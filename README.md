@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         <tr>
-            <td><img width="200" src="https://avatars.githubusercontent.com/u/46420281?v=4" /> </td>
+            <td><img width="200" src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/3b3d1134-79f6-4b04-8ad3-78ffbc56dec9" /> </td>
             <td><img width="200" src="https://avatars.githubusercontent.com/u/70168249?v=4" /></td>
             <td><img width="200" src="https://avatars.githubusercontent.com/u/44396392?v=4" /></td>
             <td><img width="200" src="https://avatars.githubusercontent.com/u/111403658?v=4" /></td>
