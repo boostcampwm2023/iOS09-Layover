@@ -37,12 +37,18 @@
         <tr>
             <td width="200"><b>Write Reasonable Code!</b><br/>이유 있는 코드를 작성하기</td>
             <td width="200"><b>🏊‍♂️ DEEP DIVE</b><br/>함께 성장하기<br/>재밌게 하기<br/>꼼꼼한 코드리뷰<br/></td>
-            <td width="200">열심히 하기!</td>
+            <td width="200"><b>🐢 기본에 충실한</b><br/>서드 파티에 의존하지 않기<br/>Swift를 이용한 기술 도전 많이 하기</td>
             <td width="200">과정을 즐기기</br>열린 자세로 학습</td>
             <td width="200">영향을 주는 사람 되기 🎱</td>
         </tr>
     </tbody>
 </table>
+
+---
+
+![Layover표지](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/11befbb5-46af-4e24-b8e9-cb1378239f74)
+
+![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
 
 ---
 
