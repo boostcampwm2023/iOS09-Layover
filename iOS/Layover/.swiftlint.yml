@@ -1,0 +1,7 @@
+disabled_rules:
+- todo
+
+line_length: 200
+excluded:
+- Layover/AppDelegate.swift
+- Layover/SceneDelegate.swift
