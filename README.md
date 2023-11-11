@@ -63,7 +63,7 @@
     - `BE`/dev
     - `BE`/feat
 
-<img src="https://nvie.com/img/git-model@2x.png">
+![깃 플로우](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/6ab7693e-52ee-4df2-8b22-ef60dd962ac9)
 
 ---
 
