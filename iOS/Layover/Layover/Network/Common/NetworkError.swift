@@ -31,7 +31,7 @@ enum NetworkError: LocalizedError {
 
 enum ServerError: Int {
     case unknown
-    case badReqeust = 400
+    case badRequest = 400
     case unauthorized = 401
     case forbidden = 403
     case notFound = 404

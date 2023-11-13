@@ -8,23 +8,48 @@
 import Foundation
 
 protocol ProviderType {
-    func request<R: Decodable, E: RequestResponsable>(with endPoint: E) async throws -> R where E.Response == R
+    func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
 }
 
 class Provider: ProviderType {
 
-    let session: URLSession
+    private let session: URLSession
+    private let authManager: AuthManagerProtocol
 
-    public init(session: URLSession = URLSession.shared) {
+    init(session: URLSession = URLSession.shared, authManager: AuthManagerProtocol = AuthManager.shared) {
         self.session = session
+        self.authManager = authManager
     }
 
-    public func request<R: Decodable, E: RequestResponsable>(with endPoint: E) async throws -> R where E.Response == R {
-        let urlRequest = try endPoint.makeURLRequest()
+    func request<R: Decodable, E: RequestResponsable>(with endPoint: E, 
+                                                      authenticationIfNeeded: Bool = true,
+                                                      retryCount: Int = 2) async throws -> R where E.Response == R {
+
+        var urlRequest = try endPoint.makeURLRequest()
+
+        if authenticationIfNeeded {
+            let token = authManager.accessToken
+            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
         let (data, response) = try await session.data(for: urlRequest)
-        try self.checkStatusCode(of: response)
+
+        do {
+            try self.checkStatusCode(of: response)
+        } catch NetworkError.server(let error) {
+            if case .unauthorized = error {
+                guard retryCount > 0 else {
+                    throw NetworkError.server(error)
+                }
+
+                //TODO: refresh 해야함
+
+                return try await request(with: endPoint, authenticationIfNeeded: authenticationIfNeeded, retryCount: retryCount - 1)
+            }
+        }
+
         return try data.decode()
     }
 
@@ -41,7 +66,7 @@ class Provider: ProviderType {
         return try data.decode()
     }
 
-    private func checkStatusCode(of response: URLResponse) throws {
+    func checkStatusCode(of response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
             throw NetworkError.unknown
         }

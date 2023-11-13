@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
+		19C7AFD62B02584D003B35F2 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* Keychain.swift */; };
 		FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29A2B02325D001AABFF /* Requestable.swift */; };
 		FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29C2B02326A001AABFF /* Responsable.swift */; };
 		FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29E2B023315001AABFF /* HTTPMethod.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		19C7AFD52B02584D003B35F2 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		FC68E29A2B02325D001AABFF /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		FC68E29C2B02326A001AABFF /* Responsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responsable.swift; sourceTree = "<group>"; };
 		FC68E29E2B023315001AABFF /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
@@ -102,15 +106,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FC68E2992B02320F001AABFF /* Network */ = {
+		19C7AFCF2B02441C003B35F2 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				FC68E2A22B0233BC001AABFF /* NetworkError.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		19C7AFD02B024420003B35F2 /* Provider */ = {
+			isa = PBXGroup;
+			children = (
+				FC68E2A42B0233D3001AABFF /* Provider.swift */,
+			);
+			path = Provider;
+			sourceTree = "<group>";
+		};
+		19C7AFD12B024439003B35F2 /* EndPoint */ = {
 			isa = PBXGroup;
 			children = (
 				FC68E29A2B02325D001AABFF /* Requestable.swift */,
 				FC68E29C2B02326A001AABFF /* Responsable.swift */,
 				FC68E29E2B023315001AABFF /* HTTPMethod.swift */,
 				FC68E2A02B023326001AABFF /* EndPoint.swift */,
-				FC68E2A22B0233BC001AABFF /* NetworkError.swift */,
-				FC68E2A42B0233D3001AABFF /* Provider.swift */,
+			);
+			path = EndPoint;
+			sourceTree = "<group>";
+		};
+		19C7AFD42B02583C003B35F2 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				19C7AFD52B02584D003B35F2 /* Keychain.swift */,
+			);
+			path = Keychain;
+			sourceTree = "<group>";
+		};
+		FC68E2992B02320F001AABFF /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				19C7AFCF2B02441C003B35F2 /* Common */,
+				19C7AFD02B024420003B35F2 /* Provider */,
+				19C7AFD12B024439003B35F2 /* EndPoint */,
+				19C7AFCD2B02410F003B35F2 /* AuthManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -185,6 +222,7 @@
 		FC7E45752AFF6F5B004F155A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				19C7AFD42B02583C003B35F2 /* Keychain */,
 				FC7E458D2AFF7462004F155A /* DummyService.swift */,
 			);
 			path = Services;
@@ -392,10 +430,12 @@
 				FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */,
 				FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */,
 				FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */,
+				19C7AFD62B02584D003B35F2 /* Keychain.swift in Sources */,
 				FC7E458A2AFF70FB004F155A /* ViewController.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
+				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
 				FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */,
 				FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */,
@@ -589,7 +629,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kong.Layover;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp8.Layover;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -617,7 +657,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kong.Layover;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp8.Layover;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
