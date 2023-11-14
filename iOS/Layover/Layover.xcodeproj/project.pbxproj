@@ -14,6 +14,7 @@
 		194551F62B037F2D00299768 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551F02B037F2D00299768 /* LoginViewController.swift */; };
 		194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551F12B037F2D00299768 /* LoginInteractor.swift */; };
 		194551FD2B0386D100299768 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 194551FC2B0386D100299768 /* KakaoSDK */; };
+		194552022B038B8300299768 /* OSLog+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552012B038B8300299768 /* OSLog+.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
@@ -68,6 +69,7 @@
 		194551EF2B037F2D00299768 /* LoginModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModels.swift; sourceTree = "<group>"; };
 		194551F02B037F2D00299768 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		194551F12B037F2D00299768 /* LoginInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInteractor.swift; sourceTree = "<group>"; };
+		194552012B038B8300299768 /* OSLog+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+.swift"; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 			children = (
 				FC7E45952AFF7497004F155A /* DummyExtension.swift */,
 				FC4975982B03439000D8627F /* UIFont+.swift */,
+				194552012B038B8300299768 /* OSLog+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
+				194552022B038B8300299768 /* OSLog+.swift in Sources */,
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
