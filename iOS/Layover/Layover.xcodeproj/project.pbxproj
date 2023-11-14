@@ -405,6 +405,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
+				ORGANIZATIONNAME = CodeBomber;
 				TargetAttributes = {
 					FC7E45352AFEB623004F155A = {
 						CreatedOnToolsVersion = 15.0.1;
