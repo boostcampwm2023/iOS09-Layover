@@ -76,7 +76,7 @@ import Foundation
             }
         }
     }
-
+    
     private func storeValueInKeychain(_ value: Value?) {
         guard let encodedValue = encode(value) else {
             deleteFromKeychain()
@@ -87,17 +87,25 @@ import Foundation
             kSecValueData as String: encodedValue
         ]
 
-        var status = SecItemUpdate(searchQuery as CFDictionary, attributes as CFDictionary)
+        var status = updateValueInKeychain(encodedValue, attributes: attributes)
 
         if status == errSecItemNotFound {
-            let addQuery = searchQuery.merging(attributes, uniquingKeysWith: { (_, new) in new })
-            status = SecItemAdd(addQuery as CFDictionary, nil)
+            status = addValueInKeychain(encodedValue, attributes: attributes)
         }
 
         guard status == errSecSuccess else {
             // error
             return
         }
+    }
+
+    private func updateValueInKeychain(_ value: Data, attributes: [String: Any]) -> Int32 {
+        return SecItemUpdate(searchQuery as CFDictionary, attributes as CFDictionary)
+    }
+
+    private func addValueInKeychain(_ value: Data, attributes: [String: Any]) -> Int32 {
+        let addQuery = searchQuery.merging(attributes, uniquingKeysWith: { (_, new) in new })
+        return SecItemAdd(addQuery as CFDictionary, nil)
     }
 
     private func encode(_ value: Value?) -> Data? {
