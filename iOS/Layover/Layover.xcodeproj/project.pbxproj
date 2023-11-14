@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
+		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
+		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
+		FC4975992B03439000D8627F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4975982B03439000D8627F /* UIFont+.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29A2B02325D001AABFF /* Requestable.swift */; };
@@ -51,6 +55,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
+		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
+		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
+		FC4975982B03439000D8627F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		FC68E29A2B02325D001AABFF /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
@@ -150,6 +158,16 @@
 				19C7AFCD2B02410F003B35F2 /* AuthManager.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		FC4975852B0342CE00D8627F /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */,
+				FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */,
+				FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		FC7E452D2AFEB623004F155A = {
@@ -256,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				FC7E45952AFF7497004F155A /* DummyExtension.swift */,
+				FC4975982B03439000D8627F /* UIFont+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -263,6 +282,7 @@
 		FC7E45822AFF700A004F155A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FC4975852B0342CE00D8627F /* Fonts */,
 				FC7E45422AFEB62B004F155A /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -378,7 +398,10 @@
 			files = (
 				FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */,
 				FC7E45892AFF70FB004F155A /* Main.storyboard in Resources */,
+				FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */,
+				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
+				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -429,6 +452,7 @@
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */,
 				FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */,
+				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				FC7E458A2AFF70FB004F155A /* ViewController.swift in Sources */,
