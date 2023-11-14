@@ -12,8 +12,8 @@ protocol AuthManagerProtocol {
 
 final class AuthManager: AuthManagerProtocol {
 
-    @KeychainStored(service: "accessToken") var accessToken: String?
-    @KeychainStored(service: "refreshToken") var refreshToken: String?
+    @KeychainStored(key: "accessToken") var accessToken: String?
+    @KeychainStored(key: "refreshToken") var refreshToken: String?
 
     static let shared = AuthManager()
 

@@ -10,7 +10,8 @@ import Foundation
 @propertyWrapper struct KeychainStored<Value: Codable> {
 
     private let securityClass = kSecClassGenericPassword
-    private let service: String
+    private let service: String = Bundle.main.bundleIdentifier ?? "kr.codesquad.boostcamp8.Layover"
+    private let key: String
 
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
@@ -18,23 +19,27 @@ import Foundation
     private var searchQuery: [String: Any] {
         [
             kSecClass as String: securityClass,
-            kSecAttrService as String: service
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key
         ]
     }
 
     var wrappedValue: Value? {
-        didSet {
-
+        get {
+            valueFromKeychain()
+        }
+        set {
+            storeValueInKeychain(newValue)
         }
     }
 
-    init(service: String) {
-        self.service = service
-        self.wrappedValue = valueFromKeychain()
+    init(key: String) {
+        self.key = key
     }
 
     private func valueFromKeychain() -> Value? {
         var searchQuery = searchQuery
+
         searchQuery[kSecReturnAttributes as String] = true
         searchQuery[kSecReturnData as String] = true
 
@@ -115,6 +120,7 @@ import Foundation
 
     private func deleteFromKeychain() {
         let status = SecItemDelete(searchQuery as CFDictionary)
+
         guard status == errSecSuccess || status == errSecItemNotFound else {
             return
         }
