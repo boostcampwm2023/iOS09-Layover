@@ -346,11 +346,11 @@
 				FC7E45322AFEB623004F155A /* Sources */,
 				FC7E45332AFEB623004F155A /* Frameworks */,
 				FC7E45342AFEB623004F155A /* Resources */,
-				FC7E456B2AFEC0BD004F155A /* SwiftLint Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				194552192B03DD7A00299768 /* PBXTargetDependency */,
 			);
 			name = Layover;
 			packageProductDependencies = (
@@ -474,27 +474,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		FC7E456B2AFEC0BD004F155A /* SwiftLint Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "SwiftLint Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		FC7E45322AFEB623004F155A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -552,6 +531,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		194552192B03DD7A00299768 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 194552182B03DD7A00299768 /* SwiftLintPlugin */;
+		};
 		FC7E454E2AFEB62C004F155A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FC7E45352AFEB623004F155A /* Layover */;
@@ -876,8 +859,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/SwiftLint";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.54.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -887,6 +870,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDK;
+		};
+		194552182B03DD7A00299768 /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC7E456D2AFF6E44004F155A /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
