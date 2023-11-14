@@ -116,13 +116,13 @@ import Foundation
         if Value.self == String.self {
             let string = value as! String
             return Data(string.utf8)
-        } else {
-            do {
-                return try encoder.encode(value)
-            } catch {
-                // error
-                return nil
-            }
+        }
+        
+        do {
+            return try encoder.encode(value)
+        } catch {
+            // error
+            return nil
         }
     }
 
