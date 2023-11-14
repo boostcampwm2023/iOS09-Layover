@@ -44,7 +44,7 @@ class Provider: ProviderType {
                     throw NetworkError.server(error)
                 }
 
-                //TODO: refresh 해야함
+                // TODO: refresh 해야함
 
                 return try await request(with: endPoint, authenticationIfNeeded: authenticationIfNeeded, retryCount: retryCount - 1)
             }
