@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 @propertyWrapper struct KeychainStored<Value: Codable> {
 
@@ -57,7 +58,7 @@ import Foundation
 
         guard let item = unknownItem as? [String: Any],
             let data = item[kSecValueData as String] as? Data else {
-            // error
+            os_log(.error, log: .data, "%@", "Error while loading keychain item.")
                 return nil
         }
 
@@ -65,13 +66,14 @@ import Foundation
     }
 
     private func decodeValue(from data: Data) -> Value? {
+
         if Value.self == String.self {
-            return String(data: data, encoding: .utf8) as! Value?
+            return String(data: data, encoding: .utf8) as? Value
         } else {
             do {
                 return try self.decoder.decode(Value.self, from: data)
             } catch {
-                // error
+                os_log(.error, log: .data, "%@", "Error while decoding keychain item.")
                 return nil
             }
         }
@@ -94,7 +96,7 @@ import Foundation
         }
 
         guard status == errSecSuccess else {
-            // error
+            os_log(.error, log: .data, "%@", "Error while storing keychain item.")
             return
         }
     }
@@ -113,15 +115,14 @@ import Foundation
             return nil
         }
 
-        if Value.self == String.self {
-            let string = value as! String
-            return Data(string.utf8)
+        if let stringValue = value as? String {
+            return Data(stringValue.utf8)
         }
         
         do {
             return try encoder.encode(value)
         } catch {
-            // error
+            os_log(.error, log: .data, "%@", "Error while encoding keychain item.")
             return nil
         }
     }
@@ -130,6 +131,7 @@ import Foundation
         let status = SecItemDelete(searchQuery as CFDictionary)
 
         guard status == errSecSuccess || status == errSecItemNotFound else {
+            os_log(.error, log: .data, "%@", "Error while deleting keychain item.")
             return
         }
     }
