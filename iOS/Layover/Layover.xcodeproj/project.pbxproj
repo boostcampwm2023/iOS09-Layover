@@ -37,6 +37,7 @@
 		FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45952AFF7497004F155A /* DummyExtension.swift */; };
 		FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF12B036B6000195BBE /* LOButton.swift */; };
 		FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF52B03804000195BBE /* LOTextField.swift */; };
+		FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		FC7E45952AFF7497004F155A /* DummyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyExtension.swift; sourceTree = "<group>"; };
 		FCEE0FF12B036B6000195BBE /* LOButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOButton.swift; sourceTree = "<group>"; };
 		FCEE0FF52B03804000195BBE /* LOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextField.swift; sourceTree = "<group>"; };
+		FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +263,7 @@
 		FC7E457B2AFF6F9D004F155A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				FCEE0FFB2B03AFAA00195BBE /* SingUpScene */,
 				FC7E45912AFF747A004F155A /* DummyScene.swift */,
 			);
 			path = Scenes;
@@ -292,6 +295,14 @@
 				FC7E45422AFEB62B004F155A /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		FCEE0FFB2B03AFAA00195BBE /* SingUpScene */ = {
+			isa = PBXGroup;
+			children = (
+				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
+			);
+			path = SingUpScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -469,6 +480,7 @@
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
 				FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */,
+				FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */,
 				FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,
 				FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */,
