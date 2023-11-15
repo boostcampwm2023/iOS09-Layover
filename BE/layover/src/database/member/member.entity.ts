@@ -18,21 +18,25 @@ export class Member {
   @PrimaryGeneratedColumn('increment')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   username: string;
 
-  @Column()
+  @Column({ nullable: false })
   profile_image_url: string;
 
-  @Column()
+  @Column({ nullable: false })
   introduce: string;
 
-  @Column()
+  @Column({ nullable: false })
   provider: string;
 
-  @Column()
+  @Column({ nullable: false })
   hash: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   date_created: Date;
 }
