@@ -11,7 +11,7 @@ import Foundation
 final class SignUpConfigurator: Configurator {
     typealias T = SignUpViewController
 
-    static let sharedInstance = SignUpConfigurator()
+    static let shared = SignUpConfigurator()
 
     private init() { }
 

@@ -13,8 +13,8 @@ protocol SignUpDisplayLogic: AnyObject {
     func displayNickanmeDuplication()
 }
 
-final class SignUpViewController: UIViewController, SignUpDisplayLogic {
-
+final class SignUpViewController: UIViewController {
+    
     // MARK: - UI Components
 
     private let titleLabel: UILabel = {
@@ -60,7 +60,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        SignUpConfigurator.sharedInstance.configure(self)
+        SignUpConfigurator.shared.configure(self)
         setUI()
 
         // TODO: Base ViewController 로직으로 분리
@@ -104,16 +104,6 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic {
 
     // MARK: - Custom Method
 
-    func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel) {
-        nicknameAlertLabel.isHidden = response.canCheckDuplication
-        checkDuplicateNicknameButton.isEnabled = response.canCheckDuplication
-        nicknameAlertLabel.text = response.alertDescription
-    }
-
-    func displayNickanmeDuplication() {
-
-    }
-
     private func addTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         view.addGestureRecognizer(tapGesture)
@@ -127,5 +117,16 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic {
     @objc private func hideKeyboard(_ sender: Any) {
         view.endEditing(true)
     }
+}
 
+extension SignUpViewController: SignUpDisplayLogic {
+    func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel) {
+        nicknameAlertLabel.isHidden = response.canCheckDuplication
+        checkDuplicateNicknameButton.isEnabled = response.canCheckDuplication
+        nicknameAlertLabel.text = response.alertDescription
+    }
+
+    func displayNickanmeDuplication() {
+
+    }
 }

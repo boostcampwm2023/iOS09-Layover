@@ -14,7 +14,7 @@ protocol SignUpBusinessLogic {
 
 protocol SignUpDataStore { }
 
-class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
+final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
     // MARK: - Properties
 

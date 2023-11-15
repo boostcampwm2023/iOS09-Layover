@@ -12,7 +12,7 @@ protocol SignUpPresentationLogic {
     func presentNicknameValidation(with response: SignUpModels.ValidateNickname.Response)
 }
 
-class SignUpPresenter: SignUpPresentationLogic {
+final class SignUpPresenter: SignUpPresentationLogic {
 
     // MARK: - Properties
 
