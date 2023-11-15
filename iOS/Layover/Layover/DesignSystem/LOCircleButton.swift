@@ -22,16 +22,12 @@ final class LOCircleButton: UIButton {
 
     // MARK: Properties
 
+    private(set) var diameter: CGFloat
+
     var style: Style {
         didSet {
             setBackgroundColor(by: style)
             setImage(by: style)
-        }
-    }
-
-    var diameter: CGFloat {
-        didSet {
-            makeRounded(to: diameter)
         }
     }
 
@@ -101,6 +97,6 @@ final class LOCircleButton: UIButton {
     func makeRounded(to diameter: CGFloat) {
         clipsToBounds = true
         layer.cornerRadius = diameter / 2
-        bounds.size = CGSize(width: diameter, height: diameter)
+        self.diameter = diameter
     }
 }
