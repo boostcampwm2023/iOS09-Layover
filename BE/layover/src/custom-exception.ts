@@ -8,23 +8,23 @@ import {
 import { Enum, EnumType } from 'ts-jenum';
 import { Response } from 'express';
 
-export const enum ErrCode {
+export const enum CustomCode {
   'OAUTH01' = 'OAUTH01',
   'NEST_OFFER' = 'NEST_OFFER',
   'INTERNAL_SERVER_ERROR' = 'INTERNAL_SERVER_ERROR',
 }
 
-@Enum('customException')
+@Enum('customCode')
 export class ECustomException extends EnumType<ECustomException>() {
   static readonly OAUTH01 = new ECustomException(
     HttpStatus.UNAUTHORIZED,
-    ErrCode.OAUTH01,
+    CustomCode.OAUTH01,
     '회원가입이 되지 않은 유저입니다.',
   );
 
   private constructor(
     readonly statusCode: HttpStatus,
-    readonly customCode: ErrCode,
+    readonly customCode: CustomCode,
     readonly message: string,
   ) {
     super();
@@ -32,11 +32,13 @@ export class ECustomException extends EnumType<ECustomException>() {
 }
 
 export class CustomException extends HttpException {
-  customCode: ErrCode;
+  customCode: CustomCode;
+  data?: any;
 
-  constructor(customException: ECustomException) {
+  constructor(customException: ECustomException, data?: any) {
     super(customException.message, customException.statusCode);
     this.customCode = customException.customCode;
+    this.data = data;
   }
 }
 
@@ -46,23 +48,25 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response: Response = ctx.getResponse<Response>();
 
-    let customCode: ErrCode;
+    let customCode: CustomCode;
     let statusCode: HttpStatus;
 
     if (exception instanceof CustomException) {
       customCode = exception.customCode;
       statusCode = exception.getStatus();
     } else if (exception instanceof HttpException) {
-      customCode = ErrCode.NEST_OFFER;
+      customCode = CustomCode.NEST_OFFER;
       statusCode = exception.getStatus();
     } else {
-      customCode = ErrCode.INTERNAL_SERVER_ERROR;
+      customCode = CustomCode.INTERNAL_SERVER_ERROR;
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     response.status(statusCode).json({
-      customCode,
+      customCode: customCode,
       message: exception.message,
+      statusCode: statusCode,
+      data: exception.data,
     });
   }
 }
