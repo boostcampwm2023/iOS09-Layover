@@ -9,7 +9,7 @@
 import Foundation
 
 final class SignUpConfigurator: Configurator {
-    typealias T = SignUpViewController
+    typealias ViewController = SignUpViewController
 
     static let shared = SignUpConfigurator()
 

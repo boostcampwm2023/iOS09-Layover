@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum MapModels {
 
     // MARK: - Use Cases

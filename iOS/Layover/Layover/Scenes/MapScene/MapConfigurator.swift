@@ -9,7 +9,7 @@
 import Foundation
 
 final class MapConfigurator: Configurator {
-    typealias T = MapViewController
+    typealias ViewController = MapViewController
 
     static let shared = MapConfigurator()
 

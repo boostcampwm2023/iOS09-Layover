@@ -56,13 +56,10 @@ final class MapViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         MapConfigurator.shared.configure(self)
+        interactor?.checkLocationAuthorizationStatus()
     }
 
     // MARK: - UI + Layout
-
-    override func setUI() {
-
-    }
 
     override func setConstraints() {
         view.addSubviews(mapView, searchButton, currentLocationButton, uploadButton)
@@ -78,7 +75,7 @@ final class MapViewController: BaseViewController {
             mapView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            searchButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            searchButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchButton.heightAnchor.constraint(equalToConstant: 42),
 
@@ -89,6 +86,7 @@ final class MapViewController: BaseViewController {
             currentLocationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
+
 }
 
 extension MapViewController: MapDisplayLogic {
