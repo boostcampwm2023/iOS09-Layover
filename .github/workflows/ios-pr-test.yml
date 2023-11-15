@@ -30,7 +30,7 @@ on:
 jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
-    runs-on: macos-13-arm64
+    runs-on: macos-13-xlarge
     defaults:
       run:
         working-directory: ./iOS/Layover
