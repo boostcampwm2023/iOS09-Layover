@@ -14,7 +14,7 @@ protocol SignUpDisplayLogic: AnyObject {
 }
 
 final class SignUpViewController: UIViewController {
-    
+
     // MARK: - UI Components
 
     private let titleLabel: UILabel = {
@@ -22,7 +22,7 @@ final class SignUpViewController: UIViewController {
         label.text = "여정 기록을 위한\n닉네임을 입력해주세요."
         label.numberOfLines = 0
         label.font = .loFont(type: .header2)
-        label.textColor = .white
+        label.textColor = .layoverWhite
         return label
     }()
 

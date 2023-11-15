@@ -29,7 +29,7 @@ final class LOButton: UIButton {
     private var buttonTitleColor: UIColor {
         switch style {
         case .basic:
-            return isEnabled ? .white : .grey500
+            return isEnabled ? .layoverWhite : .grey500
         }
     }
 

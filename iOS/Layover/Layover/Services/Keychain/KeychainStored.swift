@@ -78,7 +78,7 @@ import OSLog
             }
         }
     }
-    
+
     private func storeValueInKeychain(_ value: Value?) {
         guard let encodedValue = encode(value) else {
             deleteFromKeychain()
@@ -118,7 +118,7 @@ import OSLog
         if let stringValue = value as? String {
             return Data(stringValue.utf8)
         }
-        
+
         do {
             return try encoder.encode(value)
         } catch {
