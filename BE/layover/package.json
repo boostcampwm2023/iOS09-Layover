@@ -26,6 +26,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.1.16",
     "axios": "^1.6.1",
     "mysql2": "^3.6.3",
     "redis": "^4.6.10",
