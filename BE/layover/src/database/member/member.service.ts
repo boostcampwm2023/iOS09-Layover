@@ -14,7 +14,6 @@ export class MemberService {
     introduce: string,
     provider: string,
     hash: string,
-    date_created: Date,
   ): Promise<void> {
     const memberEntity = this.memberRepository.create({
       username,
@@ -22,7 +21,6 @@ export class MemberService {
       introduce,
       provider,
       hash,
-      date_created,
     });
     await this.memberRepository.save(memberEntity);
   }
@@ -33,7 +31,7 @@ export class MemberService {
         hash,
       },
     });
-    if (member) return true;
-    else return false;
+    if (member.length === 0) return false;
+    else return true;
   }
 }
