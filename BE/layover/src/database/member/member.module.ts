@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-//import { DatabaseModule } from '../database.module';
+import { DatabaseModule } from '../database.module';
 import { memberProviders } from './member.providers';
 import { MemberService } from './member.service';
 
 @Module({
-  //imports: [DatabaseModule],
+  imports: [DatabaseModule],
   providers: [...memberProviders, MemberService],
+  exports: [MemberService],
 })
-export class PhotoModule {}
+export class MemberModule {}
