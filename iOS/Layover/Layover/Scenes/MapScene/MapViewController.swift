@@ -13,7 +13,7 @@ protocol MapDisplayLogic: AnyObject {
 
 }
 
-final class MapViewController: BaseViewController, MKMapViewDelegate {
+final class MapViewController: BaseViewController {
 
     private let mapView: MKMapView = {
         let mapView = MKMapView()
