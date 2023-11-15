@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { MemberService } from 'src/database/member/member.service';
 import { JwtService } from '@nestjs/jwt';
-import { getJwtPaylaod } from 'src/utils/jwtPayload';
+import { getJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 
