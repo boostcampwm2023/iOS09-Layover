@@ -8,14 +8,99 @@
 
 import UIKit
 
-class LOCircleButton: UIButton {
+final class LOCircleButton: UIButton {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    // MARK: Button Type
+
+    enum Style {
+        case add
+        case locate
+        case photo
+        case sound
+        case scissors
     }
-    */
 
+    // MARK: Properties
+
+    var style: Style {
+        didSet {
+            setBackgroundColor(by: style)
+            setImage(by: style)
+        }
+    }
+
+    var diameter: CGFloat {
+        didSet {
+            makeRounded(to: diameter)
+        }
+    }
+
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: diameter, height: diameter)
+    }
+
+    // MARK: Initializer
+
+    init(style: Style, diameter: CGFloat) {
+        self.style = style
+        self.diameter = diameter
+        super.init(frame: .zero)
+        setBorder()
+        setBackgroundColor(by: style)
+        setImage(by: style)
+    }
+
+    required init?(coder: NSCoder) {
+        self.style = .add
+        self.diameter = 52
+        super.init(coder: coder)
+        setBorder()
+        setBackgroundColor(by: style)
+        setImage(by: style)
+    }
+
+    // MARK: View Life Cycle
+
+    override func layoutSubviews() {
+        makeRounded(to: diameter)
+        super.layoutSubviews()
+    }
+
+    // MARK: Methods
+
+    private func setBorder() {
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.grey500.cgColor
+    }
+
+    private func setBackgroundColor(by style: Style) {
+        switch style {
+        case .add:
+            backgroundColor = .primaryPurple
+        default:
+            backgroundColor = .darkGrey
+        }
+    }
+
+    private func setImage(by style: Style) {
+        switch style {
+        case .add:
+            setImage(.plus, for: .normal)
+        case .locate:
+            setImage(.location, for: .normal)
+        case .photo:
+            setImage(.photo, for: .normal)
+        case .sound:
+            setImage(.volume, for: .normal)
+            setImage(.mute, for: .selected)
+        case .scissors:
+            setImage(.scissors, for: .normal)
+        }
+    }
+
+    func makeRounded(to diameter: CGFloat) {
+        clipsToBounds = true
+        layer.cornerRadius = diameter / 2
+        bounds.size = CGSize(width: diameter, height: diameter)
+    }
 }

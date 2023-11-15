@@ -25,11 +25,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
 
     // MARK: - UI Components
 
-    private let uploadButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage(resource: .uploadButton)
-        return UIButton(configuration: configuration)
-    }()
+    private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
 
     // MARK: - Object lifecycle
 
@@ -70,9 +66,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
 
         NSLayoutConstraint.activate([
             uploadButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarController?.tabBar.bounds.height ?? 83) - 20),
-            uploadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            uploadButton.widthAnchor.constraint(equalToConstant: 52),
-            uploadButton.heightAnchor.constraint(equalToConstant: 52)
+            uploadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
 
