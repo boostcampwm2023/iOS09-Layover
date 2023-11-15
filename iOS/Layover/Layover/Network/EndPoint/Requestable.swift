@@ -4,7 +4,7 @@
 //
 //  Created by kong on 2023/11/13.
 //
- 
+
 import Foundation
 
 protocol Requestable {

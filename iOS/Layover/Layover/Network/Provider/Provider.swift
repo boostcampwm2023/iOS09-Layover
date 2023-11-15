@@ -23,15 +23,16 @@ class Provider: ProviderType {
         self.authManager = authManager
     }
 
-    func request<R: Decodable, E: RequestResponsable>(with endPoint: E, 
+    func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
                                                       authenticationIfNeeded: Bool = true,
                                                       retryCount: Int = 2) async throws -> R where E.Response == R {
 
         var urlRequest = try endPoint.makeURLRequest()
 
         if authenticationIfNeeded {
-            let token = authManager.accessToken
-            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            if let token = authManager.accessToken {
+                urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
         }
 
         let (data, response) = try await session.data(for: urlRequest)

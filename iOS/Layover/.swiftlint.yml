@@ -1,7 +1,13 @@
 disabled_rules:
 - todo
+- nesting
 
 line_length: 200
 excluded:
 - Layover/AppDelegate.swift
 - Layover/SceneDelegate.swift
+
+identifier_name:
+  excluded:
+    - ui
+    - id
