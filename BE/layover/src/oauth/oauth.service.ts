@@ -1,41 +1,28 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-// import { MemberService } from 'src/database/member/member.service';
+import { MemberService } from 'src/database/member/member.service';
+import { JwtService } from '@nestjs/jwt';
+import { getJwtPaylaod } from 'src/utils/jwtPayload';
+import { createClient } from 'redis';
+import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 
 @Injectable()
 export class OauthService {
   constructor(
-    private readonly httpService: HttpService, // private readonly memberService: MemberService,
+    private readonly httpService: HttpService,
+    private readonly memberService: MemberService,
+    private readonly jwtService: JwtService,
+    @Inject('REDIS_CLIENT')
+    private readonly redisClient: ReturnType<typeof createClient>,
   ) {}
 
-  async getAccessToken(url: string, code: string): Promise<string> {
-    const observableRes = this.httpService.post(
-      url,
-      {
-        grant_type: 'authorization_code',
-        client_id: process.env.KAKAO_CLIENT_ID,
-        redirect_uri: process.env.KAKAO_REDIRECT_URI,
-        code,
-      },
-      {
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        },
-      },
-    );
-    const response = await firstValueFrom(observableRes);
-    const accessToken = response.data.access_token;
-    return accessToken;
-  }
-
-  async getEmailByAccessToken(
+  async getMemberIdByAccessToken(
     url: string,
     accessToken: string,
   ): Promise<string> {
-    const queryString = `?property_keys=["kakao_account.email"]`;
     const observableRes = this.httpService.post(
-      url + queryString,
+      url,
       {},
       {
         headers: {
@@ -45,25 +32,46 @@ export class OauthService {
       },
     );
     const response = await firstValueFrom(observableRes);
-    const eamil = response.data.kakaoAccount.email;
-    return eamil;
+    const uniqueMemberId = String(response.data.id);
+    return uniqueMemberId;
   }
 
-  // isMemberExistByHash(hash: string): Promise<boolean> {
-  //  return this.memberService.isMemberExistByHash(hash);
-  //}
+  isMemberExistByHash(hash: string): Promise<boolean> {
+    return this.memberService.isMemberExistByHash(hash);
+  }
 
-  doSignup() {}
+  async signup(
+    memberHash: string,
+    username: string,
+    provider: string,
+  ): Promise<void> {
+    await this.memberService.insertMember(
+      username,
+      'default profile_image_url',
+      'default introduce',
+      provider,
+      memberHash,
+    );
+  }
 
-  doLogin(): { accessJWT: string; refreshJWT: string } {
+  async login(
+    memberHash: string,
+  ): Promise<{ accessJWT: string; refreshJWT: string }> {
+    // access token 생성
+    const accessTokenPaylaod = getJwtPaylaod('access', memberHash);
+    const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
+
+    // refresh token 생성
+    const refreshTokenPaylaod = getJwtPaylaod('refresh', memberHash);
+    const refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
+
+    // refresh token은 redis에 저장, 유효기간도 추가
+    this.redisClient.setEx(refreshJWT, REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+
+    // 각 토큰 반환
     return {
-      accessJWT: '1234',
-      refreshJWT: '5678',
+      accessJWT,
+      refreshJWT,
     };
   }
-
-  // 로그아웃! 해서 Auth 서버에도 토큰 지우기
-  //returnAccessToken(accessToken: string): void {
-  //  this.httpService.post('https://kapi.kakao.com/v1/user/logout');
-  //}
 }
