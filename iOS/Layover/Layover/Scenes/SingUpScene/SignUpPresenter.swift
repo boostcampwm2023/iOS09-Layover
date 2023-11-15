@@ -21,7 +21,7 @@ final class SignUpPresenter: SignUpPresentationLogic {
 
     // MARK: - UseCase: 닉네임 유효성 검사
 
-    func presentNicknameValidation(with response: SignUpModels.ValidateNickname.Response) {
+    func presentNicknameValidation(with response: Models.ValidateNickname.Response) {
         let viewModel = Models.ValidateNickname.ViewModel(canCheckDuplication: response.nicknameState == .valid,
                                                           alertDescription: response.nicknameState.alertDescription)
         viewController?.displayNicknameValidation(response: viewModel)
