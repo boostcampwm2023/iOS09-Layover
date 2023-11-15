@@ -3,32 +3,17 @@
 //  Layover
 //
 //  Created by kong on 2023/11/14.
+//  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
 import UIKit
 
-protocol SignUpDisplayLogic {
-  func displayNicknameValidation(response: Bool)
+protocol SignUpDisplayLogic: AnyObject {
+    func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel)
+    func displayNickanmeDuplication()
 }
 
 final class SignUpViewController: UIViewController, SignUpDisplayLogic {
-
-    enum NicknameState {
-        case valid
-        case lessThan2GreaterThan8
-        case invalidCharacter
-
-        var alertDescription: String? {
-            switch self {
-            case .valid:
-                return nil
-            case .lessThan2GreaterThan8:
-                return "2자 이상 8자 이하로 입력해주세요."
-            case .invalidCharacter:
-                return "입력할 수 없는 문자입니다."
-            }
-        }
-    }
 
     // MARK: - UI Components
 
@@ -69,10 +54,13 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic {
         return button
     }()
 
+    var interactor: SignUpBusinessLogic?
+
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        SignUpConfigurator.sharedInstance.configure(self)
         setUI()
 
         // TODO: Base ViewController 로직으로 분리
@@ -116,7 +104,13 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic {
 
     // MARK: - Custom Method
 
-    func displayNicknameValidation(response: Bool) {
+    func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel) {
+        nicknameAlertLabel.isHidden = response.canCheckDuplication
+        checkDuplicateNicknameButton.isEnabled = response.canCheckDuplication
+        nicknameAlertLabel.text = response.alertDescription
+    }
+
+    func displayNickanmeDuplication() {
 
     }
 
@@ -125,31 +119,13 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic {
         view.addGestureRecognizer(tapGesture)
     }
 
-    private func validate(nickname: String) -> NicknameState {
-        if nickname.count < 2 || nickname.count > 8 {
-            return .lessThan2GreaterThan8
-        } else if nickname.wholeMatch(of: /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+/) == nil {
-            return .invalidCharacter
-        }
-        return .valid
+    @objc private func setUpTextFieldState(_ sender: UITextField) {
+        guard let nickname = sender.text else { return }
+        interactor?.validateNickname(with: SignUpModels.ValidateNickname.Request(nickname: nickname))
     }
 
     @objc private func hideKeyboard(_ sender: Any) {
         view.endEditing(true)
-    }
-
-    @objc private func setUpTextFieldState(_ sender: UITextField) {
-        guard let nickname = sender.text else { return }
-        let nicknameState = validate(nickname: nickname)
-        switch nicknameState {
-        case .valid:
-            nicknameAlertLabel.isHidden = true
-            checkDuplicateNicknameButton.isEnabled = true
-        case .lessThan2GreaterThan8, .invalidCharacter:
-            nicknameAlertLabel.isHidden = false
-            checkDuplicateNicknameButton.isEnabled = false
-            nicknameAlertLabel.text = nicknameState.alertDescription
-        }
     }
 
 }
