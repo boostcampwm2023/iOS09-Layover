@@ -15,7 +15,7 @@ final class MainTabBarConfigurator: Configurator {
     // TODO: 뷰컨트롤러, 탭바 아이템 교체
     func configure(_ viewController: UITabBarController) {
 
-        let homeViewController = DummyViewController()
+        let homeViewController = UINavigationController(rootViewController: HomeViewController())
         let mapViewController = DummyViewController()
         let profileViewController = DummyViewController()
 

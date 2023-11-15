@@ -81,8 +81,8 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         view.addSubviews(uploadButton)
 
         NSLayoutConstraint.activate([
-            uploadButton.rightAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            uploadButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            uploadButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarController?.tabBar.bounds.height ?? 83) - 20),
+            uploadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             uploadButton.widthAnchor.constraint(equalToConstant: 52),
             uploadButton.heightAnchor.constraint(equalToConstant: 52)
         ])
