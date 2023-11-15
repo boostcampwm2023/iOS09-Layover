@@ -31,6 +31,13 @@ final class MainTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUI()
+    }
+
+    // MARK: - UI
+
+    private func setUI() {
+        tabBar.tintColor = .primaryPurple
         tabBar.backgroundColor = .black
     }
 }
