@@ -8,6 +8,6 @@
 import UIKit
 
 protocol Configurator {
-    associatedtype T: UIViewController
-    func configure(_ viewController: T)
+    associatedtype ViewController: UIViewController
+    func configure(_ viewController: ViewController)
 }
