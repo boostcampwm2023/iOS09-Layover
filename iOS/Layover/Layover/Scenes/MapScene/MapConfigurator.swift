@@ -15,7 +15,7 @@ final class MapConfigurator: Configurator {
 
     private init() { }
 
-    func configure(_ viewController: MapViewController) {
+    func configure(_ viewController: ViewController) {
         let viewController = viewController
         let interactor = MapInteractor()
         let presenter = MapPresenter()

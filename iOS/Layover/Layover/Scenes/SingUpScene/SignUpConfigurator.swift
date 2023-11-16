@@ -15,7 +15,7 @@ final class SignUpConfigurator: Configurator {
 
     private init() { }
 
-    func configure(_ viewController: SignUpViewController) {
+    func configure(_ viewController: ViewController) {
         let viewController = viewController
         let interactor = SignUpInteractor()
         let presenter = SignUpPresenter()
