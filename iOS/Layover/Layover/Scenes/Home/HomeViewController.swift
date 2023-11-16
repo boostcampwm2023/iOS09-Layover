@@ -25,7 +25,10 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
     private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
 
     private lazy var carouselCollectionView: UICollectionView = {
-        let layout = makeCarouselLayout()
+        let layout = createCarouselLayout(groupWidthDimension: 314/375,
+                                          groupHeightDimension: 473/534,
+                                          maximumZoomScale: 1,
+                                          minimumZoomScale: 473/534)
         let collectionView = UICollectionView(frame: .init(), collectionViewLayout: layout)
         collectionView.register(HomeCarouselCollectionViewCell.self, forCellWithReuseIdentifier: HomeCarouselCollectionViewCell.identifier)
         collectionView.backgroundColor = .clear
@@ -96,13 +99,16 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         carouselDatasource.apply(snapshot)
     }
 
-    private func makeCarouselLayout() -> UICollectionViewCompositionalLayout {
+    private func createCarouselLayout(groupWidthDimension: CGFloat,
+                                      groupHeightDimension: CGFloat,
+                                      maximumZoomScale: CGFloat,
+                                      minimumZoomScale: CGFloat) -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { _, _ in
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                   heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(314/375),
-                                                   heightDimension: .fractionalHeight(473/534))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(groupWidthDimension),
+                                                   heightDimension: .fractionalHeight(groupHeightDimension))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: [item])
 
@@ -117,9 +123,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
                 items.forEach { item in
                     let itemCenterRelativeToOffset = item.frame.midX - offset.x // 아이템 중심점과 container offset(왼쪽)의 거리
                     let distanceFromCenter = abs(itemCenterRelativeToOffset - containerWidth / 2.0) // container 중심점과 아이템 중심점의 거리
-                    let minScale: CGFloat = 473/534 // 최소 비율
-                    let maxScale: CGFloat = 1
-                    let scale = max(maxScale - (distanceFromCenter / containerWidth), minScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
+                    let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minimumZoomScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
                     item.transform = CGAffineTransform(scaleX: scale, y: scale)
                 }
             }
