@@ -30,7 +30,7 @@ export class OauthController {
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    return { accessJWT: accessJWT, refreshKJWT: refreshJWT };
+    return { accessToken: accessJWT, refreshToken: refreshJWT };
   }
 
   @Get('apple')
@@ -49,7 +49,7 @@ export class OauthController {
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    return { accessJWT: accessJWT, refreshKJWT: refreshJWT };
+    return { accessToken: accessJWT, refreshToken: refreshJWT };
   }
 
   @Post('refresh-token')
@@ -63,6 +63,6 @@ export class OauthController {
     );
 
     // return access token and refresh token
-    return { accessJWT: accessJWT, refreshKJWT: refreshJWT };
+    return { accessToken: accessJWT, refreshToken: refreshJWT };
   }
 }
