@@ -74,13 +74,6 @@
 			remoteGlobalIDString = FC7E45352AFEB623004F155A;
 			remoteInfo = Layover;
 		};
-		FC7E45572AFEB62C004F155A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FC7E452E2AFEB623004F155A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FC7E45352AFEB623004F155A;
-			remoteInfo = Layover;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -133,7 +126,6 @@
 		FC7E45472AFEB62B004F155A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
-		FC7E45562AFEB62C004F155A /* LayoverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		FC7E458B2AFF7455004F155A /* DummyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyModel.swift; sourceTree = "<group>"; };
 		FC7E458D2AFF7462004F155A /* DummyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyService.swift; sourceTree = "<group>"; };
@@ -156,13 +148,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FC7E45492AFEB62B004F155A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FC7E45532AFEB62C004F155A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -291,7 +276,6 @@
 			children = (
 				FC7E45362AFEB623004F155A /* Layover.app */,
 				FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */,
-				FC7E45562AFEB62C004F155A /* LayoverUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -448,24 +432,6 @@
 			productReference = FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		FC7E45552AFEB62C004F155A /* LayoverUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FC7E45662AFEB62C004F155A /* Build configuration list for PBXNativeTarget "LayoverUITests" */;
-			buildPhases = (
-				FC7E45522AFEB62C004F155A /* Sources */,
-				FC7E45532AFEB62C004F155A /* Frameworks */,
-				FC7E45542AFEB62C004F155A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FC7E45582AFEB62C004F155A /* PBXTargetDependency */,
-			);
-			name = LayoverUITests;
-			productName = LayoverUITests;
-			productReference = FC7E45562AFEB62C004F155A /* LayoverUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -481,10 +447,6 @@
 						CreatedOnToolsVersion = 15.0.1;
 					};
 					FC7E454B2AFEB62B004F155A = {
-						CreatedOnToolsVersion = 15.0.1;
-						TestTargetID = FC7E45352AFEB623004F155A;
-					};
-					FC7E45552AFEB62C004F155A = {
 						CreatedOnToolsVersion = 15.0.1;
 						TestTargetID = FC7E45352AFEB623004F155A;
 					};
@@ -509,7 +471,6 @@
 			targets = (
 				FC7E45352AFEB623004F155A /* Layover */,
 				FC7E454B2AFEB62B004F155A /* LayoverTests */,
-				FC7E45552AFEB62C004F155A /* LayoverUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -529,13 +490,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FC7E454A2AFEB62B004F155A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FC7E45542AFEB62C004F155A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -609,13 +563,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC7E45522AFEB62C004F155A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -627,11 +574,6 @@
 			isa = PBXTargetDependency;
 			target = FC7E45352AFEB623004F155A /* Layover */;
 			targetProxy = FC7E454D2AFEB62C004F155A /* PBXContainerItemProxy */;
-		};
-		FC7E45582AFEB62C004F155A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FC7E45352AFEB623004F155A /* Layover */;
-			targetProxy = FC7E45572AFEB62C004F155A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -863,42 +805,6 @@
 			};
 			name = Release;
 		};
-		FC7E45672AFEB62C004F155A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B3PWYBKFUK;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp8.Layover;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Layover;
-			};
-			name = Debug;
-		};
-		FC7E45682AFEB62C004F155A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B3PWYBKFUK;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp8.Layover;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Layover;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -925,15 +831,6 @@
 			buildConfigurations = (
 				FC7E45642AFEB62C004F155A /* Debug */,
 				FC7E45652AFEB62C004F155A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FC7E45662AFEB62C004F155A /* Build configuration list for PBXNativeTarget "LayoverUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FC7E45672AFEB62C004F155A /* Debug */,
-				FC7E45682AFEB62C004F155A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
