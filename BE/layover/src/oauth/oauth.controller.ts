@@ -12,20 +12,14 @@ export class OauthController {
 
   @Post('kakao')
   async processKakaoLogin(@Body('accessToken') accessToken: string) {
-    // Get memberId from Kakao Auth Server
+    // Get memberId from Kakao Auth Server -> make memberHash
     const kakaoUserInfoURL = 'https://kapi.kakao.com/v2/user/me';
     const memberId = await this.oauthService.getMemberIdByAccessToken(
       kakaoUserInfoURL,
       accessToken,
     );
-
-    // Verify a user account already exists
     const memberHash = hashSHA256(memberId + 'kakao'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
-    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
 
-    if (!isUserExist) {
-      // response 401, OAUTH01
-    }
     // login
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 

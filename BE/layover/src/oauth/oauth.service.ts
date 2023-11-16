@@ -57,6 +57,13 @@ export class OauthService {
   async login(
     memberHash: string,
   ): Promise<{ accessJWT: string; refreshJWT: string }> {
+    // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
+    const isUserExist = await this.isMemberExistByHash(memberHash);
+
+    if (!isUserExist) {
+      // response 401, OAUTH01
+    }
+
     // access token 생성
     const accessTokenPaylaod = getJwtPaylaod('access', memberHash);
     const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
