@@ -49,7 +49,7 @@ extension UIFont {
         case .body2Bold:
             return .loFont(ofSize: 16, weight: .bold)
         case .body3:
-            return .loFont(ofSize: 14, weight: .bold)
+            return .loFont(ofSize: 14, weight: .regular)
         }
     }
 

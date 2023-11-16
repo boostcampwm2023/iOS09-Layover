@@ -1,5 +1,5 @@
 //
-//  SignUpConfigurator.swift
+//  MapConfigurator.swift
 //  Layover
 //
 //  Created by kong on 2023/11/15.
@@ -8,17 +8,17 @@
 
 import Foundation
 
-final class SignUpConfigurator: Configurator {
-    typealias ViewController = SignUpViewController
+final class MapConfigurator: Configurator {
+    typealias ViewController = MapViewController
 
-    static let shared = SignUpConfigurator()
+    static let shared = MapConfigurator()
 
     private init() { }
 
     func configure(_ viewController: ViewController) {
         let viewController = viewController
-        let interactor = SignUpInteractor()
-        let presenter = SignUpPresenter()
+        let interactor = MapInteractor()
+        let presenter = MapPresenter()
         viewController.interactor = interactor
         interactor.presenter = presenter
         presenter.viewController = viewController

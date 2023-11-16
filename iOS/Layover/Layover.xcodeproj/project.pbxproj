@@ -34,6 +34,11 @@
 		FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A12B045C3F004717BC /* SignUpPresenter.swift */; };
 		FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A32B045D6C004717BC /* SignUpModels.swift */; };
 		FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A52B049020004717BC /* SignUpConfigurator.swift */; };
+		FC2511A92B04DAD4004717BC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A82B04DAD4004717BC /* MapViewController.swift */; };
+		FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */; };
+		FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AC2B04EACD004717BC /* MapInteractor.swift */; };
+		FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AE2B04EAD9004717BC /* MapPresenter.swift */; };
+		FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511B02B04EAEC004717BC /* MapModels.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
@@ -49,8 +54,6 @@
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45502AFEB62C004F155A /* LayoverTests.swift */; };
-		FC7E455B2AFEB62C004F155A /* LayoverUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E455A2AFEB62C004F155A /* LayoverUITests.swift */; };
-		FC7E455D2AFEB62C004F155A /* LayoverUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E455C2AFEB62C004F155A /* LayoverUITestsLaunchTests.swift */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
 		FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458B2AFF7455004F155A /* DummyModel.swift */; };
 		FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458D2AFF7462004F155A /* DummyService.swift */; };
@@ -65,13 +68,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		FC7E454D2AFEB62C004F155A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FC7E452E2AFEB623004F155A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FC7E45352AFEB623004F155A;
-			remoteInfo = Layover;
-		};
-		FC7E45572AFEB62C004F155A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FC7E452E2AFEB623004F155A /* Project object */;
 			proxyType = 1;
@@ -107,6 +103,11 @@
 		FC2511A12B045C3F004717BC /* SignUpPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPresenter.swift; sourceTree = "<group>"; };
 		FC2511A32B045D6C004717BC /* SignUpModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModels.swift; sourceTree = "<group>"; };
 		FC2511A52B049020004717BC /* SignUpConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpConfigurator.swift; sourceTree = "<group>"; };
+		FC2511A82B04DAD4004717BC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapConfigurator.swift; sourceTree = "<group>"; };
+		FC2511AC2B04EACD004717BC /* MapInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractor.swift; sourceTree = "<group>"; };
+		FC2511AE2B04EAD9004717BC /* MapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
+		FC2511B02B04EAEC004717BC /* MapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModels.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
@@ -125,9 +126,6 @@
 		FC7E45472AFEB62B004F155A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
-		FC7E45562AFEB62C004F155A /* LayoverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC7E455A2AFEB62C004F155A /* LayoverUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverUITests.swift; sourceTree = "<group>"; };
-		FC7E455C2AFEB62C004F155A /* LayoverUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		FC7E458B2AFF7455004F155A /* DummyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyModel.swift; sourceTree = "<group>"; };
 		FC7E458D2AFF7462004F155A /* DummyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyService.swift; sourceTree = "<group>"; };
@@ -150,13 +148,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FC7E45492AFEB62B004F155A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FC7E45532AFEB62C004F155A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -237,6 +228,18 @@
 			path = Keychain;
 			sourceTree = "<group>";
 		};
+		FC2511A72B04DA9C004717BC /* MapScene */ = {
+			isa = PBXGroup;
+			children = (
+				FC2511A82B04DAD4004717BC /* MapViewController.swift */,
+				FC2511AC2B04EACD004717BC /* MapInteractor.swift */,
+				FC2511AE2B04EAD9004717BC /* MapPresenter.swift */,
+				FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */,
+				FC2511B02B04EAEC004717BC /* MapModels.swift */,
+			);
+			path = MapScene;
+			sourceTree = "<group>";
+		};
 		FC4975852B0342CE00D8627F /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,7 +267,6 @@
 				FC7E45692AFEC06E004F155A /* .swiftlint.yml */,
 				FC7E45382AFEB623004F155A /* Layover */,
 				FC7E454F2AFEB62C004F155A /* LayoverTests */,
-				FC7E45592AFEB62C004F155A /* LayoverUITests */,
 				FC7E45372AFEB623004F155A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -274,7 +276,6 @@
 			children = (
 				FC7E45362AFEB623004F155A /* Layover.app */,
 				FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */,
-				FC7E45562AFEB62C004F155A /* LayoverUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -306,15 +307,6 @@
 			path = LayoverTests;
 			sourceTree = "<group>";
 		};
-		FC7E45592AFEB62C004F155A /* LayoverUITests */ = {
-			isa = PBXGroup;
-			children = (
-				FC7E455A2AFEB62C004F155A /* LayoverUITests.swift */,
-				FC7E455C2AFEB62C004F155A /* LayoverUITestsLaunchTests.swift */,
-			);
-			path = LayoverUITests;
-			sourceTree = "<group>";
-		};
 		FC7E456E2AFF6EDA004F155A /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				1945520E2B03AEA400299768 /* Configurator.swift */,
+				FC2511A72B04DA9C004717BC /* MapScene */,
 				FCEE0FFB2B03AFAA00195BBE /* SingUpScene */,
 				194552032B038FC400299768 /* Tabbar */,
 				194551EB2B037F1E00299768 /* Login */,
@@ -439,24 +432,6 @@
 			productReference = FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		FC7E45552AFEB62C004F155A /* LayoverUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FC7E45662AFEB62C004F155A /* Build configuration list for PBXNativeTarget "LayoverUITests" */;
-			buildPhases = (
-				FC7E45522AFEB62C004F155A /* Sources */,
-				FC7E45532AFEB62C004F155A /* Frameworks */,
-				FC7E45542AFEB62C004F155A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FC7E45582AFEB62C004F155A /* PBXTargetDependency */,
-			);
-			name = LayoverUITests;
-			productName = LayoverUITests;
-			productReference = FC7E45562AFEB62C004F155A /* LayoverUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -472,10 +447,6 @@
 						CreatedOnToolsVersion = 15.0.1;
 					};
 					FC7E454B2AFEB62B004F155A = {
-						CreatedOnToolsVersion = 15.0.1;
-						TestTargetID = FC7E45352AFEB623004F155A;
-					};
-					FC7E45552AFEB62C004F155A = {
 						CreatedOnToolsVersion = 15.0.1;
 						TestTargetID = FC7E45352AFEB623004F155A;
 					};
@@ -500,7 +471,6 @@
 			targets = (
 				FC7E45352AFEB623004F155A /* Layover */,
 				FC7E454B2AFEB62B004F155A /* LayoverTests */,
-				FC7E45552AFEB62C004F155A /* LayoverUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -526,13 +496,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC7E45542AFEB62C004F155A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -542,6 +505,7 @@
 			files = (
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
+				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
@@ -549,6 +513,7 @@
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
+				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
@@ -563,6 +528,7 @@
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */,
+				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
@@ -574,12 +540,14 @@
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
 				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
 				1945520F2B03AEA400299768 /* Configurator.swift in Sources */,
+				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
 				FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */,
 				FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */,
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
 				FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,
+				FC2511A92B04DAD4004717BC /* MapViewController.swift in Sources */,
 				FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */,
@@ -595,15 +563,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC7E45522AFEB62C004F155A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FC7E455B2AFEB62C004F155A /* LayoverUITests.swift in Sources */,
-				FC7E455D2AFEB62C004F155A /* LayoverUITestsLaunchTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -615,11 +574,6 @@
 			isa = PBXTargetDependency;
 			target = FC7E45352AFEB623004F155A /* Layover */;
 			targetProxy = FC7E454D2AFEB62C004F155A /* PBXContainerItemProxy */;
-		};
-		FC7E45582AFEB62C004F155A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FC7E45352AFEB623004F155A /* Layover */;
-			targetProxy = FC7E45572AFEB62C004F155A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -769,7 +723,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -797,7 +751,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -851,42 +805,6 @@
 			};
 			name = Release;
 		};
-		FC7E45672AFEB62C004F155A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B3PWYBKFUK;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp8.Layover;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Layover;
-			};
-			name = Debug;
-		};
-		FC7E45682AFEB62C004F155A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B3PWYBKFUK;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp8.Layover;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Layover;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -913,15 +831,6 @@
 			buildConfigurations = (
 				FC7E45642AFEB62C004F155A /* Debug */,
 				FC7E45652AFEB62C004F155A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FC7E45662AFEB62C004F155A /* Build configuration list for PBXNativeTarget "LayoverUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FC7E45672AFEB62C004F155A /* Debug */,
-				FC7E45682AFEB62C004F155A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "interface-arrows-round-right--diagram-round-arrow-right.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "interface-arrows-round-right--diagram-round-arrow-right@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "interface-arrows-round-right--diagram-round-arrow-right@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
