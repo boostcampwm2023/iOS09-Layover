@@ -54,7 +54,6 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
         // <#Analytics Worker Instance#>.trackAnalytics(event: request.event)
 
         let response = Models.TrackAnalytics.Response()
-//        presenter?.presentTrackAnalytics(with: response)
     }
 
     // MARK: - Use Case - Home
