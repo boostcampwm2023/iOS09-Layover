@@ -28,7 +28,18 @@ export class OauthController {
   }
 
   @Get('apple')
-  getAppleOauthPage() {}
+  async processAppleLogin(@Body('identityToken') identityToken: string) {
+    // Get memberId from identity token ("sub" claim)
+    const jwtPayload = await this.oauthService.extractPayloadJWT(identityToken);
+    const memberId = jwtPayload.sub;
+    const memberHash = hashSHA256(memberId + 'apple'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
+
+    // login
+    const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
+
+    // return access token and refresh token
+    return { accessToken: accessJWT, refreshToken: refreshJWT };
+  }
 
   @Post('signup')
   async processSignup(
