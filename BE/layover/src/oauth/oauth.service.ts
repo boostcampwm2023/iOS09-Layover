@@ -1,11 +1,11 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable, Inject } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { MemberService } from 'src/database/member/member.service';
+import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
+import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
+import { MemberService } from 'src/database/member/member.service';
 import { getJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
-import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 
 @Injectable()
 export class OauthService {
@@ -73,5 +73,11 @@ export class OauthService {
       accessJWT,
       refreshJWT,
     };
+  }
+
+  async validateJWT(token: string) {
+    return await this.jwtService.verifyAsync(token, {
+      issuer: process.env.LAYOVER_PUBLIC_IP,
+    });
   }
 }

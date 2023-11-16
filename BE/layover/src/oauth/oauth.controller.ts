@@ -33,6 +33,9 @@ export class OauthController {
     return { accessJWT: accessJWT, refreshKJWT: refreshJWT };
   }
 
+  @Get('apple')
+  getAppleOauthPage() {}
+
   @Post('signup')
   async processSignup(
     @Body('memberHash') memberHash: string,
@@ -49,6 +52,17 @@ export class OauthController {
     return { accessJWT: accessJWT, refreshKJWT: refreshJWT };
   }
 
-  @Get('apple')
-  getAppleOauthPage() {}
+  @Post('refresh-token')
+  async renewTokens(@Body('refreshToken') refreshToken: string) {
+    // validate refresh token
+    const payload = await this.oauthService.validateJWT(refreshToken);
+
+    // 새로운 토큰을 생성하고 이를 반환함
+    const { accessJWT, refreshJWT } = await this.oauthService.login(
+      payload.memberHash,
+    );
+
+    // return access token and refresh token
+    return { accessJWT: accessJWT, refreshKJWT: refreshJWT };
+  }
 }
