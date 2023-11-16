@@ -14,10 +14,10 @@ export function getJwtPaylaod(token: tokenType, memberHash: string): any {
   const uuid = 1234;
 
   return {
-    iss: 'https://layover-public-ip',
+    iss: `${process.env.LAYOVER_PUBLIC_IP}`,
     exp: issuedNumericDate + expirationPeriod,
     sub: `Layover${token}Token`,
-    aud: 'https://layover-public-ip',
+    aud: `${process.env.LAYOVER_PUBLIC_IP}`,
     nbf: issuedNumericDate,
     iat: issuedNumericDate,
     jti: uuid,
