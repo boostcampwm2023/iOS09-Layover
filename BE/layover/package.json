@@ -32,6 +32,8 @@
     "redis": "^4.6.10",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "ts-jenum": "^2.2.2",
+    "rxjs": "^7.8.1",
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
