@@ -4,7 +4,7 @@ import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import { MemberService } from 'src/database/member/member.service';
-import { getJwtPaylaod } from 'src/utils/jwtUtils';
+import { makeJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 
 @Injectable()
@@ -65,11 +65,11 @@ export class OauthService {
     }
 
     // access token 생성
-    const accessTokenPaylaod = getJwtPaylaod('access', memberHash);
+    const accessTokenPaylaod = makeJwtPaylaod('access', memberHash);
     const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
 
     // refresh token 생성
-    const refreshTokenPaylaod = getJwtPaylaod('refresh', memberHash);
+    const refreshTokenPaylaod = makeJwtPaylaod('refresh', memberHash);
     const refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
 
     // refresh token은 redis에 저장, 유효기간도 추가
@@ -86,5 +86,11 @@ export class OauthService {
     return await this.jwtService.verifyAsync(token, {
       issuer: process.env.LAYOVER_PUBLIC_IP,
     });
+  }
+
+  async extractPayloadJWT(token: string) {
+    const regex = /\.(.*?)\./g;
+    const payload = token.match(regex)[0].slice(1, -1);
+    return JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
   }
 }
