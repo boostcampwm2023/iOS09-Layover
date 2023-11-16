@@ -32,6 +32,7 @@
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		835A61902B067D61002F22A5 /* LOSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A618F2B067D61002F22A5 /* LOSlider.swift */; };
 		835A61922B067FEC002F22A5 /* LOTagStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61912B067FEC002F22A5 /* LOTagStackView.swift */; };
+		835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61932B068096002F22A5 /* LODescriptionView.swift */; };
 		FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC25119F2B045C0A004717BC /* SignUpInteractor.swift */; };
 		FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A12B045C3F004717BC /* SignUpPresenter.swift */; };
 		FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A32B045D6C004717BC /* SignUpModels.swift */; };
@@ -103,6 +104,7 @@
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		835A618F2B067D61002F22A5 /* LOSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOSlider.swift; sourceTree = "<group>"; };
 		835A61912B067FEC002F22A5 /* LOTagStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTagStackView.swift; sourceTree = "<group>"; };
+		835A61932B068096002F22A5 /* LODescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LODescriptionView.swift; sourceTree = "<group>"; };
 		FC25119F2B045C0A004717BC /* SignUpInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInteractor.swift; sourceTree = "<group>"; };
 		FC2511A12B045C3F004717BC /* SignUpPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPresenter.swift; sourceTree = "<group>"; };
 		FC2511A32B045D6C004717BC /* SignUpModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModels.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				194552302B04DA1A00299768 /* LOCircleButton.swift */,
 				835A618F2B067D61002F22A5 /* LOSlider.swift */,
 				835A61912B067FEC002F22A5 /* LOTagStackView.swift */,
+				835A61932B068096002F22A5 /* LODescriptionView.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -557,6 +560,7 @@
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,
 				FC2511A92B04DAD4004717BC /* MapViewController.swift in Sources */,
 				FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */,
+				835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,
