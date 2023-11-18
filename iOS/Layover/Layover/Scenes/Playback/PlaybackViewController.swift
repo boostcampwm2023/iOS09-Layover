@@ -19,16 +19,7 @@ protocol PlaybackDisplayLogic: AnyObject {
 
 final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
-    // MARK: = UI Components
-
-    private let titleLabel: UILabel = {
-        let label: UILabel = UILabel()
-        label.numberOfLines = 1
-        label.font = .loFont(type: .subtitle)
-        label.textColor = .layoverWhite
-        label.text = "테스트"
-        return label
-    }()
+    // MARK: - UI Components
 
     private let descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
@@ -127,9 +118,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         view.backgroundColor = .black
         setupFetchFromLocalDataStore()
         setUI()
-        let labelTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionLabelDidTap(_:)))
-        descriptionView.descriptionLabel.isUserInteractionEnabled = true
-        descriptionView.descriptionLabel.addGestureRecognizer(labelTapGesture)
+        let viewTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
+        descriptionView.addGestureRecognizer(viewTapGesture)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -151,16 +141,13 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - UI + Layout
 
     private func setUI() {
-        [titleLabel, descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider].forEach { subView in
-            view.addSubview(subView)
+        [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider].forEach { subView in
             subView.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.bottomAnchor.constraint(equalTo: descriptionView.topAnchor, constant: -5),
+        view.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider)
 
-            descriptionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+        NSLayoutConstraint.activate([
             descriptionView.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -11),
             descriptionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             descriptionView.widthAnchor.constraint(equalToConstant: LODescriptionView.descriptionWidth),
@@ -184,12 +171,14 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
             videoSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             videoSlider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        descriptionViewHeight = descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight)
-        descriptionViewHeight.isActive = true
-
+        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
+        let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
+        descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
+        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: estimatedSize.height - LODescriptionView.descriptionHeight).isActive = true
         if descriptionView.checkLabelOverflow() {
-            descriptionView.layer.addSublayer(gradientLayer)
+            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
         }
+        print(descriptionView.checkLabelOverflow())
     }
     // MARK: - Notifications
 
@@ -272,24 +261,23 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     // MARK: - Custom Method
 
-    @objc private func descriptionLabelDidTap(_ sender: UITapGestureRecognizer) {
-        if let descriptionLabel = sender.view {
-            if self.descriptionView.clipsToBounds {
+    @objc private func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
+            if self.descriptionView.state == .hidden {
+                let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
+                let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.descriptionView.transform = CGAffineTransform(translationX: 0, y: -(descriptionLabel.frame.height - LODescriptionView.descriptionHeight))
-                    self.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(descriptionLabel.frame.height - LODescriptionView.descriptionHeight))
+                    self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(estimatedSize.height - LODescriptionView.descriptionHeight))
+                    self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(estimatedSize.height - LODescriptionView.descriptionHeight))
                     self.gradientLayer.isHidden = true
-                }, completion: { _ in
-                    self.descriptionView.clipsToBounds = false
                 })
+                self.descriptionView.state = .show
             } else {
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.titleLabel.transform = .identity
-                    self.descriptionView.transform = .identity
+                    self.descriptionView.descriptionLabel.transform = .identity
+                    self.descriptionView.titleLabel.transform = .identity
                     self.gradientLayer.isHidden = false
-                    self.descriptionView.clipsToBounds = true
                 })
+                self.descriptionView.state = .hidden
             }
-        }
     }
 }
