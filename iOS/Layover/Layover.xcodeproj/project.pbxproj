@@ -39,6 +39,7 @@
 		FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AC2B04EACD004717BC /* MapInteractor.swift */; };
 		FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AE2B04EAD9004717BC /* MapPresenter.swift */; };
 		FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511B02B04EAEC004717BC /* MapModels.swift */; };
+		FC3F3BD82B069EB30080E3A6 /* MapVideoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapVideoCollectionViewCell.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
@@ -108,6 +109,7 @@
 		FC2511AC2B04EACD004717BC /* MapInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractor.swift; sourceTree = "<group>"; };
 		FC2511AE2B04EAD9004717BC /* MapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
 		FC2511B02B04EAEC004717BC /* MapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModels.swift; sourceTree = "<group>"; };
+		FC3F3BD72B069EB30080E3A6 /* MapVideoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVideoCollectionViewCell.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				FC2511AE2B04EAD9004717BC /* MapPresenter.swift */,
 				FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */,
 				FC2511B02B04EAEC004717BC /* MapModels.swift */,
+				FC3F3BD72B069EB30080E3A6 /* MapVideoCollectionViewCell.swift */,
 			);
 			path = MapScene;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
+				FC3F3BD82B069EB30080E3A6 /* MapVideoCollectionViewCell.swift in Sources */,
 				FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
