@@ -32,6 +32,7 @@ final class LOTagStackView: UIStackView {
         self.spacing = 8
     }
 
+    // TODO: Component 추가 시 변경
     private func setButton(_ content: String) -> UIButton {
         let button: UIButton = UIButton()
         var config = UIButton.Configuration.plain()
