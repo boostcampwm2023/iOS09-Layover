@@ -178,7 +178,6 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         if descriptionView.checkLabelOverflow() {
             descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
         }
-        print(descriptionView.checkLabelOverflow())
     }
     // MARK: - Notifications
 
