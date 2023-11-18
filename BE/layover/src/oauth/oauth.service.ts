@@ -64,6 +64,13 @@ export class OauthService {
       // response 401, OAUTH01
     }
 
+    // 각 토큰 반환
+    return this.generateAccessRefreshTokens(memberHash);
+  }
+
+  async generateAccessRefreshTokens(
+    memberHash: string,
+  ): Promise<{ accessJWT: string; refreshJWT: string }> {
     // access token 생성
     const accessTokenPaylaod = makeJwtPaylaod('access', memberHash);
     const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);

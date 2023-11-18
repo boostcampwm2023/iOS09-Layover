@@ -63,9 +63,8 @@ export class OauthController {
     const payload = await this.oauthService.validateJWT(refreshToken);
 
     // 새로운 토큰을 생성하고 이를 반환함
-    const { accessJWT, refreshJWT } = await this.oauthService.login(
-      payload.memberHash,
-    );
+    const { accessJWT, refreshJWT } =
+      await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
     // return access token and refresh token
     return { accessToken: accessJWT, refreshToken: refreshJWT };
