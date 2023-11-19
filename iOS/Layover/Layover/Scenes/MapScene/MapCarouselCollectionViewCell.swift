@@ -1,5 +1,5 @@
 //
-//  MapVideoCollectionViewCell.swift
+//  MapCarouselCollectionViewCell.swift
 //  Layover
 //
 //  Created by kong on 2023/11/17.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-final class MapVideoCollectionViewCell: UICollectionViewCell {
+final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = String(describing: MapVideoCollectionViewCell.self)
+    static let identifier = String(describing: MapCarouselCollectionViewCell.self)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

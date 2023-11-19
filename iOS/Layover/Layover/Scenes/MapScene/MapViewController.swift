@@ -43,17 +43,20 @@ final class MapViewController: BaseViewController {
 
     private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
 
-    private lazy var videoCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
+    private lazy var carouselCollectionView: UICollectionView = {
+        let layout: UICollectionViewLayout = .createCarouselLayout(groupWidthDimension: 94/375,
+                                                                   groupHeightDimension: 117/151,
+                                                                   maximumZoomScale: 1.0,
+                                                                   minimumZoomScale: 79/94)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.register(MapVideoCollectionViewCell.self,
-                                forCellWithReuseIdentifier: MapVideoCollectionViewCell.identifier)
+        collectionView.register(MapCarouselCollectionViewCell.self, forCellWithReuseIdentifier: MapCarouselCollectionViewCell.identifier)
         return collectionView
     }()
 
-    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: videoCollectionView) { collectionView, indexPath, _ in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapVideoCollectionViewCell.identifier,
-                                                            for: indexPath) as? MapVideoCollectionViewCell else { return UICollectionViewCell() }
+    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: carouselCollectionView) { collectionView, indexPath, _ in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
+                                                            for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.layer.cornerRadius = 10
         return cell
     }
@@ -74,7 +77,7 @@ final class MapViewController: BaseViewController {
     // MARK: - UI + Layout
 
     override func setConstraints() {
-        [mapView, searchButton, currentLocationButton, uploadButton, videoCollectionView].forEach {
+        [mapView, searchButton, currentLocationButton, uploadButton, carouselCollectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -89,43 +92,21 @@ final class MapViewController: BaseViewController {
             searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchButton.heightAnchor.constraint(equalToConstant: 42),
 
-            uploadButton.bottomAnchor.constraint(equalTo: videoCollectionView.topAnchor, constant: -15),
+            uploadButton.bottomAnchor.constraint(equalTo: carouselCollectionView.topAnchor, constant: -15),
             uploadButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
 
             currentLocationButton.bottomAnchor.constraint(equalTo: uploadButton.topAnchor, constant: -10),
             currentLocationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
 
-            videoCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
-            videoCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            videoCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            videoCollectionView.heightAnchor.constraint(equalToConstant: 150)
+            carouselCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
+            carouselCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            carouselCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            carouselCollectionView.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
 
-    private func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(94/375),
-                                               heightDimension: .absolute(151))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.visibleItemsInvalidationHandler = { (items, offset, environment) in
-            let containerWidth = environment.container.contentSize.width
-            items.forEach { item in
-                let distanceFromCenter = abs((item.center.x - offset.x) - environment.container.contentSize.width / 2.0)
-                let minScale: CGFloat = 79/94
-                let maxScale: CGFloat = 1.0
-                let scale = max(maxScale - (distanceFromCenter / containerWidth), minScale)
-                item.transform = CGAffineTransform(scaleX: scale, y: scale)
-            }
-        }
-        return UICollectionViewCompositionalLayout(section: section)
-    }
-
     private func setCarouselCollectionView() {
-        videoCollectionView.dataSource = carouselDatasource
+        carouselCollectionView.dataSource = carouselDatasource
         var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9])
