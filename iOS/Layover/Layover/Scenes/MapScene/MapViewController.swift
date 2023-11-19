@@ -45,9 +45,9 @@ final class MapViewController: BaseViewController {
 
     private lazy var carouselCollectionView: UICollectionView = {
         let layout: UICollectionViewLayout = .createCarouselLayout(groupWidthDimension: 94/375,
-                                                                   groupHeightDimension: 117/151,
+                                                                   groupHeightDimension: 1.0,
                                                                    maximumZoomScale: 1.0,
-                                                                   minimumZoomScale: 79/94)
+                                                                   minimumZoomScale: 73/94)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.register(MapCarouselCollectionViewCell.self, forCellWithReuseIdentifier: MapCarouselCollectionViewCell.identifier)
@@ -101,7 +101,7 @@ final class MapViewController: BaseViewController {
             carouselCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
             carouselCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             carouselCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            carouselCollectionView.heightAnchor.constraint(equalToConstant: 150)
+            carouselCollectionView.heightAnchor.constraint(equalToConstant: 151)
         ])
     }
 
