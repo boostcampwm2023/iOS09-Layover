@@ -20,7 +20,7 @@ final class LODescriptionView: UIView {
 
     // MARK: - Properties
 
-    private (set) var titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label: UILabel = UILabel()
         label.numberOfLines = 1
         label.font = .loFont(type: .body1)
@@ -28,7 +28,7 @@ final class LODescriptionView: UIView {
         label.text = "제목 테스트"
         return label
     }()
-    private (set) var descriptionLabel: UILabel = {
+    let descriptionLabel: UILabel = {
         let label: UILabel = UILabel()
         label.textColor = .layoverWhite
         label.font = .loFont(type: .body2)
@@ -52,9 +52,6 @@ final class LODescriptionView: UIView {
     // MARK: Method
 
     private func setupConstraints() {
-        descriptionLabel.textColor = .layoverWhite
-        descriptionLabel.font = .loFont(type: .body2)
-        descriptionLabel.numberOfLines = 0
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.addSubviews(descriptionLabel, titleLabel)

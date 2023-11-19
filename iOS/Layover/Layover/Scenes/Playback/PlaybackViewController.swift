@@ -28,8 +28,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         return descriptionView
     }()
 
-    private var descriptionViewHeight: NSLayoutConstraint! = nil
-    private var descriptionViewBottom: NSLayoutConstraint! = nil
+    private let descriptionViewHeight: NSLayoutConstraint! = nil
 
     private let gradientLayer: CAGradientLayer = {
         let gradientLayer: CAGradientLayer = CAGradientLayer()
@@ -73,10 +72,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     }()
 
     private let videoSlider: LOSlider = LOSlider()
-
     private let videoView: UIView = UIView()
 
-    private var isIncreaseLabel: Bool = false
     // MARK: - Properties
 
     typealias Models = PlaybackModels
