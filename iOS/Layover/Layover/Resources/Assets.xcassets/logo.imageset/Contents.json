@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Layover로고.png",
+      "filename" : "Layover로고 3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Layover로고 1.png",
+      "filename" : "Layover로고 4.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Layover로고 2.png",
+      "filename" : "Layover로고.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
