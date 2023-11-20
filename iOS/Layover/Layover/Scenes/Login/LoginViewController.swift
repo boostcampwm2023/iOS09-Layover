@@ -22,7 +22,7 @@ final class LoginViewController: BaseViewController {
     // MARK: - Properties
     private let logoImage: UIImageView = {
         let imageView: UIImageView = UIImageView()
-//        imageView.image = UIImage.logo
+        imageView.image = UIImage.loLogo
         return imageView
     }()
 
