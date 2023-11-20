@@ -22,7 +22,7 @@ final class LoginViewController: BaseViewController {
     // MARK: - Properties
     private let logoImage: UIImageView = {
         let imageView: UIImageView = UIImageView()
-        imageView.image = UIImage.logo
+//        imageView.image = UIImage.logo
         return imageView
     }()
 
@@ -35,7 +35,7 @@ final class LoginViewController: BaseViewController {
 
     private let kakaoLoginButton: UIButton = {
         let button: UIButton = UIButton()
-        button.setBackgroundImage(UIImage.kakaologin, for: .normal)
+//        button.setBackgroundImage(UIImage.kakaologin, for: .normal)
 
         return button
     }()
