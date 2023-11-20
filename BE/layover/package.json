@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.1.16",
+    "aws-sdk": "^2.1499.0",
     "axios": "^1.6.1",
     "mysql2": "^3.6.3",
     "redis": "^4.6.10",
