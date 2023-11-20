@@ -10,6 +10,8 @@ import { Response } from 'express';
 
 export const enum CustomCode {
   'OAUTH01' = 'OAUTH01',
+  'JWT01' = 'JWT01',
+  'JWT02' = 'JWT02',
   'NEST_OFFER' = 'NEST_OFFER',
   'INTERNAL_SERVER_ERROR' = 'INTERNAL_SERVER_ERROR',
 }
@@ -20,6 +22,18 @@ export class ECustomException extends EnumType<ECustomException>() {
     HttpStatus.UNAUTHORIZED,
     CustomCode.OAUTH01,
     '회원가입이 되지 않은 유저입니다.',
+  );
+
+  static readonly JWT01 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.JWT01,
+    '유효하지 않은 토큰입니다.',
+  );
+
+  static readonly JWT02 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.JWT02,
+    '토큰 만료기간이 경과하였습니다.',
   );
 
   private constructor(

@@ -47,7 +47,6 @@ export class OauthController {
     @Body('username') username: string,
     @Body('provider') provider: string,
   ) {
-    console.log(memberHash, username, provider);
     await this.oauthService.signup(memberHash, username, provider);
 
     // login
@@ -60,12 +59,16 @@ export class OauthController {
   @Post('refresh-token')
   async renewTokens(@Body('refreshToken') refreshToken: string) {
     // validate refresh token
-    const payload = await this.oauthService.validateJWT(refreshToken);
-
-    // 새로운 토큰을 생성하고 이를 반환함
-    const { accessJWT, refreshJWT } = await this.oauthService.login(
-      payload.memberHash,
+    await this.oauthService.validateJWT(
+      refreshToken,
+      process.env.LAYOVER_PUBLIC_IP,
     );
+    const payload = await this.oauthService.extractPayloadJWT(refreshToken);
+
+    console.log(payload);
+    // 새로운 토큰을 생성하고 이를 반환함
+    const { accessJWT, refreshJWT } =
+      await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
     // return access token and refresh token
     return { accessToken: accessJWT, refreshToken: refreshJWT };
