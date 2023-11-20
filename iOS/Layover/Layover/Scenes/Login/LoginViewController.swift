@@ -29,16 +29,50 @@ final class LoginViewController: BaseViewController {
         return titleLabel
     }()
 
+    private let kakaoTitleView: UIView = UIView()
+
+    private let kakaoLogo: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.kakaoLogo
+        return imageView
+    }()
+
+    private let kakaoLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.text = "카카오로 계속하기"
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        return label
+    }()
+
     private let kakaoLoginButton: UIButton = {
         let button: UIButton = UIButton()
-        button.setBackgroundImage(UIImage.kakaoLogin, for: .normal)
-
+        button.backgroundColor = .kakao
+        button.layer.cornerRadius = 10
         return button
     }()
 
-    private let appleLoginButton: UIControl = {
-        let appleLogin: UIControl = ASAuthorizationAppleIDButton(type: .continue, style: .white)
-        return appleLogin
+    private let appleTitleView: UIView = UIView()
+
+    private let appleLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.text = "Apple로 계속하기"
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        return label
+    }()
+
+    private let appleLogo: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.appleLogo
+        return imageView
+    }()
+
+    private let appleLoginButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        return button
     }()
 
     typealias Models = LoginModels
@@ -84,6 +118,48 @@ final class LoginViewController: BaseViewController {
             appleLoginButton.topAnchor.constraint(equalTo: kakaoLoginButton.bottomAnchor, constant: 8),
             appleLoginButton.widthAnchor.constraint(equalToConstant: 315),
             appleLoginButton.heightAnchor.constraint(equalToConstant: 48)
+        ])
+        setLoginButtonConstraints()
+    }
+
+    private func setLoginButtonConstraints() {
+        kakaoTitleView.addSubviews(kakaoLogo, kakaoLabel)
+        kakaoLoginButton.addSubview(kakaoTitleView)
+        kakaoTitleView.translatesAutoresizingMaskIntoConstraints = false
+        kakaoLogo.translatesAutoresizingMaskIntoConstraints = false
+        kakaoLabel.translatesAutoresizingMaskIntoConstraints = false
+        appleTitleView.addSubviews(appleLogo, appleLabel)
+        appleLoginButton.addSubview(appleTitleView)
+        appleTitleView.translatesAutoresizingMaskIntoConstraints = false
+        appleLogo.translatesAutoresizingMaskIntoConstraints = false
+        appleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            kakaoTitleView.widthAnchor.constraint(equalToConstant: 129),
+            kakaoTitleView.heightAnchor.constraint(equalToConstant: 20),
+            kakaoTitleView.centerXAnchor.constraint(equalTo: kakaoLoginButton.centerXAnchor),
+            kakaoTitleView.centerYAnchor.constraint(equalTo: kakaoLoginButton.centerYAnchor),
+            kakaoLogo.widthAnchor.constraint(equalToConstant: 20),
+            kakaoLogo.heightAnchor.constraint(equalToConstant: 20),
+            kakaoLogo.leadingAnchor.constraint(equalTo: kakaoTitleView.leadingAnchor),
+            kakaoLogo.topAnchor.constraint(equalTo: kakaoTitleView.topAnchor),
+            kakaoLogo.bottomAnchor.constraint(equalTo: kakaoTitleView.bottomAnchor),
+            kakaoLabel.topAnchor.constraint(equalTo: kakaoTitleView.topAnchor),
+            kakaoLabel.bottomAnchor.constraint(equalTo: kakaoTitleView.bottomAnchor),
+            kakaoLabel.leadingAnchor.constraint(equalTo: kakaoLogo.trailingAnchor, constant: 1.5),
+
+            appleTitleView.widthAnchor.constraint(equalToConstant: 129),
+            appleTitleView.heightAnchor.constraint(equalToConstant: 20),
+            appleTitleView.centerXAnchor.constraint(equalTo: appleLoginButton.centerXAnchor),
+            appleTitleView.centerYAnchor.constraint(equalTo: appleLoginButton.centerYAnchor),
+            appleLogo.widthAnchor.constraint(equalToConstant: 20),
+            appleLogo.heightAnchor.constraint(equalToConstant: 20),
+            appleLogo.leadingAnchor.constraint(equalTo: appleTitleView.leadingAnchor),
+            appleLogo.topAnchor.constraint(equalTo: appleTitleView.topAnchor),
+            appleLogo.bottomAnchor.constraint(equalTo: appleTitleView.bottomAnchor),
+            appleLabel.topAnchor.constraint(equalTo: appleTitleView.topAnchor),
+            appleLabel.bottomAnchor.constraint(equalTo: appleTitleView.bottomAnchor),
+            appleLabel.leadingAnchor.constraint(equalTo: appleLogo.trailingAnchor, constant: 1.5)
         ])
     }
 
