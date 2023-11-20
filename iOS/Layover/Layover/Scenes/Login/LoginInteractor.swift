@@ -20,7 +20,7 @@ final class LoginInteractor {
 
     typealias Models = LoginModels
 
-    lazy var worker = LoginWorker()
+    var worker: LoginWorker?
     var presenter: LoginPresentationLogic?
 
 }
