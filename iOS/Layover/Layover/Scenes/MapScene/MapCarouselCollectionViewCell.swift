@@ -10,8 +10,6 @@ import UIKit
 
 final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = String(describing: MapCarouselCollectionViewCell.self)
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
