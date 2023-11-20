@@ -6,6 +6,7 @@ import { OauthModule } from './oauth/oauth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { BoardModule } from './board/board.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { join } from 'path';
     DatabaseModule,
     OauthModule,
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
+    BoardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
