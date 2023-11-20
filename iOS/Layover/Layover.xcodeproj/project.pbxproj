@@ -51,6 +51,7 @@
 		FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AC2B04EACD004717BC /* MapInteractor.swift */; };
 		FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AE2B04EAD9004717BC /* MapPresenter.swift */; };
 		FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511B02B04EAEC004717BC /* MapModels.swift */; };
+		FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
@@ -73,6 +74,7 @@
 		FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45912AFF747A004F155A /* DummyScene.swift */; };
 		FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45932AFF7486004F155A /* DummyDesignSystem.swift */; };
 		FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45952AFF7497004F155A /* DummyExtension.swift */; };
+		FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9BB82B2B094E5500EB72A9 /* UICollectionViewLayout+.swift */; };
 		FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF12B036B6000195BBE /* LOButton.swift */; };
 		FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF52B03804000195BBE /* LOTextField.swift */; };
 		FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */; };
@@ -132,6 +134,7 @@
 		FC2511AC2B04EACD004717BC /* MapInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractor.swift; sourceTree = "<group>"; };
 		FC2511AE2B04EAD9004717BC /* MapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
 		FC2511B02B04EAEC004717BC /* MapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModels.swift; sourceTree = "<group>"; };
+		FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
@@ -157,6 +160,7 @@
 		FC7E45912AFF747A004F155A /* DummyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyScene.swift; sourceTree = "<group>"; };
 		FC7E45932AFF7486004F155A /* DummyDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyDesignSystem.swift; sourceTree = "<group>"; };
 		FC7E45952AFF7497004F155A /* DummyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyExtension.swift; sourceTree = "<group>"; };
+		FC9BB82B2B094E5500EB72A9 /* UICollectionViewLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewLayout+.swift"; sourceTree = "<group>"; };
 		FCEE0FF12B036B6000195BBE /* LOButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOButton.swift; sourceTree = "<group>"; };
 		FCEE0FF52B03804000195BBE /* LOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextField.swift; sourceTree = "<group>"; };
 		FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = ../SignUpViewController.swift; sourceTree = "<group>"; };
@@ -291,6 +295,7 @@
 				FC2511AE2B04EAD9004717BC /* MapPresenter.swift */,
 				FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */,
 				FC2511B02B04EAEC004717BC /* MapModels.swift */,
+				FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */,
 			);
 			path = MapScene;
 			sourceTree = "<group>";
@@ -425,6 +430,7 @@
 				FC4975982B03439000D8627F /* UIFont+.swift */,
 				194552012B038B8300299768 /* OSLog+.swift */,
 				194552292B04883800299768 /* UIView+.swift */,
+				FC9BB82B2B094E5500EB72A9 /* UICollectionViewLayout+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -567,6 +573,7 @@
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
+				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
 				FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
@@ -602,6 +609,7 @@
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
+				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
 				835A61922B067FEC002F22A5 /* LOTagStackView.swift in Sources */,
 				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
