@@ -40,6 +40,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
         return cell
     }
 
