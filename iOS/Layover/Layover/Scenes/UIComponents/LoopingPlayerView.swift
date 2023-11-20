@@ -57,7 +57,7 @@ final class LoopingPlayerView: UIView {
 
 #Preview {
     let view = LoopingPlayerView()
-    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!, timeRange: .init(start: .zero, end: .init(seconds: 3.0, preferredTimescale: .max)))
+    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!, timeRange: .init(start: .zero, end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
     view.play()
     view.player?.isMuted = true
     return view
