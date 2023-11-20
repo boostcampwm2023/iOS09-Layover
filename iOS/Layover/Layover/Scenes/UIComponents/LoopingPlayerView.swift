@@ -15,7 +15,7 @@ final class LoopingPlayerView: UIView {
 
     override static var layerClass: AnyClass { AVPlayerLayer.self }
 
-    var player: AVQueuePlayer? {
+    private(set) var player: AVQueuePlayer? {
         get { playerLayer?.player as? AVQueuePlayer }
         set { playerLayer?.player = newValue }
     }
@@ -57,7 +57,9 @@ final class LoopingPlayerView: UIView {
 
 #Preview {
     let view = LoopingPlayerView()
-    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!, timeRange: .init(start: .zero, end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
+    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!, 
+                      timeRange: .init(start: .zero,
+                                       end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
     view.play()
     view.player?.isMuted = true
     return view
