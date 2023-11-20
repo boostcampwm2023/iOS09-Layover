@@ -42,6 +42,7 @@
 		835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619A2B068115002F22A5 /* PlaybackModels.swift */; };
 		835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619B2B068115002F22A5 /* PlaybackViewController.swift */; };
 		835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619C2B068115002F22A5 /* PlaybackInteractor.swift */; };
+		835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */; };
 		FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC25119F2B045C0A004717BC /* SignUpInteractor.swift */; };
 		FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A12B045C3F004717BC /* SignUpPresenter.swift */; };
 		FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A32B045D6C004717BC /* SignUpModels.swift */; };
@@ -123,6 +124,7 @@
 		835A619A2B068115002F22A5 /* PlaybackModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackModels.swift; sourceTree = "<group>"; };
 		835A619B2B068115002F22A5 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		835A619C2B068115002F22A5 /* PlaybackInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackInteractor.swift; sourceTree = "<group>"; };
+		835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Dashboard-Regular.ttf"; sourceTree = "<group>"; };
 		FC25119F2B045C0A004717BC /* SignUpInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInteractor.swift; sourceTree = "<group>"; };
 		FC2511A12B045C3F004717BC /* SignUpPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPresenter.swift; sourceTree = "<group>"; };
 		FC2511A32B045D6C004717BC /* SignUpModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModels.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 		FC4975852B0342CE00D8627F /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */,
 				FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */,
 				FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */,
 				FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */,
@@ -543,6 +546,7 @@
 				FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */,
 				FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */,
 				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
+				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
