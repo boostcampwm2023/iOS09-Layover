@@ -35,7 +35,7 @@ final class LoginViewController: BaseViewController {
 
     private let kakaoLoginButton: UIButton = {
         let button: UIButton = UIButton()
-//        button.setBackgroundImage(UIImage.kakaologin, for: .normal)
+        button.setBackgroundImage(UIImage.kakaoLogin, for: .normal)
 
         return button
     }()
