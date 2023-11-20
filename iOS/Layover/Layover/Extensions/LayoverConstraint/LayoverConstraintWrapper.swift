@@ -10,9 +10,6 @@ import UIKit
 
 struct LayoverConstraintWrapper<Base> {
     let base: Base
-    init(base: Base) {
-        self.base = base
-    }
 }
 
 protocol LayoverConstraintCompatible {
@@ -25,7 +22,7 @@ extension LayoverConstraintCompatible {
     var lor: LayoverConstraintWrapper<Self> {
         get {
             return LayoverConstraintWrapper(base: self)
-        } set { }
+        }
     }
 }
 

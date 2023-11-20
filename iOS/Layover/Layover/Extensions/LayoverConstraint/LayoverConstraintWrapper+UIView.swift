@@ -65,6 +65,14 @@ final class ConstraintMaker {
         trailingAnchor(equalTo: relativeView.trailingAnchor)
     }
 
+    func centerXAnchor(equalTo anchor: NSLayoutAnchor<NSLayoutXAxisAnchor>) {
+        view.centerXAnchor.constraint(equalTo: anchor).isActive = true
+    }
+
+    func centerYAnchor(equalTo anchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) {
+        view.centerYAnchor.constraint(equalTo: anchor).isActive = true
+    }
+
     func equalToSuperView() {
         guard let superview = view.superview else { return }
         verticalAnchor(equalTo: superview)
