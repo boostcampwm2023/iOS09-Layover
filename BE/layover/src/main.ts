@@ -5,9 +5,9 @@ import { GlobalExceptionFilter } from './custom-exception';
 
 import { readFileSync } from 'fs';
 const httpsOptions = {
-  key: readFileSync('./secrets/private.key'),
-  cert: readFileSync('./secrets/certificate.crt'),
-  ca: readFileSync('./secrets/ca_bundle.crt'),
+  key: readFileSync('./private.key'),
+  cert: readFileSync('./certificate.crt'),
+  ca: readFileSync('./ca_bundle.crt'),
 };
 
 async function bootstrap() {
