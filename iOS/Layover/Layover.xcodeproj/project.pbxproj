@@ -28,8 +28,20 @@
 		194552282B0479B600299768 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552272B0479B600299768 /* BaseViewController.swift */; };
 		1945522A2B04883800299768 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552292B04883800299768 /* UIView+.swift */; };
 		194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552302B04DA1A00299768 /* LOCircleButton.swift */; };
+		194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */; };
+		1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945523A2B05258200299768 /* HomeConfigurator.swift */; };
+		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
+		835A61902B067D61002F22A5 /* LOSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A618F2B067D61002F22A5 /* LOSlider.swift */; };
+		835A61922B067FEC002F22A5 /* LOTagStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61912B067FEC002F22A5 /* LOTagStackView.swift */; };
+		835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61932B068096002F22A5 /* LODescriptionView.swift */; };
+		835A619D2B068115002F22A5 /* PlaybackPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61972B068115002F22A5 /* PlaybackPresenter.swift */; };
+		835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61982B068115002F22A5 /* PlaybackWorker.swift */; };
+		835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61992B068115002F22A5 /* PlaybackRouter.swift */; };
+		835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619A2B068115002F22A5 /* PlaybackModels.swift */; };
+		835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619B2B068115002F22A5 /* PlaybackViewController.swift */; };
+		835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619C2B068115002F22A5 /* PlaybackInteractor.swift */; };
 		FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC25119F2B045C0A004717BC /* SignUpInteractor.swift */; };
 		FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A12B045C3F004717BC /* SignUpPresenter.swift */; };
 		FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A32B045D6C004717BC /* SignUpModels.swift */; };
@@ -99,8 +111,20 @@
 		194552272B0479B600299768 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		194552292B04883800299768 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		194552302B04DA1A00299768 /* LOCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOCircleButton.swift; sourceTree = "<group>"; };
+		194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
+		1945523A2B05258200299768 /* HomeConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfigurator.swift; sourceTree = "<group>"; };
+		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
+		835A618F2B067D61002F22A5 /* LOSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOSlider.swift; sourceTree = "<group>"; };
+		835A61912B067FEC002F22A5 /* LOTagStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTagStackView.swift; sourceTree = "<group>"; };
+		835A61932B068096002F22A5 /* LODescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LODescriptionView.swift; sourceTree = "<group>"; };
+		835A61972B068115002F22A5 /* PlaybackPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPresenter.swift; sourceTree = "<group>"; };
+		835A61982B068115002F22A5 /* PlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackWorker.swift; sourceTree = "<group>"; };
+		835A61992B068115002F22A5 /* PlaybackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackRouter.swift; sourceTree = "<group>"; };
+		835A619A2B068115002F22A5 /* PlaybackModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackModels.swift; sourceTree = "<group>"; };
+		835A619B2B068115002F22A5 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
+		835A619C2B068115002F22A5 /* PlaybackInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackInteractor.swift; sourceTree = "<group>"; };
 		FC25119F2B045C0A004717BC /* SignUpInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInteractor.swift; sourceTree = "<group>"; };
 		FC2511A12B045C3F004717BC /* SignUpPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPresenter.swift; sourceTree = "<group>"; };
 		FC2511A32B045D6C004717BC /* SignUpModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModels.swift; sourceTree = "<group>"; };
@@ -187,14 +211,32 @@
 		1945521A2B0478A100299768 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				194552322B04FF2900299768 /* Cell */,
 				1945521E2B0478B400299768 /* HomeModels.swift */,
 				1945521F2B0478B400299768 /* HomeViewController.swift */,
 				194552202B0478B400299768 /* HomeInteractor.swift */,
 				1945521B2B0478B400299768 /* HomePresenter.swift */,
 				1945521C2B0478B400299768 /* HomeWorker.swift */,
 				1945521D2B0478B400299768 /* HomeRouter.swift */,
+				1945523A2B05258200299768 /* HomeConfigurator.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		194552322B04FF2900299768 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		19BB8A572B07BEE30070B922 /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				19743C042B06940D001E405A /* PlayerView.swift */,
+			);
+			path = UIComponents;
 			sourceTree = "<group>";
 		};
 		19C7AFCF2B02441C003B35F2 /* Common */ = {
@@ -230,6 +272,19 @@
 				19C7AFD52B02584D003B35F2 /* KeychainStored.swift */,
 			);
 			path = Keychain;
+			sourceTree = "<group>";
+		};
+		835A61962B0680FC002F22A5 /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				835A61972B068115002F22A5 /* PlaybackPresenter.swift */,
+				835A61982B068115002F22A5 /* PlaybackWorker.swift */,
+				835A61992B068115002F22A5 /* PlaybackRouter.swift */,
+				835A619A2B068115002F22A5 /* PlaybackModels.swift */,
+				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
+				835A619C2B068115002F22A5 /* PlaybackInteractor.swift */,
+			);
+			path = Playback;
 			sourceTree = "<group>";
 		};
 		FC2511A72B04DA9C004717BC /* MapScene */ = {
@@ -340,9 +395,11 @@
 		FC7E457B2AFF6F9D004F155A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				19BB8A572B07BEE30070B922 /* UIComponents */,
+				835A61962B0680FC002F22A5 /* Playback */,
 				1945520E2B03AEA400299768 /* Configurator.swift */,
 				FC2511A72B04DA9C004717BC /* MapScene */,
-				FCEE0FFB2B03AFAA00195BBE /* SingUpScene */,
+				FCEE0FFB2B03AFAA00195BBE /* SignUpScene */,
 				194552032B038FC400299768 /* Tabbar */,
 				194551EB2B037F1E00299768 /* Login */,
 				1945521A2B0478A100299768 /* Home */,
@@ -359,6 +416,9 @@
 				FCEE0FF12B036B6000195BBE /* LOButton.swift */,
 				FCEE0FF52B03804000195BBE /* LOTextField.swift */,
 				194552302B04DA1A00299768 /* LOCircleButton.swift */,
+				835A618F2B067D61002F22A5 /* LOSlider.swift */,
+				835A61912B067FEC002F22A5 /* LOTagStackView.swift */,
+				835A61932B068096002F22A5 /* LODescriptionView.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -384,7 +444,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		FCEE0FFB2B03AFAA00195BBE /* SingUpScene */ = {
+		FCEE0FFB2B03AFAA00195BBE /* SignUpScene */ = {
 			isa = PBXGroup;
 			children = (
 				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
@@ -393,7 +453,7 @@
 				FC2511A32B045D6C004717BC /* SignUpModels.swift */,
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
-			path = SingUpScene;
+			path = SignUpScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -521,10 +581,12 @@
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
+				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
+				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
 				194552132B03AFFC00299768 /* DummyViewController.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
@@ -534,6 +596,7 @@
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
+				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
 				FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
@@ -543,20 +606,29 @@
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
+				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
+				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
+				835A61922B067FEC002F22A5 /* LOTagStackView.swift in Sources */,
 				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
+				835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */,
 				1945520F2B03AEA400299768 /* Configurator.swift in Sources */,
+				835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */,
 				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
 				FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */,
+				835A619D2B068115002F22A5 /* PlaybackPresenter.swift in Sources */,
 				FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */,
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
+				835A61902B067D61002F22A5 /* LOSlider.swift in Sources */,
 				FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,
 				FC2511A92B04DAD4004717BC /* MapViewController.swift in Sources */,
 				FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */,
+				835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */,
+				835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,

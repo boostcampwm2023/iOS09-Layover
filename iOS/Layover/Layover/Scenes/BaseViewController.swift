@@ -25,12 +25,13 @@ class BaseViewController: UIViewController {
 
     // MARK: - Methods
 
+    /// Call when ViewDidLoad
     func setConstraints() {
         // Set AutoLayout
     }
 
+    /// Call when ViewDidLoad After setConstraints()
     func setUI() {
-        // Set UI
         view.backgroundColor = UIColor.background
     }
 }
