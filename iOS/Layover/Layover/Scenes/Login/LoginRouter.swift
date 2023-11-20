@@ -25,15 +25,7 @@ class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     // MARK: - Routing
 
     func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+
     }
 
-    // MARK: - Data Passing
-
-    // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: LoginDataStore) {
-    //     destinationDS.attribute = sourceDS.attribute
-    // }
 }
