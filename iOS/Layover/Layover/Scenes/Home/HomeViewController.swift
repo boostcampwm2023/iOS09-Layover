@@ -111,7 +111,6 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
                                                    heightDimension: .fractionalHeight(groupHeightDimension))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: [item])
-
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = 0
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30)

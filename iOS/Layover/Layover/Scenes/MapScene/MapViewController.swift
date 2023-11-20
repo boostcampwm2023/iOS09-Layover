@@ -10,7 +10,7 @@ import MapKit
 import UIKit
 
 protocol MapDisplayLogic: AnyObject {
-
+    func displayFetchedVideos(viewModel: MapModels.FetchVideo.ViewModel)
 }
 
 final class MapViewController: BaseViewController {
@@ -50,7 +50,7 @@ final class MapViewController: BaseViewController {
         return collectionView
     }()
 
-    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: carouselCollectionView) { collectionView, indexPath, _ in
+    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, ViewModel.VideoDataSource>(collectionView: carouselCollectionView) { collectionView, indexPath, item in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.configure(urlString: item.videoURLs)
@@ -59,22 +59,34 @@ final class MapViewController: BaseViewController {
 
     // MARK: - Properties
 
+    typealias Models = MapModels
+    typealias ViewModel = Models.FetchVideo.ViewModel
+
     var interactor: MapBusinessLogic?
 
     // MARK: - Life Cycle
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        MapConfigurator.shared.configure(self)
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        MapConfigurator.shared.configure(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        MapConfigurator.shared.configure(self)
         interactor?.checkLocationAuthorizationStatus()
-        setCarouselCollectionView()
+        interactor?.fetchVideos()
     }
 
     // MARK: - UI + Layout
 
     override func setConstraints() {
+        view.addSubviews(mapView, searchButton, currentLocationButton, uploadButton, carouselCollectionView)
         [mapView, searchButton, currentLocationButton, uploadButton, carouselCollectionView].forEach {
-            view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
