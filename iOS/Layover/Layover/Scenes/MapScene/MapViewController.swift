@@ -44,11 +44,7 @@ final class MapViewController: BaseViewController {
     private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
 
     private lazy var carouselCollectionView: UICollectionView = {
-        let layout: UICollectionViewLayout = .createCarouselLayout(groupWidthDimension: 94/375,
-                                                                   groupHeightDimension: 1.0,
-                                                                   maximumZoomScale: 1.0,
-                                                                   minimumZoomScale: 73/94)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.register(MapCarouselCollectionViewCell.self, forCellWithReuseIdentifier: MapCarouselCollectionViewCell.identifier)
         return collectionView
@@ -57,7 +53,7 @@ final class MapViewController: BaseViewController {
     private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: carouselCollectionView) { collectionView, indexPath, _ in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
-        cell.layer.cornerRadius = 10
+        cell.configure(urlString: item.videoURLs)
         return cell
     }
 
@@ -105,17 +101,42 @@ final class MapViewController: BaseViewController {
         ])
     }
 
-    private func setCarouselCollectionView() {
-        carouselCollectionView.dataSource = carouselDatasource
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
-        snapshot.appendSections([UUID()])
-        snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9])
-        carouselDatasource.apply(snapshot)
+    private func createLayout() -> UICollectionViewLayout {
+        let groupWidthDimension: CGFloat = 94/375
+        let minumumZoomScale: CGFloat = 73/94
+        let maximumZoomScale: CGFloat = 1.0
+        let section: NSCollectionLayoutSection = .makeCarouselSection(groupWidthDimension: groupWidthDimension)
+        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.interGroupSpacing = 0
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 200, bottom: 0, trailing: 200)
+        section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+            let containerWidth = environment.container.contentSize.width
+            items.forEach { item in
+                let distanceFromCenter = abs((item.center.x - offset.x) - environment.container.contentSize.width / 2.0)
+                let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minumumZoomScale)
+                item.transform = CGAffineTransform(scaleX: scale, y: scale)
+                let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
+                if scale >= maximumZoomScale * 0.9 {
+                    cell?.didMoveToCenter()
+                } else {
+                    cell?.didMoveToSide()
+                }
+            }
+        }
+        return UICollectionViewCompositionalLayout(section: section)
     }
 
 }
 
 extension MapViewController: MapDisplayLogic {
+
+    func displayFetchedVideos(viewModel: ViewModel) {
+        carouselCollectionView.dataSource = carouselDatasource
+        var snapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
+        snapshot.appendSections([UUID()])
+        snapshot.appendItems(viewModel.videoDataSources)
+        carouselDatasource.apply(snapshot)
+    }
 
 }
 
