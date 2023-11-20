@@ -12,6 +12,8 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
 
+    private let loopingPlayerView = LoopingPlayerView()
+
     // MARK: - UI Components
 
     // MARK: - Object lifecycle
@@ -35,7 +37,12 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     }
 
     private func setConstraints() {
+        addSubviews(loopingPlayerView)
+        loopingPlayerView.backgroundColor = .green
 
+        loopingPlayerView.lor.makeConstraints {
+            $0.equalToSuperView()
+        }
     }
 
     // MARK: - Methods
