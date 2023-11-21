@@ -1,4 +1,4 @@
-import { Get, Post, Body } from '@nestjs/common';
+import { Post, Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { OauthService } from './oauth.service';
 import { hashSHA256 } from 'src/utils/hashUtils';
