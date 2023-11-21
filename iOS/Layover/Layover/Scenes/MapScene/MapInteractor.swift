@@ -47,7 +47,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"]
-        presenter?.presentFetchedVideos(response: MapModels.FetchVideo.Reponse(videoURLs: dummyData))
+        presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Reponse(videoURLs: dummyData))
     }
 
     private func checkCurrentLocationAuthorization(for status: CLAuthorizationStatus) {
