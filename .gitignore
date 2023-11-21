@@ -1,9 +1,14 @@
-# compiled output
+#compiled output
 BE/layover/dist
 BE/layover/node_modules
 
 # .env
 .env
+
+# secure files
+BE/layover/ca_bundle.crt
+BE/layover/certificate.crt
+BE/layover/private.key
 
 # Logs
 logs

@@ -61,9 +61,7 @@ export class OauthService {
   ): Promise<{ accessJWT: string; refreshJWT: string }> {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
-
     if (!isUserExist) {
-      // response 401, OAUTH01
       throw new CustomException(ECustomException.OAUTH01);
     }
 
@@ -76,13 +74,16 @@ export class OauthService {
   ): Promise<{ accessJWT: string; refreshJWT: string }> {
     // access token 생성
     const accessTokenPaylaod = makeJwtPaylaod('access', memberHash);
+    // OAUTH04
     const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
 
     // refresh token 생성
     const refreshTokenPaylaod = makeJwtPaylaod('refresh', memberHash);
+    // OAUTH04
     const refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
 
     // refresh token은 redis에 저장, 유효기간도 추가
+    // OAUTH05
     this.redisClient.setEx(refreshJWT, REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
 
     // 각 토큰 반환

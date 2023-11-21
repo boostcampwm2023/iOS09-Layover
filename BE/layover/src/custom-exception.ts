@@ -10,8 +10,15 @@ import { Response } from 'express';
 
 export const enum CustomCode {
   'OAUTH01' = 'OAUTH01',
+  'OAUTH02' = 'OAUTH02',
+  'OAUTH03' = 'OAUTH03',
+  'OAUTH04' = 'OAUTH04',
+  'OAUTH05' = 'OAUTH05',
+  'OAUTH06' = 'OAUTH06',
   'JWT01' = 'JWT01',
   'JWT02' = 'JWT02',
+  'JWT03' = 'JWT03',
+  'MEMBER01' = 'MEMBER01',
   'NEST_OFFER' = 'NEST_OFFER',
   'INTERNAL_SERVER_ERROR' = 'INTERNAL_SERVER_ERROR',
 }
@@ -24,6 +31,36 @@ export class ECustomException extends EnumType<ECustomException>() {
     '회원가입이 되지 않은 유저입니다.',
   );
 
+  static readonly OAUTH02 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.OAUTH02,
+    '유효하지 않은 access token입니다.',
+  );
+
+  static readonly OAUTH03 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.OAUTH03,
+    '사용자 정보를 받아오던 도중 오류가 발생했습니다.',
+  );
+
+  static readonly OAUTH04 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.OAUTH04,
+    'token을 생성하는 과정에서 오류가 발생했습니다.',
+  );
+
+  static readonly OAUTH05 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.OAUTH05,
+    'refresh token을 저장하는 과정에서 오류가 발생했습니다.',
+  );
+
+  static readonly OAUTH06 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.OAUTH06,
+    '회원정보를 저장하는 과정에서 오류가 발생했습니다.',
+  );
+
   static readonly JWT01 = new ECustomException(
     HttpStatus.UNAUTHORIZED,
     CustomCode.JWT01,
@@ -34,6 +71,12 @@ export class ECustomException extends EnumType<ECustomException>() {
     HttpStatus.UNAUTHORIZED,
     CustomCode.JWT02,
     '토큰 만료기간이 경과하였습니다.',
+  );
+
+  static readonly JWT03 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.JWT03,
+    '유효하지 않은 JWT 토큰입니다.',
   );
 
   private constructor(
