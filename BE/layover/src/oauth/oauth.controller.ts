@@ -27,7 +27,7 @@ export class OauthController {
     return { accessToken: accessJWT, refreshToken: refreshJWT };
   }
 
-  @Get('apple')
+  @Post('apple')
   async processAppleLogin(@Body('identityToken') identityToken: string) {
     // Get memberId from identity token ("sub" claim)
     const jwtPayload = await this.oauthService.extractPayloadJWT(identityToken);
@@ -47,10 +47,14 @@ export class OauthController {
     @Body('username') username: string,
     @Body('provider') provider: string,
   ) {
+    // 닉네임 중복 확인
+
+    // signup
     await this.oauthService.signup(memberHash, username, provider);
 
-    // login
-    const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
+    // token들 발급
+    const { accessJWT, refreshJWT } =
+      await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
     return { accessToken: accessJWT, refreshToken: refreshJWT };
