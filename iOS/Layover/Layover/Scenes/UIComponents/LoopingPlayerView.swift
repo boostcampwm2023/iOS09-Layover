@@ -24,11 +24,16 @@ final class LoopingPlayerView: UIView {
 
     private var playerLayer: AVPlayerLayer? { layer as? AVPlayerLayer }
 
+    var isPlaying: Bool {
+        player?.timeControlStatus == .playing
+    }
+
     // MARK: - View Life Cycle
 
     override func layoutSubviews() {
         super.layoutSubviews()
         playerLayer?.frame = bounds
+        playerLayer?.videoGravity = .resizeAspectFill
     }
 
     // MARK: - Methods
@@ -41,23 +46,27 @@ final class LoopingPlayerView: UIView {
     }
 
     func disable() {
-        player?.pause()
+        pause()
         player = nil
         looper = nil
     }
 
     func play() {
-        player?.play()
+        if !isPlaying {
+            player?.play()
+        }
     }
 
     func pause() {
-        player?.pause()
+        if isPlaying {
+            player?.pause()
+        }
     }
 }
 
 #Preview {
     let view = LoopingPlayerView()
-    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!, 
+    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!,
                       timeRange: .init(start: .zero,
                                        end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
     view.play()
