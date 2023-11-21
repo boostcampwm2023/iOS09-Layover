@@ -39,8 +39,6 @@ extension AppleLoginWorker: ASAuthorizationControllerDelegate {
 //            let userIdentifier: String = appleIDCredential.user
 //            let fullName: PersonNameComponents? = appleIDCredential.fullName
 //            let email: String? = appleIDCredential.email
-
-//            let identityToken: Data? = appleIDCredential.identityToken
             guard let identityToken: Data = appleIDCredential.identityToken else {
                 return
             }
@@ -49,12 +47,11 @@ extension AppleLoginWorker: ASAuthorizationControllerDelegate {
             }
             print(identityTokenString)
             let loginRequestDTO: LoginRequestDTO = LoginRequestDTO(accessToken: identityTokenString)
-//            let loginRequestData: Data = Json
-            let endPoint: EndPoint = EndPoint<LoginResponseDTO>(baseURL: "https://101.101.210.91:3000", path: "/oauth/apple", method: .POST, bodyParameters: loginRequestDTO)
+            let endPoint: EndPoint = EndPoint<LoginResponseDTO>(baseURL: "https://layoverapi.shop:3000", path: "/oauth/apple", method: .POST, bodyParameters: loginRequestDTO)
             Task {
                 do {
                     let data: LoginResponseDTO = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-//                    print(data)
+                    print(data)
                 } catch {
                     print(error.localizedDescription)
                 }
