@@ -6,24 +6,80 @@
 //
 
 import UIKit
+import AuthenticationServices
 
-protocol LoginDisplayLogic: class {
-    func displayFetchFromLocalDataStore(with viewModel: LoginModels.FetchFromLocalDataStore.ViewModel)
-    func displayFetchFromRemoteDataStore(with viewModel: LoginModels.FetchFromRemoteDataStore.ViewModel)
-    func displayTrackAnalytics(with viewModel: LoginModels.TrackAnalytics.ViewModel)
-    func displayPerformLogin(with viewModel: LoginModels.PerformLogin.ViewModel)
+protocol LoginDisplayLogic: AnyObject {
+    func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
+    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel)
 }
 
-class LoginViewController: UIViewController, LoginDisplayLogic {
+final class LoginViewController: BaseViewController {
 
     // MARK: - Properties
+    private let logoImage: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.loLogo
+        return imageView
+    }()
+
+    private let logoTitleLabel: UILabel = {
+        let titleLabel: UILabel = UILabel()
+        titleLabel.font = .loFont(type: .logoTitle)
+        titleLabel.text = "Layover"
+        return titleLabel
+    }()
+
+    private let kakaoTitleView: UIView = UIView()
+
+    private let kakaoLogo: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.kakaoLogo
+        return imageView
+    }()
+
+    private let kakaoLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.text = "카카오로 계속하기"
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        return label
+    }()
+
+    private let kakaoLoginButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.backgroundColor = .kakao
+        button.layer.cornerRadius = 10
+        return button
+    }()
+
+    private let appleTitleView: UIView = UIView()
+
+    private let appleLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.text = "Apple로 계속하기"
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        return label
+    }()
+
+    private let appleLogo: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.appleLogo
+        return imageView
+    }()
+
+    private let appleLoginButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        return button
+    }()
 
     typealias Models = LoginModels
-    var router: (NSObjectProtocol & LoginRoutingLogic & LoginDataPassing)?
+
     var interactor: LoginBusinessLogic?
 
     // MARK: - Object lifecycle
-
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
@@ -35,120 +91,90 @@ class LoginViewController: UIViewController, LoginDisplayLogic {
     }
 
     // MARK: - Setup
-
     private func setup() {
-        let viewController = self
-        let interactor = LoginInteractor()
-        let presenter = LoginPresenter()
-        let router = LoginRouter()
-
-        viewController.router = router
-        viewController.interactor = interactor
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+        LoginConfigurator.shared.configure(self)
     }
 
-    // MARK: - View Lifecycle
+    // MARK: - UI + Layout
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupFetchFromLocalDataStore()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupFetchFromRemoteDataStore()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        trackScreenViewAnalytics()
-        registerNotifications()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        unregisterNotifications()
-    }
-
-    // MARK: - Notifications
-
-    func registerNotifications() {
-        let selector = #selector(trackScreenViewAnalytics)
-        let notification = UIApplication.didBecomeActiveNotification
-        NotificationCenter.default.addObserver(self, selector: selector, name: notification, object: nil)
-    }
-
-    func unregisterNotifications() {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    // MARK: - Use Case - Fetch From Local DataStore
-
-    @IBOutlet var exampleLocalLabel: UILabel! = UILabel()
-    func setupFetchFromLocalDataStore() {
-        let request = Models.FetchFromLocalDataStore.Request()
-        interactor?.fetchFromLocalDataStore(with: request)
-    }
-
-    func displayFetchFromLocalDataStore(with viewModel: LoginModels.FetchFromLocalDataStore.ViewModel) {
-        exampleLocalLabel.text = viewModel.exampleTranslation
-    }
-
-    // MARK: - Use Case - Fetch From Remote DataStore
-
-    @IBOutlet var exampleRemoteLabel: UILabel! = UILabel()
-    func setupFetchFromRemoteDataStore() {
-        let request = Models.FetchFromRemoteDataStore.Request()
-        interactor?.fetchFromRemoteDataStore(with: request)
-    }
-
-    func displayFetchFromRemoteDataStore(with viewModel: LoginModels.FetchFromRemoteDataStore.ViewModel) {
-        exampleRemoteLabel.text = viewModel.exampleVariable
-    }
-
-    // MARK: - Use Case - Track Analytics
-
-    @objc
-    func trackScreenViewAnalytics() {
-        trackAnalytics(event: .screenView)
-    }
-
-    func trackAnalytics(event: LoginModels.AnalyticsEvents) {
-        let request = Models.TrackAnalytics.Request(event: event)
-        interactor?.trackAnalytics(with: request)
-    }
-
-    func displayTrackAnalytics(with viewModel: LoginModels.TrackAnalytics.ViewModel) {
-        // do something after tracking analytics (if needed)
-    }
-
-    // MARK: - Use Case - Login
-
-    func performLogin(_ sender: Any) {
-        let request = Models.PerformLogin.Request(exampleVariable: exampleLocalLabel.text)
-        interactor?.performLogin(with: request)
-    }
-
-    func displayPerformLogin(with viewModel: LoginModels.PerformLogin.ViewModel) {
-        // handle error and ui element error states
-        // based on error type
-        if let error = viewModel.error {
-            switch error.type {
-            case .emptyExampleVariable:
-                exampleLocalLabel.text = error.message
-
-            case .networkError:
-                exampleLocalLabel.text = error.message
-            }
-
-            return
+    override func setConstraints() {
+        view.addSubviews(logoImage, logoTitleLabel, kakaoLoginButton, appleLoginButton)
+        [logoImage, logoTitleLabel, kakaoLoginButton, appleLoginButton].forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        // handle ui element success state and
-        // route to next screen
-        router?.routeToNext()
+        NSLayoutConstraint.activate([
+            logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 280),
+            logoImage.widthAnchor.constraint(equalToConstant: 81.24),
+            logoImage.heightAnchor.constraint(equalToConstant: 58.12),
+            logoTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoTitleLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 14.88),
+            kakaoLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            kakaoLoginButton.topAnchor.constraint(equalTo: logoTitleLabel.bottomAnchor, constant: 81),
+            kakaoLoginButton.widthAnchor.constraint(equalToConstant: 315),
+            kakaoLoginButton.heightAnchor.constraint(equalToConstant: 48),
+            appleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            appleLoginButton.topAnchor.constraint(equalTo: kakaoLoginButton.bottomAnchor, constant: 8),
+            appleLoginButton.widthAnchor.constraint(equalToConstant: 315),
+            appleLoginButton.heightAnchor.constraint(equalToConstant: 48)
+        ])
+        setLoginButtonConstraints()
     }
+
+    private func setLoginButtonConstraints() {
+        [kakaoTitleView, kakaoLogo, kakaoLabel, appleTitleView, appleLogo, appleLabel].forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        kakaoTitleView.addSubviews(kakaoLogo, kakaoLabel)
+        kakaoLoginButton.addSubview(kakaoTitleView)
+        appleTitleView.addSubviews(appleLogo, appleLabel)
+        appleLoginButton.addSubview(appleTitleView)
+
+        NSLayoutConstraint.activate([
+            kakaoTitleView.widthAnchor.constraint(equalToConstant: 129),
+            kakaoTitleView.heightAnchor.constraint(equalToConstant: 20),
+            kakaoTitleView.centerXAnchor.constraint(equalTo: kakaoLoginButton.centerXAnchor),
+            kakaoTitleView.centerYAnchor.constraint(equalTo: kakaoLoginButton.centerYAnchor),
+            kakaoLogo.widthAnchor.constraint(equalToConstant: 20),
+            kakaoLogo.heightAnchor.constraint(equalToConstant: 20),
+            kakaoLogo.leadingAnchor.constraint(equalTo: kakaoTitleView.leadingAnchor),
+            kakaoLogo.topAnchor.constraint(equalTo: kakaoTitleView.topAnchor),
+            kakaoLogo.bottomAnchor.constraint(equalTo: kakaoTitleView.bottomAnchor),
+            kakaoLabel.topAnchor.constraint(equalTo: kakaoTitleView.topAnchor),
+            kakaoLabel.bottomAnchor.constraint(equalTo: kakaoTitleView.bottomAnchor),
+            kakaoLabel.leadingAnchor.constraint(equalTo: kakaoLogo.trailingAnchor, constant: 1.5),
+
+            appleTitleView.widthAnchor.constraint(equalToConstant: 129),
+            appleTitleView.heightAnchor.constraint(equalToConstant: 20),
+            appleTitleView.centerXAnchor.constraint(equalTo: appleLoginButton.centerXAnchor),
+            appleTitleView.centerYAnchor.constraint(equalTo: appleLoginButton.centerYAnchor),
+            appleLogo.widthAnchor.constraint(equalToConstant: 20),
+            appleLogo.heightAnchor.constraint(equalToConstant: 20),
+            appleLogo.leadingAnchor.constraint(equalTo: appleTitleView.leadingAnchor),
+            appleLogo.topAnchor.constraint(equalTo: appleTitleView.topAnchor),
+            appleLogo.bottomAnchor.constraint(equalTo: appleTitleView.bottomAnchor),
+            appleLabel.topAnchor.constraint(equalTo: appleTitleView.topAnchor),
+            appleLabel.bottomAnchor.constraint(equalTo: appleTitleView.bottomAnchor),
+            appleLabel.leadingAnchor.constraint(equalTo: appleLogo.trailingAnchor, constant: 1.5)
+        ])
+    }
+
+}
+
+// MARK: - Use Case - Login
+
+extension LoginViewController: LoginDisplayLogic {
+    func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
+        // TODO: Logic 작성
+    }
+
+    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel) {
+        // TODO: Logic 작성
+    }
+
+}
+
+#Preview {
+    LoginViewController()
 }

@@ -7,25 +7,20 @@
 
 import UIKit
 
-class LoginWorker {
+final class LoginWorker {
 
     // MARK: - Properties
 
     typealias Models = LoginModels
 
-    // MARK: - Methods
+    // MARK: - Login Methods
 
-    // MARK: Screen Specific Validation
 
-    func validate(exampleVariable: String?) -> Models.LoginError? {
-        var error: Models.LoginError?
+    func kakaoLogin() {
 
-        if exampleVariable?.isEmpty == false {
-            error = nil
-        } else {
-            error = Models.LoginError(type: .emptyExampleVariable)
-        }
+    }
 
-        return error
+    func appleLogin() {
+
     }
 }
