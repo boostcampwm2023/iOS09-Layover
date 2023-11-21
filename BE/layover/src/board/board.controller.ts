@@ -3,23 +3,25 @@ import * as AWS from 'aws-sdk';
 @Controller('board')
 export class BoardController {
   @Post('presigned-url')
-  async getPresignedUrl(@Body('filename') filename: string) {
+  async getPresignedUrl(
+    @Body('filename') filename: string,
+    @Body('filetype') filetype: string,
+  ) {
     const s3 = new AWS.S3({
-      endpoint: 'https://kr.object.ncloudstorage.com',
+      endpoint: process.env.NCLOUD_S3_ENDPOINT,
       credentials: {
         accessKeyId: process.env.NCLOUD_S3_ACCESS_KEY,
         secretAccessKey: process.env.NCLOUD_S3_SECRET_KEY,
       },
-      region: 'kr-standard',
+      region: process.env.NCLOUD_S3_REGION,
     });
 
     const preSignedUrl: string = s3.getSignedUrl('putObject', {
       Bucket: process.env.NCLOUD_S3_BUCKET_NAME,
-      Key: `${filename}.mp4`,
-      Expires: 60 * 60, // URL이 만료되는 시간(초 단위)
-      ContentType: 'video/mp4',
+      Key: `${filename}.${filetype}`,
+      Expires: 60 * 60, // URL 만료되는 시간(초 단위)
+      ContentType: `video/${filetype}`,
     });
-    console.log(preSignedUrl);
     return { preSignedUrl };
   }
 }
