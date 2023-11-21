@@ -10,8 +10,10 @@ import AuthenticationServices
 
 protocol LoginDisplayLogic: AnyObject {
     func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
-    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel)
+    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewModel)
 }
+
+
 
 final class LoginViewController: BaseViewController {
 
@@ -52,7 +54,11 @@ final class LoginViewController: BaseViewController {
         return button
     }()
 
-    private let appleTitleView: UIView = UIView()
+    private let appleTitleView: UIView = {
+        let view: UIView = UIView()
+        view.isUserInteractionEnabled = false
+        return view
+    }()
 
     private let appleLabel: UILabel = {
         let label: UILabel = UILabel()
@@ -83,6 +89,7 @@ final class LoginViewController: BaseViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
+        appleLoginButton.addTarget(self, action: #selector(appleLoginButtonDidTapp), for: .touchUpInside)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -160,6 +167,13 @@ final class LoginViewController: BaseViewController {
         ])
     }
 
+    @objc func appleLoginButtonDidTapp() {
+        guard let window: UIWindow = self.view.window else {
+            return
+        }
+        let request: LoginViewController.Models.PerformAppleLogin.Request  = Models.PerformAppleLogin.Request(window: window)
+        interactor?.performAppleLogin(with: request)
+    }
 }
 
 // MARK: - Use Case - Login
@@ -169,12 +183,12 @@ extension LoginViewController: LoginDisplayLogic {
         // TODO: Logic 작성
     }
 
-    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel) {
+    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewModel) {
         // TODO: Logic 작성
     }
 
 }
-
-#Preview {
-    LoginViewController()
-}
+//
+//#Preview {
+//    LoginViewController()
+//}

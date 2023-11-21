@@ -31,7 +31,7 @@ class Provider: ProviderType {
 
         if authenticationIfNeeded {
             if let token = authManager.accessToken {
-                urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-type")
             }
         }
 

@@ -27,15 +27,17 @@ enum LoginModels {
 
     enum PerformAppleLogin {
         struct Request {
-
+            let window: UIWindow
         }
 
         struct Response {
 
         }
 
-        struct ViewMdoel {
+        struct ViewModel {
 
         }
     }
+
+    
 }

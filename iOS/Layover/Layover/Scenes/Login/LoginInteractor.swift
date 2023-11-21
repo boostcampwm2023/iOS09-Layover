@@ -20,7 +20,7 @@ final class LoginInteractor {
 
     typealias Models = LoginModels
 
-    var worker: LoginWorker?
+    var appleLoginWorker: AppleLoginWorker?
     var presenter: LoginPresentationLogic?
 
 }
@@ -33,7 +33,8 @@ extension LoginInteractor: LoginBusinessLogic {
     }
 
     func performAppleLogin(with request: LoginModels.PerformAppleLogin.Request) {
-        // TODO: Logic 작성
+        appleLoginWorker = AppleLoginWorker(window: request.window)
+        appleLoginWorker?.appleLogin()
     }
 
 }
