@@ -123,16 +123,13 @@ final class LoginViewController: BaseViewController {
     }
 
     private func setLoginButtonConstraints() {
+        [kakaoTitleView, kakaoLogo, kakaoLabel, appleTitleView, appleLogo, appleLabel].forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
+        }
         kakaoTitleView.addSubviews(kakaoLogo, kakaoLabel)
         kakaoLoginButton.addSubview(kakaoTitleView)
-        kakaoTitleView.translatesAutoresizingMaskIntoConstraints = false
-        kakaoLogo.translatesAutoresizingMaskIntoConstraints = false
-        kakaoLabel.translatesAutoresizingMaskIntoConstraints = false
         appleTitleView.addSubviews(appleLogo, appleLabel)
         appleLoginButton.addSubview(appleTitleView)
-        appleTitleView.translatesAutoresizingMaskIntoConstraints = false
-        appleLogo.translatesAutoresizingMaskIntoConstraints = false
-        appleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             kakaoTitleView.widthAnchor.constraint(equalToConstant: 129),
