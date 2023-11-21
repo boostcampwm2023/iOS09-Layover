@@ -11,7 +11,7 @@ import AVFoundation
 
 final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
-    private let loopingPlayerView = LoopingPlayerView()
+    private(set) var loopingPlayerView = LoopingPlayerView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,22 +25,10 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         render()
     }
 
-    override func prepareForReuse() {
-        render()
-    }
-
-    func configure(urlString: String) {
-        loopingPlayerView.prepareVideo(with: URL(string: urlString)!,
+    func configure(url: URL) {
+        loopingPlayerView.prepareVideo(with: url,
                                        timeRange: CMTimeRange(start: .zero, duration: CMTime(value: 1800, timescale: 600)))
         loopingPlayerView.player?.isMuted = true
-    }
-
-    func didMoveToCenter() {
-        loopingPlayerView.play()
-    }
-
-    func didMoveToSide() {
-        loopingPlayerView.pause()
     }
 
     private func setUI() {
@@ -48,10 +36,10 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(loopingPlayerView)
         loopingPlayerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        loopingPlayerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-        loopingPlayerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-        loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            loopingPlayerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            loopingPlayerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 

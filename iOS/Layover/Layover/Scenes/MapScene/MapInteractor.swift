@@ -41,13 +41,14 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
     func fetchVideos() {
         // TODO: worker 네트워크 호출
-        let dummyData: [String] = ["http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
+        let dummyURLs: [URL] = ["http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
                                    "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"]
-        presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Reponse(videoURLs: dummyData))
+            .compactMap { URL(string: $0) }
+        presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Reponse(videoURLs: dummyURLs))
     }
 
     private func checkCurrentLocationAuthorization(for status: CLAuthorizationStatus) {

@@ -53,7 +53,7 @@ final class MapViewController: BaseViewController {
     private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, ViewModel.VideoDataSource>(collectionView: carouselCollectionView) { collectionView, indexPath, item in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(urlString: item.videoURLs)
+        cell.configure(url: item.videoURL)
         return cell
     }
 
@@ -129,9 +129,9 @@ final class MapViewController: BaseViewController {
                 item.transform = CGAffineTransform(scaleX: scale, y: scale)
                 let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
                 if scale >= maximumZoomScale * 0.9 {
-                    cell?.didMoveToCenter()
+                    cell?.loopingPlayerView.play()
                 } else {
-                    cell?.didMoveToSide()
+                    cell?.loopingPlayerView.pause()
                 }
             }
         }
@@ -144,7 +144,7 @@ extension MapViewController: MapDisplayLogic {
 
     func displayFetchedVideos(viewModel: ViewModel) {
         carouselCollectionView.dataSource = carouselDatasource
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
+        var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.videoDataSources)
         carouselDatasource.apply(snapshot)

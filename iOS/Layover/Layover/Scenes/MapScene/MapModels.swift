@@ -18,7 +18,7 @@ enum MapModels {
         }
 
         struct Reponse {
-            var videoURLs: [String]
+            var videoURLs: [URL]
         }
 
         struct ViewModel {
@@ -26,7 +26,7 @@ enum MapModels {
 
             struct VideoDataSource: Hashable {
                 var id = UUID()
-                var videoURLs: String
+                var videoURL: URL
             }
         }
     }

@@ -25,7 +25,7 @@ final class LoopingPlayerView: UIView {
     private var playerLayer: AVPlayerLayer? { layer as? AVPlayerLayer }
 
     var isPlaying: Bool {
-        get { player?.timeControlStatus == .playing }
+        player?.timeControlStatus == .playing
     }
 
     // MARK: - View Life Cycle
@@ -66,7 +66,7 @@ final class LoopingPlayerView: UIView {
 
 #Preview {
     let view = LoopingPlayerView()
-    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!, 
+    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!,
                       timeRange: .init(start: .zero,
                                        end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
     view.play()
