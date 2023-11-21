@@ -17,65 +17,139 @@ extension LayoverConstraintWrapper where Base: UIView {
 }
 
 final class ConstraintMaker {
-    let view: UIView
+
+    // MARK: Properties
+
+    private let view: UIView
+
+    var edges: ConstraintEdges {
+        ConstraintEdges(view)
+    }
+
+    var top: ConstraintEdges {
+        ConstraintEdges(view).top
+    }
+
+    var bottom: ConstraintEdges {
+        ConstraintEdges(view).bottom
+    }
+
+    var leading: ConstraintEdges {
+        ConstraintEdges(view).leading
+    }
+
+    var trailing: ConstraintEdges {
+        ConstraintEdges(view).trailing
+    }
+
+    var width: ConstraintEdges {
+        ConstraintEdges(view).width
+    }
+
+    var height: ConstraintEdges {
+        ConstraintEdges(view).height
+    }
+
+    var centerX: ConstraintEdges {
+        ConstraintEdges(view).centerX
+    }
+
+    var centerY: ConstraintEdges {
+        ConstraintEdges(view).centerY
+    }
+
+    var center: ConstraintEdges {
+        ConstraintEdges(view).center
+    }
+
+    // MARK: Initializer
+
+    init(_ view: UIView) {
+        self.view = view
+    }
+}
+
+final class ConstraintEdges {
+
+    // MARK: Properties
+
+    private let view: UIView
+
+    private var topAnchor: NSLayoutYAxisAnchor?
+    private var leadingAnchor: NSLayoutXAxisAnchor?
+    private var trailingAnchor: NSLayoutXAxisAnchor?
+    private var bottomAnchor: NSLayoutYAxisAnchor?
+
+    private var widthAnchor: NSLayoutDimension?
+    private var heightAnchor: NSLayoutDimension?
+
+    private var centerXAnchor: NSLayoutXAxisAnchor?
+    private var centerYAnchor: NSLayoutYAxisAnchor?
+
+    // MARK: Builder Pattern Properties
+
+    var top: ConstraintEdges {
+        topAnchor = view.topAnchor
+        return self
+    }
+
+    var leading: ConstraintEdges {
+        leadingAnchor = view.leadingAnchor
+        return self
+    }
+
+    var trailing: ConstraintEdges {
+        trailingAnchor = view.trailingAnchor
+        return self
+    }
+
+    var bottom: ConstraintEdges {
+        bottomAnchor = view.bottomAnchor
+        return self
+    }
+
+    var width: ConstraintEdges {
+        widthAnchor = view.widthAnchor
+        return self
+    }
+
+    var height: ConstraintEdges {
+        heightAnchor = view.heightAnchor
+        return self
+    }
+
+    var centerX: ConstraintEdges {
+        centerXAnchor = view.centerXAnchor
+        return self
+    }
+
+    var centerY: ConstraintEdges {
+        centerYAnchor = view.centerYAnchor
+        return self
+    }
+
+    var center: ConstraintEdges {
+        centerXAnchor = view.centerXAnchor
+        centerYAnchor = view.centerYAnchor
+        return self
+    }
+
+    // MARK: Intializer
 
     init(_ view: UIView) {
         self.view = view
     }
 
-    func topAnchor(equalTo anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) {
-        view.topAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
-    }
-
-    func bottomAnchor(equalTo anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) {
-        view.bottomAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
-    }
-
-    func leadingAnchor(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
-        view.leadingAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
-    }
-
-    func trailingAnchor(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
-        view.trailingAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
-    }
-
-    func widthAnchor(equalToConstant constant: CGFloat) {
-        view.widthAnchor.constraint(equalToConstant: constant).isActive = true
-    }
-
-    func widthAnchor(equalTo anchor: NSLayoutDimension, multiplier: CGFloat = 1.0) {
-        view.widthAnchor.constraint(equalTo: anchor, multiplier: multiplier).isActive = true
-    }
-
-    func heightAnchor(equalToConstant constant: CGFloat) {
-        view.heightAnchor.constraint(equalToConstant: constant).isActive = true
-    }
-
-    func heightAnchor(equalTo anchor: NSLayoutDimension, multiplier: CGFloat = 1.0) {
-        view.heightAnchor.constraint(equalTo: anchor, multiplier: multiplier).isActive = true
-    }
-
-    func verticalAnchor(equalTo relativeView: UIView) {
-        topAnchor(equalTo: relativeView.topAnchor)
-        bottomAnchor(equalTo: relativeView.bottomAnchor)
-    }
-
-    func horizontalAnchor(equalTo relativeView: UIView) {
-        leadingAnchor(equalTo: relativeView.leadingAnchor)
-        trailingAnchor(equalTo: relativeView.trailingAnchor)
-    }
-
-    func centerXAnchor(equalTo anchor: NSLayoutAnchor<NSLayoutXAxisAnchor>) {
-        view.centerXAnchor.constraint(equalTo: anchor).isActive = true
-    }
-
-    func centerYAnchor(equalTo anchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) {
-        view.centerYAnchor.constraint(equalTo: anchor).isActive = true
-    }
+    // MARK: Methods
 
     func equalToSuperView() {
-        guard let superview = view.superview else { return }
-        verticalAnchor(equalTo: superview)
-        horizontalAnchor(equalTo: superview)
+        guard let superView = view.superview else { return }
+
+        NSLayoutConstraint.activate([
+            topAnchor?.constraint(equalTo: superView.topAnchor),
+            leadingAnchor?.constraint(equalTo: superView.leadingAnchor),
+            trailingAnchor?.constraint(equalTo: superView.trailingAnchor),
+            bottomAnchor?.constraint(equalTo: superView.bottomAnchor)
+        ].compactMap { $0 })
     }
 }

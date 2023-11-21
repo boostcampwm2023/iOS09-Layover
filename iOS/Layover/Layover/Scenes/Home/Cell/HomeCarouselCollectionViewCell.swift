@@ -41,7 +41,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.backgroundColor = .green
 
         loopingPlayerView.lor.makeConstraints {
-            $0.equalToSuperView()
+            $0.center.equalToSuperView()
         }
     }
 
