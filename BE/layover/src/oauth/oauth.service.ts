@@ -7,7 +7,6 @@ import { MemberService } from 'src/database/member/member.service';
 import { makeJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomException, ECustomException } from 'src/custom-exception';
-import { hashHMACSHA256 } from 'src/utils/hashUtils';
 
 @Injectable()
 export class OauthService {
@@ -72,13 +71,16 @@ export class OauthService {
   async generateAccessRefreshTokens(
     memberHash: string,
   ): Promise<{ accessJWT: string; refreshJWT: string }> {
+    // memberHash로부터 해당 회원이 저장된 db pk를 찾아옴.
+    const memberId = 777;
+
     // access token 생성
-    const accessTokenPaylaod = makeJwtPaylaod('access', memberHash);
+    const accessTokenPaylaod = makeJwtPaylaod('access', memberHash, memberId);
     // OAUTH04
     const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
 
     // refresh token 생성
-    const refreshTokenPaylaod = makeJwtPaylaod('refresh', memberHash);
+    const refreshTokenPaylaod = makeJwtPaylaod('refresh', memberHash, memberId);
     // OAUTH04
     const refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
 
@@ -93,6 +95,7 @@ export class OauthService {
     };
   }
 
+  /*
   // verifyAsync 함수로 간단하게 jwt를 검증할 수도 있지만, 어떤로 jwt 검증이 실패하는지 나누기 위해 직접 함수를 만듦.
   async validateJWT(token: string, issuer: string): Promise<void> {
     // 1. signature 유효한지 검사
@@ -116,37 +119,5 @@ export class OauthService {
     if (Math.floor(Date.now() / 1000) > payload.exp)
       throw new CustomException(ECustomException.JWT02);
   }
-
-  extractHeaderJWTstr(token: string): string {
-    const regex = /^([^\.]+)/;
-    const match = token.match(regex);
-    if (match) {
-      return match[1];
-    } else {
-      throw new CustomException(ECustomException.JWT01);
-    }
-  }
-
-  extractPayloadJWTstr(token: string): string {
-    const regex = /\.(.*?)\./g;
-    const data = token.match(regex);
-    if (!data) throw new CustomException(ECustomException.JWT01);
-    const payload = data[0].slice(1, -1);
-    return payload;
-  }
-
-  extractPayloadJWT(token: string) {
-    const payload = this.extractPayloadJWTstr(token);
-    return JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
-  }
-
-  extractSignatureJWTstr(token: string): string {
-    const regex = /\.([^.]+)$/;
-    const match = token.match(regex);
-    if (match) {
-      return match[1];
-    } else {
-      throw new CustomException(ECustomException.JWT01);
-    }
-  }
+*/
 }
