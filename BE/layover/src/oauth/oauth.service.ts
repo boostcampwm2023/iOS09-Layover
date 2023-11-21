@@ -62,7 +62,7 @@ export class OauthService {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
     if (!isUserExist) {
-      throw new CustomException(ECustomException.OAUTH01);
+      throw new CustomException(ECustomException.OAUTH01, { memberHash });
     }
 
     // 각 토큰 반환
