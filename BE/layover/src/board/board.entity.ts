@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Video } from '../video/video.entity';
-import { Member } from '../database/member/member.entity';
+import { Member } from '../member/member.entity';
 
 @Entity()
 export class Board {
