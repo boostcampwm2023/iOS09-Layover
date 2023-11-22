@@ -1,10 +1,7 @@
 import { Post, Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { OauthService } from './oauth.service';
-import { hashSHA256 } from 'src/utils/hashUtils';
-import { extractPayloadJWT } from 'src/utils/jwtUtils';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
-import { CustomException, ECustomException } from 'src/custom-exception';
 
 @Controller('oauth')
 export class OauthController {
@@ -12,13 +9,8 @@ export class OauthController {
 
   @Post('kakao')
   async processKakaoLogin(@Body('accessToken') accessToken: string) {
-    // Get memberId from Kakao Auth Server -> make memberHash
-    const kakaoUserInfoURL = 'https://kapi.kakao.com/v2/user/me';
-    const memberId = await this.oauthService.getMemberIdByAccessToken(
-      kakaoUserInfoURL,
-      accessToken,
-    );
-    const memberHash = hashSHA256(memberId + 'kakao'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
+    // memberHash 구하기
+    const memberHash = await this.oauthService.getKakaoMemberHash(accessToken);
 
     // login
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
@@ -29,11 +21,8 @@ export class OauthController {
 
   @Post('apple')
   async processAppleLogin(@Body('identityToken') identityToken: string) {
-    // Get memberId from identity token ("sub" claim)
-    const jwtPayload = await extractPayloadJWT(identityToken);
-    if (!jwtPayload.sub) throw new CustomException(ECustomException.OAUTH07);
-    const memberId = jwtPayload.sub;
-    const memberHash = hashSHA256(memberId + 'apple'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
+    // memberHash 구하기
+    const memberHash = this.oauthService.getAppleMemberHash(identityToken);
 
     // login
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
@@ -42,16 +31,39 @@ export class OauthController {
     return { accessToken: accessJWT, refreshToken: refreshJWT };
   }
 
-  @Post('signup')
-  async processSignup(
-    @Body('memberHash') memberHash: string,
+  @Post('signup/kakao')
+  async processKakaoSignup(
+    @Body('accessToken') accessToken: string,
     @Body('username') username: string,
-    @Body('provider') provider: string,
   ) {
-    // 닉네임 중복 확인
+    // memberHash 구하기
+    const memberHash = await this.oauthService.getKakaoMemberHash(accessToken);
+
+    // 닉네임 중복 확인 : MEMBER01
 
     // signup
-    await this.oauthService.signup(memberHash, username, provider);
+    await this.oauthService.signup(memberHash, username, 'kakao');
+
+    // token들 발급
+    const { accessJWT, refreshJWT } =
+      await this.oauthService.generateAccessRefreshTokens(memberHash);
+
+    // return access token and refresh token
+    return { accessToken: accessJWT, refreshToken: refreshJWT };
+  }
+
+  @Post('signup/apple')
+  async processAppleSignup(
+    @Body('identityToken') identityToken: string,
+    @Body('username') username: string,
+  ) {
+    // memberHash 구하기
+    const memberHash = this.oauthService.getAppleMemberHash(identityToken);
+
+    // 닉네임 중복 확인 : MEMBER01
+
+    // signup
+    await this.oauthService.signup(memberHash, username, 'apple');
 
     // token들 발급
     const { accessJWT, refreshJWT } =
