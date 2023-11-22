@@ -26,13 +26,9 @@ final class LOSlider: UISlider {
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         setThumbImage(UIImage.loSelectedThumb, for: .normal)
     }
-    
+
     private func setUI() {
         self.minimumTrackTintColor = .primaryPurple
         setThumbImage(UIImage.loNormalThumb, for: .normal)
-        self.minimumValue = 1
-        self.maximumValue = 100
-        self.value = 50
-
     }
 }
