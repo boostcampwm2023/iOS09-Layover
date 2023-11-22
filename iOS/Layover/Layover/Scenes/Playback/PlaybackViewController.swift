@@ -71,8 +71,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         return label
     }()
 
-    private let videoSlider: LOSlider = LOSlider()
-    private let videoView: UIView = UIView()
+    private let playerSlider: LOSlider = LOSlider()
+    private let playerView: PlayerView = PlayerView()
 
     // MARK: - Properties
 
@@ -138,23 +138,27 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - UI + Layout
 
     private func setUI() {
-        [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider].forEach { subView in
+        [playerView, descriptionView, tagStackView, profileButton, profileLabel, locationLabel, playerSlider].forEach { subView in
             subView.translatesAutoresizingMaskIntoConstraints = false
         }
-
-        view.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider)
+        view.addSubview(playerView)
+        playerView.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, playerSlider)
 
         NSLayoutConstraint.activate([
+            playerView.topAnchor.constraint(equalTo: view.topAnchor),
+            playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            playerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             descriptionView.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -11),
-            descriptionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            descriptionView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
             descriptionView.widthAnchor.constraint(equalToConstant: LODescriptionView.descriptionWidth),
 
             tagStackView.bottomAnchor.constraint(equalTo: profileButton.topAnchor, constant: -20),
-            tagStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            tagStackView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
             tagStackView.heightAnchor.constraint(equalToConstant: 25),
 
-            profileButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            profileButton.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -20),
+            profileButton.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
             profileButton.widthAnchor.constraint(equalToConstant: 38),
             profileButton.heightAnchor.constraint(equalToConstant: 38),
 
@@ -162,11 +166,11 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
             profileLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
 
             locationLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
-            locationLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
+            locationLabel.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor, constant: -19),
 
-            videoSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            videoSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            videoSlider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            playerSlider.leadingAnchor.constraint(equalTo: playerView.leadingAnchor),
+            playerSlider.trailingAnchor.constraint(equalTo: playerView.trailingAnchor),
+            playerSlider.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor)
         ])
         let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
         let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
