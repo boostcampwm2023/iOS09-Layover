@@ -42,8 +42,8 @@ export function extractHeaderJWTstr(token: string): string {
 }
 
 export function extractHeaderJWT(token: string): string {
-  const signature = extractHeaderJWTstr(token);
-  return JSON.parse(Buffer.from(signature, 'base64url').toString('utf8'));
+  const header = extractHeaderJWTstr(token);
+  return JSON.parse(Buffer.from(header, 'base64url').toString('utf8'));
 }
 
 export function extractPayloadJWTstr(token: string): string {

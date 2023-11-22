@@ -3,11 +3,12 @@ import { firstValueFrom, catchError } from 'rxjs';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
-import { MemberService } from 'src/database/member/member.service';
-import { makeJwtPaylaod } from 'src/utils/jwtUtils';
+import { MemberService } from 'src/member/member.service';
+import { extractPayloadJWT, makeJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomException, ECustomException } from 'src/custom-exception';
 import { AxiosError } from 'axios';
+import { hashSHA256 } from 'src/utils/hashUtils';
 
 @Injectable()
 export class OauthService {
@@ -48,6 +49,22 @@ export class OauthService {
     return uniqueMemberId;
   }
 
+  async getKakaoMemberHash(accessToken: string): Promise<string> {
+    const kakaoUserInfoURL = 'https://kapi.kakao.com/v2/user/me';
+    const memberId = await this.getMemberIdByAccessToken(
+      kakaoUserInfoURL,
+      accessToken,
+    );
+    return hashSHA256(memberId + 'kakao'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
+  }
+
+  getAppleMemberHash(identityToken: string): string {
+    const jwtPayload = extractPayloadJWT(identityToken);
+    if (!jwtPayload.sub) throw new CustomException(ECustomException.OAUTH07);
+    const memberId = jwtPayload.sub;
+    return hashSHA256(memberId + 'apple'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
+  }
+
   isMemberExistByHash(hash: string): Promise<boolean> {
     return this.memberService.isMemberExistByHash(hash);
   }
@@ -57,13 +74,17 @@ export class OauthService {
     username: string,
     provider: string,
   ): Promise<void> {
-    await this.memberService.insertMember(
-      username,
-      'default profile_image_url',
-      'default introduce',
-      provider,
-      memberHash,
-    );
+    try {
+      await this.memberService.insertMember(
+        username,
+        'default profile_image_url',
+        'default introduce',
+        provider,
+        memberHash,
+      );
+    } catch (e) {
+      throw new CustomException(ECustomException.OAUTH06);
+    }
   }
 
   async login(
@@ -72,7 +93,7 @@ export class OauthService {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
     if (!isUserExist) {
-      throw new CustomException(ECustomException.OAUTH01, { memberHash });
+      throw new CustomException(ECustomException.OAUTH01);
     }
 
     // 각 토큰 반환
