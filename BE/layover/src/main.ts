@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { GlobalExceptionFilter } from './custom-exception';
+import { GlobalExceptionFilter } from './response/custom-response';
 
 import { readFileSync } from 'fs';
 const httpsOptions = {

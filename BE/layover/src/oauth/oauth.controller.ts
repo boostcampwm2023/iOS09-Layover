@@ -2,6 +2,8 @@ import { Post, Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { OauthService } from './oauth.service';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
+import { CustomResponse } from '../response/custom-response';
+import { ECustomCode } from '../response/ecustom-code.jenum.';
 
 @Controller('oauth')
 export class OauthController {
@@ -16,7 +18,10 @@ export class OauthController {
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    return { accessToken: accessJWT, refreshToken: refreshJWT };
+    throw new CustomResponse(ECustomCode.SUCCESS, {
+      accessToken: accessJWT,
+      refreshToken: refreshJWT,
+    });
   }
 
   @Post('apple')
@@ -28,7 +33,10 @@ export class OauthController {
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    return { accessToken: accessJWT, refreshToken: refreshJWT };
+    throw new CustomResponse(ECustomCode.SUCCESS, {
+      accessToken: accessJWT,
+      refreshToken: refreshJWT,
+    });
   }
 
   @Post('signup/kakao')
@@ -49,7 +57,10 @@ export class OauthController {
       await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    return { accessToken: accessJWT, refreshToken: refreshJWT };
+    throw new CustomResponse(ECustomCode.SUCCESS, {
+      accessToken: accessJWT,
+      refreshToken: refreshJWT,
+    });
   }
 
   @Post('signup/apple')
@@ -70,7 +81,10 @@ export class OauthController {
       await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    return { accessToken: accessJWT, refreshToken: refreshJWT };
+    throw new CustomResponse(ECustomCode.SUCCESS, {
+      accessToken: accessJWT,
+      refreshToken: refreshJWT,
+    });
   }
 
   @Post('refresh-token')
@@ -82,6 +96,9 @@ export class OauthController {
       );
 
     // return access token and refresh token
-    return { accessToken: accessJWT, refreshToken: refreshJWT };
+    throw new CustomResponse(ECustomCode.SUCCESS, {
+      accessToken: accessJWT,
+      refreshToken: refreshJWT,
+    });
   }
 }
