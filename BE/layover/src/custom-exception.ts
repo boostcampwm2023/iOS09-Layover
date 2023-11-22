@@ -15,6 +15,7 @@ export const enum CustomCode {
   'OAUTH04' = 'OAUTH04',
   'OAUTH05' = 'OAUTH05',
   'OAUTH06' = 'OAUTH06',
+  'OAUTH07' = 'OAUTH07',
   'JWT01' = 'JWT01',
   'JWT02' = 'JWT02',
   'JWT03' = 'JWT03',
@@ -60,6 +61,12 @@ export class ECustomException extends EnumType<ECustomException>() {
     HttpStatus.UNAUTHORIZED,
     CustomCode.OAUTH06,
     '회원정보를 저장하는 과정에서 오류가 발생했습니다.',
+  );
+
+  static readonly OAUTH07 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.OAUTH07,
+    'identity token을 사용한 인증이 불가능합니다.',
   );
 
   static readonly JWT01 = new ECustomException(
