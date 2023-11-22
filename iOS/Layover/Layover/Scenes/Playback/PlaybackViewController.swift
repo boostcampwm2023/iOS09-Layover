@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 #Preview {
     PlaybackViewController()
 }
@@ -85,6 +86,13 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
+        let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
+        playerView.addGestureRecognizer(playerViewGesture)
+        playerView.player = AVPlayer(url: URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!)
+        if playerView.player?.currentItem?.status == .readyToPlay {
+            playerSlider.minimumValue = 0
+            playerSlider.maximumValue = 1
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,8 +123,11 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         view.backgroundColor = .black
         setupFetchFromLocalDataStore()
         setUI()
-        let viewTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
-        descriptionView.addGestureRecognizer(viewTapGesture)
+        let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
+        descriptionView.addGestureRecognizer(descriptionViewGesture)
+        setPlayerSlider()
+        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+        playerView.play()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -261,6 +272,35 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     // MARK: - Custom Method
 
+    private func setPlayerSlider() {
+        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+        playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
+            self?.updateSlider(currentTime)
+        })
+    }
+
+    private func updateSlider(_ currentTime: CMTime) {
+        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
+            return
+        }
+        let duration: CMTime = currentItem.duration
+        if CMTIME_IS_INVALID(duration) {
+            return
+        }
+        print(Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)))
+        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+    }
+
+    @objc private func didChangedSliderValue(_ sender: LOSlider) {
+        guard let duration: CMTime = playerView.player?.currentItem?.duration else {
+            return
+        }
+        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
+        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
+        playerView.seek(to: seekTime)
+        playerView.play()
+    }
+
     @objc private func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
             if self.descriptionView.state == .hidden {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
@@ -279,5 +319,13 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
                 })
                 self.descriptionView.state = .hidden
             }
+    }
+
+    @objc private func playerViewDidTap() {
+        if !playerView.isPlaying() {
+            playerView.play()
+        } else {
+            playerView.pause()
+        }
     }
 }
