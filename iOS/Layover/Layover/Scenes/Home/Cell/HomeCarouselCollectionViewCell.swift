@@ -7,12 +7,19 @@
 //
 
 import UIKit
+import CoreMedia
 
 final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
+    // MARK: - UI Components
+
+    private let loopingPlayerView = LoopingPlayerView()
+
     // MARK: - Properties
 
-    // MARK: - UI Components
+    var isPlayingVideos: Bool {
+        loopingPlayerView.isPlaying
+    }
 
     // MARK: - Object lifecycle
 
@@ -35,8 +42,28 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     }
 
     private func setConstraints() {
+        contentView.addSubviews(loopingPlayerView)
+        [loopingPlayerView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
+        NSLayoutConstraint.activate([
+            loopingPlayerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            loopingPlayerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
     }
 
     // MARK: - Methods
+
+    func setVideo(url: URL) {
+        loopingPlayerView.prepareVideo(with: url, timeRange: CMTimeRange(start: .zero, end: CMTime(value: 1800, timescale: 600)))
+    }
+
+    func playVideo() {
+        loopingPlayerView.play()
+    }
+
+    func pauseVideo() {
+        loopingPlayerView.pause()
+    }
 }
