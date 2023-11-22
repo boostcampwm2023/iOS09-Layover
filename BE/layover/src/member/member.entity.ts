@@ -18,19 +18,19 @@ export class Member {
   @PrimaryGeneratedColumn('increment')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, length: 20 })
   username: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, length: 255 })
   profile_image_url: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, length: 100 })
   introduce: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, length: 255 })
   provider: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, length: 255 })
   hash: string;
 
   @Column({
