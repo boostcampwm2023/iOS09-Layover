@@ -3,7 +3,7 @@ import { firstValueFrom, catchError } from 'rxjs';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
-import { MemberService } from 'src/database/member/member.service';
+import { MemberService } from 'src/member/member.service';
 import { extractPayloadJWT, makeJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomException, ECustomException } from 'src/custom-exception';
@@ -93,7 +93,7 @@ export class OauthService {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
     if (!isUserExist) {
-      throw new CustomException(ECustomException.OAUTH01, { memberHash });
+      throw new CustomException(ECustomException.OAUTH01);
     }
 
     // 각 토큰 반환
