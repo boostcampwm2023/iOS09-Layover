@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, catchError } from 'rxjs';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
@@ -7,6 +7,7 @@ import { MemberService } from 'src/database/member/member.service';
 import { makeJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomException, ECustomException } from 'src/custom-exception';
+import { AxiosError } from 'axios';
 
 @Injectable()
 export class OauthService {
@@ -22,17 +23,27 @@ export class OauthService {
     url: string,
     accessToken: string,
   ): Promise<string> {
-    const observableRes = this.httpService.post(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    const observableRes = this.httpService
+      .post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
         },
-      },
-    );
+      )
+      .pipe(
+        catchError((error: AxiosError) => {
+          console.log(`${error} occured!`);
+          throw new CustomException(ECustomException.OAUTH03);
+        }),
+      );
     const response = await firstValueFrom(observableRes);
+    if (!response.data.id)
+      // 일단 카카오에선 요청이 거절되거나 해도 이 id 필드는 필수로 주는 것 같긴하지만 일단 예외처리 함
+      throw new CustomException(ECustomException.OAUTH02);
     const uniqueMemberId = String(response.data.id);
     return uniqueMemberId;
   }
@@ -74,19 +85,30 @@ export class OauthService {
     // memberHash로부터 해당 회원이 저장된 db pk를 찾아옴.
     const memberId = 777;
 
-    // access token 생성
+    // access, refresh token 생성
     const accessTokenPaylaod = makeJwtPaylaod('access', memberHash, memberId);
-    // OAUTH04
-    const accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
-
-    // refresh token 생성
     const refreshTokenPaylaod = makeJwtPaylaod('refresh', memberHash, memberId);
-    // OAUTH04
-    const refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
 
-    // refresh token은 redis에 저장, 유효기간도 추가
-    // OAUTH05
-    this.redisClient.setEx(refreshJWT, REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+    let accessJWT: string;
+    let refreshJWT: string;
+
+    try {
+      accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
+      refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
+    } catch (e) {
+      throw new CustomException(ECustomException.OAUTH04);
+    }
+
+    try {
+      // refresh token은 redis에 저장, 유효기간도 추가
+      this.redisClient.setEx(
+        refreshJWT,
+        REFRESH_TOKEN_EXP_IN_SECOND,
+        memberHash,
+      );
+    } catch (e) {
+      throw new CustomException(ECustomException.OAUTH05);
+    }
 
     // 각 토큰 반환
     return {
@@ -94,30 +116,4 @@ export class OauthService {
       refreshJWT,
     };
   }
-
-  /*
-  // verifyAsync 함수로 간단하게 jwt를 검증할 수도 있지만, 어떤로 jwt 검증이 실패하는지 나누기 위해 직접 함수를 만듦.
-  async validateJWT(token: string, issuer: string): Promise<void> {
-    // 1. signature 유효한지 검사
-    const headerStr = this.extractHeaderJWTstr(token);
-    const payloadStr = this.extractPayloadJWTstr(token);
-    const signatureStr = this.extractSignatureJWTstr(token);
-    if (
-      signatureStr !==
-      hashHMACSHA256(headerStr + '.' + payloadStr, process.env.JWT_SECRET_KEY)
-    )
-      throw new CustomException(ECustomException.JWT01);
-
-    // 1-1. payload 추출
-    const payload = this.extractPayloadJWT(token);
-
-    // 2. issuer가 일치하는지 검사 (아직은 issuer만 확인)
-    if (payload.iss != issuer)
-      throw new CustomException(ECustomException.JWT01);
-
-    // 3. exp를 지났는지 검사
-    if (Math.floor(Date.now() / 1000) > payload.exp)
-      throw new CustomException(ECustomException.JWT02);
-  }
-*/
 }

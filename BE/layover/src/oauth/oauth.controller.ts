@@ -4,6 +4,7 @@ import { OauthService } from './oauth.service';
 import { hashSHA256 } from 'src/utils/hashUtils';
 import { extractPayloadJWT } from 'src/utils/jwtUtils';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
+import { CustomException, ECustomException } from 'src/custom-exception';
 
 @Controller('oauth')
 export class OauthController {
@@ -30,7 +31,7 @@ export class OauthController {
   async processAppleLogin(@Body('identityToken') identityToken: string) {
     // Get memberId from identity token ("sub" claim)
     const jwtPayload = await extractPayloadJWT(identityToken);
-    // sub 없으면 예외 응답하기!!!
+    if (!jwtPayload.sub) throw new CustomException(ECustomException.OAUTH07);
     const memberId = jwtPayload.sub;
     const memberHash = hashSHA256(memberId + 'apple'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
 
