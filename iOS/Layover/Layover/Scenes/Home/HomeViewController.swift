@@ -122,6 +122,12 @@ final class HomeViewController: BaseViewController {
                     let distanceFromCenter = abs(itemCenterRelativeToOffset - containerWidth / 2.0) // container 중심점과 아이템 중심점의 거리
                     let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minimumZoomScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
                     item.transform = CGAffineTransform(scaleX: scale, y: scale)
+                    guard let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? HomeCarouselCollectionViewCell else { return }
+                    if scale > 0.9 {
+                        cell.playVideo()
+                    } else {
+                        cell.pauseVideo()
+                    }
                 }
             }
             return section
