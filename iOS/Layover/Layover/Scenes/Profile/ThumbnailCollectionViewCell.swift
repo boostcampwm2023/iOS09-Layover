@@ -1,5 +1,5 @@
 //
-//  ProfileVideoCollectionViewCell.swift
+//  ThumbnailCollectionViewCell.swift
 //  Layover
 //
 //  Created by kong on 2023/11/21.

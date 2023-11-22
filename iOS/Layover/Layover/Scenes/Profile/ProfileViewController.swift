@@ -14,6 +14,13 @@ protocol ProfileDisplayLogic: AnyObject {
 
 final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
 
+    // MARK: - Type
+
+    enum ProfileType {
+        case own
+        case other
+    }
+
     // MARK: - UI Components
 
     private lazy var thumbnailCollectionView: UICollectionView = {
@@ -27,7 +34,7 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
         return collectionView
     }()
 
-    private lazy var videoDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: thumbnailCollectionView) { collectionView, indexPath, item in
+    private lazy var videoDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: thumbnailCollectionView) { collectionView, indexPath, _ in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ThumbnailCollectionViewCell.identifier,
                                                             for: indexPath) as? ThumbnailCollectionViewCell else { return UICollectionViewCell() }
         return cell
@@ -38,15 +45,18 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
     typealias Models = ProfileModels
     var router: (NSObjectProtocol & ProfileRoutingLogic & ProfileDataPassing)?
     var interactor: ProfileBusinessLogic?
+    private let profileType: ProfileType
 
     // MARK: - Object Lifecycle
 
-    init() {
+    init(profileType: ProfileType) {
+        self.profileType = profileType
         super.init(nibName: nil, bundle: nil)
         ProfileConfigurator.shared.configure(self)
     }
 
     required init?(coder: NSCoder) {
+        self.profileType = .other
         super.init(coder: coder)
         ProfileConfigurator.shared.configure(self)
     }
@@ -55,6 +65,7 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNavigationBar()
         setVideoCollectionView()
     }
 
@@ -91,21 +102,40 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
         return layout
     }
 
+    private func setNavigationBar() {
+        switch profileType {
+        case .own:
+            let barButtonItem: UIBarButtonItem = UIBarButtonItem(title: nil,
+                                                                 image: UIImage(resource: .setting),
+                                                                 target: self,
+                                                                 action: #selector(didTapSettingButton))
+            barButtonItem.tintColor = .layoverWhite
+            self.navigationItem.rightBarButtonItem = barButtonItem
+        case .other:
+            return
+        }
+    }
+
     private func setVideoCollectionView() {
         thumbnailCollectionView.dataSource = videoDatasource
         var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         videoDatasource.apply(snapshot)
-        videoDatasource.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+        videoDatasource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
             guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProfileHeaderView.identifier, for: indexPath) as? ProfileHeaderView
+            header?.editButton.isHidden = self?.profileType == .other
             return header
         }
+    }
+
+    @objc private func didTapSettingButton() {
+
     }
 
 }
 
 #Preview {
-    ProfileViewController()
+    ProfileViewController(profileType: .own)
 }

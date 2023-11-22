@@ -34,7 +34,7 @@ final class ProfileHeaderView: UICollectionReusableView {
         return label
     }()
 
-    private let editButton: LOButton = {
+    let editButton: LOButton = {
         let button: LOButton = LOButton(style: .basic)
         button.setTitle("편집", for: .normal)
         return button
@@ -55,8 +55,8 @@ final class ProfileHeaderView: UICollectionReusableView {
     // MARK: - Methods
 
     private func setConstraints() {
-        addSubviews(profileImageView, nicknameLabel, descriptionLabel)
-        [profileImageView, nicknameLabel, descriptionLabel].forEach {
+        addSubviews(profileImageView, nicknameLabel, editButton, descriptionLabel)
+        [profileImageView, nicknameLabel, editButton, descriptionLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
@@ -67,10 +67,17 @@ final class ProfileHeaderView: UICollectionReusableView {
             profileImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             nicknameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 39),
-            nicknameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            nicknameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            nicknameLabel.trailingAnchor.constraint(equalTo: editButton.leadingAnchor, constant: -10),
+
+            editButton.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
+            editButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            editButton.heightAnchor.constraint(equalToConstant: 34),
+            editButton.widthAnchor.constraint(equalToConstant: 58),
 
             descriptionLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 18),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -21)
         ])
     }
