@@ -39,7 +39,7 @@ final class HomeViewController: BaseViewController {
     private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: carouselCollectionView) { collectionView, indexPath, url in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
-        cell.setVideo(url: url)
+        cell.setVideo(url: url, loopingAt: .zero)
         cell.playVideo()
         return cell
     }

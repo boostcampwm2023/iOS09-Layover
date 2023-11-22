@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreMedia
 
 final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
@@ -55,14 +54,10 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    override func prepareForReuse() {
-        loopingPlayerView.disable()
-    }
-
     // MARK: - Methods
 
-    func setVideo(url: URL) {
-        loopingPlayerView.prepareVideo(with: url, timeRange: CMTimeRange(start: .zero, end: CMTime(value: 1800, timescale: 600)))
+    func setVideo(url: URL, loopingAt time: TimeInterval) {
+        loopingPlayerView.prepareVideo(with: url, loopStart: time, duration: 3.0)
         loopingPlayerView.player?.isMuted = true
     }
 
