@@ -58,7 +58,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
     // MARK: - Setup
 
     private func setup() {
-
+        HomeConfigurator.shared.configure(self)
     }
 
     // MARK: - View Lifecycle
