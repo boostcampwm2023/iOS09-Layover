@@ -41,7 +41,6 @@ final class HomeViewController: BaseViewController {
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: url)
         cell.playVideo()
-        cell.layer.cornerRadius = 10
         return cell
     }
 
@@ -123,9 +122,9 @@ final class HomeViewController: BaseViewController {
                     let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minimumZoomScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
                     item.transform = CGAffineTransform(scaleX: scale, y: scale)
                     guard let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? HomeCarouselCollectionViewCell else { return }
-                    if scale > 0.9 {
+                    if scale >= 0.9 && !cell.isPlayingVideos {
                         cell.playVideo()
-                    } else {
+                    } else if scale < 0.9 && cell.isPlayingVideos {
                         cell.pauseVideo()
                     }
                 }

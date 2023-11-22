@@ -16,16 +16,18 @@ protocol HomeDataStore {
 
 }
 
-final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
+final class HomeInteractor: HomeDataStore {
 
     // MARK: - Properties
 
     typealias Models = HomeModels
 
     var presenter: HomePresentationLogic?
+}
 
-    // MARK: - Use Case
+// MARK: - Use Case
 
+extension HomeInteractor: HomeBusinessLogic {
     func fetchVideos(with request: Models.CarouselVideos.Request) {
         let response = Models.CarouselVideos.Response(videoURLs: [
             URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!,

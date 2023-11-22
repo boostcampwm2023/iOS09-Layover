@@ -25,20 +25,22 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        setUI()
         setConstraints()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setup()
+        setUI()
         setConstraints()
     }
 
     // MARK: - Setup
 
-    private func setup() {
-        backgroundColor = .white
+    private func setUI() {
+        backgroundColor = .darkGrey
+        layer.cornerRadius = 10
+        clipsToBounds = true
     }
 
     private func setConstraints() {
@@ -51,6 +53,10 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
             loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+
+    override func prepareForReuse() {
+        loopingPlayerView.disable()
     }
 
     // MARK: - Methods
