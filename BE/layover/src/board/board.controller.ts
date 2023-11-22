@@ -1,5 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { BoardService } from './board.service';
+import {ECustomCode} from "../response/ecustom-code.jenum.";
+import {CustomResponse} from "../response/custom-response";
 @Controller('board')
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
@@ -13,7 +15,7 @@ export class BoardController {
       filename,
       filetype,
     );
-    return { preSignedUrl };
+    throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
   }
 
   @Post()
@@ -23,11 +25,6 @@ export class BoardController {
     @Body('location') location: string,
   ) {
     await this.boardService.createBoard(title, content, location);
-
-    return {
-      title,
-      content,
-      location,
-    };
+    throw new CustomResponse(ECustomCode.SUCCESS);
   }
 }
