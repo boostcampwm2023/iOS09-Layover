@@ -1,0 +1,65 @@
+name: iOS development deployment workflow
+
+on:
+  push:
+    branches: [ "release" ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      print_tags:
+        description: 'True to print to STDOUT'
+        required: true
+        type: boolean
+      tags:
+        description: 'Test scenario tags'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Build and deploy default scheme using any available iPhone simulator
+    runs-on: macos-13-xlarge
+    defaults:
+      run:
+        working-directory: ./iOS/Layover
+
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0.1'
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set Default Scheme
+        run: |
+          scheme_list=$(xcodebuild -list -json | tr -d "\n")
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
+          echo $default | cat >default
+          echo Using default scheme: $default
+          
+      - name: Build archive and export ipa
+        uses: yukiarrr/ios-build-action@v1.11.0
+        with:
+          p12-base64: ${{ .github/secrets/layoverProfile }}
+          mobileprovision-base64: ${{ .github/secrets/mobileprovision }}
+          certificate-password: ${{ secrets.CERTIFICATE_PWD }}
+          project-path: Layover.xcodeproj
+          code-signing-identity: "Apple Development"
+          team-id: ${{ secrets.TEAM_ID }}
+          export-method: "development"
+          scheme: "$scheme"
+          output-path: ${{ runner.temp }}/output.ipa
+          bundle-identifier: "kr.codesquad.boostcamp8.Layover"
+          build-destination: "generic/platform=iOS"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ipa upload
+          path: ${{ runner.temp }}/output.ipa
