@@ -37,11 +37,22 @@ final class LoopingPlayerView: UIView {
     }
 
     // MARK: - Methods
-
+    // TODO: - 아래쪽 메서드가 사용하기 괜찮으면 이 메서드 삭제
     func prepareVideo(with url: URL, timeRange: CMTimeRange) {
         let playerItem = AVPlayerItem(url: url)
         let player = AVQueuePlayer(playerItem: playerItem)
         looper = AVPlayerLooper(player: player, templateItem: playerItem, timeRange: timeRange)
+        self.player = player
+    }
+
+    func prepareVideo(with url: URL, loopStart: TimeInterval, duration: TimeInterval) {
+        let playerItem = AVPlayerItem(url: url)
+        let player = AVQueuePlayer(playerItem: playerItem)
+        looper = AVPlayerLooper(player: player,
+                                templateItem: playerItem,
+                                timeRange: CMTimeRange(start: CMTime(value: Int64(loopStart * 600),
+                                                                     timescale: CMTimeScale(600)),
+                                                       end: CMTime(value: Int64((loopStart + duration) * 600), timescale: 600)))
         self.player = player
     }
 

@@ -15,18 +15,4 @@ class HomeWorker {
     typealias Models = HomeModels
 
     // MARK: - Methods
-
-    // MARK: Screen Specific Validation
-
-    func validate(exampleVariable: String?) -> Models.HomeError? {
-        var error: Models.HomeError?
-
-        if exampleVariable?.isEmpty == false {
-            error = nil
-        } else {
-            error = Models.HomeError(type: .emptyExampleVariable)
-        }
-
-        return error
-    }
 }
