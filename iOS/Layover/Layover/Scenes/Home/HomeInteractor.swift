@@ -9,77 +9,28 @@
 import UIKit
 
 protocol HomeBusinessLogic {
-    func fetchFromLocalDataStore(with request: HomeModels.FetchFromLocalDataStore.Request)
-    func fetchFromRemoteDataStore(with request: HomeModels.FetchFromRemoteDataStore.Request)
-    func trackAnalytics(with request: HomeModels.TrackAnalytics.Request)
-    func performHome(with request: HomeModels.PerformHome.Request)
+    func fetchVideos(with: HomeModels.CarouselVideos.Request)
 }
 
 protocol HomeDataStore {
-    var exampleVariable: String? { get set }
+
 }
 
-class HomeInteractor: HomeBusinessLogic, HomeDataStore {
+final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
 
     // MARK: - Properties
 
     typealias Models = HomeModels
 
-    lazy var worker = HomeWorker()
     var presenter: HomePresentationLogic?
 
-    var exampleVariable: String?
+    // MARK: - Use Case
 
-    // MARK: - Use Case - Fetch From Local DataStore
-
-    func fetchFromLocalDataStore(with request: HomeModels.FetchFromLocalDataStore.Request) {
-        let response = Models.FetchFromLocalDataStore.Response()
-        presenter?.presentFetchFromLocalDataStore(with: response)
-    }
-
-    // MARK: - Use Case - Fetch From Remote DataStore
-
-    func fetchFromRemoteDataStore(with request: HomeModels.FetchFromRemoteDataStore.Request) {
-        // fetch something from backend and return the values here
-        // <#Network Worker Instance#>.fetchFromRemoteDataStore(completion: { [weak self] code in
-        //     let response = Models.FetchFromRemoteDataStore.Response(exampleVariable: code)
-        //     self?.presenter?.presentFetchFromRemoteDataStore(with: response)
-        // })
-    }
-
-    // MARK: - Use Case - Track Analytics
-
-    func trackAnalytics(with request: HomeModels.TrackAnalytics.Request) {
-        // call analytics library/wrapper here to track analytics
-        // <#Analytics Worker Instance#>.trackAnalytics(event: request.event)
-
-        let response = Models.TrackAnalytics.Response()
-    }
-
-    // MARK: - Use Case - Home
-
-    func performHome(with request: HomeModels.PerformHome.Request) {
-        let error = worker.validate(exampleVariable: request.exampleVariable)
-
-        if let error = error {
-            let response = Models.PerformHome.Response(error: error)
-            presenter?.presentPerformHome(with: response)
-            return
-        }
-
-        // <#Network Worker Instance#>.performHome(completion: { [weak self, weak request] isSuccessful, error in
-        //     self?.completion(request?.exampleVariable, isSuccessful, error)
-        // })
-    }
-
-    private func completion(_ exampleVariable: String?, _ isSuccessful: Bool, _ error: Models.HomeError?) {
-        if isSuccessful {
-            // do something on success
-            let goodExample = exampleVariable ?? ""
-            self.exampleVariable = goodExample
-        }
-
-        let response = Models.PerformHome.Response(error: error)
-        presenter?.presentPerformHome(with: response)
+    func fetchVideos(with request: Models.CarouselVideos.Request) {
+        let response = Models.CarouselVideos.Response(videoURLs: [
+            URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!,
+            URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!
+        ])
+        presenter?.presentVideoURL(with: response)
     }
 }

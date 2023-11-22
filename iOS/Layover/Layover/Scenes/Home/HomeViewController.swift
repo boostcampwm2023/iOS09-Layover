@@ -9,10 +9,10 @@
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-
+    func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel)
 }
 
-final class HomeViewController: BaseViewController, HomeDisplayLogic {
+final class HomeViewController: BaseViewController {
 
     // MARK: - Properties
 
@@ -36,9 +36,11 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         return collectionView
     }()
 
-    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: carouselCollectionView) { collectionView, indexPath, _ in
+    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: carouselCollectionView) { collectionView, indexPath, url in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
+        cell.setVideo(url: url)
+        cell.playVideo()
         cell.layer.cornerRadius = 10
         return cell
     }
@@ -61,7 +63,12 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         HomeConfigurator.shared.configure(self)
     }
 
-    // MARK: - View Lifecycle
+    // MARK: - Life Cycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchCarouselVideos()
+    }
 
     // MARK: - UI
 
@@ -87,16 +94,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
 
     override func setUI() {
         super.setUI()
-        setCarouselCollectionView()
-    }
-
-    private func setCarouselCollectionView() {
         carouselCollectionView.dataSource = carouselDatasource
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
-        // sample data
-        snapshot.appendSections([UUID()])
-        snapshot.appendItems([1, 2, 3, 4])
-        carouselDatasource.apply(snapshot)
     }
 
     private func createCarouselLayout(groupWidthDimension: CGFloat,
@@ -133,12 +131,21 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
 
     // MARK: - Use Case
 
-    // MARK: - Use Case - Fetch From Remote DataStore
+    private func fetchCarouselVideos() {
+        interactor?.fetchVideos(with: Models.CarouselVideos.Request())
+    }
+}
 
-    // MARK: - Use Case - Track Analytics
+// MARK: - DisplayLogic
 
-    // MARK: - Use Case - Home
-
+extension HomeViewController: HomeDisplayLogic {
+    func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel) {
+        var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
+        // sample data
+        snapshot.appendSections([UUID()])
+        snapshot.appendItems(viewModel.videoURLs)
+        carouselDatasource.apply(snapshot)
+    }
 }
 
 #Preview {

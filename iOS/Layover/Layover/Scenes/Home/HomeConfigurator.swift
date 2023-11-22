@@ -23,7 +23,6 @@ final class HomeConfigurator: Configurator {
 
         let interactor = HomeInteractor()
         interactor.presenter = presenter
-        interactor.worker = HomeWorker()
 
         viewController.router = router
         viewController.interactor = interactor
