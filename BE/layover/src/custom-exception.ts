@@ -18,6 +18,7 @@ export const enum CustomCode {
   'JWT01' = 'JWT01',
   'JWT02' = 'JWT02',
   'JWT03' = 'JWT03',
+  'JWT04' = 'JWT04',
   'MEMBER01' = 'MEMBER01',
   'NEST_OFFER' = 'NEST_OFFER',
   'INTERNAL_SERVER_ERROR' = 'INTERNAL_SERVER_ERROR',
@@ -77,6 +78,12 @@ export class ECustomException extends EnumType<ECustomException>() {
     HttpStatus.UNAUTHORIZED,
     CustomCode.JWT03,
     '유효하지 않은 JWT 토큰입니다.',
+  );
+
+  static readonly JWT04 = new ECustomException(
+    HttpStatus.UNAUTHORIZED,
+    CustomCode.JWT04,
+    '토큰 정보가 올바르지 않습니다.',
   );
 
   private constructor(
