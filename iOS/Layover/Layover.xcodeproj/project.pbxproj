@@ -71,7 +71,6 @@
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45502AFEB62C004F155A /* LayoverTests.swift */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
-		FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458B2AFF7455004F155A /* DummyModel.swift */; };
 		FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458D2AFF7462004F155A /* DummyService.swift */; };
 		FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458F2AFF746E004F155A /* DummyWorker.swift */; };
 		FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45912AFF747A004F155A /* DummyScene.swift */; };
@@ -161,7 +160,6 @@
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		FC7E458B2AFF7455004F155A /* DummyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyModel.swift; sourceTree = "<group>"; };
 		FC7E458D2AFF7462004F155A /* DummyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyService.swift; sourceTree = "<group>"; };
 		FC7E458F2AFF746E004F155A /* DummyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyWorker.swift; sourceTree = "<group>"; };
 		FC7E45912AFF747A004F155A /* DummyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyScene.swift; sourceTree = "<group>"; };
@@ -380,7 +378,6 @@
 		FC7E456E2AFF6EDA004F155A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				FC7E458B2AFF7455004F155A /* DummyModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -608,7 +605,6 @@
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
-				FC7E458C2AFF7455004F155A /* DummyModel.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
