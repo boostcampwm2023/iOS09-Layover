@@ -16,7 +16,7 @@ CREATE TABLE layover_member
 @Entity()
 export class Member {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column({ nullable: false, length: 20 })
   username: string;
