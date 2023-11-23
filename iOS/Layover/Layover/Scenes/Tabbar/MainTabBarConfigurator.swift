@@ -16,7 +16,7 @@ final class MainTabBarConfigurator: Configurator {
     func configure(_ viewController: UITabBarController) {
         let homeViewController = UINavigationController(rootViewController: HomeViewController())
         let mapViewController = UINavigationController(rootViewController: MapViewController())
-        let profileViewController = DummyViewController()
+        let profileViewController = UINavigationController(rootViewController: ProfileViewController(profileType: .own))
 
         let homeIconImage = UIImage(resource: .planet)
         let mapIconImage = UIImage(resource: .map)
