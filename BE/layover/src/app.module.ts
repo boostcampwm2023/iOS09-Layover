@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BoardModule } from './board/board.module';
 import { VideoService } from './video/video.service';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -14,8 +15,9 @@ import { VideoService } from './video/video.service';
     OauthModule,
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
     BoardModule,
+    VideoModule,
   ],
   controllers: [AppController],
-  providers: [AppService, VideoService],
+  providers: [AppService],
 })
 export class AppModule {}
