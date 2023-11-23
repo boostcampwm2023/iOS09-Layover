@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+struct LoginDTO: Decodable {
+    let accessToken: String
+    let refreshToken: String
+}

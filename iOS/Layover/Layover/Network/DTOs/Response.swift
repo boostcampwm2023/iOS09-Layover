@@ -1,5 +1,5 @@
 //
-//  LoginDTO.swift
+//  Response.swift
 //  Layover
 //
 //  Created by 김인환 on 11/23/23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ResponseDTO<Data: Decodable>: Decodable {
+struct Response<Data: Decodable>: Decodable {
     let customCode: String
     let statusCode: Int
     let message: String
