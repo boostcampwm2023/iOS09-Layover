@@ -13,11 +13,10 @@ enum LoginModels {
 
     enum PerformKakaoLogin {
         struct Request {
-
         }
 
         struct Response {
-
+            
         }
 
         struct ViewModel {

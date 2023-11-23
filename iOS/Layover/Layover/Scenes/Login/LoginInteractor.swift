@@ -20,7 +20,7 @@ final class LoginInteractor {
 
     typealias Models = LoginModels
 
-    var worker: LoginWorker?
+    var worker: LoginWorkerProtocol?
     var presenter: LoginPresentationLogic?
 
 }
@@ -29,7 +29,11 @@ final class LoginInteractor {
 
 extension LoginInteractor: LoginBusinessLogic {
     func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request) {
-        // TODO: Logic 작성
+        Task {
+            if await worker?.kakaoLogin() == true {
+                presenter?.presentPerformKakaoLogin(with: .init())
+            }
+        }
     }
 
     func performAppleLogin(with request: LoginModels.PerformAppleLogin.Request) {
