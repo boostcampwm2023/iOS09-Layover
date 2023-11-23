@@ -24,7 +24,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     private let descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
-        descriptionView.setText("테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22")
+        descriptionView.setText("밤새 모니터에 튀긴 침이 마르기도 전에 대기실로 아참 교수님이 문신 땜에 긴팔 입고 오래 난 시작도 전에 눈을 감았지")
         descriptionView.clipsToBounds = true
         return descriptionView
     }()
@@ -60,7 +60,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2Bold)
         label.textColor = UIColor.layoverWhite
-        label.text = "@테스트"
+        label.text = "@Layover"
         return label
     }()
 
@@ -68,8 +68,24 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2)
         label.textColor = UIColor.layoverWhite
-        label.text = "테스트"
+        label.text = "파리"
         return label
+    }()
+
+    private let pauseImage: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.pause
+        imageView.isHidden = true
+        imageView.alpha = 0.4
+        return imageView
+    }()
+
+    private let playImage: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.play
+        imageView.isHidden = true
+        imageView.alpha = 0.4
+        return imageView
     }()
 
     private let playerSlider: LOSlider = LOSlider()
@@ -88,7 +104,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         setup()
         let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
         playerView.addGestureRecognizer(playerViewGesture)
-        playerView.player = AVPlayer(url: URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!)
+        playerView.player = AVPlayer(url: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
         if playerView.player?.currentItem?.status == .readyToPlay {
             playerSlider.minimumValue = 0
             playerSlider.maximumValue = 1
@@ -151,62 +167,17 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - UI + Layout
 
     private func setUI() {
-        [playerView, descriptionView, tagStackView, profileButton, profileLabel, locationLabel].forEach { subView in
-            subView.translatesAutoresizingMaskIntoConstraints = false
-        }
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let safeAreaBottomPadding = windowScene?.keyWindow?.safeAreaInsets.bottom
-        let window = windowScene?.windows.first
-        guard let tabbar = self.tabBarController?.tabBar else {
-            return
-        }
+        playerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(playerView)
-        playerView.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel)
 
         NSLayoutConstraint.activate([
             playerView.topAnchor.constraint(equalTo: view.topAnchor),
             playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            playerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            descriptionView.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -11),
-            descriptionView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
-            descriptionView.widthAnchor.constraint(equalToConstant: LODescriptionView.descriptionWidth),
-
-            tagStackView.bottomAnchor.constraint(equalTo: profileButton.topAnchor, constant: -20),
-            tagStackView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
-            tagStackView.heightAnchor.constraint(equalToConstant: 25),
-
-            profileButton.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -20),
-            profileButton.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
-            profileButton.widthAnchor.constraint(equalToConstant: 38),
-            profileButton.heightAnchor.constraint(equalToConstant: 38),
-
-            profileLabel.bottomAnchor.constraint(equalTo: locationLabel.topAnchor),
-            profileLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
-
-            locationLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
-            locationLabel.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor, constant: -19)
+            playerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
-            return
-        }
-        guard let windowHeight = (windowScene?.screen.bounds.height) else {
-            return
-        }
-//        print(tabbar.frame.height)
-//        print(safeAreaBottomPadding)
-//        print(windowHeight)
-        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight), width: playerSliderWidth, height: LOSlider.loSliderHeight)
-        window?.addSubview(playerSlider)
-        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
-        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
-        let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
-        descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
-        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: estimatedSize.height - LODescriptionView.descriptionHeight).isActive = true
-        if descriptionView.checkLabelOverflow() {
-            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
-        }
+        setSubViewsInPlayerViewConstraints()
+        setPlayerSliderUI()
     }
     // MARK: - Notifications
 
@@ -304,8 +275,74 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         if CMTIME_IS_INVALID(duration) {
             return
         }
-//        print(Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)))
         playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+    }
+
+    private func setSubViewsInPlayerViewConstraints() {
+        [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, pauseImage, playImage].forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        playerView.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, pauseImage, playImage)
+        NSLayoutConstraint.activate([
+            descriptionView.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -11),
+            descriptionView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
+            descriptionView.widthAnchor.constraint(equalToConstant: LODescriptionView.descriptionWidth),
+
+            tagStackView.bottomAnchor.constraint(equalTo: profileButton.topAnchor, constant: -20),
+            tagStackView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
+            tagStackView.heightAnchor.constraint(equalToConstant: 25),
+
+            profileButton.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -20),
+            profileButton.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
+            profileButton.widthAnchor.constraint(equalToConstant: 38),
+            profileButton.heightAnchor.constraint(equalToConstant: 38),
+
+            profileLabel.bottomAnchor.constraint(equalTo: locationLabel.topAnchor),
+            profileLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
+
+            locationLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
+            locationLabel.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor, constant: -19),
+
+            pauseImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
+            pauseImage.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
+            pauseImage.widthAnchor.constraint(equalToConstant: 65),
+            pauseImage.heightAnchor.constraint(equalToConstant: 65),
+
+            playImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
+            playImage.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
+            playImage.widthAnchor.constraint(equalToConstant: 65),
+            playImage.heightAnchor.constraint(equalToConstant: 65)
+        ])
+        setDescriptionViewUI()
+    }
+
+    private func setDescriptionViewUI() {
+        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
+        let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
+        descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
+        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: estimatedSize.height - LODescriptionView.descriptionHeight).isActive = true
+        if descriptionView.checkLabelOverflow() {
+            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
+        }
+    }
+
+    // TODO: CollectionView 전환 시 window에서 히든처리 반드시 필요
+    private func setPlayerSliderUI() {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        guard let tabbar = self.tabBarController?.tabBar else {
+            return
+        }
+        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
+            return
+        }
+        guard let windowHeight = (windowScene?.screen.bounds.height) else {
+            return
+        }
+        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+        window?.addSubview(playerSlider)
+        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 
     @objc private func didChangedSliderValue(_ sender: LOSlider) {
