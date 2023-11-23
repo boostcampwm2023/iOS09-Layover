@@ -6,6 +6,7 @@ import { GlobalExceptionFilter } from './response/custom-response';
 import { readFileSync } from 'fs';
 import { TokenResDto } from './oauth/dtos/token-res.dto';
 import { PresignedUrlResDto } from './board/dtos/presigned-url-res.dto';
+import { CheckUsernameResDto } from './member/dtos/check-username-res.dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -22,7 +23,7 @@ async function bootstrap() {
     .addTag('Layover')
     .build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [TokenResDto, PresignedUrlResDto],
+    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto],
   });
   SwaggerModule.setup('api', app, document);
 

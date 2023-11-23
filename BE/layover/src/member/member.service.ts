@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Member } from './member.entity';
+import { MAX_USERNAME } from '../config';
 
 @Injectable()
 export class MemberService {
@@ -25,13 +26,21 @@ export class MemberService {
     await this.memberRepository.save(memberEntity);
   }
 
+  async updateUsername(id: number, username: string) {
+    await this.memberRepository.update({ id }, { username });
+  }
+
   async isMemberExistByHash(hash: string): Promise<boolean> {
     const member = await this.memberRepository.find({
       where: {
         hash,
       },
     });
-    if (member.length === 0) return false;
-    else return true;
+    return member.length !== 0;
+  }
+
+  async isExistUsername(username: string): Promise<boolean> {
+    const member = await this.memberRepository.find({ where: { username } });
+    return member.length !== 0;
   }
 }
