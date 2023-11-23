@@ -369,9 +369,10 @@ private extension PlaybackViewController {
             if self.descriptionView.state == .hidden {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
                 let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
+                let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(estimatedSize.height - LODescriptionView.descriptionHeight))
-                    self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(estimatedSize.height - LODescriptionView.descriptionHeight))
+                    self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
+                    self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
                     self.gradientLayer.isHidden = true
                 })
                 self.descriptionView.state = .show
