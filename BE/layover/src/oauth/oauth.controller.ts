@@ -15,6 +15,7 @@ import { AppleLoginDto } from './dtos/apple-login.dto';
 import { KakaoSignupDto } from './dtos/kakao-signup.dto';
 import { AppleSignupDto } from './dtos/apple-signup.dto';
 import { TokenResDto } from './dtos/token-res.dto';
+import { CustomHeader } from 'src/pipes/custom-header.decorator';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
@@ -228,7 +229,8 @@ export class OauthController {
     },
   })
   @Post('refresh-token')
-  async renewTokens(@Body('refreshToken', JwtValidationPipe) refreshToken) {
+  async renewTokens(@CustomHeader(new JwtValidationPipe()) refreshToken) {
+    console.log(refreshToken);
     // 새로운 토큰을 생성하고 이를 반환함
     const { accessJWT, refreshJWT } =
       await this.oauthService.generateAccessRefreshTokens(
