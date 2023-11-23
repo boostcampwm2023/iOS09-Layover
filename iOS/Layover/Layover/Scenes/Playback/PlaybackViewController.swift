@@ -8,9 +8,9 @@
 
 import UIKit
 import AVFoundation
-#Preview {
-    PlaybackViewController()
-}
+//#Preview {
+//    PlaybackViewController()
+//}
 protocol PlaybackDisplayLogic: AnyObject {
     func displayFetchFromLocalDataStore(with viewModel: PlaybackModels.FetchFromLocalDataStore.ViewModel)
     func displayFetchFromRemoteDataStore(with viewModel: PlaybackModels.FetchFromRemoteDataStore.ViewModel)
@@ -127,6 +127,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         descriptionView.addGestureRecognizer(descriptionViewGesture)
         setPlayerSlider()
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+        playerView.player?.isMuted = true
         playerView.play()
     }
 
@@ -149,11 +150,18 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - UI + Layout
 
     private func setUI() {
-        [playerView, descriptionView, tagStackView, profileButton, profileLabel, locationLabel, playerSlider].forEach { subView in
+        [playerView, descriptionView, tagStackView, profileButton, profileLabel, locationLabel].forEach { subView in
             subView.translatesAutoresizingMaskIntoConstraints = false
         }
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let safeAreaBottomPadding = windowScene?.keyWindow?.safeAreaInsets.bottom
+        let window = windowScene?.windows.first
+        guard let tabbar = self.tabBarController?.tabBar else {
+            return
+        }
         view.addSubview(playerView)
-        playerView.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, playerSlider)
+        playerView.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel)
 
         NSLayoutConstraint.activate([
             playerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -177,12 +185,20 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
             profileLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
 
             locationLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
-            locationLabel.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor, constant: -19),
-
-            playerSlider.leadingAnchor.constraint(equalTo: playerView.leadingAnchor),
-            playerSlider.trailingAnchor.constraint(equalTo: playerView.trailingAnchor),
-            playerSlider.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor)
+            locationLabel.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor, constant: -19)
         ])
+        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
+            return
+        }
+        guard let windowHeight = (windowScene?.screen.bounds.height) else {
+            return
+        }
+//        print(tabbar.frame.height)
+//        print(safeAreaBottomPadding)
+//        print(windowHeight)
+        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+        window?.addSubview(playerSlider)
+        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
         let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
         let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
         descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
@@ -287,7 +303,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         if CMTIME_IS_INVALID(duration) {
             return
         }
-        print(Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)))
+//        print(Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)))
         playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
