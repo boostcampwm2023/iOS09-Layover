@@ -2,7 +2,8 @@ import {
   ACCESS_TOKEN_EXP_IN_SECOND,
   REFRESH_TOKEN_EXP_IN_SECOND,
 } from 'src/config';
-import { CustomException, ECustomException } from 'src/custom-exception';
+import { CustomResponse } from 'src/response/custom-response';
+import { ECustomCode } from '../response/ecustom-code.jenum.';
 
 type tokenType = 'access' | 'refresh';
 
@@ -37,7 +38,7 @@ export function extractHeaderJWTstr(token: string): string {
   if (match) {
     return match[1];
   } else {
-    throw new CustomException(ECustomException.JWT01);
+    throw new CustomResponse(ECustomCode.JWT01);
   }
 }
 
@@ -49,7 +50,7 @@ export function extractHeaderJWT(token: string): string {
 export function extractPayloadJWTstr(token: string): string {
   const regex = /\.(.*?)\./g;
   const data = token.match(regex);
-  if (!data) throw new CustomException(ECustomException.JWT01);
+  if (!data) throw new CustomResponse(ECustomCode.JWT01);
   const payload = data[0].slice(1, -1);
   return payload;
 }
@@ -65,6 +66,6 @@ export function extractSignatureJWTstr(token: string): string {
   if (match) {
     return match[1];
   } else {
-    throw new CustomException(ECustomException.JWT01);
+    throw new CustomResponse(ECustomCode.JWT01);
   }
 }

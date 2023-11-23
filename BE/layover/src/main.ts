@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { GlobalExceptionFilter } from './custom-exception';
+import { GlobalExceptionFilter } from './response/custom-response';
 
 import { readFileSync } from 'fs';
+import { TokenResDto } from './oauth/dtos/token-res.dto';
+import { PresignedUrlResDto } from './board/dtos/presigned-url-res.dto';
 import { CheckUsernameResDto } from './member/dtos/check-username-res.dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
@@ -21,7 +23,7 @@ async function bootstrap() {
     .addTag('Layover')
     .build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [CheckUsernameResDto],
+    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto],
   });
   SwaggerModule.setup('api', app, document);
 

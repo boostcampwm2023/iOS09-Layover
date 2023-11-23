@@ -6,9 +6,10 @@ import { JwtService } from '@nestjs/jwt';
 import { MemberService } from 'src/member/member.service';
 import { extractPayloadJWT, makeJwtPaylaod } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
-import { CustomException, ECustomException } from 'src/custom-exception';
+import { CustomResponse } from 'src/response/custom-response';
 import { AxiosError } from 'axios';
 import { hashSHA256 } from 'src/utils/hashUtils';
+import { ECustomCode } from '../response/ecustom-code.jenum.';
 
 @Injectable()
 export class OauthService {
@@ -38,13 +39,13 @@ export class OauthService {
       .pipe(
         catchError((error: AxiosError) => {
           console.log(`${error} occured!`);
-          throw new CustomException(ECustomException.OAUTH03);
+          throw new CustomResponse(ECustomCode.OAUTH03);
         }),
       );
     const response = await firstValueFrom(observableRes);
     if (!response.data.id)
       // 일단 카카오에선 요청이 거절되거나 해도 이 id 필드는 필수로 주는 것 같긴하지만 일단 예외처리 함
-      throw new CustomException(ECustomException.OAUTH02);
+      throw new CustomResponse(ECustomCode.OAUTH02);
     const uniqueMemberId = String(response.data.id);
     return uniqueMemberId;
   }
@@ -60,7 +61,7 @@ export class OauthService {
 
   getAppleMemberHash(identityToken: string): string {
     const jwtPayload = extractPayloadJWT(identityToken);
-    if (!jwtPayload.sub) throw new CustomException(ECustomException.OAUTH07);
+    if (!jwtPayload.sub) throw new CustomResponse(ECustomCode.OAUTH07);
     const memberId = jwtPayload.sub;
     return hashSHA256(memberId + 'apple'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
   }
@@ -83,7 +84,7 @@ export class OauthService {
         memberHash,
       );
     } catch (e) {
-      throw new CustomException(ECustomException.OAUTH06);
+      throw new CustomResponse(ECustomCode.OAUTH06);
     }
   }
 
@@ -93,7 +94,7 @@ export class OauthService {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
     if (!isUserExist) {
-      throw new CustomException(ECustomException.OAUTH01);
+      throw new CustomResponse(ECustomCode.OAUTH01);
     }
 
     // 각 토큰 반환
@@ -117,7 +118,7 @@ export class OauthService {
       accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
       refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
     } catch (e) {
-      throw new CustomException(ECustomException.OAUTH04);
+      throw new CustomResponse(ECustomCode.OAUTH04);
     }
 
     try {
@@ -128,7 +129,7 @@ export class OauthService {
         memberHash,
       );
     } catch (e) {
-      throw new CustomException(ECustomException.OAUTH05);
+      throw new CustomResponse(ECustomCode.OAUTH05);
     }
 
     // 각 토큰 반환
