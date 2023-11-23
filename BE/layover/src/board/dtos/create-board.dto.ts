@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateBoardDto {
   @ApiProperty({
@@ -11,11 +12,15 @@ export class CreateBoardDto {
     example: 'chilling at the beach~',
     description: '내용',
   })
+  @IsString()
+  @IsNotEmpty()
   readonly content: string;
 
   @ApiProperty({
     example: '37.0213513391321',
     description: '위치',
   })
+  @IsString()
+  @IsNotEmpty()
   readonly location: string;
 }
