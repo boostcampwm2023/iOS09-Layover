@@ -78,6 +78,7 @@ final class LoginViewController: BaseViewController {
     typealias Models = LoginModels
 
     var interactor: LoginBusinessLogic?
+    var router: (LoginRoutingLogic & LoginDataPassing)?
 
     // MARK: - Object lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -167,6 +168,8 @@ final class LoginViewController: BaseViewController {
 extension LoginViewController: LoginDisplayLogic {
     func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
         // TODO: Logic 작성
+        print("HELLO")
+        router?.routeToNext()
     }
 
     func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel) {

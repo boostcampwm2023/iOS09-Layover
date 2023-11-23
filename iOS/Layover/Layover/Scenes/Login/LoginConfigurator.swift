@@ -20,6 +20,8 @@ final class LoginConfigurator: Configurator {
         let interactor = LoginInteractor()
         let presenter = LoginPresenter()
         let worker = LoginWorker(provider: Provider())
+        let router = LoginRouter()
+        viewController.interactor = interactor
         interactor.presenter = presenter
         interactor.worker = worker
         presenter.viewController = viewController
