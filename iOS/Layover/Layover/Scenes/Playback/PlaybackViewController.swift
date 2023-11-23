@@ -8,9 +8,7 @@
 
 import UIKit
 import AVFoundation
-//#Preview {
-//    PlaybackViewController()
-//}
+
 protocol PlaybackDisplayLogic: AnyObject {
     func displayFetchFromLocalDataStore(with viewModel: PlaybackModels.FetchFromLocalDataStore.ViewModel)
     func displayFetchFromRemoteDataStore(with viewModel: PlaybackModels.FetchFromRemoteDataStore.ViewModel)
@@ -102,13 +100,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
-        let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
-        playerView.addGestureRecognizer(playerViewGesture)
-        playerView.player = AVPlayer(url: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
-        if playerView.player?.currentItem?.status == .readyToPlay {
-            playerSlider.minimumValue = 0
-            playerSlider.maximumValue = 1
-        }
+        setPlayerView(url: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -139,11 +131,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         view.backgroundColor = .black
         setupFetchFromLocalDataStore()
         setUI()
-        let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
-        descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
-        descriptionView.descriptionLabel.isUserInteractionEnabled = true
+        addDescriptionAnimateGesture()
         setPlayerSlider()
-        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
         playerView.player?.isMuted = true
         playerView.play()
     }
@@ -268,6 +257,7 @@ private extension PlaybackViewController {
         playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
             self?.updateSlider(currentTime)
         })
+        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
     }
 
     func updateSlider(_ currentTime: CMTime) {
@@ -348,6 +338,23 @@ private extension PlaybackViewController {
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 
+    func addDescriptionAnimateGesture() {
+        let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
+        descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
+    }
+
+    func setPlayerView(url: URL) {
+        let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
+        playerView.addGestureRecognizer(playerViewGesture)
+        playerView.player = AVPlayer(url: url)
+//        playerView.player = AVPlayer(url: URL(string: "")!)
+
+        if playerView.player?.currentItem?.status == .readyToPlay {
+            playerSlider.minimumValue = 0
+            playerSlider.maximumValue = 1
+        }
+    }
+
     @objc func didChangedSliderValue(_ sender: LOSlider) {
         guard let duration: CMTime = playerView.player?.currentItem?.duration else {
             return
@@ -400,3 +407,7 @@ private extension PlaybackViewController {
         }
     }
 }
+
+//#Preview {
+//    PlaybackViewController()
+//}

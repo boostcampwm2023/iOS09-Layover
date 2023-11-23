@@ -33,6 +33,7 @@ final class LODescriptionView: UIView {
         label.textColor = .layoverWhite
         label.font = .loFont(type: .body2)
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
         return label
     }()
 
