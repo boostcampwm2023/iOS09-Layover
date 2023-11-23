@@ -43,8 +43,4 @@ export class MemberService {
     const member = await this.memberRepository.find({ where: { username } });
     return member.length !== 0;
   }
-
-  isUsernameLong(username: string): boolean {
-    return username.length > MAX_USERNAME;
-  }
 }

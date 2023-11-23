@@ -37,10 +37,7 @@ export class MemberController {
   checkUsername(@Body() usernameDto: CheckUsernameDto) {
     return new CustomResponse(
       ECustomCode.SUCCESS,
-      !(
-        this.memberService.isUsernameLong(usernameDto.username) ||
-        this.memberService.isExistUsername(usernameDto.username)
-      ),
+      !this.memberService.isExistUsername(usernameDto.username),
     );
   }
 }
