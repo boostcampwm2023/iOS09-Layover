@@ -49,7 +49,7 @@ jobs:
           echo Using default scheme: $default
       - name: Decrypt xcconfig 
         env:
-          ENCRYPTED_XCCONFIG_PATH:  ${{ .github/secrets/Secrets.xcconfig.gpg }}
+          ENCRYPTED_XCCONFIG_PATH:  ${{ ../../.github/secrets/Secrets.xcconfig.gpg }}
           XCCONFIG_ENCRYPTION_PWD: ${{ secrets.SECRET_XCCONFIG_PWD }}
         run: |
           gpg -d -o . --pinentry-mode=loopback --passphrase "$XCCONFIG_ENCRYPTION_PWD" "$ENCRYPTED_XCCONFIG_PATH"
