@@ -258,16 +258,19 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         router?.routeToNext()
     }
 
-    // MARK: - Custom Method
+}
 
-    private func setPlayerSlider() {
+// MARK: - Playback Method
+
+private extension PlaybackViewController {
+    func setPlayerSlider() {
         let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
         playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
             self?.updateSlider(currentTime)
         })
     }
 
-    private func updateSlider(_ currentTime: CMTime) {
+    func updateSlider(_ currentTime: CMTime) {
         guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
             return
         }
@@ -278,7 +281,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
-    private func setSubViewsInPlayerViewConstraints() {
+    func setSubViewsInPlayerViewConstraints() {
         [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, pauseImage, playImage].forEach { subView in
             subView.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -316,7 +319,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         setDescriptionViewUI()
     }
 
-    private func setDescriptionViewUI() {
+    func setDescriptionViewUI() {
         let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
         let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
         descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
@@ -327,7 +330,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     }
 
     // TODO: CollectionView 전환 시 window에서 히든처리 반드시 필요
-    private func setPlayerSliderUI() {
+    func setPlayerSliderUI() {
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         let window = windowScene?.windows.first
@@ -345,7 +348,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 
-    @objc private func didChangedSliderValue(_ sender: LOSlider) {
+    @objc func didChangedSliderValue(_ sender: LOSlider) {
         guard let duration: CMTime = playerView.player?.currentItem?.duration else {
             return
         }
@@ -355,7 +358,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         playerView.play()
     }
 
-    @objc private func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
+    @objc func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
             if self.descriptionView.state == .hidden {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
                 let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
@@ -375,7 +378,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
             }
     }
 
-    @objc private func playerViewDidTap() {
+    @objc func playerViewDidTap() {
         if !playerView.isPlaying() {
             UIView.transition(with: playImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
                 self.playImage.isHidden = false
