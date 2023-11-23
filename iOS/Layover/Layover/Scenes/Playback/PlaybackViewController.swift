@@ -348,12 +348,11 @@ private extension PlaybackViewController {
         let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
         playerView.addGestureRecognizer(playerViewGesture)
         playerView.player = AVPlayer(url: url)
-//        playerView.player = AVPlayer(url: URL(string: "")!)
-
         if playerView.player?.currentItem?.status == .readyToPlay {
             playerSlider.minimumValue = 0
             playerSlider.maximumValue = 1
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: playerView.player?.currentItem)
     }
 
     @objc func didChangedSliderValue(_ sender: LOSlider) {
@@ -407,6 +406,12 @@ private extension PlaybackViewController {
             playerView.pause()
         }
     }
+
+    @objc func playerDidFinishPlaying(note: NSNotification) {
+        playerView.seek(to: CMTime.zero)
+        playerView.play()
+    }
+
 }
 
 //#Preview {
