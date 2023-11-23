@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
 import {
@@ -8,6 +8,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
+import { CustomResponse } from 'src/response/custom-response';
+import { ECustomCode } from 'src/response/ecustom-code.jenum.';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -32,10 +34,13 @@ export class MemberController {
     },
   })
   @Post('username')
-  checkUsername(usernameDto: CheckUsernameDto) {
-    return !(
-      this.memberService.isUsernameLong(usernameDto.username) ||
-      this.memberService.isExistUsername(usernameDto.username)
+  checkUsername(@Body() usernameDto: CheckUsernameDto) {
+    return new CustomResponse(
+      ECustomCode.SUCCESS,
+      !(
+        this.memberService.isUsernameLong(usernameDto.username) ||
+        this.memberService.isExistUsername(usernameDto.username)
+      ),
     );
   }
 }
