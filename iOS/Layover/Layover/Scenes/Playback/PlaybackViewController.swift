@@ -124,7 +124,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         setupFetchFromLocalDataStore()
         setUI()
         let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
-        descriptionView.addGestureRecognizer(descriptionViewGesture)
+        descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
+        descriptionView.descriptionLabel.isUserInteractionEnabled = true
         setPlayerSlider()
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
         playerView.player?.isMuted = true
