@@ -340,8 +340,22 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     @objc private func playerViewDidTap() {
         if !playerView.isPlaying() {
+            UIView.transition(with: playImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.playImage.isHidden = false
+            }, completion: { _ in
+                UIView.transition(with: self.playImage, duration: 0.5, animations: {
+                    self.playImage.isHidden = true
+                })
+            })
             playerView.play()
         } else {
+            UIView.transition(with: pauseImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.pauseImage.isHidden = false
+            }, completion: { _ in
+                UIView.transition(with: self.pauseImage, duration: 0.5, animations: {
+                    self.pauseImage.isHidden = true
+                })
+            })
             playerView.pause()
         }
     }
