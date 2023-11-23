@@ -1,4 +1,5 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 import { BoardService } from './board.service';
 import { ECustomCode } from '../response/ecustom-code.jenum.';
 import { CustomResponse } from '../response/custom-response';
@@ -11,6 +12,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { PresignedUrlResDto } from './dtos/presigned-url-res.dto';
+import { CreateBoardResDto } from './dtos/create-board-res.dto';
 
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
@@ -36,10 +38,7 @@ export class BoardController {
   })
   @Post('presigned-url')
   async getPresignedUrl(@Body() presignedUrlDto: PresignedUrlDto) {
-    const [filename, filetype] = [
-      presignedUrlDto.filename,
-      presignedUrlDto.filetype,
-    ];
+    const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
 
     const { preSignedUrl } = this.boardService.makePreSignedUrl(
       filename,
@@ -72,7 +71,14 @@ export class BoardController {
       createBoardDto.content,
       createBoardDto.location,
     ];
-    await this.boardService.createBoard(title, content, location);
-    throw new CustomResponse(ECustomCode.SUCCESS);
+    const boardId = await this.boardService.createBoard(
+      title,
+      content,
+      location,
+    );
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new CreateBoardResDto(boardId),
+    );
   }
 }
