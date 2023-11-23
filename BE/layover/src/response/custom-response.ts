@@ -7,9 +7,17 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ECustomCode } from './ecustom-code.jenum.';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CustomResponse extends HttpException {
+  @ApiProperty({
+    example: 'LAYOVER01',
+    description: '커스텀 코드',
+  })
   customCode: string;
+  @ApiProperty({
+    description: '응답 데이터',
+  })
   data?: any;
 
   constructor(customException: ECustomCode, data?: any) {

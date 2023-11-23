@@ -4,6 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { GlobalExceptionFilter } from './response/custom-response';
 
 import { readFileSync } from 'fs';
+import { TokenResDto } from './oauth/dtos/token-res.dto';
+import { PresignedUrlResDto } from './board/dtos/presigned-url-res.dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -19,7 +21,9 @@ async function bootstrap() {
     .setVersion('0.0.0.0.1')
     .addTag('Layover')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [TokenResDto, PresignedUrlResDto],
+  });
   SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
