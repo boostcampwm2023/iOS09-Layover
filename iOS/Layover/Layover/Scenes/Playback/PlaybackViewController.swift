@@ -34,7 +34,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         gradientLayer.frame = CGRect(x: 0, y: 0, width: LODescriptionView.descriptionWidth, height: LODescriptionView.descriptionHeight)
         let colors: [CGColor] = [UIColor.clear.cgColor, UIColor.black.cgColor]
         gradientLayer.colors = colors
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
         return gradientLayer
     }()
@@ -312,8 +312,9 @@ private extension PlaybackViewController {
     func setDescriptionViewUI() {
         let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
         let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
-        descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
-        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: estimatedSize.height - LODescriptionView.descriptionHeight).isActive = true
+        let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
+        descriptionView.heightAnchor.constraint(equalToConstant: totalHeight).isActive = true
+        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight).isActive = true
         if descriptionView.checkLabelOverflow() {
             descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
         }
