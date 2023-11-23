@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Member } from './member.entity';
-import { MAX_USERNAME } from 'src/config';
+import { MAX_USERNAME } from '../config';
 
 @Injectable()
 export class MemberService {
