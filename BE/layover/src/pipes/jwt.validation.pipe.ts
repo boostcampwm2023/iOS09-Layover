@@ -38,9 +38,7 @@ export class JwtValidationPipe implements PipeTransform {
     if (Math.floor(Date.now() / 1000) > payload.exp)
       throw new CustomResponse(ECustomCode.JWT02);
 
-    // jwt를 객체로 변환하여 넘겨줌
-    return {
-      payload: extractPayloadJWT(token),
-    };
+    // jwt 페이로드를 객체로 변환하여 넘겨줌
+    return extractPayloadJWT(token);
   }
 }

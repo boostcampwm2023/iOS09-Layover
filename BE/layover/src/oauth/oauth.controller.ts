@@ -229,13 +229,10 @@ export class OauthController {
     },
   })
   @Post('refresh-token')
-  async renewTokens(@CustomHeader(new JwtValidationPipe()) refreshToken) {
-    console.log(refreshToken);
+  async renewTokens(@CustomHeader(new JwtValidationPipe()) payload) {
     // 새로운 토큰을 생성하고 이를 반환함
     const { accessJWT, refreshJWT } =
-      await this.oauthService.generateAccessRefreshTokens(
-        refreshToken.payload.memberHash,
-      );
+      await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
     // return access token and refresh token
     throw new CustomResponse(ECustomCode.SUCCESS, {
