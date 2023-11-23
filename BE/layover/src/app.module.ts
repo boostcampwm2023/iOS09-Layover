@@ -6,6 +6,7 @@ import { OauthModule } from './oauth/oauth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BoardModule } from './board/board.module';
+import { VideoService } from './video/video.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { BoardModule } from './board/board.module';
     BoardModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, VideoService],
 })
 export class AppModule {}
