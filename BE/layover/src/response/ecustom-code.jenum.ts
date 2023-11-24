@@ -18,13 +18,13 @@ export class ECustomCode extends EnumType<ECustomCode>() {
   static readonly OAUTH02 = new ECustomCode(
     HttpStatus.BAD_REQUEST,
     'OAUTH02',
-    '유효하지 않은 access token입니다.',
+    '유효하지 않은 kakao access token입니다.',
   );
 
   static readonly OAUTH03 = new ECustomCode(
     HttpStatus.INTERNAL_SERVER_ERROR,
     'OAUTH03',
-    '사용자 정보를 받아오던 도중 오류가 발생했습니다.',
+    'OAuth 서버에서 사용자 정보를 받아오던 도중 오류가 발생했습니다.',
   );
 
   static readonly OAUTH04 = new ECustomCode(
