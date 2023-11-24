@@ -91,13 +91,20 @@ final class PlaybackView: UIView {
         addDescriptionAnimateGesture()
         setUI()
     }
+
+    func addAVPlayer(url: URL) {
+        playerView.player = AVPlayer(url: url)
+    }
+
+    func getPlayerItemStatus() -> AVPlayerItem.Status? {
+        playerView.player?.currentItem?.status
+    }
 }
 
 extension PlaybackView {
     func setPlayerView(url: URL) {
         let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
         playerView.addGestureRecognizer(playerViewGesture)
-        playerView.player = AVPlayer(url: url)
 //        if playerView.player?.currentItem?.status == .readyToPlay {
 //            playerSlider.minimumValue = 0
 //            playerSlider.maximumValue = 1
