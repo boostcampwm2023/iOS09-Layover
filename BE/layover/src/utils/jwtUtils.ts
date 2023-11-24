@@ -3,7 +3,7 @@ import {
   REFRESH_TOKEN_EXP_IN_SECOND,
 } from 'src/config';
 import { CustomResponse } from 'src/response/custom-response';
-import { ECustomCode } from '../response/ecustom-code.jenum.';
+import { ECustomCode } from '../response/ecustom-code.jenum';
 
 type tokenType = 'access' | 'refresh';
 

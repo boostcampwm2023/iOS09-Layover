@@ -9,7 +9,7 @@ import { createClient } from 'redis';
 import { CustomResponse } from 'src/response/custom-response';
 import { AxiosError } from 'axios';
 import { hashSHA256 } from 'src/utils/hashUtils';
-import { ECustomCode } from '../response/ecustom-code.jenum.';
+import { ECustomCode } from '../response/ecustom-code.jenum';
 
 @Injectable()
 export class OauthService {

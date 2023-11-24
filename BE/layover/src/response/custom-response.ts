@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ECustomCode } from './ecustom-code.jenum.';
+import { ECustomCode } from './ecustom-code.jenum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CustomResponse extends HttpException {

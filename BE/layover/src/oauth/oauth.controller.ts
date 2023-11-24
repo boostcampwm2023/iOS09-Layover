@@ -3,7 +3,7 @@ import { Controller } from '@nestjs/common';
 import { OauthService } from './oauth.service';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { CustomResponse } from '../response/custom-response';
-import { ECustomCode } from '../response/ecustom-code.jenum.';
+import { ECustomCode } from '../response/ecustom-code.jenum';
 import {
   ApiOperation,
   ApiResponse,
