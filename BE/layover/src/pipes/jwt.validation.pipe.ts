@@ -7,7 +7,7 @@ import {
   extractPayloadJWTstr,
   extractSignatureJWTstr,
 } from 'src/utils/jwtUtils';
-import { ECustomCode } from '../response/ecustom-code.jenum.';
+import { ECustomCode } from '../response/ecustom-code.jenum';
 
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {

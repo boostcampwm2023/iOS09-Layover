@@ -1,7 +1,7 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { BoardService } from './board.service';
-import { ECustomCode } from '../response/ecustom-code.jenum.';
+import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { PresignedUrlDto } from './dtos/presigned-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';

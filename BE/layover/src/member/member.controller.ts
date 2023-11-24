@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { CustomResponse } from 'src/response/custom-response';
-import { ECustomCode } from 'src/response/ecustom-code.jenum.';
+import { ECustomCode } from 'src/response/ecustom-code.jenum';
 
 @ApiTags('Member API')
 @Controller('member')
