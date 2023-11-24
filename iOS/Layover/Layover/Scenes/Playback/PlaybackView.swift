@@ -94,7 +94,7 @@ final class PlaybackView: UIView {
 
     func addAVPlayer(url: URL) {
         playerView.player = AVPlayer(url: url)
-        playerView.player?.isMuted = true
+//        playerView.player?.isMuted = true
         playerView.play()
     }
 
@@ -108,6 +108,10 @@ final class PlaybackView: UIView {
             self?.updateSlider(playerSlider: playerSlider, currentTime: currentTime)
         })
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+    }
+
+    func stopPlayer() {
+        playerView.pause()
     }
 }
 

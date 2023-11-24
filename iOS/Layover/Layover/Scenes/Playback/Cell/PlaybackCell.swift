@@ -9,17 +9,23 @@
 import UIKit
 
 final class PlaybackCell: UICollectionViewCell {
-    private let playbackView: PlaybackView = PlaybackView()
+    let playbackView: PlaybackView = PlaybackView()
     static let reuseIdentifier: String = "PlaybackCellReuseIdentifier"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configure()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        playbackView.stopPlayer()
+        print("chop")
     }
 
     func addAVPlayer(url: URL) {

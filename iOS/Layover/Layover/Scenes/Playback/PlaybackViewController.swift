@@ -245,6 +245,31 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
+
+extension PlaybackViewController: UICollectionViewDelegate {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
+//        for visibleIndexPath in visibleIndexPaths {
+//            print(visibleIndexPath)
+//            if let cell = playbackCollectionView.cellForItem(at: visibleIndexPath) as? PlaybackCell {
+//                print("chopmojji")
+//                cell.playbackView.stopPlayer()
+//            }
+//        }
+//    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
+//        print("visible: \(visibleIndexPaths)")
+        for visibleIndexPath in visibleIndexPaths {
+            if let cell = playbackCollectionView.cellForItem(at: visibleIndexPath) as? PlaybackCell {
+                print("visibleIndexPathCell: \(visibleIndexPath) \(cell.frame)")
+                cell.playbackView.stopPlayer()
+            }
+        }
+
+    }
+}
 //#Preview {
 //    PlaybackViewController()
 //}
