@@ -52,7 +52,6 @@ extension Requestable {
 
         return url
     }
-
 }
 
 extension Encodable {

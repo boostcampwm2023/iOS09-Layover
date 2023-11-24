@@ -14,3 +14,5 @@ struct Response<Data: Decodable>: Decodable {
     let message: String
     let data: Data?
 }
+
+struct EmptyData: Decodable { }
