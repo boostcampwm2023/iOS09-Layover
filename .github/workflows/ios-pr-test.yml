@@ -51,7 +51,7 @@ jobs:
         env:
           XCCONFIG_ENCRYPTION_PWD: ${{ secrets.SECRET_XCCONFIG_PWD }}
         run: |
-          gpg --pinentry-mode=loopback --batch --yes --passphrase "$XCCONFIG_ENCRYPTION_PWD" -d ../../.github/secrets/Secrets.xcconfig.gpg
+          gpg -o Secrets.xcconfig --pinentry-mode=loopback --batch --yes --passphrase "$XCCONFIG_ENCRYPTION_PWD" -d ../../.github/secrets/Secrets.xcconfig.gpg
       - name: Build
         env:
           scheme: ${{ 'default' }}
