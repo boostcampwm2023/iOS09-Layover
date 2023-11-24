@@ -83,8 +83,6 @@ final class PlaybackView: UIView {
         setUI()
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
-        playerView.player?.isMuted = true
-        playerView.play()
     }
 
     required init?(coder: NSCoder) {
@@ -92,12 +90,12 @@ final class PlaybackView: UIView {
         setUI()
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
-        playerView.player?.isMuted = true
-        playerView.play()
     }
 
     func addAVPlayer(url: URL) {
         playerView.player = AVPlayer(url: url)
+        playerView.player?.isMuted = true
+        playerView.play()
     }
 
     func getPlayerItemStatus() -> AVPlayerItem.Status? {

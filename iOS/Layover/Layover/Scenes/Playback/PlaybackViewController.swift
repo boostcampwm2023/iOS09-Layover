@@ -212,7 +212,7 @@ private extension PlaybackViewController {
     }
 
     func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<PlaybackCell, URL> { (cell, indexPath, url) in
+        let cellRegistration = UICollectionView.CellRegistration<PlaybackCell, URL> { (cell, _, url) in
             cell.addAVPlayer(url: url)
         }
 
