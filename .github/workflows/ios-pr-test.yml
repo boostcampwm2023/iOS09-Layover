@@ -47,6 +47,11 @@ jobs:
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
           echo Using default scheme: $default
+      - name: Decrypt xcconfig 
+        env:
+          XCCONFIG_ENCRYPTION_PWD: ${{ secrets.SECRET_XCCONFIG_PWD }}
+        run: |
+          gpg --pinentry-mode=loopback --batch --yes --passphrase "$XCCONFIG_ENCRYPTION_PWD" -d ../../.github/secrets/Secrets.xcconfig.gpg
       - name: Build
         env:
           scheme: ${{ 'default' }}
