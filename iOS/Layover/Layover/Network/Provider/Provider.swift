@@ -34,8 +34,8 @@ class Provider: ProviderType {
     }
 
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
-                                                      authenticationIfNeeded: Bool = true,
-                                                      retryCount: Int = 2) async throws -> R where E.Response == R {
+                                                      authenticationIfNeeded: Bool,
+                                                      retryCount: Int) async throws -> R where E.Response == R {
 
         var urlRequest = try endPoint.makeURLRequest()
 
