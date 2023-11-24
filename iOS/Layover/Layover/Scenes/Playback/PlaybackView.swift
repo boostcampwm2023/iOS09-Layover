@@ -80,16 +80,20 @@ final class PlaybackView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setPlayerView(url: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
+        setUI()
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
+        playerView.player?.isMuted = true
+        playerView.play()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setPlayerView(url: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
-        addDescriptionAnimateGesture()
         setUI()
+        addDescriptionAnimateGesture()
+        setSubViewsInPlayerViewConstraints()
+        playerView.player?.isMuted = true
+        playerView.play()
     }
 
     func addAVPlayer(url: URL) {
@@ -98,6 +102,14 @@ final class PlaybackView: UIView {
 
     func getPlayerItemStatus() -> AVPlayerItem.Status? {
         playerView.player?.currentItem?.status
+    }
+
+    func setPlayerSlider(_ playerSlider: LOSlider) {
+        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+        playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
+            self?.updateSlider(playerSlider: playerSlider, currentTime: currentTime)
+        })
+        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
     }
 }
 
@@ -179,16 +191,6 @@ extension PlaybackView {
         setSubViewsInPlayerViewConstraints()
     }
 
-    @objc func didChangedSliderValue(_ sender: LOSlider) {
-        guard let duration: CMTime = playerView.player?.currentItem?.duration else {
-            return
-        }
-        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
-        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
-        playerView.seek(to: seekTime)
-        playerView.play()
-    }
-
     @objc func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
             if self.descriptionView.state == .hidden {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
@@ -208,6 +210,17 @@ extension PlaybackView {
                 })
                 self.descriptionView.state = .hidden
             }
+    }
+
+    func updateSlider(playerSlider: LOSlider, currentTime: CMTime) {
+        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
+            return
+        }
+        let duration: CMTime = currentItem.duration
+        if CMTIME_IS_INVALID(duration) {
+            return
+        }
+        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
     @objc func playerViewDidTap() {
@@ -234,6 +247,16 @@ extension PlaybackView {
 
     @objc func playerDidFinishPlaying(note: NSNotification) {
         playerView.seek(to: CMTime.zero)
+        playerView.play()
+    }
+
+    @objc func didChangedSliderValue(_ sender: LOSlider) {
+        guard let duration: CMTime = playerView.player?.currentItem?.duration else {
+            return
+        }
+        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
+        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
+        playerView.seek(to: seekTime)
         playerView.play()
     }
 }
