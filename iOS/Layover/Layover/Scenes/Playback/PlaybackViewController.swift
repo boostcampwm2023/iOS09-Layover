@@ -334,7 +334,10 @@ private extension PlaybackViewController {
         guard let windowHeight = (windowScene?.screen.bounds.height) else {
             return
         }
-        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+        playerSlider.frame = CGRect(x: 0, 
+                                    y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight),
+                                    width: playerSliderWidth,
+                                    height: LOSlider.loSliderHeight)
         window?.addSubview(playerSlider)
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
@@ -370,7 +373,7 @@ private extension PlaybackViewController {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
                 let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
                 let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
-                UIView.animate(withDuration: 0.3, animations: {
+                UIView.animate(withDuration: 0.3,animations: {
                     self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
                     self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
                     self.gradientLayer.isHidden = true
