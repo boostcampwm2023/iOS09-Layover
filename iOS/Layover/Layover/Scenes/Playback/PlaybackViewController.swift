@@ -7,9 +7,8 @@
 //
 
 import UIKit
-#Preview {
-    PlaybackViewController()
-}
+import AVFoundation
+
 protocol PlaybackDisplayLogic: AnyObject {
     func displayFetchFromLocalDataStore(with viewModel: PlaybackModels.FetchFromLocalDataStore.ViewModel)
     func displayFetchFromRemoteDataStore(with viewModel: PlaybackModels.FetchFromRemoteDataStore.ViewModel)
@@ -23,7 +22,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     private let descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
-        descriptionView.setText("테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22테스트22")
+        descriptionView.setText("밤새 모니터에 튀긴 침이 마르기도 전에 대기실로 아참 교수님이 문신 땜에 긴팔 입고 오래 난 시작도 전에 눈을 감았지")
         descriptionView.clipsToBounds = true
         return descriptionView
     }()
@@ -35,7 +34,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         gradientLayer.frame = CGRect(x: 0, y: 0, width: LODescriptionView.descriptionWidth, height: LODescriptionView.descriptionHeight)
         let colors: [CGColor] = [UIColor.clear.cgColor, UIColor.black.cgColor]
         gradientLayer.colors = colors
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
         return gradientLayer
     }()
@@ -59,7 +58,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2Bold)
         label.textColor = UIColor.layoverWhite
-        label.text = "@테스트"
+        label.text = "@Layover"
         return label
     }()
 
@@ -67,12 +66,28 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2)
         label.textColor = UIColor.layoverWhite
-        label.text = "테스트"
+        label.text = "파리"
         return label
     }()
 
-    private let videoSlider: LOSlider = LOSlider()
-    private let videoView: UIView = UIView()
+    private let pauseImage: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.pause
+        imageView.isHidden = true
+        imageView.alpha = 0.4
+        return imageView
+    }()
+
+    private let playImage: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.play
+        imageView.isHidden = true
+        imageView.alpha = 0.4
+        return imageView
+    }()
+
+    private let playerSlider: LOSlider = LOSlider()
+    private let playerView: PlayerView = PlayerView()
 
     // MARK: - Properties
 
@@ -85,6 +100,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
+        setPlayerView(url: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,8 +131,10 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         view.backgroundColor = .black
         setupFetchFromLocalDataStore()
         setUI()
-        let viewTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
-        descriptionView.addGestureRecognizer(viewTapGesture)
+        addDescriptionAnimateGesture()
+        setPlayerSlider()
+        playerView.player?.isMuted = true
+        playerView.play()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -138,43 +156,17 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - UI + Layout
 
     private func setUI() {
-        [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider].forEach { subView in
-            subView.translatesAutoresizingMaskIntoConstraints = false
-        }
-
-        view.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, videoSlider)
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(playerView)
 
         NSLayoutConstraint.activate([
-            descriptionView.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -11),
-            descriptionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            descriptionView.widthAnchor.constraint(equalToConstant: LODescriptionView.descriptionWidth),
-
-            tagStackView.bottomAnchor.constraint(equalTo: profileButton.topAnchor, constant: -20),
-            tagStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            tagStackView.heightAnchor.constraint(equalToConstant: 25),
-
-            profileButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            profileButton.widthAnchor.constraint(equalToConstant: 38),
-            profileButton.heightAnchor.constraint(equalToConstant: 38),
-
-            profileLabel.bottomAnchor.constraint(equalTo: locationLabel.topAnchor),
-            profileLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
-
-            locationLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
-            locationLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
-
-            videoSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            videoSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            videoSlider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            playerView.topAnchor.constraint(equalTo: view.topAnchor),
+            playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            playerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
-        let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
-        descriptionView.heightAnchor.constraint(equalToConstant: estimatedSize.height).isActive = true
-        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: estimatedSize.height - LODescriptionView.descriptionHeight).isActive = true
-        if descriptionView.checkLabelOverflow() {
-            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
-        }
+        setSubViewsInPlayerViewConstraints()
+        setPlayerSliderUI()
     }
     // MARK: - Notifications
 
@@ -255,15 +247,135 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         router?.routeToNext()
     }
 
-    // MARK: - Custom Method
+}
 
-    @objc private func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
+// MARK: - Playback Method
+
+private extension PlaybackViewController {
+    func setPlayerSlider() {
+        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+        playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
+            self?.updateSlider(currentTime)
+        })
+        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+    }
+
+    func updateSlider(_ currentTime: CMTime) {
+        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
+            return
+        }
+        let duration: CMTime = currentItem.duration
+        if CMTIME_IS_INVALID(duration) {
+            return
+        }
+        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+    }
+
+    func setSubViewsInPlayerViewConstraints() {
+        [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, pauseImage, playImage].forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        playerView.addSubviews(descriptionView, tagStackView, profileButton, profileLabel, locationLabel, pauseImage, playImage)
+        NSLayoutConstraint.activate([
+            descriptionView.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -11),
+            descriptionView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
+            descriptionView.widthAnchor.constraint(equalToConstant: LODescriptionView.descriptionWidth),
+
+            tagStackView.bottomAnchor.constraint(equalTo: profileButton.topAnchor, constant: -20),
+            tagStackView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
+            tagStackView.heightAnchor.constraint(equalToConstant: 25),
+
+            profileButton.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -20),
+            profileButton.leadingAnchor.constraint(equalTo: playerView.leadingAnchor, constant: 20),
+            profileButton.widthAnchor.constraint(equalToConstant: 38),
+            profileButton.heightAnchor.constraint(equalToConstant: 38),
+
+            profileLabel.bottomAnchor.constraint(equalTo: locationLabel.topAnchor),
+            profileLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
+
+            locationLabel.leadingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: 14),
+            locationLabel.bottomAnchor.constraint(equalTo: playerView.safeAreaLayoutGuide.bottomAnchor, constant: -19),
+
+            pauseImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
+            pauseImage.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
+            pauseImage.widthAnchor.constraint(equalToConstant: 65),
+            pauseImage.heightAnchor.constraint(equalToConstant: 65),
+
+            playImage.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
+            playImage.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
+            playImage.widthAnchor.constraint(equalToConstant: 65),
+            playImage.heightAnchor.constraint(equalToConstant: 65)
+        ])
+        setDescriptionViewUI()
+    }
+
+    func setDescriptionViewUI() {
+        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
+        let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
+        let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
+        descriptionView.heightAnchor.constraint(equalToConstant: totalHeight).isActive = true
+        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight).isActive = true
+        if descriptionView.checkLabelOverflow() {
+            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
+        }
+    }
+
+    // TODO: CollectionView 전환 시 window에서 히든처리 반드시 필요
+    func setPlayerSliderUI() {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        guard let tabbar = self.tabBarController?.tabBar else {
+            return
+        }
+        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
+            return
+        }
+        guard let windowHeight = (windowScene?.screen.bounds.height) else {
+            return
+        }
+        playerSlider.frame = CGRect(x: 0, 
+                                    y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight),
+                                    width: playerSliderWidth,
+                                    height: LOSlider.loSliderHeight)
+        window?.addSubview(playerSlider)
+        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
+    }
+
+    func addDescriptionAnimateGesture() {
+        let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
+        descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
+    }
+
+    func setPlayerView(url: URL) {
+        let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
+        playerView.addGestureRecognizer(playerViewGesture)
+        playerView.player = AVPlayer(url: url)
+        if playerView.player?.currentItem?.status == .readyToPlay {
+            playerSlider.minimumValue = 0
+            playerSlider.maximumValue = 1
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: playerView.player?.currentItem)
+    }
+
+    @objc func didChangedSliderValue(_ sender: LOSlider) {
+        guard let duration: CMTime = playerView.player?.currentItem?.duration else {
+            return
+        }
+        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
+        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
+        playerView.seek(to: seekTime)
+        playerView.play()
+    }
+
+    @objc func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
             if self.descriptionView.state == .hidden {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
                 let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(estimatedSize.height - LODescriptionView.descriptionHeight))
-                    self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(estimatedSize.height - LODescriptionView.descriptionHeight))
+                let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
+                UIView.animate(withDuration: 0.3,animations: {
+                    self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
+                    self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
                     self.gradientLayer.isHidden = true
                 })
                 self.descriptionView.state = .show
@@ -276,4 +388,36 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
                 self.descriptionView.state = .hidden
             }
     }
+
+    @objc func playerViewDidTap() {
+        if !playerView.isPlaying() {
+            UIView.transition(with: playImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.playImage.isHidden = false
+            }, completion: { _ in
+                UIView.transition(with: self.playImage, duration: 0.5, animations: {
+                    self.playImage.isHidden = true
+                })
+            })
+            playerView.play()
+        } else {
+            UIView.transition(with: pauseImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.pauseImage.isHidden = false
+            }, completion: { _ in
+                UIView.transition(with: self.pauseImage, duration: 0.5, animations: {
+                    self.pauseImage.isHidden = true
+                })
+            })
+            playerView.pause()
+        }
+    }
+
+    @objc func playerDidFinishPlaying(note: NSNotification) {
+        playerView.seek(to: CMTime.zero)
+        playerView.play()
+    }
+
 }
+
+//#Preview {
+//    PlaybackViewController()
+//}
