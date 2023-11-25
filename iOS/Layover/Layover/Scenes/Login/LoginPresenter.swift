@@ -28,7 +28,7 @@ extension LoginPresenter: LoginPresentationLogic {
         // TODO: Logic 작성
         viewController?.displayPerformKakaoLogin(with: .init())
     }
-    
+
     func presentPerformAppleLogin(with response: LoginModels.PerformAppleLogin.Response) {
         // TODO: Logic 작성
     }

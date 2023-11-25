@@ -29,6 +29,7 @@
 		194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552302B04DA1A00299768 /* LOCircleButton.swift */; };
 		194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */; };
 		1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945523A2B05258200299768 /* HomeConfigurator.swift */; };
+		1972CCCF2B12438900C3C762 /* LoginEndPointsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */; };
 		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
@@ -119,6 +120,7 @@
 		194552302B04DA1A00299768 /* LOCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOCircleButton.swift; sourceTree = "<group>"; };
 		194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
 		1945523A2B05258200299768 /* HomeConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfigurator.swift; sourceTree = "<group>"; };
+		1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointsFactory.swift; sourceTree = "<group>"; };
 		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -247,6 +249,14 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		1972CCCD2B12436300C3C762 /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */,
+			);
+			path = Factories;
+			sourceTree = "<group>";
+		};
 		19AACFC82B0F7C200088143E /* DTOs */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +294,7 @@
 		19C7AFD12B024439003B35F2 /* EndPoint */ = {
 			isa = PBXGroup;
 			children = (
+				1972CCCD2B12436300C3C762 /* Factories */,
 				FC68E29A2B02325D001AABFF /* Requestable.swift */,
 				FC68E29C2B02326A001AABFF /* Responsable.swift */,
 				FC68E29E2B023315001AABFF /* HTTPMethod.swift */,
@@ -660,6 +671,7 @@
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
 				835A61902B067D61002F22A5 /* LOSlider.swift in Sources */,
 				19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */,
+				1972CCCF2B12438900C3C762 /* LoginEndPointsFactory.swift in Sources */,
 				835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,

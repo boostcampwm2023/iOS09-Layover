@@ -22,14 +22,44 @@ final class LoginWorker: LoginWorkerProtocol {
     typealias Models = LoginModels
 
     let provider: ProviderType
+    let loginEndPointFactory: LoginEndPointFactory
     let authManager: AuthManager
 
-    init(provider: ProviderType, authManager: AuthManager = .shared) {
+    init(provider: ProviderType = Provider(), loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointsFactory(), authManager: AuthManager = .shared) {
         self.provider = provider
         self.authManager = authManager
+        self.loginEndPointFactory = loginEndPointFactory
     }
 
     // MARK: - Login Methods
+
+    func kakaoLogin() async -> Bool {
+        guard let token = await fetchKakaoLoginToken() else {
+            os_log(.error, log: .data, "%@", "Failed to fetch kakao login token")
+            return false
+        }
+
+        // TODO: 회원 가입 여부 확인
+
+        // 로그인 처리
+        do {
+            let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: token)
+            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            authManager.accessToken = result.data?.accessToken
+            authManager.refreshToken = result.data?.refreshToken
+            return true
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return false
+        }
+    }
+
+    func appleLogin() {
+
+    }
+}
+
+extension LoginWorker {
     @MainActor
     private func fetchKakaoLoginToken() async -> String? {
         if UserApi.isKakaoTalkLoginAvailable() {
@@ -55,39 +85,5 @@ final class LoginWorker: LoginWorkerProtocol {
                 }
             }
         }
-    }
-
-    func kakaoLogin() async -> Bool {
-        guard let token = await fetchKakaoLoginToken() else {
-            os_log(.error, log: .data, "%@", "Failed to fetch kakao login token")
-            return false
-        }
-
-        guard let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String else {
-            os_log(.error, log: .data, "%@", "Failed to fetch base url")
-            return false
-        }
-
-        var bodyParameters = [String: String]()
-        bodyParameters.updateValue(token, forKey: "accessToken")
-
-        let endPoint = EndPoint<Response<LoginDTO>>(baseURL: baseURL,
-                                                    path: "/api/v1/auth/login",
-                                                    method: .POST,
-                                                    bodyParameters: bodyParameters)
-
-        do {
-            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-            authManager.accessToken = result.data?.accessToken
-            authManager.refreshToken = result.data?.refreshToken
-            return true
-        } catch {
-            os_log(.error, log: .data, "%@", error.localizedDescription)
-            return false
-        }
-    }
-
-    func appleLogin() {
-
     }
 }
