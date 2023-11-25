@@ -71,6 +71,11 @@
 		FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F922B1220CC0088CF9B /* NicknameDTO.swift */; };
 		FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F942B1222350088CF9B /* ProfileImageDTO.swift */; };
 		FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F962B1224B80088CF9B /* IntroduceDTO.swift */; };
+		FC767F9F2B12283D0088CF9B /* PatchUserName.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9A2B12283D0088CF9B /* PatchUserName.json */; };
+		FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9B2B12283D0088CF9B /* CheckUserName.json */; };
+		FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9C2B12283D0088CF9B /* DeleteUser.json */; };
+		FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */; };
+		FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */; };
 		FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45392AFEB623004F155A /* AppDelegate.swift */; };
 		FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E453B2AFEB623004F155A /* SceneDelegate.swift */; };
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
@@ -170,6 +175,11 @@
 		FC767F922B1220CC0088CF9B /* NicknameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameDTO.swift; sourceTree = "<group>"; };
 		FC767F942B1222350088CF9B /* ProfileImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageDTO.swift; sourceTree = "<group>"; };
 		FC767F962B1224B80088CF9B /* IntroduceDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceDTO.swift; sourceTree = "<group>"; };
+		FC767F9A2B12283D0088CF9B /* PatchUserName.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchUserName.json; sourceTree = "<group>"; };
+		FC767F9B2B12283D0088CF9B /* CheckUserName.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CheckUserName.json; sourceTree = "<group>"; };
+		FC767F9C2B12283D0088CF9B /* DeleteUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DeleteUser.json; sourceTree = "<group>"; };
+		FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchIntroduce.json; sourceTree = "<group>"; };
+		FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchProfileImage.json; sourceTree = "<group>"; };
 		FC7E45362AFEB623004F155A /* Layover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45392AFEB623004F155A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC7E453B2AFEB623004F155A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -368,6 +378,18 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		FC767F992B12282E0088CF9B /* MockData */ = {
+			isa = PBXGroup;
+			children = (
+				FC767F9B2B12283D0088CF9B /* CheckUserName.json */,
+				FC767F9C2B12283D0088CF9B /* DeleteUser.json */,
+				FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */,
+				FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */,
+				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
+			);
+			path = MockData;
+			sourceTree = "<group>";
+		};
 		FC7E452D2AFEB623004F155A = {
 			isa = PBXGroup;
 			children = (
@@ -500,6 +522,7 @@
 		FCE52FF62B0FCADB002CDB75 /* Mock */ = {
 			isa = PBXGroup;
 			children = (
+				FC767F992B12282E0088CF9B /* MockData */,
 				FCE52FF72B0FCAF7002CDB75 /* MockURLProtocol.swift */,
 			);
 			path = Mock;
@@ -608,10 +631,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */,
+				FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */,
+				FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */,
 				FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */,
+				FC767F9F2B12283D0088CF9B /* PatchUserName.json in Resources */,
 				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
 				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
+				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
+				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
 			);

@@ -1,0 +1,8 @@
+{
+  "customCode": "SUCCESS",
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "statusCode": 200,
+  "data": {
+      "introduce": "야자타임을 좋아하고 더운걸 싫어하는 화니라고해요"
+  }
+}
