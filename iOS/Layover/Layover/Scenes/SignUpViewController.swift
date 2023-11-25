@@ -119,6 +119,7 @@ extension SignUpViewController: SignUpDisplayLogic {
         nicknameAlertLabel.isHidden = response.canCheckDuplication
         checkDuplicateNicknameButton.isEnabled = response.canCheckDuplication
         nicknameAlertLabel.text = response.alertDescription
+        nicknameAlertLabel.textColor = .error
     }
 
     func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel) {

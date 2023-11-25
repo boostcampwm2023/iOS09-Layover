@@ -29,9 +29,7 @@ final class SignUpPresenter: SignUpPresentationLogic {
     }
 
     func presentNicknameDuplication(with response: SignUpModels.CheckDuplication.Response) {
-        let alertDescription = response.isDuplicate ? "사용중인 닉네임입니다." : "사용가능한 닉네임입니다."
-        let viewModel = Models.CheckDuplication.ViewModel(canSignUp: !response.isDuplicate,
-                                                          alertDescription: alertDescription)
+        let viewModel = Models.CheckDuplication.ViewModel(canSignUp: !response.isDuplicate)
         viewController?.displayNickanmeDuplication(response: viewModel)
     }
 
