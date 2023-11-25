@@ -22,12 +22,6 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        playbackView.stopPlayer()
-        print("chop")
-    }
-
     func addAVPlayer(url: URL) {
         playbackView.addAVPlayer(url: url)
     }

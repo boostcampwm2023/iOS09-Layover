@@ -24,6 +24,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     private var dataSource: UICollectionViewDiffableDataSource<UUID, URL>?
 
+    private var prevPlaybackCell: PlaybackCell?
 
     // MARK: - Properties
 
@@ -69,10 +70,6 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         setUI()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
-//        addDescriptionAnimateGesture()
-//        setPlayerSlider()
-//        playerView.player?.isMuted = true
-//        playerView.play()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -82,6 +79,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? PlaybackCell
         trackScreenViewAnalytics()
         registerNotifications()
     }
@@ -247,27 +245,18 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension PlaybackViewController: UICollectionViewDelegate {
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
-//        for visibleIndexPath in visibleIndexPaths {
-//            print(visibleIndexPath)
-//            if let cell = playbackCollectionView.cellForItem(at: visibleIndexPath) as? PlaybackCell {
-//                print("chopmojji")
-//                cell.playbackView.stopPlayer()
-//            }
-//        }
-//    }
-
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
-//        print("visible: \(visibleIndexPaths)")
-        for visibleIndexPath in visibleIndexPaths {
-            if let cell = playbackCollectionView.cellForItem(at: visibleIndexPath) as? PlaybackCell {
-                print("visibleIndexPathCell: \(visibleIndexPath) \(cell.frame)")
-                cell.playbackView.stopPlayer()
-            }
+        // 추후 무한 스크롤 처리 예정
+        let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
+        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
+            return
         }
 
+        if prevPlaybackCell != currentPlaybackCell {
+            prevPlaybackCell?.playbackView.stopPlayer()
+            currentPlaybackCell.playbackView.playPlayer()
+            prevPlaybackCell = currentPlaybackCell
+        }
     }
 }
 //#Preview {

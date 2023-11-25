@@ -113,6 +113,10 @@ final class PlaybackView: UIView {
     func stopPlayer() {
         playerView.pause()
     }
+
+    func playPlayer() {
+        playerView.play()
+    }
 }
 
 extension PlaybackView {
