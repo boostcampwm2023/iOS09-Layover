@@ -30,7 +30,7 @@ final class LoginViewController: BaseViewController {
         return titleLabel
     }()
 
-    private let kakaoLoginButton: UIButton = {
+    private lazy var kakaoLoginButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .kakao
 
@@ -41,12 +41,13 @@ final class LoginViewController: BaseViewController {
         configuration.imagePadding = 4
         configuration.contentInsets = .init(top: 0, leading: -4, bottom: 0, trailing: 0)
         let button: UIButton = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(kakaoLoginButtonTapped(_:)), for: .touchUpInside)
         button.clipsToBounds = true
         button.layer.cornerRadius = 10
         return button
     }()
 
-    private let appleLoginButton: UIButton = {
+    private lazy var appleLoginButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .white
 
@@ -57,6 +58,7 @@ final class LoginViewController: BaseViewController {
         configuration.image = UIImage.appleLogo.resized(to: CGSize(width: 20, height: 20))
         configuration.imagePadding = 4
         let button: UIButton = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(appleLoginButtonTapped(_:)), for: .touchUpInside)
         button.clipsToBounds = true
         button.layer.cornerRadius = 10
         return button
@@ -114,6 +116,18 @@ final class LoginViewController: BaseViewController {
             appleLoginButton.widthAnchor.constraint(equalToConstant: 315),
             appleLoginButton.heightAnchor.constraint(equalToConstant: 48)
         ])
+    }
+
+    // MARK: Actions
+
+    @objc private func kakaoLoginButtonTapped(_ sender: UIButton) {
+        let request = LoginModels.PerformKakaoLogin.Request()
+        interactor?.performKakaoLogin(with: request)
+    }
+
+    @objc private func appleLoginButtonTapped(_ sender: UIButton) {
+        let request = LoginModels.PerformAppleLogin.Request()
+        interactor?.performAppleLogin(with: request)
     }
 }
 
