@@ -66,6 +66,11 @@
 		FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E2A02B023326001AABFF /* EndPoint.swift */; };
 		FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E2A22B0233BC001AABFF /* NetworkError.swift */; };
 		FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E2A42B0233D3001AABFF /* Provider.swift */; };
+		FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F832B1214A70088CF9B /* MockUserWorker.swift */; };
+		FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F852B1214C10088CF9B /* CheckUserNameDTO.swift */; };
+		FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F922B1220CC0088CF9B /* NicknameDTO.swift */; };
+		FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F942B1222350088CF9B /* ProfileImageDTO.swift */; };
+		FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F962B1224B80088CF9B /* IntroduceDTO.swift */; };
 		FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45392AFEB623004F155A /* AppDelegate.swift */; };
 		FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E453B2AFEB623004F155A /* SceneDelegate.swift */; };
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
@@ -160,6 +165,11 @@
 		FC68E2A02B023326001AABFF /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		FC68E2A22B0233BC001AABFF /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		FC68E2A42B0233D3001AABFF /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		FC767F832B1214A70088CF9B /* MockUserWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockUserWorker.swift; sourceTree = "<group>"; };
+		FC767F852B1214C10088CF9B /* CheckUserNameDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckUserNameDTO.swift; sourceTree = "<group>"; };
+		FC767F922B1220CC0088CF9B /* NicknameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameDTO.swift; sourceTree = "<group>"; };
+		FC767F942B1222350088CF9B /* ProfileImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageDTO.swift; sourceTree = "<group>"; };
+		FC767F962B1224B80088CF9B /* IntroduceDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceDTO.swift; sourceTree = "<group>"; };
 		FC7E45362AFEB623004F155A /* Layover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45392AFEB623004F155A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC7E453B2AFEB623004F155A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -256,6 +266,10 @@
 			children = (
 				19AACFC92B0F7C3B0088143E /* Response.swift */,
 				19AACFCB2B0F7D730088143E /* LoginDTO.swift */,
+				FC767F852B1214C10088CF9B /* CheckUserNameDTO.swift */,
+				FC767F922B1220CC0088CF9B /* NicknameDTO.swift */,
+				FC767F942B1222350088CF9B /* ProfileImageDTO.swift */,
+				FC767F962B1224B80088CF9B /* IntroduceDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -411,6 +425,7 @@
 		FC7E45782AFF6F7A004F155A /* Workers */ = {
 			isa = PBXGroup;
 			children = (
+				FC767F832B1214A70088CF9B /* MockUserWorker.swift */,
 				FC7E458F2AFF746E004F155A /* DummyWorker.swift */,
 			);
 			path = Workers;
@@ -617,9 +632,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
+				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
+				FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
@@ -642,6 +659,7 @@
 				FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */,
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
+				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
@@ -650,11 +668,13 @@
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
+				FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */,
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
 				FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */,
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
+				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
