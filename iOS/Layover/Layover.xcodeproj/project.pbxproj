@@ -79,6 +79,8 @@
 		FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */; };
 		FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */; };
 		FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767FA42B125F430088CF9B /* UIViewController+.swift */; };
+		FC767FA82B1269DB0088CF9B /* LOAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767FA72B1269DB0088CF9B /* LOAnnotationView.swift */; };
+		FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767FA92B126D080088CF9B /* LOAnnotation.swift */; };
 		FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45392AFEB623004F155A /* AppDelegate.swift */; };
 		FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E453B2AFEB623004F155A /* SceneDelegate.swift */; };
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
@@ -186,6 +188,8 @@
 		FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchIntroduce.json; sourceTree = "<group>"; };
 		FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchProfileImage.json; sourceTree = "<group>"; };
 		FC767FA42B125F430088CF9B /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
+		FC767FA72B1269DB0088CF9B /* LOAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOAnnotationView.swift; sourceTree = "<group>"; };
+		FC767FA92B126D080088CF9B /* LOAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOAnnotation.swift; sourceTree = "<group>"; };
 		FC7E45362AFEB623004F155A /* Layover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45392AFEB623004F155A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC7E453B2AFEB623004F155A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -364,17 +368,18 @@
 			path = Playback;
 			sourceTree = "<group>";
 		};
-		FC2511A72B04DA9C004717BC /* MapScene */ = {
+		FC2511A72B04DA9C004717BC /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				FC767FA62B1269980088CF9B /* Views */,
 				FC2511A82B04DAD4004717BC /* MapViewController.swift */,
 				FC2511AC2B04EACD004717BC /* MapInteractor.swift */,
 				FC2511AE2B04EAD9004717BC /* MapPresenter.swift */,
 				FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */,
 				FC2511B02B04EAEC004717BC /* MapModels.swift */,
-				FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */,
+				FC767FA92B126D080088CF9B /* LOAnnotation.swift */,
 			);
-			path = MapScene;
+			path = Map;
 			sourceTree = "<group>";
 		};
 		FC4975852B0342CE00D8627F /* Fonts */ = {
@@ -411,6 +416,13 @@
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 			);
 			path = MockData;
+		FC767FA62B1269980088CF9B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */,
+				FC767FA72B1269DB0088CF9B /* LOAnnotationView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		FC7E452D2AFEB623004F155A = {
@@ -483,7 +495,7 @@
 				19BB8A572B07BEE30070B922 /* UIComponents */,
 				1945520E2B03AEA400299768 /* Configurator.swift */,
 				835A61962B0680FC002F22A5 /* Playback */,
-				FC2511A72B04DA9C004717BC /* MapScene */,
+				FC2511A72B04DA9C004717BC /* Map */,
 				FCEE0FFB2B03AFAA00195BBE /* SignUpScene */,
 				194552032B038FC400299768 /* Tabbar */,
 				194551EB2B037F1E00299768 /* Login */,
@@ -705,6 +717,7 @@
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
+				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
@@ -727,6 +740,7 @@
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
 				FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */,
+				FC767FA82B1269DB0088CF9B /* LOAnnotationView.swift in Sources */,
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
