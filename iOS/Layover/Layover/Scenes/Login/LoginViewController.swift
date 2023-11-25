@@ -9,9 +9,9 @@ import UIKit
 import AuthenticationServices
 
 protocol LoginDisplayLogic: AnyObject {
-    func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
+    func navigateToMain()
     func routeToSignUp(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
-    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel)
+    func routeToSignUp(with viewModel: LoginModels.PerformAppleLogin.ViewModel)
 }
 
 final class LoginViewController: BaseViewController {
@@ -135,20 +135,17 @@ final class LoginViewController: BaseViewController {
 // MARK: - Use Case - Login
 
 extension LoginViewController: LoginDisplayLogic {
-    func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
-        // TODO: Logic 작성
+    func navigateToMain() {
         router?.routeToMainTabBar()
     }
 
     func routeToSignUp(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
-        // TODO: 로그인 후 회원가입이 필요한 경우
-//         router?.routeToMainTabBar()
+        router?.navigateToKakaoSignUp()
     }
 
-    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel) {
-        // TODO: Logic 작성
+    func routeToSignUp(with viewModel: LoginModels.PerformAppleLogin.ViewModel) {
+        router?.navigateToAppleSignUp()
     }
-
 }
 
 fileprivate extension UIImage {

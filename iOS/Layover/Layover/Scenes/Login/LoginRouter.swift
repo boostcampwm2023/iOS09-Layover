@@ -9,13 +9,15 @@ import UIKit
 
 protocol LoginRoutingLogic {
     func routeToMainTabBar()
+    func navigateToKakaoSignUp()
+    func navigateToAppleSignUp()
 }
 
 protocol LoginDataPassing {
     var dataStore: LoginDataStore? { get }
 }
 
-class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
+final class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
 
     // MARK: - Properties
 
@@ -27,5 +29,17 @@ class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     func routeToMainTabBar() {
         let tabBarViewController = MainTabBarViewController()
         viewController?.navigationController?.setViewControllers([tabBarViewController], animated: true)
+    }
+
+    func navigateToKakaoSignUp() {
+        // TODO: SignUpRouter로 토큰 값 전달 필요
+        let signUpViewController = SignUpViewController()
+        viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
+    }
+
+    func navigateToAppleSignUp() {
+        // TODO: SignUpRouter로 토큰 값 전달 필요
+        let signUpViewController = SignUpViewController()
+        viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
     }
 }

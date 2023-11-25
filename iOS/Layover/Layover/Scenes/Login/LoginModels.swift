@@ -33,7 +33,7 @@ enum LoginModels {
 
         }
 
-        struct ViewMdoel {
+        struct ViewModel {
 
         }
     }
