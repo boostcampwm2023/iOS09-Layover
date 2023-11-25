@@ -29,7 +29,6 @@ final class MockUserWorker: UserWorkerProtocol {
                                            headerFields: nil)
             return (response, data, nil)
         }
-
         let endPoint: EndPoint = EndPoint<Response<NicknameDTO>>(path: "/member/username",
                                                             method: .PATCH,
                                                             bodyParameters: NicknameDTO(userName: nickname),
@@ -51,7 +50,6 @@ final class MockUserWorker: UserWorkerProtocol {
                                            headerFields: nil)
             return (response, data, nil)
         }
-
         let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
                                                             method: .POST,
                                                             bodyParameters: NicknameDTO(userName: nickname),
@@ -93,10 +91,9 @@ final class MockUserWorker: UserWorkerProtocol {
                                            headerFields: nil)
             return (response, data, nil)
         }
-
         let endPoint = EndPoint<Response<NicknameDTO>>(path: "/member",
                                                   method: .DELETE,
-                                                  headers: ["Content-Type": "application/json"])
+                                                  headers: ["Authorization": "mock token"])
         let response = try await provider.request(with: endPoint)
         guard let data = response.data else { throw NetworkError.emptyData }
         return data.userName
