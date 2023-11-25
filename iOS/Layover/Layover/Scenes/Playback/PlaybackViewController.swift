@@ -79,13 +79,19 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? PlaybackCell
+        if prevPlaybackCell == nil {
+            prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? PlaybackCell
+        } else {
+            prevPlaybackCell?.playbackView.playPlayer()
+        }
         trackScreenViewAnalytics()
         registerNotifications()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        playerSlider.isHidden = true
+        prevPlaybackCell?.playbackView.stopPlayer()
         unregisterNotifications()
     }
 
@@ -259,6 +265,11 @@ extension PlaybackViewController: UICollectionViewDelegate {
             currentPlaybackCell.playbackView.playPlayer()
             prevPlaybackCell = currentPlaybackCell
         }
+        playerSlider.isHidden = false
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        playerSlider.isHidden = true
     }
 }
 //#Preview {
