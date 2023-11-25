@@ -75,6 +75,12 @@ export class ECustomCode extends EnumType<ECustomCode>() {
     '토큰 정보가 올바르지 않습니다.',
   );
 
+  static readonly MEMBER01 = new ECustomCode(
+    HttpStatus.BAD_REQUEST,
+    'MEMBER01',
+    '중복 닉네임이 존재합니다.',
+  );
+
   private constructor(
     readonly statusCode: HttpStatus,
     readonly customCode: string,
