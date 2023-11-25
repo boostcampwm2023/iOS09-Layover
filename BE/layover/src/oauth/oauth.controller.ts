@@ -119,10 +119,10 @@ export class OauthController {
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new TokenResDto(accessJWT, refreshJWT),
+    );
   }
 
   @ApiOperation({
@@ -162,10 +162,10 @@ export class OauthController {
       await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new TokenResDto(accessJWT, refreshJWT),
+    );
   }
 
   @ApiOperation({
@@ -205,10 +205,10 @@ export class OauthController {
       await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new TokenResDto(accessJWT, refreshJWT),
+    );
   }
 
   @ApiOperation({
@@ -235,9 +235,9 @@ export class OauthController {
       await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new TokenResDto(accessJWT, refreshJWT),
+    );
   }
 }
