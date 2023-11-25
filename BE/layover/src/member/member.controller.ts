@@ -1,4 +1,11 @@
-import { Body, Controller, HttpStatus, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpStatus,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
 import {
@@ -16,6 +23,7 @@ import { CustomHeader } from 'src/pipes/custom-header.decorator';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { IntroduceDto } from './dtos/introduce.dto';
 import { IntroduceResDto } from './dtos/introduce-res.dto';
+import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -118,6 +126,40 @@ export class MemberController {
     throw new CustomResponse(
       ECustomCode.SUCCESS,
       new IntroduceResDto(introduce),
+    );
+  }
+
+  @ApiOperation({
+    summary: '회원 탈퇴(삭제)',
+    description: '회원 삭제를 수행합니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '삭제된 회원 정보(닉네임)',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'boolean', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(DeleteMemberResDto) },
+      },
+    },
+  })
+  @Delete()
+  async deleteMember(@CustomHeader(new JwtValidationPipe()) payload) {
+    const id = payload.memberId;
+
+    // 삭제될 유저 정보 가져오기
+    const memberInfo = await this.memberService.selectUsername(id);
+
+    // db에 반영
+    await this.memberService.deleteMember(id);
+
+    // 응답
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new DeleteMemberResDto(memberInfo),
     );
   }
 }

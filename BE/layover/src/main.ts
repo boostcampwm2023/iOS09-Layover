@@ -10,6 +10,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { CheckUsernameResDto } from './member/dtos/check-username-res.dto';
 import { UsernameResDto } from './member/dtos/username-res.dto';
 import { IntroduceResDto } from './member/dtos/introduce-res.dto';
+import { DeleteMemberResDto } from './member/dtos/delete-member-res.dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -39,6 +40,7 @@ async function bootstrap() {
       CheckUsernameResDto,
       UsernameResDto,
       IntroduceResDto,
+      DeleteMemberResDto,
     ],
   });
   SwaggerModule.setup('api', app, document);
