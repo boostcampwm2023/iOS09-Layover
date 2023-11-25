@@ -8,7 +8,7 @@
 import UIKit
 
 protocol LoginRoutingLogic {
-    func routeToNext()
+    func routeToMainTabBar()
 }
 
 protocol LoginDataPassing {
@@ -24,8 +24,8 @@ class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
 
     // MARK: - Routing
 
-    func routeToNext() {
-
+    func routeToMainTabBar() {
+        let tabBarViewController = MainTabBarViewController()
+        viewController?.navigationController?.setViewControllers([tabBarViewController], animated: true)
     }
-
 }

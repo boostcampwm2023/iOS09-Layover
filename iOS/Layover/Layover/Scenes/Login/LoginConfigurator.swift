@@ -25,5 +25,6 @@ final class LoginConfigurator: Configurator {
         interactor.presenter = presenter
         interactor.worker = worker
         presenter.viewController = viewController
+        router.dataStore = interactor
     }
 }

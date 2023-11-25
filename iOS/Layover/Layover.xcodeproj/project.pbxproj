@@ -206,12 +206,12 @@
 		194551EB2B037F1E00299768 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				194551EC2B037F2D00299768 /* LoginPresenter.swift */,
 				194551ED2B037F2D00299768 /* LoginWorker.swift */,
-				194551EE2B037F2D00299768 /* LoginRouter.swift */,
 				194551EF2B037F2D00299768 /* LoginModels.swift */,
+				194551EE2B037F2D00299768 /* LoginRouter.swift */,
 				194551F02B037F2D00299768 /* LoginViewController.swift */,
 				194551F12B037F2D00299768 /* LoginInteractor.swift */,
+				194551EC2B037F2D00299768 /* LoginPresenter.swift */,
 				835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */,
 			);
 			path = Login;

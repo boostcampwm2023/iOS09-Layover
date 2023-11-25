@@ -12,9 +12,12 @@ protocol LoginBusinessLogic {
     func performAppleLogin(with request: LoginModels.PerformAppleLogin.Request)
 }
 
-protocol LoginDataStore { }
+protocol LoginDataStore {
+    var kakaoLoginToken: String? { get set }
+    var appleLoginToken: String? { get set }
+}
 
-final class LoginInteractor {
+final class LoginInteractor: LoginDataStore {
 
     // MARK: - Properties
 
@@ -23,6 +26,10 @@ final class LoginInteractor {
     var worker: LoginWorkerProtocol?
     var presenter: LoginPresentationLogic?
 
+    // MARK: Data Store
+
+    var kakaoLoginToken: String?
+    var appleLoginToken: String?
 }
 
 // MARK: - Use Case - Login
@@ -30,8 +37,12 @@ final class LoginInteractor {
 extension LoginInteractor: LoginBusinessLogic {
     func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request) {
         Task {
-            if await worker?.kakaoLogin() == true {
+            guard let token = await worker?.fetchKakaoLoginToken() else { return }
+            kakaoLoginToken = token
+            if await worker?.isRegisteredKakao(with: token) == true {
                 presenter?.presentPerformKakaoLogin(with: .init())
+            } else {
+                presenter?.presentSignUp(with: Models.PerformKakaoLogin.Response())
             }
         }
     }
@@ -39,9 +50,5 @@ extension LoginInteractor: LoginBusinessLogic {
     func performAppleLogin(with request: LoginModels.PerformAppleLogin.Request) {
         // TODO: Logic 작성
     }
-
-}
-
-extension LoginInteractor: LoginDataStore {
 
 }

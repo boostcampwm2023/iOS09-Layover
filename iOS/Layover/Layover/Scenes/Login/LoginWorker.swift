@@ -12,10 +12,12 @@ import KakaoSDKUser
 import OSLog
 
 protocol LoginWorkerProtocol {
-    func kakaoLogin() async -> Bool
+    @MainActor func fetchKakaoLoginToken() async -> String?
+    func isRegisteredKakao(with socialToken: String) async -> Bool
+    func loginKakao(with socialToken: String) async -> Bool
 }
 
-final class LoginWorker: LoginWorkerProtocol {
+final class LoginWorker {
 
     // MARK: - Properties
 
@@ -30,38 +32,12 @@ final class LoginWorker: LoginWorkerProtocol {
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
     }
-
-    // MARK: - Login Methods
-
-    func kakaoLogin() async -> Bool {
-        guard let token = await fetchKakaoLoginToken() else {
-            os_log(.error, log: .data, "%@", "Failed to fetch kakao login token")
-            return false
-        }
-
-        // 로그인 처리
-        do {
-            let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: token)
-            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-
-            // TODO: 임시 구현, 추후 서버 바뀌면 회원가입 여부도 API 체크
-            authManager.accessToken = result.data?.accessToken
-            authManager.refreshToken = result.data?.refreshToken
-            return true
-        } catch {
-            os_log(.error, log: .data, "%@", error.localizedDescription)
-            return false
-        }
-    }
-
-    func appleLogin() {
-
-    }
 }
 
-extension LoginWorker {
+extension LoginWorker: LoginWorkerProtocol {
+
     @MainActor
-    private func fetchKakaoLoginToken() async -> String? {
+    func fetchKakaoLoginToken() async -> String? {
         if UserApi.isKakaoTalkLoginAvailable() {
             return await withCheckedContinuation { continuation in
                 UserApi.shared.loginWithKakaoTalk { oauthToken, error in
@@ -84,6 +60,33 @@ extension LoginWorker {
                     }
                 }
             }
+        }
+    }
+
+    func isRegisteredKakao(with socialToken: String) async -> Bool {
+        // TODO: 회원가입 여부 판단. 추후 서버 바뀌면 구현
+        return false
+//        do {
+//            let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
+//            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+//            return true
+//        } catch {
+//            os_log(.error, log: .data, "%@", error.localizedDescription)
+//            return false
+//        }
+    }
+
+    func loginKakao(with socialToken: String) async -> Bool {
+        do {
+            let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
+            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+
+            authManager.accessToken = result.data?.accessToken
+            authManager.refreshToken = result.data?.refreshToken
+            return true
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return false
         }
     }
 }
