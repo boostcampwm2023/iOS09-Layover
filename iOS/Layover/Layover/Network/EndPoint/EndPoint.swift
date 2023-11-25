@@ -19,7 +19,7 @@ final class EndPoint<R>: RequestResponsable {
     var bodyParameters: Encodable?
     var headers: [String: String]?
 
-    init(baseURL: String,
+    init(baseURL: String = Bundle.main.infoDictionary?["BASE_URL"] as? String ?? "",
          path: String,
          method: HTTPMethod,
          queryParameters: Encodable? = nil,
