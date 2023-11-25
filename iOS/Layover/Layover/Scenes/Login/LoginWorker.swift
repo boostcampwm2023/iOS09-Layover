@@ -83,6 +83,7 @@ extension LoginWorker: LoginWorkerProtocol {
 
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
+            authManager.isLoggedIn = true
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)

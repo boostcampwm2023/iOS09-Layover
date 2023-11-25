@@ -39,7 +39,7 @@ extension LoginInteractor: LoginBusinessLogic {
         Task {
             guard let token = await worker?.fetchKakaoLoginToken() else { return }
             kakaoLoginToken = token
-            if await worker?.isRegisteredKakao(with: token) == true {
+            if await worker?.isRegisteredKakao(with: token) == true, await worker?.loginKakao(with: token) == true {
                 presenter?.presentPerformKakaoLogin(with: .init())
             } else {
                 presenter?.presentSignUp(with: Models.PerformKakaoLogin.Response())
