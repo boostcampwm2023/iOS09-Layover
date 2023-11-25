@@ -13,6 +13,16 @@ protocol ProviderType {
     func request(url: String) async throws -> Data
 }
 
+extension ProviderType {
+    func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
+                                                      authenticationIfNeeded: Bool = true,
+                                                      retryCount: Int = 2) async throws -> R where E.Response == R {
+        return try await request(with: endPoint,
+                authenticationIfNeeded: authenticationIfNeeded,
+                retryCount: retryCount)
+    }
+}
+
 class Provider: ProviderType {
 
     private let session: URLSession
@@ -24,8 +34,8 @@ class Provider: ProviderType {
     }
 
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
-                                                      authenticationIfNeeded: Bool = true,
-                                                      retryCount: Int = 2) async throws -> R where E.Response == R {
+                                                      authenticationIfNeeded: Bool,
+                                                      retryCount: Int) async throws -> R where E.Response == R {
 
         var urlRequest = try endPoint.makeURLRequest()
 
@@ -60,7 +70,7 @@ class Provider: ProviderType {
         return try data.decode()
     }
 
-    public func request(url: String) async throws -> Data {
+    func request(url: String) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
         let (data, response) = try await session.data(from: url)
         try self.checkStatusCode(of: response)

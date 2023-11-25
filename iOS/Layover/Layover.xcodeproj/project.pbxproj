@@ -18,7 +18,6 @@
 		1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945520C2B0399E500299768 /* MainTabBarViewController.swift */; };
 		1945520F2B03AEA400299768 /* Configurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945520E2B03AEA400299768 /* Configurator.swift */; };
 		194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552102B03AF2B00299768 /* MainTabBarConfigurator.swift */; };
-		194552132B03AFFC00299768 /* DummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552122B03AFFC00299768 /* DummyViewController.swift */; };
 		194552212B0478B400299768 /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945521B2B0478B400299768 /* HomePresenter.swift */; };
 		194552222B0478B400299768 /* HomeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945521C2B0478B400299768 /* HomeWorker.swift */; };
 		194552232B0478B400299768 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945521D2B0478B400299768 /* HomeRouter.swift */; };
@@ -73,11 +72,7 @@
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45502AFEB62C004F155A /* LayoverTests.swift */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
-		FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458D2AFF7462004F155A /* DummyService.swift */; };
 		FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458F2AFF746E004F155A /* DummyWorker.swift */; };
-		FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45912AFF747A004F155A /* DummyScene.swift */; };
-		FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45932AFF7486004F155A /* DummyDesignSystem.swift */; };
-		FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45952AFF7497004F155A /* DummyExtension.swift */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
 		FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */; };
@@ -113,7 +108,6 @@
 		1945520C2B0399E500299768 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		1945520E2B03AEA400299768 /* Configurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurator.swift; sourceTree = "<group>"; };
 		194552102B03AF2B00299768 /* MainTabBarConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarConfigurator.swift; sourceTree = "<group>"; };
-		194552122B03AFFC00299768 /* DummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyViewController.swift; sourceTree = "<group>"; };
 		1945521B2B0478B400299768 /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
 		1945521C2B0478B400299768 /* HomeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWorker.swift; sourceTree = "<group>"; };
 		1945521D2B0478B400299768 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
@@ -173,11 +167,7 @@
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		FC7E458D2AFF7462004F155A /* DummyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyService.swift; sourceTree = "<group>"; };
 		FC7E458F2AFF746E004F155A /* DummyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyWorker.swift; sourceTree = "<group>"; };
-		FC7E45912AFF747A004F155A /* DummyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyScene.swift; sourceTree = "<group>"; };
-		FC7E45932AFF7486004F155A /* DummyDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyDesignSystem.swift; sourceTree = "<group>"; };
-		FC7E45952AFF7497004F155A /* DummyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyExtension.swift; sourceTree = "<group>"; };
 		FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModels.swift; sourceTree = "<group>"; };
@@ -230,7 +220,6 @@
 			children = (
 				1945520C2B0399E500299768 /* MainTabBarViewController.swift */,
 				194552102B03AF2B00299768 /* MainTabBarConfigurator.swift */,
-				194552122B03AFFC00299768 /* DummyViewController.swift */,
 			);
 			path = Tabbar;
 			sourceTree = "<group>";
@@ -384,7 +373,6 @@
 			isa = PBXGroup;
 			children = (
 				FC68E2992B02320F001AABFF /* Network */,
-				FC7E456E2AFF6EDA004F155A /* Models */,
 				FC7E45752AFF6F5B004F155A /* Services */,
 				FC7E45782AFF6F7A004F155A /* Workers */,
 				FC7E457B2AFF6F9D004F155A /* Scenes */,
@@ -407,18 +395,10 @@
 			path = LayoverTests;
 			sourceTree = "<group>";
 		};
-		FC7E456E2AFF6EDA004F155A /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		FC7E45752AFF6F5B004F155A /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				19C7AFD42B02583C003B35F2 /* Keychain */,
-				FC7E458D2AFF7462004F155A /* DummyService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -435,15 +415,14 @@
 			isa = PBXGroup;
 			children = (
 				19BB8A572B07BEE30070B922 /* UIComponents */,
-				835A61962B0680FC002F22A5 /* Playback */,
 				1945520E2B03AEA400299768 /* Configurator.swift */,
+				835A61962B0680FC002F22A5 /* Playback */,
 				FC2511A72B04DA9C004717BC /* MapScene */,
 				FCEE0FFB2B03AFAA00195BBE /* SignUpScene */,
 				194552032B038FC400299768 /* Tabbar */,
 				194551EB2B037F1E00299768 /* Login */,
 				1945521A2B0478A100299768 /* Home */,
 				FC930E6E2B0CD73B00AA48E3 /* Profile */,
-				FC7E45912AFF747A004F155A /* DummyScene.swift */,
 				194552272B0479B600299768 /* BaseViewController.swift */,
 			);
 			path = Scenes;
@@ -452,7 +431,6 @@
 		FC7E45802AFF6FE9004F155A /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				FC7E45932AFF7486004F155A /* DummyDesignSystem.swift */,
 				FCEE0FF12B036B6000195BBE /* LOButton.swift */,
 				FCEE0FF52B03804000195BBE /* LOTextField.swift */,
 				194552302B04DA1A00299768 /* LOCircleButton.swift */,
@@ -466,7 +444,6 @@
 		FC7E45812AFF6FF9004F155A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				FC7E45952AFF7497004F155A /* DummyExtension.swift */,
 				FC4975982B03439000D8627F /* UIFont+.swift */,
 				194552012B038B8300299768 /* OSLog+.swift */,
 				194552292B04883800299768 /* UIView+.swift */,
@@ -631,7 +608,6 @@
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
-				FC7E45962AFF7497004F155A /* DummyExtension.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
@@ -640,12 +616,10 @@
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
-				FC7E458E2AFF7462004F155A /* DummyService.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
-				194552132B03AFFC00299768 /* DummyViewController.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
@@ -686,7 +660,6 @@
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
 				835A61902B067D61002F22A5 /* LOSlider.swift in Sources */,
 				19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */,
-				FC7E45942AFF7486004F155A /* DummyDesignSystem.swift in Sources */,
 				835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,
@@ -696,7 +669,6 @@
 				19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */,
 				835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
-				FC7E45922AFF747A004F155A /* DummyScene.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,
 			);

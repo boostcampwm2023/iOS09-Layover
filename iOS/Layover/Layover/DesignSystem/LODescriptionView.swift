@@ -25,7 +25,7 @@ final class LODescriptionView: UIView {
         label.numberOfLines = 1
         label.font = .loFont(type: .body1)
         label.textColor = .layoverWhite
-        label.text = "제목 테스트"
+        label.text = "시차"
         return label
     }()
     let descriptionLabel: UILabel = {
@@ -33,6 +33,7 @@ final class LODescriptionView: UIView {
         label.textColor = .layoverWhite
         label.font = .loFont(type: .body2)
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
         return label
     }()
 

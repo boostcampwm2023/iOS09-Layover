@@ -8,9 +8,9 @@
 
 import UIKit
 final class LOTagStackView: UIStackView {
-    lazy var tagButton1: UIButton = setButton("#테스트1")
-    lazy var tagButton2: UIButton = setButton("#테스트2")
-    lazy var tagButton3: UIButton = setButton("#테스트3")
+    lazy var tagButton1: UIButton = setButton("#밤샘")
+    lazy var tagButton2: UIButton = setButton("#시차")
+    lazy var tagButton3: UIButton = setButton("#고양이")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
