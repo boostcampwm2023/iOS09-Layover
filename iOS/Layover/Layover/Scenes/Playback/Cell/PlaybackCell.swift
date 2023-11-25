@@ -26,8 +26,9 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.addAVPlayer(url: url)
     }
 
-    func setPlayerSlider(_ playerSlider: LOSlider) {
-        playbackView.setPlayerSlider(playerSlider)
+    func setPlayerSlider(tabbarHeight: CGFloat) {
+        playbackView.setPlayerSlider()
+        playbackView.setPlayerSliderUI(tabbarHeight: tabbarHeight)
     }
 
     private func configure() {

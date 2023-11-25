@@ -76,6 +76,8 @@ final class PlaybackView: UIView {
         return imageView
     }()
 
+    let playerSlider: LOSlider = LOSlider()
+
     private let playerView: PlayerView = PlayerView()
 
     override init(frame: CGRect) {
@@ -84,6 +86,7 @@ final class PlaybackView: UIView {
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
         setPlayerView()
+        setPlayerSlider()
     }
 
     required init?(coder: NSCoder) {
@@ -92,6 +95,7 @@ final class PlaybackView: UIView {
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
         setPlayerView()
+        setPlayerSlider()
     }
 
     func addAVPlayer(url: URL) {
@@ -104,10 +108,10 @@ final class PlaybackView: UIView {
         playerView.player?.currentItem?.status
     }
 
-    func setPlayerSlider(_ playerSlider: LOSlider) {
+    func setPlayerSlider() {
         let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
         playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
-            self?.updateSlider(playerSlider: playerSlider, currentTime: currentTime)
+            self?.updateSlider(currentTime: currentTime)
         })
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
     }
@@ -122,6 +126,24 @@ final class PlaybackView: UIView {
 
     func replayPlayer() {
         playerView.seek(to: .zero)
+    }
+
+    func setPlayerSliderUI(tabbarHeight: CGFloat) {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
+            return
+        }
+        guard let windowHeight = (windowScene?.screen.bounds.height) else {
+            return
+        }
+        playerSlider.frame = CGRect(x: 0,
+                                    y: (windowHeight - tabbarHeight - LOSlider.loSliderHeight),
+                                    width: playerSliderWidth,
+                                    height: LOSlider.loSliderHeight)
+        window?.addSubview(playerSlider)
+        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 }
 
@@ -220,7 +242,7 @@ extension PlaybackView {
             }
     }
 
-    func updateSlider(playerSlider: LOSlider, currentTime: CMTime) {
+    func updateSlider(currentTime: CMTime) {
         guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
             return
         }

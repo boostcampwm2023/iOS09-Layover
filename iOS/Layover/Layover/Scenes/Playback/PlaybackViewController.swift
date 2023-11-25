@@ -18,7 +18,7 @@ protocol PlaybackDisplayLogic: AnyObject {
 
 final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
-    private let playerSlider: LOSlider = LOSlider()
+//    private let playerSlider: LOSlider = LOSlider()
 
     private let playbackCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
@@ -90,7 +90,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        playerSlider.isHidden = true
+        prevPlaybackCell?.playbackView.playerSlider.isHidden = true
         prevPlaybackCell?.playbackView.stopPlayer()
         unregisterNotifications()
     }
@@ -108,7 +108,6 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
             playbackCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             playbackCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        setPlayerSliderUI()
     }
     // MARK: - Notifications
 
@@ -193,32 +192,13 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 // MARK: - Playback Method
 
 private extension PlaybackViewController {
-    // TODO: CollectionView 전환 시 window에서 히든처리 반드시 필요
-    func setPlayerSliderUI() {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        guard let tabbar = self.tabBarController?.tabBar else {
-            return
-        }
-        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
-            return
-        }
-        guard let windowHeight = (windowScene?.screen.bounds.height) else {
-            return
-        }
-        playerSlider.frame = CGRect(x: 0, 
-                                    y: (windowHeight - tabbar.frame.height - LOSlider.loSliderHeight),
-                                    width: playerSliderWidth,
-                                    height: LOSlider.loSliderHeight)
-        window?.addSubview(playerSlider)
-        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
-    }
-
     func configureDataSource() {
+        guard let tabbarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
+            return
+        }
         let cellRegistration = UICollectionView.CellRegistration<PlaybackCell, URL> { (cell, _, url) in
             cell.addAVPlayer(url: url)
-            cell.setPlayerSlider(self.playerSlider)
+            cell.setPlayerSlider(tabbarHeight: tabbarHeight)
         }
 
         dataSource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: playbackCollectionView) {
@@ -265,11 +245,11 @@ extension PlaybackViewController: UICollectionViewDelegate {
             currentPlaybackCell.playbackView.playPlayer()
             prevPlaybackCell = currentPlaybackCell
         }
-        playerSlider.isHidden = false
+        currentPlaybackCell.playbackView.playerSlider.isHidden = false
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        playerSlider.isHidden = true
+        prevPlaybackCell?.playbackView.playerSlider.isHidden = true
     }
 }
 //#Preview {
