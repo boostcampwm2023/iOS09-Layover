@@ -41,9 +41,9 @@ export class MemberController {
   })
   @Post('check-username')
   async checkUsername(@Body() usernameDto: CheckUsernameDto) {
-    const exist = await !this.memberService.isExistUsername(
+    const exist = !(await this.memberService.isExistUsername(
       usernameDto.username,
-    );
+    ));
     throw new CustomResponse(
       ECustomCode.SUCCESS,
       new CheckUsernameResDto(exist),
@@ -80,7 +80,7 @@ export class MemberController {
     }
 
     // db에 반영
-    this.memberService.updateUsername(id, username);
+    await this.memberService.updateUsername(id, username);
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new UsernameResDto(username));
@@ -112,7 +112,7 @@ export class MemberController {
     const introduce = introduceDto.introduce;
 
     // db에 반영
-    this.memberService.updateIntroduce(id, introduce);
+    await this.memberService.updateIntroduce(id, introduce);
 
     // 응답
     throw new CustomResponse(
