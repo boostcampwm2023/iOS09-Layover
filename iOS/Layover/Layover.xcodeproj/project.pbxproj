@@ -78,6 +78,7 @@
 		FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9C2B12283D0088CF9B /* DeleteUser.json */; };
 		FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */; };
 		FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */ = {isa = PBXBuildFile; fileRef = FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */; };
+		FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767FA42B125F430088CF9B /* UIViewController+.swift */; };
 		FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45392AFEB623004F155A /* AppDelegate.swift */; };
 		FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E453B2AFEB623004F155A /* SceneDelegate.swift */; };
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
@@ -184,6 +185,7 @@
 		FC767F9C2B12283D0088CF9B /* DeleteUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DeleteUser.json; sourceTree = "<group>"; };
 		FC767F9D2B12283D0088CF9B /* PatchIntroduce.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchIntroduce.json; sourceTree = "<group>"; };
 		FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PatchProfileImage.json; sourceTree = "<group>"; };
+		FC767FA42B125F430088CF9B /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		FC7E45362AFEB623004F155A /* Layover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Layover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45392AFEB623004F155A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC7E453B2AFEB623004F155A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 				194552292B04883800299768 /* UIView+.swift */,
 				FC9BB82B2B094E5500EB72A9 /* UICollectionViewLayout+.swift */,
 				FCE52FF92B0FCB0A002CDB75 /* URLSession+.swift */,
+				FC767FA42B125F430088CF9B /* UIViewController+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -697,6 +700,7 @@
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
+				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
