@@ -83,6 +83,7 @@ final class PlaybackView: UIView {
         setUI()
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
+        setPlayerView()
     }
 
     required init?(coder: NSCoder) {
@@ -90,6 +91,7 @@ final class PlaybackView: UIView {
         setUI()
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
+        setPlayerView()
     }
 
     func addAVPlayer(url: URL) {
@@ -117,16 +119,16 @@ final class PlaybackView: UIView {
     func playPlayer() {
         playerView.play()
     }
+
+    func replayPlayer() {
+        playerView.seek(to: .zero)
+    }
 }
 
 extension PlaybackView {
-    func setPlayerView(url: URL) {
+    func setPlayerView() {
         let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
-        playerView.addGestureRecognizer(playerViewGesture)
-//        if playerView.player?.currentItem?.status == .readyToPlay {
-//            playerSlider.minimumValue = 0
-//            playerSlider.maximumValue = 1
-//        }
+        self.addGestureRecognizer(playerViewGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: playerView.player?.currentItem)
     }
 

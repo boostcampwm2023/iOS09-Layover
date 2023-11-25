@@ -32,5 +32,7 @@ final class LOSlider: UISlider {
     private func setUI() {
         self.minimumTrackTintColor = .primaryPurple
         setThumbImage(UIImage.loNormalThumb, for: .normal)
+        self.minimumValue = 0
+        self.maximumValue = 1
     }
 }

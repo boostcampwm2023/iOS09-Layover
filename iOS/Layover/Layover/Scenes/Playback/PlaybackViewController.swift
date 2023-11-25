@@ -212,6 +212,7 @@ private extension PlaybackViewController {
     func configureDataSource() {
         let cellRegistration = UICollectionView.CellRegistration<PlaybackCell, URL> { (cell, _, url) in
             cell.addAVPlayer(url: url)
+            cell.setPlayerSlider(self.playerSlider)
         }
 
         dataSource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: playbackCollectionView) {
@@ -254,6 +255,7 @@ extension PlaybackViewController: UICollectionViewDelegate {
 
         if prevPlaybackCell != currentPlaybackCell {
             prevPlaybackCell?.playbackView.stopPlayer()
+            prevPlaybackCell?.playbackView.replayPlayer()
             currentPlaybackCell.playbackView.playPlayer()
             prevPlaybackCell = currentPlaybackCell
         }

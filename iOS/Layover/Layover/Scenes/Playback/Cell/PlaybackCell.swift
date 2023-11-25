@@ -26,6 +26,10 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.addAVPlayer(url: url)
     }
 
+    func setPlayerSlider(_ playerSlider: LOSlider) {
+        playbackView.setPlayerSlider(playerSlider)
+    }
+
     private func configure() {
         playbackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(playbackView)
