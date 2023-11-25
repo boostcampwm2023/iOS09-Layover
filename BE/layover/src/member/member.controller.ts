@@ -14,6 +14,8 @@ import { UsernameResDto } from './dtos/username-res.dto';
 import { UsernameDto } from './dtos/username.dto';
 import { CustomHeader } from 'src/pipes/custom-header.decorator';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
+import { IntroduceDto } from './dtos/introduce.dto';
+import { IntroduceResDto } from './dtos/introduce-res.dto';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -42,7 +44,10 @@ export class MemberController {
     const exist = await !this.memberService.isExistUsername(
       usernameDto.username,
     );
-    throw new CustomResponse(ECustomCode.SUCCESS, { exist });
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new CheckUsernameResDto(exist),
+    );
   }
 
   @ApiOperation({
@@ -63,7 +68,7 @@ export class MemberController {
     },
   })
   @Patch('username')
-  async pdateUsername(
+  async updateUsername(
     @CustomHeader(new JwtValidationPipe()) payload,
     @Body() usernameDto: UsernameDto,
   ) {
@@ -78,8 +83,41 @@ export class MemberController {
     this.memberService.updateUsername(id, username);
 
     // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      username,
-    });
+    throw new CustomResponse(ECustomCode.SUCCESS, new UsernameResDto(username));
+  }
+
+  @ApiOperation({
+    summary: '자기소개 수정',
+    description: '자기소개 수정을 수행합니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '자기소개 수정 결과',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'boolean', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(IntroduceResDto) },
+      },
+    },
+  })
+  @Patch('introduce')
+  async updateIntroduce(
+    @CustomHeader(new JwtValidationPipe()) payload,
+    @Body() introduceDto: IntroduceDto,
+  ) {
+    const id = payload.memberId;
+    const introduce = introduceDto.introduce;
+
+    // db에 반영
+    this.memberService.updateIntroduce(id, introduce);
+
+    // 응답
+    throw new CustomResponse(
+      ECustomCode.SUCCESS,
+      new IntroduceResDto(introduce),
+    );
   }
 }
