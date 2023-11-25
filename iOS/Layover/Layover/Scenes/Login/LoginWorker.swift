@@ -30,7 +30,7 @@ final class LoginWorker: LoginWorkerProtocol {
     }
 
     // MARK: - Login Methods
-
+    @MainActor
     private func fetchKakaoLoginToken() async -> String? {
         if UserApi.isKakaoTalkLoginAvailable() {
             return await withCheckedContinuation { continuation in
