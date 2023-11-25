@@ -39,12 +39,12 @@ final class LoginWorker: LoginWorkerProtocol {
             return false
         }
 
-        // TODO: 회원 가입 여부 확인
-
         // 로그인 처리
         do {
             let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: token)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+
+            // TODO: 임시 구현, 추후 서버 바뀌면 회원가입 여부도 API 체크
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
             return true
