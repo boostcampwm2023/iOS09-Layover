@@ -13,7 +13,7 @@ protocol SignUpDisplayLogic: AnyObject {
     func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel)
 }
 
-final class SignUpViewController: UIViewController {
+final class SignUpViewController: BaseViewController {
 
     // MARK: - UI Components
 
@@ -62,18 +62,14 @@ final class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         SignUpConfigurator.shared.configure(self)
-        setUI()
-
-        // TODO: Base ViewController 로직으로 분리
-        view.backgroundColor = .background
-        addTapGesture()
+        setConstraints()
     }
 
     // MARK: - UI + Layout
 
-    private func setUI() {
-        [titleLabel, nicknameTextfield, nicknameAlertLabel, checkDuplicateNicknameButton, confirmButton].forEach {
-            view.addSubview($0)
+    override func setConstraints() {
+        view.addSubviews(titleLabel, nicknameTextfield, nicknameAlertLabel, checkDuplicateNicknameButton, confirmButton)
+        view.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
@@ -105,22 +101,14 @@ final class SignUpViewController: UIViewController {
 
     // MARK: - Custom Method
 
-    private func addTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
-        view.addGestureRecognizer(tapGesture)
-    }
-
     @objc private func setUpTextFieldState(_ sender: UITextField) {
         guard let nickname = sender.text else { return }
         interactor?.validateNickname(with: SignUpModels.ValidateNickname.Request(nickname: nickname))
     }
 
-    @objc private func hideKeyboard(_ sender: Any) {
-        view.endEditing(true)
-    }
-
     @objc private func checkDuplicateNicknameButtonDidTap(_ sender: UIButton) {
         guard let nickname = nicknameTextfield.text else { return }
+        checkDuplicateNicknameButton.isEnabled = false
         interactor?.checkDuplication(with: SignUpModels.CheckDuplication.Request(nickname: nickname))
     }
 }
@@ -136,6 +124,7 @@ extension SignUpViewController: SignUpDisplayLogic {
     func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel) {
         nicknameAlertLabel.isHidden = false
         nicknameAlertLabel.text = response.alertDescription
+        nicknameAlertLabel.textColor = response.canSignUp ? .correct : .error
         confirmButton.isEnabled = response.canSignUp
     }
 
