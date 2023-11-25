@@ -10,7 +10,7 @@ import UIKit
 
 protocol SignUpDisplayLogic: AnyObject {
     func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel)
-    func displayNickanmeDuplication()
+    func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel)
 }
 
 final class SignUpViewController: UIViewController {
@@ -40,10 +40,11 @@ final class SignUpViewController: UIViewController {
         return label
     }()
 
-    private let checkDuplicateNicknameButton: LOButton = {
+    private lazy var checkDuplicateNicknameButton: LOButton = {
         let button = LOButton(style: .basic)
         button.isEnabled = false
         button.setTitle("중복확인", for: .normal)
+        button.addTarget(self, action: #selector(checkDuplicateNicknameButtonDidTap(_:)), for: .touchUpInside)
         return button
     }()
 
@@ -117,16 +118,25 @@ final class SignUpViewController: UIViewController {
     @objc private func hideKeyboard(_ sender: Any) {
         view.endEditing(true)
     }
+
+    @objc private func checkDuplicateNicknameButtonDidTap(_ sender: UIButton) {
+        guard let nickname = nicknameTextfield.text else { return }
+        interactor?.checkDuplication(with: SignUpModels.CheckDuplication.Request(nickname: nickname))
+    }
 }
 
 extension SignUpViewController: SignUpDisplayLogic {
+
     func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel) {
         nicknameAlertLabel.isHidden = response.canCheckDuplication
         checkDuplicateNicknameButton.isEnabled = response.canCheckDuplication
         nicknameAlertLabel.text = response.alertDescription
     }
 
-    func displayNickanmeDuplication() {
-
+    func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel) {
+        nicknameAlertLabel.isHidden = false
+        nicknameAlertLabel.text = response.alertDescription
+        confirmButton.isEnabled = response.canSignUp
     }
+
 }

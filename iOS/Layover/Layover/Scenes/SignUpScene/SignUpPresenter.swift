@@ -10,6 +10,7 @@ import UIKit
 
 protocol SignUpPresentationLogic {
     func presentNicknameValidation(with response: SignUpModels.ValidateNickname.Response)
+    func presentNicknameDuplication(with response: SignUpModels.CheckDuplication.Response)
 }
 
 final class SignUpPresenter: SignUpPresentationLogic {
@@ -25,6 +26,13 @@ final class SignUpPresenter: SignUpPresentationLogic {
         let viewModel = Models.ValidateNickname.ViewModel(canCheckDuplication: response.nicknameState == .valid,
                                                           alertDescription: response.nicknameState.alertDescription)
         viewController?.displayNicknameValidation(response: viewModel)
+    }
+
+    func presentNicknameDuplication(with response: SignUpModels.CheckDuplication.Response) {
+        let alertDescription = response.isDuplicate ? "사용중인 닉네임입니다." : "사용가능한 닉네임입니다."
+        let viewModel = Models.CheckDuplication.ViewModel(canSignUp: !response.isDuplicate,
+                                                          alertDescription: alertDescription)
+        viewController?.displayNickanmeDuplication(response: viewModel)
     }
 
 }

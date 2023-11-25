@@ -10,6 +10,7 @@ import UIKit
 
 protocol SignUpBusinessLogic {
     func validateNickname(with request: SignUpModels.ValidateNickname.Request)
+    func checkDuplication(with request: SignUpModels.CheckDuplication.Request)
 }
 
 protocol SignUpDataStore { }
@@ -20,6 +21,7 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
     typealias Models = SignUpModels
 
+    var userWorker: UserWorkerProtocol?
     var presenter: SignUpPresentationLogic?
 
     // MARK: - UseCase: 닉네임 유효성 검사
@@ -27,6 +29,20 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
     func validateNickname(with request: SignUpModels.ValidateNickname.Request) {
         let response = check(nickname: request.nickname)
         presenter?.presentNicknameValidation(with: response)
+    }
+
+    func checkDuplication(with request: SignUpModels.CheckDuplication.Request) {
+        Task {
+            do {
+                let response = try await userWorker?.checkDuplication(for: request.nickname)
+                await MainActor.run {
+                    presenter?.presentNicknameDuplication(with: SignUpModels.CheckDuplication.Response(isDuplicate: response ?? true))
+                }
+            } catch let error {
+                // TODO: present toast
+                print(error.localizedDescription)
+            }
+        }
     }
 
     private func check(nickname: String) -> SignUpModels.ValidateNickname.Response {
