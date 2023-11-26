@@ -21,13 +21,13 @@ final class MockUserWorker: UserWorkerProtocol {
     func modifyNickname(to nickname: String) async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "PatchUserName",
                                                  withExtension: "json") else { throw NetworkError.unknown }
-        let data = try? Data(contentsOf: fileLocation)
+        let mockData = try Data(contentsOf: fileLocation)
         MockURLProtocol.requestHandler = { request in
             let response = HTTPURLResponse(url: request.url!,
                                            statusCode: 200,
                                            httpVersion: nil,
                                            headerFields: nil)
-            return (response, data, nil)
+            return (response, mockData, nil)
         }
         let endPoint: EndPoint = EndPoint<Response<NicknameDTO>>(path: "/member/username",
                                                             method: .PATCH,
@@ -41,14 +41,13 @@ final class MockUserWorker: UserWorkerProtocol {
     func checkDuplication(for nickname: String) async throws -> Bool {
         guard let fileLocation = Bundle.main.url(forResource: "CheckUserName",
                                                  withExtension: "json") else { throw NetworkError.unknown }
-        let data = try? Data(contentsOf: fileLocation)
-
+        let mockData = try Data(contentsOf: fileLocation)
         MockURLProtocol.requestHandler = { request in
             let response = HTTPURLResponse(url: request.url!,
                                            statusCode: 200,
                                            httpVersion: nil,
                                            headerFields: nil)
-            return (response, data, nil)
+            return (response, mockData, nil)
         }
         let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
                                                             method: .POST,
@@ -62,13 +61,13 @@ final class MockUserWorker: UserWorkerProtocol {
     func modifyIntroduce(to introduce: String) async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "PatchIntroduce",
                                                  withExtension: "json") else { throw NetworkError.unknown }
-        let data = try? Data(contentsOf: fileLocation)
+        let mockData = try Data(contentsOf: fileLocation)
         MockURLProtocol.requestHandler = { request in
             let response = HTTPURLResponse(url: request.url!,
                                            statusCode: 200,
                                            httpVersion: nil,
                                            headerFields: nil)
-            return (response, data, nil)
+            return (response, mockData, nil)
         }
 
         let endPoint = EndPoint<Response<IntroduceDTO>>(path: "/member/introduce",
@@ -83,13 +82,13 @@ final class MockUserWorker: UserWorkerProtocol {
     func withdraw() async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "DeleteUser",
                                                  withExtension: "json") else { throw NetworkError.unknown }
-        let data = try? Data(contentsOf: fileLocation)
+        let mockData = try Data(contentsOf: fileLocation)
         MockURLProtocol.requestHandler = { request in
             let response = HTTPURLResponse(url: request.url!,
                                            statusCode: 200,
                                            httpVersion: nil,
                                            headerFields: nil)
-            return (response, data, nil)
+            return (response, mockData, nil)
         }
         let endPoint = EndPoint<Response<NicknameDTO>>(path: "/member",
                                                   method: .DELETE,
