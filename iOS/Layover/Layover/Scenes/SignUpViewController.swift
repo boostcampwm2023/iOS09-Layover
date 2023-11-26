@@ -57,12 +57,28 @@ final class SignUpViewController: BaseViewController {
 
     var interactor: SignUpBusinessLogic?
 
+    // MARK: - Intiailizer
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+
+    // MARK:  - Setup
+
+    private func setup() {
         SignUpConfigurator.shared.configure(self)
-        setConstraints()
     }
 
     // MARK: - UI + Layout
@@ -99,7 +115,7 @@ final class SignUpViewController: BaseViewController {
         ])
     }
 
-    // MARK: - Custom Method
+    // MARK: - Actions
 
     @objc private func setUpTextFieldState(_ sender: UITextField) {
         guard let nickname = sender.text else { return }
