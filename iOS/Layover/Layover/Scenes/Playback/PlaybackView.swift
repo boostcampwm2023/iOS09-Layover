@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 
 final class PlaybackView: UIView {
+    // MARK: - UI Components
     // TODO: private 다시 붙이고 Method 처리
     let descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
@@ -81,6 +82,8 @@ final class PlaybackView: UIView {
 
     private let playerView: PlayerView = PlayerView()
 
+    // MARK: - View Life Cycle
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
@@ -99,6 +102,8 @@ final class PlaybackView: UIView {
         setPlayerSlider()
     }
 
+    // MARK: Player Setting Method
+
     func addAVPlayer(url: URL) {
         playerView.player = AVPlayer(url: url)
     }
@@ -113,18 +118,6 @@ final class PlaybackView: UIView {
             self?.updateSlider(currentTime: currentTime)
         })
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
-    }
-
-    func stopPlayer() {
-        playerView.pause()
-    }
-
-    func playPlayer() {
-        playerView.play()
-    }
-
-    func replayPlayer() {
-        playerView.seek(to: .zero)
     }
 
     func setPlayerSliderUI(tabbarHeight: CGFloat) {
@@ -144,9 +137,38 @@ final class PlaybackView: UIView {
         window?.addSubview(playerSlider)
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
+
+    // MARK: Player Play Method
+
+    func stopPlayer() {
+        playerView.pause()
+    }
+
+    func playPlayer() {
+        playerView.play()
+    }
+
+    func replayPlayer() {
+        playerView.seek(to: .zero)
+    }
 }
 
-extension PlaybackView {
+// MARK: PlaybackView 내부에서만 쓰이는 Method
+
+private extension PlaybackView {
+    func updateSlider(currentTime: CMTime) {
+        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
+            return
+        }
+        let duration: CMTime = currentItem.duration
+        if CMTIME_IS_INVALID(duration) {
+            return
+        }
+        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+    }
+
+    // MARK: - Gesture Method
+
     func setPlayerView() {
         let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
         self.addGestureRecognizer(playerViewGesture)
@@ -157,6 +179,8 @@ extension PlaybackView {
         let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
         descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
     }
+    
+    // MARK: - UI Method
 
     func setDescriptionViewUI() {
         let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
@@ -220,6 +244,8 @@ extension PlaybackView {
         setSubViewsInPlayerViewConstraints()
     }
 
+    // MARK: Gesture
+
     @objc func descriptionViewDidTap(_ sender: UITapGestureRecognizer) {
             if self.descriptionView.state == .hidden {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
@@ -239,17 +265,6 @@ extension PlaybackView {
                 })
                 self.descriptionView.state = .hidden
             }
-    }
-
-    func updateSlider(currentTime: CMTime) {
-        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
-            return
-        }
-        let duration: CMTime = currentItem.duration
-        if CMTIME_IS_INVALID(duration) {
-            return
-        }
-        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
     @objc func playerViewDidTap() {
@@ -273,6 +288,8 @@ extension PlaybackView {
             playerView.pause()
         }
     }
+
+    // MARK: Selector
 
     @objc func playerDidFinishPlaying(note: NSNotification) {
         playerView.seek(to: CMTime.zero)

@@ -21,6 +21,9 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
     // TODO: VideoModel 받아서 처리
     func setPlaybackContents(title: String) {
         playbackView.descriptionView.titleLabel.text = title
@@ -44,5 +47,6 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
+        playbackView.playerSlider.isHidden = true
     }
 }

@@ -37,7 +37,12 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     }
     // MARK: - UI Components
 
-    private let playbackCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let playbackCollectionView: UICollectionView = {
+        let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.isPagingEnabled = true
+        return collectionView
+    }()
 
     // MARK: - Properties
 
@@ -45,8 +50,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     private var prevPlaybackCell: PlaybackCell?
 
-    private let video1: VideoModel = VideoModel(title: "1", videoURL: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
-    private let video2: VideoModel = VideoModel(title: "2", videoURL: URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!)
+    private let video1: VideoModel = VideoModel(title: "1", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
+    private let video2: VideoModel = VideoModel(title: "2", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
     private let video3: VideoModel = VideoModel(title: "3", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
     private var videos: [VideoModel] = []
 
@@ -89,12 +94,12 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        // TODO: VIP Cycle
         videos = [video1, video2, video3]
         setupFetchFromLocalDataStore()
         setInfiniteScroll()
-        configureDataSource()
         setUI()
+        configureDataSource()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
     }
@@ -106,14 +111,9 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if prevPlaybackCell == nil {
-            prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 1, section: 0)) as? PlaybackCell
-            prevPlaybackCell?.playbackView.playPlayer()
-        } else {
-            prevPlaybackCell?.playbackView.playPlayer()
-        }
         trackScreenViewAnalytics()
         registerNotifications()
+        initPrevPlayerCell()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,8 +131,6 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - UI + Layout
 
     private func setUI() {
-        playbackCollectionView.showsVerticalScrollIndicator = false
-        playbackCollectionView.isPagingEnabled = true
         playbackCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(playbackCollectionView)
         NSLayoutConstraint.activate([
@@ -265,6 +263,49 @@ private extension PlaybackViewController {
             videos = transDataForInfiniteScroll(videos)
         }
     }
+
+    func moveCellAtInfiniteScroll(_ scrollView: UIScrollView) {
+        // ViewType이 Home이 아닌 경우
+        let count: Int = videos.count
+        if count == 0 {
+            return
+        }
+        if viewType == .home {
+            // 마지막 Cell에 도달하면 비디오 추가 로드
+            // 마지막 Video까지 다 재생했다면 다른 ViewType과 마찬가지로 동작 시작
+        }
+        // 첫번째에 위치한 마지막 cell에 도달했을 때
+        if scrollView.contentOffset.y == 0 {
+            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
+        }
+        // 마지막에 위치한 첫번째 cell에 도달했을 때
+        if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
+            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+        }
+    }
+
+    func stopPrevPlayerAndPlayCurrnetPlayer(_ scrollView: UIScrollView) {
+        let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
+        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
+            return
+        }
+        
+        if prevPlaybackCell != currentPlaybackCell {
+            prevPlaybackCell?.playbackView.stopPlayer()
+            prevPlaybackCell?.playbackView.replayPlayer()
+            currentPlaybackCell.playbackView.playPlayer()
+            prevPlaybackCell = currentPlaybackCell
+        }
+        currentPlaybackCell.playbackView.playerSlider.isHidden = false
+    }
+
+    func initPrevPlayerCell() {
+        if prevPlaybackCell == nil {
+            prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 1, section: 0)) as? PlaybackCell
+        }
+        prevPlaybackCell?.playbackView.playerSlider.isHidden = false
+        prevPlaybackCell?.playbackView.playPlayer()
+    }
 }
 
 extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
@@ -287,37 +328,8 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 
 extension PlaybackViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        // ViewType이 Home이 아닌 경우
-        let count: Int = videos.count
-        if count == 0 {
-            return
-        }
-        if viewType == .home {
-            // 마지막 Cell에 도달하면 비디오 추가 로드
-            // 마지막 Video까지 다 재생했다면 다른 ViewType과 마찬가지로 동작 시작
-        }
-        // 첫번째에 위치한 마지막 cell에 도달했을 때
-        if scrollView.contentOffset.y == 0 {
-            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
-        }
-        // 마지막에 위치한 첫번째 cell에 도달했을 때
-        if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
-            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
-        }
-
-        let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
-        print("indexPath: \(indexPathRow)")
-        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
-            return
-        }
-
-        if prevPlaybackCell != currentPlaybackCell {
-            prevPlaybackCell?.playbackView.stopPlayer()
-            prevPlaybackCell?.playbackView.replayPlayer()
-            currentPlaybackCell.playbackView.playPlayer()
-            prevPlaybackCell = currentPlaybackCell
-        }
-        currentPlaybackCell.playbackView.playerSlider.isHidden = false
+        moveCellAtInfiniteScroll(scrollView)
+        stopPrevPlayerAndPlayCurrnetPlayer(scrollView)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
