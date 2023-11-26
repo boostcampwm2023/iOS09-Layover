@@ -45,9 +45,42 @@ export class BoardService {
       original_video_url: '',
       video_thumbnail: '',
       location: location,
+      filename: '',
       status: 'RUNNING',
     });
     const savedBoard: Board = await this.boardRepository.save(boardEntity);
     return savedBoard.id;
+  }
+
+  async setOriginalVideoUrl(filename: string) {
+    const board: Board = await this.boardRepository.findOne({ where: { filename } });
+    board.original_video_url = this.generateOriginalVideoHLS(filename);
+    await this.boardRepository.save(board);
+  }
+
+  generateOriginalVideoHLS(filename: string) {
+    return `${process.env.HLS_SCHEME}${process.env.HLS_ORIGIN_CDN}/hls/${process.env.HLS_ORIGIN_BUCKET_ENCRYPTED_NAME}
+    /${filename}/index.m3u8`;
+  }
+
+  async setEncodedVideoUrl(filename: string) {
+    const board: Board = await this.boardRepository.findOne({ where: { filename } });
+    const video: Video = board.video;
+    // filename 으로 sd 인지 hd 인지 구분해야함.
+
+    if (filename === 'HD') {
+      video.hd_url = this.generateEncodedVideoHLS(filename);
+    }
+
+    if (filename === 'SD') {
+      video.hd_url = this.generateEncodedVideoHLS(filename);
+    }
+
+    await this.videoService.saveVideo(video);
+  }
+
+  generateEncodedVideoHLS(filename: string) {
+    return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
+    /${filename}/index.m3u8`;
   }
 }

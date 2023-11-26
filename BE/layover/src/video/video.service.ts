@@ -13,4 +13,8 @@ export class VideoService {
     });
     return await this.videoRepository.save(videoEntity);
   }
+
+  async saveVideo(video: Video): Promise<Video> {
+    return await this.videoRepository.save(video);
+  }
 }

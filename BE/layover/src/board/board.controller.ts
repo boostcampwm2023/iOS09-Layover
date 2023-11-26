@@ -77,7 +77,9 @@ export class BoardController {
   })
   @Post('/upload-callback')
   async uploadCallback(@Body() uploadCallbackRequestDto: UploadCallbackDto) {
-    console.log(uploadCallbackRequestDto);
+    // 업로드 완료로 데이터가 들어오면 filename을 가지고 board 데이터의 원본 hls link를 업데이트 해줍니다.
+    await this.boardService.setOriginalVideoUrl(uploadCallbackRequestDto.filename);
+    throw new CustomResponse(ECustomCode.SUCCESS);
   }
 
   @ApiOperation({
@@ -86,6 +88,22 @@ export class BoardController {
   })
   @Post('/encoding-callback')
   async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
-    console.log(encodingCallbackRequestDto);
+    // status 를 구분한다.
+    switch (encodingCallbackRequestDto.status) {
+      case 'WAITING':
+        break;
+      case 'RUNNING':
+        break;
+      case 'FAILURE':
+        break;
+      case 'COMPLETE':
+        // dto 에서 filename 을 파싱한다.
+        const filename = encodingCallbackRequestDto.filePath;
+        await this.boardService.setEncodedVideoUrl(filename);
+        break;
+      default:
+    }
+
+    throw new CustomResponse(ECustomCode.SUCCESS);
   }
 }
