@@ -9,13 +9,15 @@ import UIKit
 import AuthenticationServices
 
 protocol LoginDisplayLogic: AnyObject {
-    func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
-    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel)
+    func navigateToMain()
+    func routeToSignUp(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
+    func routeToSignUp(with viewModel: LoginModels.PerformAppleLogin.ViewModel)
 }
 
 final class LoginViewController: BaseViewController {
 
     // MARK: - Properties
+
     private let logoImage: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.image = UIImage.loLogo
@@ -29,57 +31,49 @@ final class LoginViewController: BaseViewController {
         return titleLabel
     }()
 
-    private let kakaoTitleView: UIView = UIView()
+    private lazy var kakaoLoginButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .kakao
 
-    private let kakaoLogo: UIImageView = {
-        let imageView: UIImageView = UIImageView()
-        imageView.image = UIImage.kakaoLogo
-        return imageView
-    }()
-
-    private let kakaoLabel: UILabel = {
-        let label: UILabel = UILabel()
-        label.text = "카카오로 계속하기"
-        label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textColor = .black
-        return label
-    }()
-
-    private let kakaoLoginButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.backgroundColor = .kakao
+        configuration.attributedTitle = AttributedString("카카오로 계속하기",
+                                                         attributes: AttributeContainer([.font: UIFont.boldSystemFont(ofSize: 17),
+                                                                                         .foregroundColor: UIColor.black]))
+        configuration.image = UIImage.kakaoLogo.resized(to: CGSize(width: 20, height: 20))
+        configuration.imagePadding = 4
+        configuration.contentInsets = .init(top: 0, leading: -4, bottom: 0, trailing: 0)
+        let button: UIButton = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(kakaoLoginButtonTapped(_:)), for: .touchUpInside)
+        button.clipsToBounds = true
         button.layer.cornerRadius = 10
         return button
     }()
 
-    private let appleTitleView: UIView = UIView()
+    private lazy var appleLoginButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .white
 
-    private let appleLabel: UILabel = {
-        let label: UILabel = UILabel()
-        label.text = "Apple로 계속하기"
-        label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textColor = .black
-        return label
-    }()
+        configuration.attributedTitle = AttributedString("Apple로 계속하기",
+                                                         attributes: AttributeContainer([.font: UIFont.boldSystemFont(ofSize: 17),
+                                                                                         .foregroundColor: UIColor.black]))
 
-    private let appleLogo: UIImageView = {
-        let imageView: UIImageView = UIImageView()
-        imageView.image = UIImage.appleLogo
-        return imageView
-    }()
-
-    private let appleLoginButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.backgroundColor = .white
+        configuration.image = UIImage.appleLogo.resized(to: CGSize(width: 20, height: 20))
+        configuration.imagePadding = 4
+        let button: UIButton = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(appleLoginButtonTapped(_:)), for: .touchUpInside)
+        button.clipsToBounds = true
         button.layer.cornerRadius = 10
         return button
     }()
+
+    // MARK: Properties
 
     typealias Models = LoginModels
 
     var interactor: LoginBusinessLogic?
+    var router: (LoginRoutingLogic & LoginDataPassing)?
 
     // MARK: - Object lifecycle
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
@@ -91,6 +85,7 @@ final class LoginViewController: BaseViewController {
     }
 
     // MARK: - Setup
+
     private func setup() {
         LoginConfigurator.shared.configure(self)
     }
@@ -105,76 +100,58 @@ final class LoginViewController: BaseViewController {
 
         NSLayoutConstraint.activate([
             logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 280),
+            logoImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 236),
             logoImage.widthAnchor.constraint(equalToConstant: 81.24),
             logoImage.heightAnchor.constraint(equalToConstant: 58.12),
+
             logoTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoTitleLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 14.88),
+
             kakaoLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            kakaoLoginButton.topAnchor.constraint(equalTo: logoTitleLabel.bottomAnchor, constant: 81),
+            kakaoLoginButton.topAnchor.constraint(equalTo: logoTitleLabel.bottomAnchor, constant: 77),
             kakaoLoginButton.widthAnchor.constraint(equalToConstant: 315),
             kakaoLoginButton.heightAnchor.constraint(equalToConstant: 48),
+
             appleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             appleLoginButton.topAnchor.constraint(equalTo: kakaoLoginButton.bottomAnchor, constant: 8),
             appleLoginButton.widthAnchor.constraint(equalToConstant: 315),
             appleLoginButton.heightAnchor.constraint(equalToConstant: 48)
         ])
-        setLoginButtonConstraints()
     }
 
-    private func setLoginButtonConstraints() {
-        [kakaoTitleView, kakaoLogo, kakaoLabel, appleTitleView, appleLogo, appleLabel].forEach { subView in
-            subView.translatesAutoresizingMaskIntoConstraints = false
-        }
-        kakaoTitleView.addSubviews(kakaoLogo, kakaoLabel)
-        kakaoLoginButton.addSubview(kakaoTitleView)
-        appleTitleView.addSubviews(appleLogo, appleLabel)
-        appleLoginButton.addSubview(appleTitleView)
+    // MARK: Actions
 
-        NSLayoutConstraint.activate([
-            kakaoTitleView.widthAnchor.constraint(equalToConstant: 129),
-            kakaoTitleView.heightAnchor.constraint(equalToConstant: 20),
-            kakaoTitleView.centerXAnchor.constraint(equalTo: kakaoLoginButton.centerXAnchor),
-            kakaoTitleView.centerYAnchor.constraint(equalTo: kakaoLoginButton.centerYAnchor),
-            kakaoLogo.widthAnchor.constraint(equalToConstant: 20),
-            kakaoLogo.heightAnchor.constraint(equalToConstant: 20),
-            kakaoLogo.leadingAnchor.constraint(equalTo: kakaoTitleView.leadingAnchor),
-            kakaoLogo.topAnchor.constraint(equalTo: kakaoTitleView.topAnchor),
-            kakaoLogo.bottomAnchor.constraint(equalTo: kakaoTitleView.bottomAnchor),
-            kakaoLabel.topAnchor.constraint(equalTo: kakaoTitleView.topAnchor),
-            kakaoLabel.bottomAnchor.constraint(equalTo: kakaoTitleView.bottomAnchor),
-            kakaoLabel.leadingAnchor.constraint(equalTo: kakaoLogo.trailingAnchor, constant: 1.5),
-
-            appleTitleView.widthAnchor.constraint(equalToConstant: 129),
-            appleTitleView.heightAnchor.constraint(equalToConstant: 20),
-            appleTitleView.centerXAnchor.constraint(equalTo: appleLoginButton.centerXAnchor),
-            appleTitleView.centerYAnchor.constraint(equalTo: appleLoginButton.centerYAnchor),
-            appleLogo.widthAnchor.constraint(equalToConstant: 20),
-            appleLogo.heightAnchor.constraint(equalToConstant: 20),
-            appleLogo.leadingAnchor.constraint(equalTo: appleTitleView.leadingAnchor),
-            appleLogo.topAnchor.constraint(equalTo: appleTitleView.topAnchor),
-            appleLogo.bottomAnchor.constraint(equalTo: appleTitleView.bottomAnchor),
-            appleLabel.topAnchor.constraint(equalTo: appleTitleView.topAnchor),
-            appleLabel.bottomAnchor.constraint(equalTo: appleTitleView.bottomAnchor),
-            appleLabel.leadingAnchor.constraint(equalTo: appleLogo.trailingAnchor, constant: 1.5)
-        ])
+    @objc private func kakaoLoginButtonTapped(_ sender: UIButton) {
+        let request = LoginModels.PerformKakaoLogin.Request()
+        interactor?.performKakaoLogin(with: request)
     }
 
+    @objc private func appleLoginButtonTapped(_ sender: UIButton) {
+        let request = LoginModels.PerformAppleLogin.Request()
+        interactor?.performAppleLogin(with: request)
+    }
 }
 
 // MARK: - Use Case - Login
 
 extension LoginViewController: LoginDisplayLogic {
-    func displayPerformKakaoLogin(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
-        // TODO: Logic 작성
+    func navigateToMain() {
+        router?.routeToMainTabBar()
     }
 
-    func displayPerformAppleLogin(with viewModel: LoginModels.PerformAppleLogin.ViewMdoel) {
-        // TODO: Logic 작성
+    func routeToSignUp(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
+        router?.navigateToKakaoSignUp()
     }
 
+    func routeToSignUp(with viewModel: LoginModels.PerformAppleLogin.ViewModel) {
+        router?.navigateToAppleSignUp()
+    }
 }
 
-#Preview {
-    LoginViewController()
+fileprivate extension UIImage {
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
 }

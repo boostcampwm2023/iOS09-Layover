@@ -24,7 +24,7 @@ final class EndPoint<R>: RequestResponsable {
          method: HTTPMethod,
          queryParameters: Encodable? = nil,
          bodyParameters: Encodable? = nil,
-         headers: [String: String]? = nil) {
+         headers: [String: String]? = ["Content-Type": "application/json"]) {
         self.baseURL = baseURL
         self.path = path
         self.method = method
