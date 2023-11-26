@@ -29,4 +29,7 @@ export class Board {
 
   @Column({ nullable: false })
   location: string;
+
+  @Column({ nullable: false })
+  status: string;
 }

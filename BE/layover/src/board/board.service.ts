@@ -45,6 +45,7 @@ export class BoardService {
       original_video_url: '',
       video_thumbnail: '',
       location: location,
+      status: 'RUNNING',
     });
     const savedBoard: Board = await this.boardRepository.save(boardEntity);
     return savedBoard.id;
