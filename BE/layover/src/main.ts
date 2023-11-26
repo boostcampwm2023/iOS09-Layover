@@ -8,6 +8,7 @@ import { TokenResDto } from './oauth/dtos/token-res.dto';
 import { PresignedUrlResDto } from './board/dtos/presigned-url-res.dto';
 import { ValidationPipe } from '@nestjs/common';
 import { CheckUsernameResDto } from './member/dtos/check-username-res.dto';
+import { CreateBoardResDto } from './board/dtos/create-board-res.dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -24,14 +25,9 @@ async function bootstrap() {
       transform: true, // 요청에서 받은 데이터를 DTO에서 정의한 타입으로 변환해줍니다.
     }),
   );
-  const config = new DocumentBuilder()
-    .setTitle('Layover API Documentation')
-    .setDescription('The Layover API description')
-    .setVersion('0.0.0.0.1')
-    .addTag('Layover')
-    .build();
+  const config = new DocumentBuilder().setTitle('Layover API Documentation').setDescription('The Layover API description').setVersion('0.0.0.0.1').addTag('Layover').build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto],
+    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto, CreateBoardResDto],
   });
   SwaggerModule.setup('api', app, document);
 
