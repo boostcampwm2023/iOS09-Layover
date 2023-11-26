@@ -41,7 +41,11 @@ final class MapViewController: BaseViewController {
         return button
     }()
 
-    private let currentLocationButton: LOCircleButton = LOCircleButton(style: .locate, diameter: 52)
+    private lazy var currentLocationButton: LOCircleButton = {
+        let button = LOCircleButton(style: .locate, diameter: 52)
+        button.addTarget(self, action: #selector(currentLocationButtonDidTap), for: .touchUpInside)
+        return button
+    }()
 
     private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
 
@@ -83,7 +87,7 @@ final class MapViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.checkLocationAuthorizationStatus()
-        interactor?.fetchVideos()
+        setCollectionViewDataSource()
         createMapAnnotation()
     }
 
@@ -118,6 +122,12 @@ final class MapViewController: BaseViewController {
         ])
     }
 
+    private func setCollectionViewDataSource() {
+        carouselCollectionView.dataSource = carouselDatasource
+    }
+
+    // MARK: - Methods
+
     private func createLayout() -> UICollectionViewLayout {
         let groupWidthDimension: CGFloat = 94/375
         let minumumZoomScale: CGFloat = 73/94
@@ -151,7 +161,6 @@ final class MapViewController: BaseViewController {
         let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: 36.3276544,
                                                                          longitude: 127.427232),
                                       thumnailImage: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
-        mapView.showAnnotations([annotation], animated: true)
         mapView.addAnnotation(annotation)
     }
 
@@ -163,26 +172,38 @@ final class MapViewController: BaseViewController {
         }
     }
 
+    private func deleteCarouselDatasource() {
+        var snapshot: NSDiffableDataSourceSnapshot = carouselDatasource.snapshot()
+        snapshot.deleteAllItems()
+        carouselDatasource.apply(snapshot)
+    }
+
+    @objc private func currentLocationButtonDidTap() {
+        mapView.setUserTrackingMode(.follow, animated: true)
+    }
+
 }
 
 extension MapViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
+        guard !(annotation is MKUserLocation) else { return nil }
         var annotationView: MKAnnotationView?
-        if let loAnnotation = annotation as? LOAnnotation {
-            annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
-                                                                   for: annotation)
-        }
+        annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
+                                                               for: annotation)
         return annotationView
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        guard let annotation = view.annotation, !(annotation is MKUserLocation) else { return }
+        mapView.setCenter(annotation.coordinate, animated: true)
         animateAnnotationSelection(for: view, isSelected: true)
+        interactor?.fetchVideos()
     }
 
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         animateAnnotationSelection(for: view, isSelected: false)
+        deleteCarouselDatasource()
     }
 
 }
@@ -190,7 +211,6 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController: MapDisplayLogic {
 
     func displayFetchedVideos(viewModel: ViewModel) {
-        carouselCollectionView.dataSource = carouselDatasource
         var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.videoDataSources)
