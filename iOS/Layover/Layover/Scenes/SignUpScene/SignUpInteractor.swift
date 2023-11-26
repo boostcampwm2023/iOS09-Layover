@@ -14,7 +14,7 @@ protocol SignUpBusinessLogic {
     func signUp(with request: SignUpModels.SignUp.Request)
 }
 
-protocol SignUpDataStore {
+protocol SignUpDataStore: AnyObject {
     var signUpType: SignUpModels.SignUp.LoginType? { get set }
     var socialToken: String? { get set }
 }
@@ -26,6 +26,7 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
     typealias Models = SignUpModels
 
     var userWorker: UserWorkerProtocol?
+    var signUpWorker: SignUpWorkerProtocol?
     var presenter: SignUpPresentationLogic?
 
     var signUpType: SignUpModels.SignUp.LoginType?
@@ -66,11 +67,17 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
     func signUp(with request: SignUpModels.SignUp.Request) {
         guard let signUpType, let socialToken else { return }
 
-        switch signUpType {
-        case .kakao:
-            break
-        case .apple:
-            break
+        Task {
+            switch signUpType {
+            case .kakao:
+                if await signUpWorker?.signUp(withKakao: socialToken, username: request.nickname) == true {
+                    await MainActor.run {
+                        presenter?.presentSignUpSuccess()
+                    }
+                }
+            case .apple:
+                break
+            }
         }
     }
 

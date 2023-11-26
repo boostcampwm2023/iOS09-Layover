@@ -33,6 +33,7 @@
 		1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */; };
 		1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */; };
 		1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */; };
+		1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */; };
 		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
@@ -139,6 +140,7 @@
 		1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultStored.swift; sourceTree = "<group>"; };
 		1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpEndPointFactory.swift; sourceTree = "<group>"; };
+		1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWorker.swift; sourceTree = "<group>"; };
 		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -562,6 +564,7 @@
 				1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */,
 				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
 				FC25119F2B045C0A004717BC /* SignUpInteractor.swift */,
+				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A12B045C3F004717BC /* SignUpPresenter.swift */,
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
@@ -700,6 +703,7 @@
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
+				1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */,
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,

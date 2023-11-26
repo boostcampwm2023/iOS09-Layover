@@ -11,6 +11,7 @@ import UIKit
 protocol SignUpPresentationLogic {
     func presentNicknameValidation(with response: SignUpModels.ValidateNickname.Response)
     func presentNicknameDuplication(with response: SignUpModels.CheckDuplication.Response)
+    func presentSignUpSuccess()
 }
 
 final class SignUpPresenter: SignUpPresentationLogic {
@@ -31,6 +32,10 @@ final class SignUpPresenter: SignUpPresentationLogic {
     func presentNicknameDuplication(with response: SignUpModels.CheckDuplication.Response) {
         let viewModel = Models.CheckDuplication.ViewModel(canSignUp: !response.isDuplicate)
         viewController?.displayNickanmeDuplication(response: viewModel)
+    }
+
+    func presentSignUpSuccess() {
+        viewController?.navigateToMain()
     }
 
 }

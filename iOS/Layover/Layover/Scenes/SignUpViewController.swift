@@ -11,6 +11,7 @@ import UIKit
 protocol SignUpDisplayLogic: AnyObject {
     func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel)
     func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel)
+    func navigateToMain()
 }
 
 final class SignUpViewController: BaseViewController {
@@ -165,4 +166,7 @@ extension SignUpViewController: SignUpDisplayLogic {
         confirmButton.isEnabled = response.canSignUp
     }
 
+    func navigateToMain() {
+        router?.navigateToMain()
+    }
 }
