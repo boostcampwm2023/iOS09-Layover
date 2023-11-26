@@ -9,13 +9,11 @@
 import Foundation
 
 final class SignUpConfigurator: Configurator {
-    typealias ViewController = SignUpViewController
-
     static let shared = SignUpConfigurator()
 
     private init() { }
 
-    func configure(_ viewController: ViewController) {
+    func configure(_ viewController: SignUpViewController) {
         let viewController = viewController
         let interactor = SignUpInteractor()
         let userWorker = MockUserWorker()

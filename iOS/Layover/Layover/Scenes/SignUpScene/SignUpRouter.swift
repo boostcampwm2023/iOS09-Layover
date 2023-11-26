@@ -9,6 +9,7 @@
 import Foundation
 
 protocol SignUpRoutingLogic {
+    func routeToBack()
     func navigateToMain()
 }
 
@@ -25,6 +26,10 @@ final class SignUpRouter: SignUpRoutingLogic, SignUpDataPassing {
     var dataStore: SignUpDataStore?
 
     // MARK: - Routing
+
+    func routeToBack() {
+        viewController?.navigationController?.popViewController(animated: true)
+    }
 
     func navigateToMain() {
         let mainTabBarViewController = MainTabBarViewController()

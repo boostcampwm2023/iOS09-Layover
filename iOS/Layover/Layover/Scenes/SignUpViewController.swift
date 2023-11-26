@@ -70,13 +70,7 @@ final class SignUpViewController: BaseViewController {
         setup()
     }
 
-    // MARK: - Life Cycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    // MARK:  - Setup
+    // MARK: - Setup
 
     private func setup() {
         SignUpConfigurator.shared.configure(self)
@@ -85,6 +79,7 @@ final class SignUpViewController: BaseViewController {
     // MARK: - UI + Layout
 
     override func setConstraints() {
+        super.setConstraints()
         view.addSubviews(titleLabel, nicknameTextfield, nicknameAlertLabel, checkDuplicateNicknameButton, confirmButton)
         view.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -116,6 +111,20 @@ final class SignUpViewController: BaseViewController {
         ])
     }
 
+    override func setUI() {
+        super.setUI()
+        setNavigationBackButton()
+    }
+
+    // MARK: Methods
+
+    private func setNavigationBackButton() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage.iconTabBack,
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(popViewController))
+    }
+
     // MARK: - Actions
 
     @objc private func setUpTextFieldState(_ sender: UITextField) {
@@ -127,6 +136,10 @@ final class SignUpViewController: BaseViewController {
         guard let nickname = nicknameTextfield.text else { return }
         checkDuplicateNicknameButton.isEnabled = false
         interactor?.checkDuplication(with: SignUpModels.CheckDuplication.Request(nickname: nickname))
+    }
+
+    @objc private func popViewController() {
+        router?.routeToBack()
     }
 }
 
