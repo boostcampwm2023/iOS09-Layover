@@ -20,9 +20,13 @@ final class SignUpConfigurator: Configurator {
         let interactor = SignUpInteractor()
         let userWorker = MockUserWorker()
         let presenter = SignUpPresenter()
+        let router = SignUpRouter()
         viewController.interactor = interactor
+        viewController.router = router
         interactor.presenter = presenter
         interactor.userWorker = userWorker
         presenter.viewController = viewController
+        router.viewController = viewController
+        router.dataStore = interactor
     }
 }

@@ -56,6 +56,7 @@ final class SignUpViewController: BaseViewController {
     }()
 
     var interactor: SignUpBusinessLogic?
+    var router: (SignUpRoutingLogic & SignUpDataPassing)?
 
     // MARK: - Intiailizer
 

@@ -13,7 +13,10 @@ protocol SignUpBusinessLogic {
     func checkDuplication(with request: SignUpModels.CheckDuplication.Request)
 }
 
-protocol SignUpDataStore { }
+protocol SignUpDataStore {
+    var signUpType: SignUpModels.SignUp.LoginType? { get set }
+    var socialToken: String? { get set }
+}
 
 final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
@@ -23,6 +26,9 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
     var userWorker: UserWorkerProtocol?
     var presenter: SignUpPresentationLogic?
+
+    var signUpType: SignUpModels.SignUp.LoginType?
+    var socialToken: String?
 
     // MARK: - UseCase: 닉네임 유효성 검사
 
