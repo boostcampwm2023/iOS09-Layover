@@ -10,7 +10,6 @@ import UIKit
 
 final class PlaybackCell: UICollectionViewCell {
     let playbackView: PlaybackView = PlaybackView()
-    static let reuseIdentifier: String = "PlaybackCellReuseIdentifier"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,6 +19,11 @@ final class PlaybackCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configure()
+    }
+
+    // TODO: VideoModel 받아서 처리
+    func setPlaybackContents(title: String) {
+        playbackView.descriptionView.titleLabel.text = title
     }
 
     func addAVPlayer(url: URL) {

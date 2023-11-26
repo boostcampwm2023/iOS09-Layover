@@ -10,7 +10,8 @@ import UIKit
 import AVFoundation
 
 final class PlaybackView: UIView {
-    private let descriptionView: LODescriptionView = {
+    // TODO: private 다시 붙이고 Method 처리
+    let descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
         descriptionView.setText("밤새 모니터에 튀긴 침이 마르기도 전에 대기실로 아참 교수님이 문신 땜에 긴팔 입고 오래 난 시작도 전에 눈을 감았지")
         descriptionView.clipsToBounds = true
@@ -100,8 +101,6 @@ final class PlaybackView: UIView {
 
     func addAVPlayer(url: URL) {
         playerView.player = AVPlayer(url: url)
-//        playerView.player?.isMuted = true
-        playerView.play()
     }
 
     func getPlayerItemStatus() -> AVPlayerItem.Status? {

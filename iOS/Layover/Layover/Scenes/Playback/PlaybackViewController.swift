@@ -17,20 +17,45 @@ protocol PlaybackDisplayLogic: AnyObject {
 }
 
 final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
+    // MARK: - Type
+    enum ViewType {
+        case home
+        case map
+        case profile
+        case tag
+    }
 
-//    private let playerSlider: LOSlider = LOSlider()
+    enum Section {
+        case main
+    }
+
+    // TODO: VIP 적용 시 Model로 빼서 presenter에서 ViewModel로 받기, 무한 스크롤 테스트 용
+    struct VideoModel: Hashable {
+        var id: UUID = UUID()
+        let title: String
+        let videoURL: URL
+    }
+    // MARK: - UI Components
 
     private let playbackCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
-    private var dataSource: UICollectionViewDiffableDataSource<UUID, URL>?
+    // MARK: - Properties
+
+    private var dataSource: UICollectionViewDiffableDataSource<Section, VideoModel>?
 
     private var prevPlaybackCell: PlaybackCell?
 
-    // MARK: - Properties
+    private let video1: VideoModel = VideoModel(title: "1", videoURL: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!)
+    private let video2: VideoModel = VideoModel(title: "2", videoURL: URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!)
+    private let video3: VideoModel = VideoModel(title: "3", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
+    private var videos: [VideoModel] = []
 
     typealias Models = PlaybackModels
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
     var interactor: PlaybackBusinessLogic?
+
+    // TODO: Presenter에서 받기
+    private let viewType: ViewType = .map
 
     // MARK: - Object lifecycle
 
@@ -65,7 +90,9 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        videos = [video1, video2, video3]
         setupFetchFromLocalDataStore()
+        setInfiniteScroll()
         configureDataSource()
         setUI()
         playbackCollectionView.delegate = self
@@ -80,7 +107,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if prevPlaybackCell == nil {
-            prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? PlaybackCell
+            prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 1, section: 0)) as? PlaybackCell
+            prevPlaybackCell?.playbackView.playPlayer()
         } else {
             prevPlaybackCell?.playbackView.playPlayer()
         }
@@ -93,6 +121,11 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
         prevPlaybackCell?.playbackView.playerSlider.isHidden = true
         prevPlaybackCell?.playbackView.stopPlayer()
         unregisterNotifications()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
     }
 
     // MARK: - UI + Layout
@@ -196,20 +229,41 @@ private extension PlaybackViewController {
         guard let tabbarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
             return
         }
-        let cellRegistration = UICollectionView.CellRegistration<PlaybackCell, URL> { (cell, _, url) in
-            cell.addAVPlayer(url: url)
+        playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
+        dataSource = UICollectionViewDiffableDataSource<Section, VideoModel>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
+            cell.setPlaybackContents(title: video.title)
+            cell.addAVPlayer(url: video.videoURL)
             cell.setPlayerSlider(tabbarHeight: tabbarHeight)
+            return cell
         }
-
-        dataSource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: playbackCollectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, url: URL) -> UICollectionViewCell? in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: url)
-        }
-
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
-        snapshot.appendSections([UUID()])
-        snapshot.appendItems([URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!, URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!])
+        var snapshot = NSDiffableDataSourceSnapshot<Section, VideoModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(videos)
         dataSource?.apply(snapshot, animatingDifferences: false)
+    }
+
+    func transDataForInfiniteScroll(_ videos: [VideoModel]) -> [VideoModel] {
+        /// Home과 Home을 제외한 나머지(맵, 프로필, 태그)의 무한 스크롤 동작이 다름
+        /// Home은 내릴 때마다 Video호출 필요, 나머지는 정해진 양이 있음
+        /// Home일 경우는 첫번 째 cell일 때 위로 안올라감.
+        /// 모든 동영상을 다 지나쳐야 첫번째 cell로 이동
+        var transVideos: [VideoModel] = videos
+        if transVideos.count > 0 {
+            var tempLastVideoModel: VideoModel = transVideos[transVideos.count-1]
+            tempLastVideoModel.id = UUID()
+            var tempFirstVideoModel: VideoModel = transVideos[1]
+            tempFirstVideoModel.id = UUID()
+            transVideos.insert(tempLastVideoModel, at: 0)
+            transVideos.append(tempFirstVideoModel)
+        }
+        return transVideos
+    }
+
+    func setInfiniteScroll() {
+        if viewType != .home {
+            videos = transDataForInfiniteScroll(videos)
+        }
     }
 }
 
@@ -233,8 +287,26 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 
 extension PlaybackViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        // 추후 무한 스크롤 처리 예정
+        // ViewType이 Home이 아닌 경우
+        let count: Int = videos.count
+        if count == 0 {
+            return
+        }
+        if viewType == .home {
+            // 마지막 Cell에 도달하면 비디오 추가 로드
+            // 마지막 Video까지 다 재생했다면 다른 ViewType과 마찬가지로 동작 시작
+        }
+        // 첫번째에 위치한 마지막 cell에 도달했을 때
+        if scrollView.contentOffset.y == 0 {
+            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
+        }
+        // 마지막에 위치한 첫번째 cell에 도달했을 때
+        if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
+            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+        }
+
         let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
+        print("indexPath: \(indexPathRow)")
         guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
             return
         }
