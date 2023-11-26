@@ -416,6 +416,8 @@
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 			);
 			path = MockData;
+            sourceTree = "<group>";
+        };
 		FC767FA62B1269980088CF9B /* Views */ = {
 			isa = PBXGroup;
 			children = (
