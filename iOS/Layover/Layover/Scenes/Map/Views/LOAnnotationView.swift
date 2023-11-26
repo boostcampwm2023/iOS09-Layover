@@ -39,6 +39,11 @@ final class LOAnnotationView: MKAnnotationView {
         setThumnailImage()
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        bounds.size = markerImageView.bounds.size
+    }
+
     func setThumnailImage() {
         self.thumnailImageView.image = .checkmark
     }
@@ -62,7 +67,7 @@ final class LOAnnotationView: MKAnnotationView {
             thumnailImageView.topAnchor.constraint(equalTo: markerImageView.topAnchor, constant: 3),
             thumnailImageView.heightAnchor.constraint(equalToConstant: 44-8),
             thumnailImageView.leadingAnchor.constraint(equalTo: markerImageView.leadingAnchor, constant: 3),
-            thumnailImageView.trailingAnchor.constraint(equalTo: markerImageView.trailingAnchor, constant: -3),
+            thumnailImageView.trailingAnchor.constraint(equalTo: markerImageView.trailingAnchor, constant: -3)
         ])
 
     }

@@ -64,8 +64,9 @@ final class MapViewController: BaseViewController {
 
     typealias Models = MapModels
     typealias ViewModel = Models.FetchVideo.ViewModel
-
     var interactor: MapBusinessLogic?
+
+    private lazy var carouselCollectionViewHeight: NSLayoutConstraint = carouselCollectionView.heightAnchor.constraint(equalToConstant: 0)
 
     // MARK: - Life Cycle
 
@@ -104,7 +105,7 @@ final class MapViewController: BaseViewController {
             searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchButton.heightAnchor.constraint(equalToConstant: 42),
 
-            uploadButton.bottomAnchor.constraint(equalTo: carouselCollectionView.topAnchor, constant: -15),
+            uploadButton.bottomAnchor.constraint(equalTo: carouselCollectionView.topAnchor, constant: -10),
             uploadButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
 
             currentLocationButton.bottomAnchor.constraint(equalTo: uploadButton.topAnchor, constant: -10),
@@ -113,7 +114,7 @@ final class MapViewController: BaseViewController {
             carouselCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
             carouselCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             carouselCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            carouselCollectionView.heightAnchor.constraint(equalToConstant: 151)
+            carouselCollectionViewHeight
         ])
     }
 
@@ -147,10 +148,19 @@ final class MapViewController: BaseViewController {
     }
 
     private func createMapAnnotation() {
-        let annotation: LOAnnotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: 36.3276544,
-                                                                                       longitude: 127.427232),
-                                                    thumnailImage: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
+        let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: 36.3276544,
+                                                                         longitude: 127.427232),
+                                      thumnailImage: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
+        mapView.showAnnotations([annotation], animated: true)
         mapView.addAnnotation(annotation)
+    }
+
+    private func animateAnnotationSelection(for annotationView: MKAnnotationView, isSelected: Bool) {
+        carouselCollectionViewHeight.constant = isSelected ? 151 : 0
+        UIView.animate(withDuration: 0.3) {
+            annotationView.transform = isSelected ? CGAffineTransform(scaleX: 1.3, y: 1.3) : .identity
+            self.view.layoutIfNeeded()
+        }
     }
 
 }
@@ -161,9 +171,18 @@ extension MapViewController: MKMapViewDelegate {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
         var annotationView: MKAnnotationView?
         if let loAnnotation = annotation as? LOAnnotation {
-            annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier, for: loAnnotation)
+            annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
+                                                                   for: annotation)
         }
         return annotationView
+    }
+
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        animateAnnotationSelection(for: view, isSelected: true)
+    }
+
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        animateAnnotationSelection(for: view, isSelected: false)
     }
 
 }
@@ -179,7 +198,3 @@ extension MapViewController: MapDisplayLogic {
     }
 
 }
-
-//#Preview {
-//    MapViewController()
-//}
