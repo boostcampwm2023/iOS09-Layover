@@ -4,15 +4,15 @@ import { Video } from './video.entity';
 
 @Injectable()
 export class VideoService {
-  constructor(
-    @Inject('VIDEO_REPOSITORY') private videoRepository: Repository<Video>,
-  ) {}
+  constructor(@Inject('VIDEO_REPOSITORY') private videoRepository: Repository<Video>) {}
 
-  async createEmptyVideo(): Promise<Video> {
-    const videoEntity = this.videoRepository.create({
+  async createVideo(videoName: string): Promise<string> {
+    const videoEntity: Video = this.videoRepository.create({
+      id: videoName,
       sd_url: '',
       hd_url: '',
     });
-    return await this.videoRepository.save(videoEntity);
+    const savedVideo: Video = await this.videoRepository.save(videoEntity);
+    return savedVideo.id;
   }
 }
