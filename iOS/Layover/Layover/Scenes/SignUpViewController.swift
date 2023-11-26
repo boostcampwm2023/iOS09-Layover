@@ -48,10 +48,11 @@ final class SignUpViewController: BaseViewController {
         return button
     }()
 
-    private let confirmButton: LOButton = {
+    private lazy var confirmButton: LOButton = {
         let button = LOButton(style: .basic)
         button.isEnabled = false
         button.setTitle("회원가입", for: .normal)
+        button.addTarget(self, action: #selector(signUpButtonDidTap(_:)), for: .touchUpInside)
         return button
     }()
 
@@ -140,6 +141,11 @@ final class SignUpViewController: BaseViewController {
 
     @objc private func popViewController() {
         router?.routeToBack()
+    }
+
+    @objc private func signUpButtonDidTap(_ sender: UIButton) {
+        guard let nickname = nicknameTextfield.text else { return }
+        interactor?.signUp(with: SignUpModels.SignUp.Request(nickname: nickname))
     }
 }
 

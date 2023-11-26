@@ -11,6 +11,7 @@ import UIKit
 protocol SignUpBusinessLogic {
     func validateNickname(with request: SignUpModels.ValidateNickname.Request)
     func checkDuplication(with request: SignUpModels.CheckDuplication.Request)
+    func signUp(with request: SignUpModels.SignUp.Request)
 }
 
 protocol SignUpDataStore {
@@ -58,6 +59,19 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
             return .init(nicknameState: .invalidCharacter)
         }
         return .init(nicknameState: .valid)
+    }
+
+    // MARK: - UseCase: SignUp
+
+    func signUp(with request: SignUpModels.SignUp.Request) {
+        guard let signUpType, let socialToken else { return }
+
+        switch signUpType {
+        case .kakao:
+            break
+        case .apple:
+            break
+        }
     }
 
 }
