@@ -12,8 +12,12 @@ protocol AuthManagerProtocol {
 
 final class AuthManager: AuthManagerProtocol {
 
+    // MARK: Properties
+
     @KeychainStored(key: "accessToken") var accessToken: String?
     @KeychainStored(key: "refreshToken") var refreshToken: String?
+
+    @UserDefaultStored(key: UserDefaultKey.isLoggedIn, defaultValue: false) var isLoggedIn: Bool
 
     static let shared = AuthManager()
 

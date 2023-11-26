@@ -8,8 +8,9 @@
 import UIKit
 
 protocol LoginPresentationLogic {
-    func presentPerformKakaoLogin(with response: LoginModels.PerformKakaoLogin.Response)
-    func presentPerformAppleLogin(with response: LoginModels.PerformAppleLogin.Response)
+    func presentPerformLogin()
+    func presentSignUp(with response: LoginModels.PerformKakaoLogin.Response)
+    func presentSignUp(with response: LoginModels.PerformAppleLogin.Response)
 }
 
 final class LoginPresenter {
@@ -24,13 +25,15 @@ final class LoginPresenter {
 // MARK: - Use Case - Login
 
 extension LoginPresenter: LoginPresentationLogic {
-    func presentPerformKakaoLogin(with response: LoginModels.PerformKakaoLogin.Response) {
-        // TODO: Logic 작성
-
-    }
-    
-    func presentPerformAppleLogin(with response: LoginModels.PerformAppleLogin.Response) {
-        // TODO: Logic 작성
+    func presentPerformLogin() {
+        viewController?.navigateToMain()
     }
 
+    func presentSignUp(with response: LoginModels.PerformKakaoLogin.Response) {
+        viewController?.routeToSignUp(with: LoginModels.PerformKakaoLogin.ViewModel())
+    }
+
+    func presentSignUp(with response: LoginModels.PerformAppleLogin.Response) {
+        viewController?.routeToSignUp(with: LoginModels.PerformAppleLogin.ViewModel())
+    }
 }

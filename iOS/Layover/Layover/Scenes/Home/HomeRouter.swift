@@ -26,10 +26,8 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
     // MARK: - Routing
 
     func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+        let nextViewController = MainTabBarViewController()
+        viewController?.navigationController?.setViewControllers([nextViewController], animated: true)
     }
 
     // MARK: - Data Passing
