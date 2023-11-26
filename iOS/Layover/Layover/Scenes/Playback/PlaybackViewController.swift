@@ -50,6 +50,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     private var prevPlaybackCell: PlaybackCell?
 
+    private var checkTelePort: Bool = false
+
     private let video1: VideoModel = VideoModel(title: "1", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
     private let video2: VideoModel = VideoModel(title: "2", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
     private let video3: VideoModel = VideoModel(title: "3", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
@@ -277,26 +279,23 @@ private extension PlaybackViewController {
         // 첫번째에 위치한 마지막 cell에 도달했을 때
         if scrollView.contentOffset.y == 0 {
             scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
-        }
-        // 마지막에 위치한 첫번째 cell에 도달했을 때
-        if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
+            checkTelePort = true
+        } else if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
             scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+            checkTelePort = true
+        } else {
+            normalPlayerScroll(scrollView)
         }
+
     }
 
-    func stopPrevPlayerAndPlayCurrnetPlayer(_ scrollView: UIScrollView) {
+    func normalPlayerScroll(_ scrollView: UIScrollView) {
         let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
         guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
             return
         }
-        
-        if prevPlaybackCell != currentPlaybackCell {
-            prevPlaybackCell?.playbackView.stopPlayer()
-            prevPlaybackCell?.playbackView.replayPlayer()
-            currentPlaybackCell.playbackView.playPlayer()
-            prevPlaybackCell = currentPlaybackCell
-        }
-        currentPlaybackCell.playbackView.playerSlider.isHidden = false
+        stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
+        checkTelePort = false
     }
 
     func initPrevPlayerCell() {
@@ -305,6 +304,16 @@ private extension PlaybackViewController {
         }
         prevPlaybackCell?.playbackView.playerSlider.isHidden = false
         prevPlaybackCell?.playbackView.playPlayer()
+    }
+
+    func stopPrevPlayerAndPlayCurrnetPlayer(_ currentPlaybackCell: PlaybackCell) {
+        if prevPlaybackCell != currentPlaybackCell {
+            prevPlaybackCell?.playbackView.stopPlayer()
+            prevPlaybackCell?.playbackView.replayPlayer()
+            currentPlaybackCell.playbackView.playPlayer()
+            prevPlaybackCell = currentPlaybackCell
+            currentPlaybackCell.playbackView.playerSlider.isHidden = false
+        }
     }
 }
 
@@ -329,11 +338,22 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 extension PlaybackViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         moveCellAtInfiniteScroll(scrollView)
-        stopPrevPlayerAndPlayCurrnetPlayer(scrollView)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         prevPlaybackCell?.playbackView.playerSlider.isHidden = true
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if checkTelePort {
+            let count: Int = videos.count
+            guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
+                return
+            }
+            if indexPath.row == 1 || indexPath.row == count - 2 {
+                stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
+            }
+        }
     }
 }
 //#Preview {

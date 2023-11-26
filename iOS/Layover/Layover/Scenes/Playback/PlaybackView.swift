@@ -80,7 +80,7 @@ final class PlaybackView: UIView {
 
     let playerSlider: LOSlider = LOSlider()
 
-    private let playerView: PlayerView = PlayerView()
+    let playerView: PlayerView = PlayerView()
 
     // MARK: - View Life Cycle
 
@@ -150,6 +150,10 @@ final class PlaybackView: UIView {
 
     func replayPlayer() {
         playerView.seek(to: .zero)
+    }
+
+    func resetPlayer() {
+        playerView.resetPlayer()
     }
 }
 

@@ -21,15 +21,13 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
     // TODO: VideoModel 받아서 처리
     func setPlaybackContents(title: String) {
         playbackView.descriptionView.titleLabel.text = title
     }
 
     func addAVPlayer(url: URL) {
+        playbackView.resetPlayer()
         playbackView.addAVPlayer(url: url)
     }
 
