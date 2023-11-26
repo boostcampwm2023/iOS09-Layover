@@ -6,13 +6,11 @@ import { Video } from './video.entity';
 export class VideoService {
   constructor(@Inject('VIDEO_REPOSITORY') private videoRepository: Repository<Video>) {}
 
-  async createVideo(videoName: string): Promise<string> {
+  async createEmptyVideo(): Promise<Video> {
     const videoEntity: Video = this.videoRepository.create({
-      id: videoName,
       sd_url: '',
       hd_url: '',
     });
-    const savedVideo: Video = await this.videoRepository.save(videoEntity);
-    return savedVideo.id;
+    return await this.videoRepository.save(videoEntity);
   }
 }

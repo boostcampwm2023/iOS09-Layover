@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Video {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({ nullable: false })
   sd_url: string;

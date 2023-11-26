@@ -5,6 +5,7 @@ import { Board } from './board.entity';
 import { MemberService } from '../member/member.service';
 import { VideoService } from '../video/video.service';
 import { Member } from '../member/member.entity';
+import { Video } from '../video/video.entity';
 
 @Injectable()
 export class BoardService {
@@ -35,8 +36,10 @@ export class BoardService {
 
   async createBoard(userId: number, title: string, content: string, location: string): Promise<number> {
     const member: Member = await this.memberService.findMemberById(userId);
+    const video: Video = await this.videoService.createEmptyVideo();
     const boardEntity: Board = this.boardRepository.create({
       member: member,
+      video: video,
       title: title,
       content: content,
       original_video_url: '',

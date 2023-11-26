@@ -43,7 +43,6 @@ export class BoardController {
     const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
 
     const { preSignedUrl } = this.boardService.makePreSignedUrl(filename, filetype);
-    await this.videoService.createVideo(`${filename}.${filetype}`);
     throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
   }
 
