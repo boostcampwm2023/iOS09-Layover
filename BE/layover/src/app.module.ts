@@ -6,17 +6,10 @@ import { OauthModule } from './oauth/oauth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BoardModule } from './board/board.module';
-import { VideoService } from './video/video.service';
 import { VideoModule } from './video/video.module';
 
 @Module({
-  imports: [
-    DatabaseModule,
-    OauthModule,
-    ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
-    BoardModule,
-    VideoModule,
-  ],
+  imports: [DatabaseModule, OauthModule, ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }), BoardModule, VideoModule],
   controllers: [AppController],
   providers: [AppService],
 })

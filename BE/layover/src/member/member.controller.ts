@@ -1,19 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  HttpStatus,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, HttpStatus, Patch, Post } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
-import {
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
@@ -49,13 +37,8 @@ export class MemberController {
   })
   @Post('check-username')
   async checkUsername(@Body() usernameDto: CheckUsernameDto) {
-    const exist = !(await this.memberService.isExistUsername(
-      usernameDto.username,
-    ));
-    throw new CustomResponse(
-      ECustomCode.SUCCESS,
-      new CheckUsernameResDto(exist),
-    );
+    const exist = !(await this.memberService.isExistUsername(usernameDto.username));
+    throw new CustomResponse(ECustomCode.SUCCESS, new CheckUsernameResDto(exist));
   }
 
   @ApiOperation({
@@ -76,10 +59,7 @@ export class MemberController {
     },
   })
   @Patch('username')
-  async updateUsername(
-    @CustomHeader(new JwtValidationPipe()) payload,
-    @Body() usernameDto: UsernameDto,
-  ) {
+  async updateUsername(@CustomHeader(new JwtValidationPipe()) payload, @Body() usernameDto: UsernameDto) {
     const id = payload.memberId;
     const username = usernameDto.username;
     // 중복 검증
@@ -112,10 +92,7 @@ export class MemberController {
     },
   })
   @Patch('introduce')
-  async updateIntroduce(
-    @CustomHeader(new JwtValidationPipe()) payload,
-    @Body() introduceDto: IntroduceDto,
-  ) {
+  async updateIntroduce(@CustomHeader(new JwtValidationPipe()) payload, @Body() introduceDto: IntroduceDto) {
     const id = payload.memberId;
     const introduce = introduceDto.introduce;
 
@@ -123,10 +100,7 @@ export class MemberController {
     await this.memberService.updateIntroduce(id, introduce);
 
     // 응답
-    throw new CustomResponse(
-      ECustomCode.SUCCESS,
-      new IntroduceResDto(introduce),
-    );
+    throw new CustomResponse(ECustomCode.SUCCESS, new IntroduceResDto(introduce));
   }
 
   @ApiOperation({
@@ -157,9 +131,6 @@ export class MemberController {
     await this.memberService.deleteMember(id);
 
     // 응답
-    throw new CustomResponse(
-      ECustomCode.SUCCESS,
-      new DeleteMemberResDto(memberInfo),
-    );
+    throw new CustomResponse(ECustomCode.SUCCESS, new DeleteMemberResDto(memberInfo));
   }
 }

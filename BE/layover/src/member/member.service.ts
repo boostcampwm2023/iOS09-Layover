@@ -4,17 +4,9 @@ import { Member } from './member.entity';
 
 @Injectable()
 export class MemberService {
-  constructor(
-    @Inject('MEMBER_REPOSITORY') private memberRepository: Repository<Member>,
-  ) {}
+  constructor(@Inject('MEMBER_REPOSITORY') private memberRepository: Repository<Member>) {}
 
-  async insertMember(
-    username: string,
-    profile_image_url: string,
-    introduce: string,
-    provider: string,
-    hash: string,
-  ): Promise<void> {
+  async insertMember(username: string, profile_image_url: string, introduce: string, provider: string, hash: string): Promise<void> {
     const memberEntity = this.memberRepository.create({
       username,
       profile_image_url,
@@ -54,5 +46,9 @@ export class MemberService {
   async isExistUsername(username: string): Promise<boolean> {
     const member = await this.memberRepository.find({ where: { username } });
     return member.length !== 0;
+  }
+
+  async findMemberById(id: number): Promise<Member> {
+    return await this.memberRepository.findOne({ where: { id } });
   }
 }

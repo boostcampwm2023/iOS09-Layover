@@ -21,10 +21,7 @@ export class OauthService {
     private readonly redisClient: ReturnType<typeof createClient>,
   ) {}
 
-  async getMemberIdByAccessToken(
-    url: string,
-    accessToken: string,
-  ): Promise<string> {
+  async getMemberIdByAccessToken(url: string, accessToken: string): Promise<string> {
     const observableRes = this.httpService
       .post(
         url,
@@ -52,10 +49,7 @@ export class OauthService {
 
   async getKakaoMemberHash(accessToken: string): Promise<string> {
     const kakaoUserInfoURL = 'https://kapi.kakao.com/v2/user/me';
-    const memberId = await this.getMemberIdByAccessToken(
-      kakaoUserInfoURL,
-      accessToken,
-    );
+    const memberId = await this.getMemberIdByAccessToken(kakaoUserInfoURL, accessToken);
     return hashSHA256(memberId + 'kakao'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
   }
 
@@ -74,27 +68,15 @@ export class OauthService {
     return await this.memberService.isExistUsername(username);
   }
 
-  async signup(
-    memberHash: string,
-    username: string,
-    provider: string,
-  ): Promise<void> {
+  async signup(memberHash: string, username: string, provider: string): Promise<void> {
     try {
-      await this.memberService.insertMember(
-        username,
-        'default profile_image_url',
-        'default introduce',
-        provider,
-        memberHash,
-      );
+      await this.memberService.insertMember(username, 'default profile_image_url', 'default introduce', provider, memberHash);
     } catch (e) {
       throw new CustomResponse(ECustomCode.OAUTH06);
     }
   }
 
-  async login(
-    memberHash: string,
-  ): Promise<{ accessJWT: string; refreshJWT: string }> {
+  async login(memberHash: string): Promise<{ accessJWT: string; refreshJWT: string }> {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
     if (!isUserExist) {
@@ -105,9 +87,7 @@ export class OauthService {
     return this.generateAccessRefreshTokens(memberHash);
   }
 
-  async generateAccessRefreshTokens(
-    memberHash: string,
-  ): Promise<{ accessJWT: string; refreshJWT: string }> {
+  async generateAccessRefreshTokens(memberHash: string): Promise<{ accessJWT: string; refreshJWT: string }> {
     // memberHash로부터 해당 회원이 저장된 db pk를 찾아옴.
     const memberId = 777;
 
@@ -127,11 +107,7 @@ export class OauthService {
 
     try {
       // refresh token은 redis에 저장, 유효기간도 추가
-      this.redisClient.setEx(
-        refreshJWT,
-        REFRESH_TOKEN_EXP_IN_SECOND,
-        memberHash,
-      );
+      this.redisClient.setEx(refreshJWT, REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
     } catch (e) {
       throw new CustomResponse(ECustomCode.OAUTH05);
     }

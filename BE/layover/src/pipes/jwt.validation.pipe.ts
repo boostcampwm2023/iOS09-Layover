@@ -1,12 +1,7 @@
 import { PipeTransform, Injectable } from '@nestjs/common';
 import { CustomResponse } from 'src/response/custom-response';
 import { hashHMACSHA256 } from 'src/utils/hashUtils';
-import {
-  extractHeaderJWTstr,
-  extractPayloadJWT,
-  extractPayloadJWTstr,
-  extractSignatureJWTstr,
-} from 'src/utils/jwtUtils';
+import { extractHeaderJWTstr, extractPayloadJWT, extractPayloadJWTstr, extractSignatureJWTstr } from 'src/utils/jwtUtils';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 
 @Injectable()
@@ -21,11 +16,7 @@ export class JwtValidationPipe implements PipeTransform {
     const headerStr = extractHeaderJWTstr(token);
     const payloadStr = extractPayloadJWTstr(token);
     const signatureStr = extractSignatureJWTstr(token);
-    if (
-      signatureStr !==
-      hashHMACSHA256(headerStr + '.' + payloadStr, process.env.JWT_SECRET_KEY)
-    )
-      throw new CustomResponse(ECustomCode.JWT03);
+    if (signatureStr !== hashHMACSHA256(headerStr + '.' + payloadStr, process.env.JWT_SECRET_KEY)) throw new CustomResponse(ECustomCode.JWT03);
 
     // 1-1. payload 추출
     const payload = extractPayloadJWT(token);
@@ -35,8 +26,7 @@ export class JwtValidationPipe implements PipeTransform {
     if (payload.iss != issuer) throw new CustomResponse(ECustomCode.JWT04);
 
     // 3. exp를 지났는지 검사
-    if (Math.floor(Date.now() / 1000) > payload.exp)
-      throw new CustomResponse(ECustomCode.JWT02);
+    if (Math.floor(Date.now() / 1000) > payload.exp) throw new CustomResponse(ECustomCode.JWT02);
 
     // jwt 페이로드를 객체로 변환하여 넘겨줌
     return extractPayloadJWT(token);
