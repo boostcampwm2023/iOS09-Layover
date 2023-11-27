@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import AuthenticationServices
+
+import OSLog
 
 protocol LoginBusinessLogic {
     func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request)
@@ -17,7 +20,7 @@ protocol LoginDataStore {
     var appleLoginToken: String? { get set }
 }
 
-final class LoginInteractor: LoginDataStore {
+final class LoginInteractor: NSObject, LoginDataStore {
 
     // MARK: - Properties
 
@@ -52,7 +55,43 @@ extension LoginInteractor: LoginBusinessLogic {
     }
 
     func performAppleLogin(with request: LoginModels.PerformAppleLogin.Request) {
-        // TODO: Logic 작성
+        let appleIDProvider: ASAuthorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
+        let loginRequest: ASAuthorizationAppleIDRequest = appleIDProvider.createRequest()
+        let authorizationController: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [loginRequest])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = request.loginViewController
+        authorizationController.performRequests()
+
+    }
+}
+
+extension LoginInteractor: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            guard let identityTokenData: Data = appleIDCredential.identityToken else {
+                return
+            }
+            guard let identityToken: String = String(data: identityTokenData, encoding: .utf8) else {
+                return
+            }
+            Task {
+                if await worker?.isRegisteredApple(with: identityToken) == true, await worker?.loginApple(with: identityToken) == true {
+                    await MainActor.run {
+                        presenter?.presentPerformLogin()
+                    }
+                } else {
+                    await MainActor.run {
+                        presenter?.presentSignUp(with: Models.PerformAppleLogin.Response())
+                    }
+                }
+            }
+        default:
+            break
+        }
     }
 
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        os_log(.error, log: .data, "%@", error.localizedDescription)
+    }
 }

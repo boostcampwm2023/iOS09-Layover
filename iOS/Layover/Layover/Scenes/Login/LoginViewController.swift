@@ -155,3 +155,9 @@ fileprivate extension UIImage {
         }
     }
 }
+
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        self.view.window!
+    }
+}
