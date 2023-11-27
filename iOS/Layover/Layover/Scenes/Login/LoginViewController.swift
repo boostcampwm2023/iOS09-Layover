@@ -127,7 +127,7 @@ final class LoginViewController: BaseViewController {
     }
 
     @objc private func appleLoginButtonTapped(_ sender: UIButton) {
-        let request = LoginModels.PerformAppleLogin.Request()
+        let request = LoginModels.PerformAppleLogin.Request(loginViewController: self)
         interactor?.performAppleLogin(with: request)
     }
 }
@@ -153,5 +153,14 @@ fileprivate extension UIImage {
         return UIGraphicsImageRenderer(size: size).image { _ in
             draw(in: CGRect(origin: .zero, size: size))
         }
+    }
+}
+
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        guard let window: UIWindow = self.view.window else {
+            return ASPresentationAnchor(frame: .zero)
+        }
+        return window
     }
 }
