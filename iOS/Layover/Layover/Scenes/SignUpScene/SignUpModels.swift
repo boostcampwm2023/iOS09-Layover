@@ -23,24 +23,6 @@ enum SignUpModels {
             var canCheckDuplication: Bool
             var alertDescription: String?
         }
-
-        // MARK: - Nickname State Type
-        enum NicknameState {
-            case valid
-            case lessThan2GreaterThan8
-            case invalidCharacter
-
-            var alertDescription: String? {
-                switch self {
-                case .valid:
-                    return nil
-                case .lessThan2GreaterThan8:
-                    return "2자 이상 8자 이하로 입력해주세요."
-                case .invalidCharacter:
-                    return "입력할 수 없는 문자입니다."
-                }
-            }
-        }
     }
 
     // MARK: - Check Nickname Duplication Use Case

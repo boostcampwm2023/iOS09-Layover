@@ -17,17 +17,19 @@ final class EditProfileConfigurator: Configurator {
     private init() { }
 
     func configure(_ viewController: ViewController) {
-        let router = EditProfileRouter()
-        router.viewController = viewController
-
-        let presenter = EditProfilePresenter()
-        presenter.viewController = viewController
-
+        let viewController = viewController
         let interactor = EditProfileInteractor()
-        interactor.presenter = presenter
+        let presenter = EditProfilePresenter()
+        let worker = MockUserWorker()
+        let router = EditProfileRouter()
 
-        viewController.router = router
+        router.viewController = viewController
+        router.dataStore = interactor
         viewController.interactor = interactor
+        viewController.router = router
+        interactor.presenter = presenter
+        interactor.userWorker = worker
+        presenter.viewController = viewController
     }
 
 }

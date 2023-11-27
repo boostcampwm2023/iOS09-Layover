@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditProfileRoutingLogic {
-    func routeToNext()
+
 }
 
 protocol EditProfileDataPassing {
@@ -24,12 +24,5 @@ final class EditProfileRouter: NSObject, EditProfileRoutingLogic, EditProfileDat
     var dataStore: EditProfileDataStore?
 
     // MARK: - Routing
-
-    func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
-    }
 
 }

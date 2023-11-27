@@ -10,10 +10,12 @@ import PhotosUI
 import UIKit
 
 protocol EditProfileDisplayLogic: AnyObject {
-
+    func displayProfile(viewModel: EditProfileModels.FetchProfile.ViewModel)
+    func displayProfileInfoValidation(viewModel: EditProfileModels.ValidateProfileInfo.ViewModel)
+    func displayNicknameDuplication(viewModel: EditProfileModels.CheckNicknameDuplication.ViewModel)
 }
 
-final class EditProfileViewController: BaseViewController, EditProfileDisplayLogic {
+final class EditProfileViewController: BaseViewController {
 
     // MARK: - UI Components
 
@@ -29,6 +31,8 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
     private let profileImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.image = UIImage.profile
+        imageView.layer.cornerRadius = 36
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -43,6 +47,7 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
     private lazy var nicknameTextfield: LOTextField = {
         let textField = LOTextField()
         textField.placeholder = "닉네임을 입력해주세요."
+        textField.addTarget(self, action: #selector(profileInfoChanged), for: .editingChanged)
         return textField
     }()
 
@@ -56,6 +61,7 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
     private lazy var introduceTextfield: LOTextField = {
         let textField = LOTextField()
         textField.placeholder = "소개를 입력해주세요."
+        textField.addTarget(self, action: #selector(profileInfoChanged), for: .editingChanged)
         return textField
     }()
 
@@ -70,6 +76,7 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
         let button = LOButton(style: .basic)
         button.isEnabled = false
         button.setTitle("중복확인", for: .normal)
+        button.addTarget(self, action: #selector(checkDuplicateNicknameButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -85,6 +92,9 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
     typealias Models = EditProfileModels
     var router: (NSObjectProtocol & EditProfileRoutingLogic & EditProfileDataPassing)?
     var interactor: EditProfileBusinessLogic?
+
+    private var changedProfileImage: UIImage?
+    private var nicknameIsValid: Bool = true
 
     // MARK: - Object Lifecycle
 
@@ -102,6 +112,7 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        interactor?.fetchProfile()
     }
 
     // MARK: - Methods
@@ -161,6 +172,24 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
         EditProfileConfigurator.shared.configure(self)
     }
 
+    @objc private func profileInfoChanged() {
+        guard let nickname = nicknameTextfield.text,
+              let introduce = introduceTextfield.text else { return }
+        let profileImageChanged = changedProfileImage != nil
+        let profileInfoRequest = EditProfileModels.ValidateProfileInfo.Request(nickname: nickname,
+                                                                               introduce: introduce,
+                                                                               profileImageChanged: profileImageChanged)
+        interactor?.validateProfileInfo(with: profileInfoRequest)
+    }
+
+    @objc private func checkDuplicateNicknameButtonDidTap() {
+        guard let nickname = nicknameTextfield.text else { return }
+        checkDuplicateNicknameButton.isEnabled = false
+
+        let request = Models.CheckNicknameDuplication.Request(nickname: nickname)
+        interactor?.checkDuplication(with: request)
+    }
+
 }
 
 extension EditProfileViewController: PHPickerViewControllerDelegate {
@@ -169,12 +198,54 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
         let item = results.first?.itemProvider
         if let item = item, item.canLoadObject(ofClass: UIImage.self) {
             item.loadObject(ofClass: UIImage.self) { [weak self] (image, _) in
-                // interactor에 전달
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.profileImageView.image = image as? UIImage
+                    self.changedProfileImage = image as? UIImage
+                    self.profileInfoChanged()
+                }
             }
         }
     }
 }
 
+extension EditProfileViewController: EditProfileDisplayLogic {
+
+    func displayProfile(viewModel: Models.FetchProfile.ViewModel) {
+        nicknameTextfield.text = viewModel.nickname
+
+        if let url = viewModel.profileImage, let data = try? Data(contentsOf: url) {
+            profileImageView.image = UIImage(data: data)
+        }
+
+        if let introduce = viewModel.introduce {
+            introduceTextfield.text = introduce
+        }
+    }
+
+    func displayProfileInfoValidation(viewModel: EditProfileModels.ValidateProfileInfo.ViewModel) {
+        nicknameAlertLabel.isHidden = viewModel.canCheckDuplication
+        nicknameAlertLabel.text = viewModel.nicknameAlertDescription
+        nicknameAlertLabel.textColor = .error
+
+        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckDuplication
+
+        introduceAlertLabel.text = viewModel.introduceAlertDescription
+        introduceAlertLabel.textColor = .error
+
+        confirmButton.isEnabled = viewModel.canEditProfile && !checkDuplicateNicknameButton.isEnabled
+        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckDuplication
+    }
+
+    func displayNicknameDuplication(viewModel: Models.CheckNicknameDuplication.ViewModel) {
+        nicknameAlertLabel.isHidden = false
+        nicknameAlertLabel.text = viewModel.alertDescription
+        nicknameAlertLabel.textColor = viewModel.isValidNickname ? .correct : .error
+        confirmButton.isEnabled = viewModel.isValidNickname
+    }
+
+}
+
 #Preview {
-    UINavigationController(rootViewController: EditProfileViewController())
+    EditProfileViewController()
 }

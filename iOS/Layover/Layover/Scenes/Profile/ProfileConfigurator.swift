@@ -17,17 +17,17 @@ final class ProfileConfigurator: Configurator {
     private init() { }
 
     func configure(_ viewController: ViewController) {
-        let router = ProfileRouter()
-        router.viewController = viewController
-
-        let presenter = ProfilePresenter()
-        presenter.viewController = viewController
-
+        let viewController = viewController
         let interactor = ProfileInteractor()
-        interactor.presenter = presenter
+        let presenter = ProfilePresenter()
+        let router = ProfileRouter()
 
-        viewController.router = router
+        router.viewController = viewController
+        router.dataStore = interactor
         viewController.interactor = interactor
+        viewController.router = router
+        interactor.presenter = presenter
+        presenter.viewController = viewController
     }
 
 }
