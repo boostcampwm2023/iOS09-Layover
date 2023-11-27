@@ -57,6 +57,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     // MARK: - Methods
 
     func setVideo(url: URL, loopingAt time: TimeInterval) {
+        loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: url, loopStart: time, duration: 3.0)
         loopingPlayerView.player?.isMuted = true
     }

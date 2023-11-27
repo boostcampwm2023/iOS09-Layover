@@ -30,7 +30,7 @@ final class HomeInteractor: HomeDataStore {
 extension HomeInteractor: HomeBusinessLogic {
     func fetchVideos(with request: Models.CarouselVideos.Request) {
         let response = Models.CarouselVideos.Response(videoURLs: [
-            URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!,
+            URL(string: "https://assets.afcdn.com/video49/20210722/v_645516.m3u8")!,
             URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!
         ])
         presenter?.presentVideoURL(with: response)

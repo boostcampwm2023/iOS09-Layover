@@ -33,6 +33,7 @@ final class HomeViewController: BaseViewController {
         collectionView.register(HomeCarouselCollectionViewCell.self, forCellWithReuseIdentifier: HomeCarouselCollectionViewCell.identifier)
         collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .always
+        collectionView.alwaysBounceVertical = false
         return collectionView
     }()
 
@@ -40,7 +41,7 @@ final class HomeViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: url, loopingAt: .zero)
-        cell.playVideo()
+
         return cell
     }
 
@@ -67,6 +68,12 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchCarouselVideos()
+        playVideoAtCenterCell()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        pauseAllVisibleCellsVideo()
     }
 
     // MARK: - UI
@@ -108,10 +115,13 @@ final class HomeViewController: BaseViewController {
                                                    heightDimension: .fractionalHeight(groupHeightDimension))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: [item])
+
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 0
+            section.interGroupSpacing = 13
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30)
             section.orthogonalScrollingBehavior = .groupPagingCentered
+            section.orthogonalScrollingProperties.decelerationRate = .normal
+            section.orthogonalScrollingProperties.bounce = .never
 
             section.visibleItemsInvalidationHandler = { items, offset, environment in
                 let containerWidth = environment.container.contentSize.width
@@ -120,11 +130,11 @@ final class HomeViewController: BaseViewController {
                     let itemCenterRelativeToOffset = item.frame.midX - offset.x // 아이템 중심점과 container offset(왼쪽)의 거리
                     let distanceFromCenter = abs(itemCenterRelativeToOffset - containerWidth / 2.0) // container 중심점과 아이템 중심점의 거리
                     let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minimumZoomScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
-                    item.transform = CGAffineTransform(scaleX: scale, y: scale)
+                    item.transform = CGAffineTransform(scaleX: 1.0, y: scale)
                     guard let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? HomeCarouselCollectionViewCell else { return }
-                    if scale >= 0.9 && !cell.isPlayingVideos {
+                    if scale >= 0.9 { // 과연 계속 호출해도 괜찮을까?
                         cell.playVideo()
-                    } else if scale < 0.9 && cell.isPlayingVideos {
+                    } else if scale < 0.9 {
                         cell.pauseVideo()
                     }
                 }
@@ -132,6 +142,21 @@ final class HomeViewController: BaseViewController {
             return section
         }
         return layout
+    }
+
+    private func pauseAllVisibleCellsVideo() {
+        carouselCollectionView.visibleCells.forEach { cell in
+            guard let cell = cell as? HomeCarouselCollectionViewCell else { return }
+            cell.pauseVideo()
+        }
+    }
+
+    private func playVideoAtCenterCell() {
+        let centerPoint = self.view.convert(carouselCollectionView.center, to: carouselCollectionView)
+        guard let index = carouselCollectionView.indexPathForItem(at: centerPoint),
+              let centerCell = carouselCollectionView.cellForItem(at: index) as? HomeCarouselCollectionViewCell
+        else { return }
+        centerCell.playVideo()
     }
 
     // MARK: - Use Case
@@ -146,13 +171,10 @@ final class HomeViewController: BaseViewController {
 extension HomeViewController: HomeDisplayLogic {
     func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel) {
         var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
-        // sample data
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.videoURLs)
-        carouselDatasource.apply(snapshot)
+        carouselDatasource.apply(snapshot) {
+            self.playVideoAtCenterCell()
+        }
     }
-}
-
-#Preview {
-    HomeViewController()
 }
