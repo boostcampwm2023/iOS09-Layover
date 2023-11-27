@@ -170,15 +170,11 @@ final class HomeViewController: BaseViewController {
 
 extension HomeViewController: HomeDisplayLogic {
     func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel) {
-        Task {
-            var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
-            // sample data
-            snapshot.appendSections([UUID()])
-            snapshot.appendItems(viewModel.videoURLs)
-            await MainActor.run {
-                carouselDatasource.apply(snapshot)
-                playVideoAtCenterCell()
-            }
+        var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
+        snapshot.appendSections([UUID()])
+        snapshot.appendItems(viewModel.videoURLs)
+        carouselDatasource.apply(snapshot) {
+            self.playVideoAtCenterCell()
         }
     }
 }
