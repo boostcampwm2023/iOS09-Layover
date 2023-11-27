@@ -33,6 +33,7 @@ final class HomeViewController: BaseViewController {
         collectionView.register(HomeCarouselCollectionViewCell.self, forCellWithReuseIdentifier: HomeCarouselCollectionViewCell.identifier)
         collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .always
+        collectionView.alwaysBounceVertical = false
         return collectionView
     }()
 
@@ -151,8 +152,4 @@ extension HomeViewController: HomeDisplayLogic {
         snapshot.appendItems(viewModel.videoURLs)
         carouselDatasource.apply(snapshot)
     }
-}
-
-#Preview {
-    HomeViewController()
 }
