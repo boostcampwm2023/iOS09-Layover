@@ -5,7 +5,7 @@
 //  Created by 김인환 on 11/14/23.
 //
 
-import UIKit
+import Foundation
 import KakaoSDKAuth
 import KakaoSDKUser
 
