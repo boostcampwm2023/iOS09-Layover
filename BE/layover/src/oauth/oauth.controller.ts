@@ -75,10 +75,10 @@ export class OauthController {
     const memberHash = await this.oauthService.getKakaoMemberHash(kakaoLoginDto.accessToken);
 
     // login
-    const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
+    const tokenResponseDto = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
+    throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 
   @ApiOperation({
@@ -104,10 +104,10 @@ export class OauthController {
     const memberHash = this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
 
     // login
-    const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
+    const tokenResponseDto = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
+    throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 
   @ApiOperation({
@@ -143,10 +143,10 @@ export class OauthController {
     await this.oauthService.signup(memberHash, username, 'kakao');
 
     // token들 발급
-    const { accessJWT, refreshJWT } = await this.oauthService.generateAccessRefreshTokens(memberHash);
+    const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
+    throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 
   @ApiOperation({
@@ -182,10 +182,10 @@ export class OauthController {
     await this.oauthService.signup(memberHash, username, 'apple');
 
     // token들 발급
-    const { accessJWT, refreshJWT } = await this.oauthService.generateAccessRefreshTokens(memberHash);
+    const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
+    throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 
   @ApiOperation({
@@ -208,9 +208,9 @@ export class OauthController {
   @Post('refresh-token')
   async renewTokens(@CustomHeader(new JwtValidationPipe()) payload) {
     // 새로운 토큰을 생성하고 이를 반환함
-    const { accessJWT, refreshJWT } = await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
+    const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
+    throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 }

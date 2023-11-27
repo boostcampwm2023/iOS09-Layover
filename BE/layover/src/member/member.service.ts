@@ -30,8 +30,8 @@ export class MemberService {
   }
 
   async selectUsername(id: number): Promise<string> {
-    const member = await this.memberRepository.find({ where: { id } });
-    return member[0].username;
+    const member = await this.memberRepository.findOne({ where: { id } });
+    return member.username;
   }
 
   async isMemberExistByHash(hash: string): Promise<boolean> {
