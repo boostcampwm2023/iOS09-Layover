@@ -22,7 +22,7 @@ export class Member {
   username: string;
 
   @Column({ nullable: false, length: 255 })
-  profile_image_url: string;
+  profile_image_key: string;
 
   @Column({ nullable: false, length: 100 })
   introduce: string;
