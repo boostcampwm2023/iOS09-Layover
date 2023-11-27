@@ -41,8 +41,9 @@ export class BoardController {
   @Post('presigned-url')
   async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: PresignedUrlDto) {
     const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
+    const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
 
-    const { preSignedUrl } = this.boardService.makePreSignedUrl(filename, filetype);
+    const { preSignedUrl } = this.boardService.makePreSignedUrl(bucketname, filename, 'video', filetype);
     throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
   }
 
