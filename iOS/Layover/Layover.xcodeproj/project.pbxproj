@@ -381,7 +381,6 @@
 			path = Playback;
 			sourceTree = "<group>";
 		};
-		FC2511A72B04DA9C004717BC /* Map */ = {
 		83C35E1C2B10923000D8DD5C /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -390,7 +389,7 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		FC2511A72B04DA9C004717BC /* MapScene */ = {
+        FC2511A72B04DA9C004717BC /* Map */ = {
 			isa = PBXGroup;
 			children = (
 				FC767FA62B1269980088CF9B /* Views */,
