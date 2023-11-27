@@ -2,13 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { GlobalExceptionFilter } from './response/custom-response';
-
 import { readFileSync } from 'fs';
 import { TokenResDto } from './oauth/dtos/token-res.dto';
 import { PresignedUrlResDto } from './board/dtos/presigned-url-res.dto';
 import { ValidationPipe } from '@nestjs/common';
 import { CheckUsernameResDto } from './member/dtos/check-username-res.dto';
 import { CreateBoardResDto } from './board/dtos/create-board-res.dto';
+import { UsernameResDto } from './member/dtos/username-res.dto';
+import { IntroduceResDto } from './member/dtos/introduce-res.dto';
+import { DeleteMemberResDto } from './member/dtos/delete-member-res.dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -27,7 +29,7 @@ async function bootstrap() {
   );
   const config = new DocumentBuilder().setTitle('Layover API Documentation').setDescription('The Layover API description').setVersion('0.0.0.0.1').addTag('Layover').build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto, CreateBoardResDto],
+    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto, CreateBoardResDto, UsernameResDto, IntroduceResDto, DeleteMemberResDto],
   });
   SwaggerModule.setup('api', app, document);
 

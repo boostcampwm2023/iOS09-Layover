@@ -4,12 +4,7 @@ import { OauthService } from './oauth.service';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { CustomResponse } from '../response/custom-response';
 import { ECustomCode } from '../response/ecustom-code.jenum';
-import {
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { KakaoLoginDto } from './dtos/kakao-login.dto';
 import { AppleLoginDto } from './dtos/apple-login.dto';
 import { KakaoSignupDto } from './dtos/kakao-signup.dto';
@@ -77,18 +72,13 @@ export class OauthController {
   @Post('kakao')
   async processKakaoLogin(@Body() kakaoLoginDto: KakaoLoginDto) {
     // memberHash 구하기
-    const memberHash = await this.oauthService.getKakaoMemberHash(
-      kakaoLoginDto.accessToken,
-    );
+    const memberHash = await this.oauthService.getKakaoMemberHash(kakaoLoginDto.accessToken);
 
     // login
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(
-      ECustomCode.SUCCESS,
-      new TokenResDto(accessJWT, refreshJWT),
-    );
+    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
   }
 
   @ApiOperation({
@@ -111,18 +101,13 @@ export class OauthController {
   @Post('apple')
   async processAppleLogin(@Body() appleLoginDto: AppleLoginDto) {
     // memberHash 구하기
-    const memberHash = this.oauthService.getAppleMemberHash(
-      appleLoginDto.identityToken,
-    );
+    const memberHash = this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
 
     // login
     const { accessJWT, refreshJWT } = await this.oauthService.login(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
   }
 
   @ApiOperation({
@@ -144,28 +129,24 @@ export class OauthController {
   })
   @Post('signup/kakao')
   async processKakaoSignup(@Body() kakaoSignupDto: KakaoSignupDto) {
-    const [accessToken, username] = [
-      kakaoSignupDto.accessToken,
-      kakaoSignupDto.username,
-    ];
+    const [accessToken, username] = [kakaoSignupDto.accessToken, kakaoSignupDto.username];
 
     // memberHash 구하기
     const memberHash = await this.oauthService.getKakaoMemberHash(accessToken);
 
     // 닉네임 중복 확인 : MEMBER01
+    if (await this.oauthService.isExistUsername(username)) {
+      throw new CustomResponse(ECustomCode.MEMBER01);
+    }
 
     // signup
     await this.oauthService.signup(memberHash, username, 'kakao');
 
     // token들 발급
-    const { accessJWT, refreshJWT } =
-      await this.oauthService.generateAccessRefreshTokens(memberHash);
+    const { accessJWT, refreshJWT } = await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
   }
 
   @ApiOperation({
@@ -187,28 +168,24 @@ export class OauthController {
   })
   @Post('signup/apple')
   async processAppleSignup(@Body() appleSignupDto: AppleSignupDto) {
-    const [identityToken, username] = [
-      appleSignupDto.identityToken,
-      appleSignupDto.username,
-    ];
+    const [identityToken, username] = [appleSignupDto.identityToken, appleSignupDto.username];
 
     // memberHash 구하기
     const memberHash = this.oauthService.getAppleMemberHash(identityToken);
 
     // 닉네임 중복 확인 : MEMBER01
+    if (await this.oauthService.isExistUsername(username)) {
+      throw new CustomResponse(ECustomCode.MEMBER01);
+    }
 
     // signup
     await this.oauthService.signup(memberHash, username, 'apple');
 
     // token들 발급
-    const { accessJWT, refreshJWT } =
-      await this.oauthService.generateAccessRefreshTokens(memberHash);
+    const { accessJWT, refreshJWT } = await this.oauthService.generateAccessRefreshTokens(memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
   }
 
   @ApiOperation({
@@ -231,13 +208,9 @@ export class OauthController {
   @Post('refresh-token')
   async renewTokens(@CustomHeader(new JwtValidationPipe()) payload) {
     // 새로운 토큰을 생성하고 이를 반환함
-    const { accessJWT, refreshJWT } =
-      await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
+    const { accessJWT, refreshJWT } = await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
     // return access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, {
-      accessToken: accessJWT,
-      refreshToken: refreshJWT,
-    });
+    throw new CustomResponse(ECustomCode.SUCCESS, new TokenResDto(accessJWT, refreshJWT));
   }
 }

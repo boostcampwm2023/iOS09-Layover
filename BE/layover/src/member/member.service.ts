@@ -21,6 +21,19 @@ export class MemberService {
     await this.memberRepository.update({ id }, { username });
   }
 
+  async updateIntroduce(id: number, introduce: string) {
+    await this.memberRepository.update({ id }, { introduce });
+  }
+
+  async deleteMember(id: number) {
+    await this.memberRepository.delete({ id });
+  }
+
+  async selectUsername(id: number): Promise<string> {
+    const member = await this.memberRepository.find({ where: { id } });
+    return member[0].username;
+  }
+
   async isMemberExistByHash(hash: string): Promise<boolean> {
     const member = await this.memberRepository.find({
       where: {
