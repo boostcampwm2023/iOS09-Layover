@@ -26,7 +26,7 @@ export class BoardService {
     });
 
     const preSignedUrl: string = s3.getSignedUrl('putObject', {
-      Bucket: process.env.NCLOUD_S3_BUCKET_NAME,
+      Bucket: process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME,
       Key: `${filename}.${filetype}`,
       Expires: 60 * 60, // URL 만료되는 시간(초 단위)
       ContentType: `video/${filetype}`,
