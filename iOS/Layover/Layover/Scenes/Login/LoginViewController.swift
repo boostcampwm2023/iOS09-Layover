@@ -127,7 +127,7 @@ final class LoginViewController: BaseViewController {
     }
 
     @objc private func appleLoginButtonTapped(_ sender: UIButton) {
-        let request = LoginModels.PerformAppleLogin.Request()
+        let request = LoginModels.PerformAppleLogin.Request(loginViewController: self)
         interactor?.performAppleLogin(with: request)
     }
 }
