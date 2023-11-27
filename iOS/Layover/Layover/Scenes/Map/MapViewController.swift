@@ -17,10 +17,12 @@ final class MapViewController: BaseViewController {
 
     // MARK: - UI Components
 
-    private let mapView: MKMapView = {
+    private lazy var mapView: MKMapView = {
         let mapView = MKMapView()
         mapView.showsUserLocation = true
         mapView.setUserTrackingMode(.follow, animated: true)
+        mapView.register(LOAnnotationView.self, forAnnotationViewWithReuseIdentifier: LOAnnotationView.identifier)
+        mapView.delegate = self
         return mapView
     }()
 
@@ -39,13 +41,18 @@ final class MapViewController: BaseViewController {
         return button
     }()
 
-    private let currentLocationButton: LOCircleButton = LOCircleButton(style: .locate, diameter: 52)
+    private lazy var currentLocationButton: LOCircleButton = {
+        let button = LOCircleButton(style: .locate, diameter: 52)
+        button.addTarget(self, action: #selector(currentLocationButtonDidTap), for: .touchUpInside)
+        return button
+    }()
 
     private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
 
     private lazy var carouselCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = false
         collectionView.register(MapCarouselCollectionViewCell.self, forCellWithReuseIdentifier: MapCarouselCollectionViewCell.identifier)
         return collectionView
     }()
@@ -61,8 +68,9 @@ final class MapViewController: BaseViewController {
 
     typealias Models = MapModels
     typealias ViewModel = Models.FetchVideo.ViewModel
-
     var interactor: MapBusinessLogic?
+
+    private lazy var carouselCollectionViewHeight: NSLayoutConstraint = carouselCollectionView.heightAnchor.constraint(equalToConstant: 0)
 
     // MARK: - Life Cycle
 
@@ -79,7 +87,8 @@ final class MapViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.checkLocationAuthorizationStatus()
-        interactor?.fetchVideos()
+        setCollectionViewDataSource()
+        createMapAnnotation()
     }
 
     // MARK: - UI + Layout
@@ -100,7 +109,7 @@ final class MapViewController: BaseViewController {
             searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchButton.heightAnchor.constraint(equalToConstant: 42),
 
-            uploadButton.bottomAnchor.constraint(equalTo: carouselCollectionView.topAnchor, constant: -15),
+            uploadButton.bottomAnchor.constraint(equalTo: carouselCollectionView.topAnchor, constant: -10),
             uploadButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
 
             currentLocationButton.bottomAnchor.constraint(equalTo: uploadButton.topAnchor, constant: -10),
@@ -109,18 +118,28 @@ final class MapViewController: BaseViewController {
             carouselCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -19),
             carouselCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             carouselCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            carouselCollectionView.heightAnchor.constraint(equalToConstant: 151)
+            carouselCollectionViewHeight
         ])
     }
+
+    private func setCollectionViewDataSource() {
+        carouselCollectionView.dataSource = carouselDatasource
+    }
+
+    // MARK: - Methods
 
     private func createLayout() -> UICollectionViewLayout {
         let groupWidthDimension: CGFloat = 94/375
         let minumumZoomScale: CGFloat = 73/94
         let maximumZoomScale: CGFloat = 1.0
+        let inset = (screenSize.width - screenSize.width * groupWidthDimension) / 2
         let section: NSCollectionLayoutSection = .makeCarouselSection(groupWidthDimension: groupWidthDimension)
         section.orthogonalScrollingBehavior = .groupPagingCentered
         section.interGroupSpacing = 0
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 200, bottom: 0, trailing: 200)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: inset,
+                                                        bottom: 0,
+                                                        trailing: inset)
         section.visibleItemsInvalidationHandler = { (items, offset, environment) in
             let containerWidth = environment.container.contentSize.width
             items.forEach { item in
@@ -138,20 +157,64 @@ final class MapViewController: BaseViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
 
+    private func createMapAnnotation() {
+        let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: 36.3276544,
+                                                                         longitude: 127.427232),
+                                      thumnailURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
+        mapView.addAnnotation(annotation)
+    }
+
+    private func animateAnnotationSelection(for annotationView: MKAnnotationView, isSelected: Bool) {
+        carouselCollectionViewHeight.constant = isSelected ? 151 : 0
+        UIView.animate(withDuration: 0.3) {
+            annotationView.transform = isSelected ? CGAffineTransform(scaleX: 1.3, y: 1.3) : .identity
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func deleteCarouselDatasource() {
+        var snapshot: NSDiffableDataSourceSnapshot = carouselDatasource.snapshot()
+        snapshot.deleteAllItems()
+        carouselDatasource.apply(snapshot)
+    }
+
+    @objc private func currentLocationButtonDidTap() {
+        mapView.setUserTrackingMode(.follow, animated: true)
+    }
+
+}
+
+extension MapViewController: MKMapViewDelegate {
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !(annotation is MKUserLocation) else { return nil }
+        var annotationView: MKAnnotationView?
+        annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
+                                                               for: annotation)
+        return annotationView
+    }
+
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        guard let annotation = view.annotation, !(annotation is MKUserLocation) else { return }
+        mapView.setCenter(annotation.coordinate, animated: true)
+        animateAnnotationSelection(for: view, isSelected: true)
+        interactor?.fetchVideos()
+    }
+
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        animateAnnotationSelection(for: view, isSelected: false)
+        deleteCarouselDatasource()
+    }
+
 }
 
 extension MapViewController: MapDisplayLogic {
 
     func displayFetchedVideos(viewModel: ViewModel) {
-        carouselCollectionView.dataSource = carouselDatasource
         var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.videoDataSources)
         carouselDatasource.apply(snapshot)
     }
 
-}
-
-#Preview {
-    MapViewController()
 }
