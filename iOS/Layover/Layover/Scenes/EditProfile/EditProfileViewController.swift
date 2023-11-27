@@ -12,7 +12,60 @@ protocol EditProfileDisplayLogic: AnyObject {
 
 }
 
-final class EditProfileViewController: UIViewController, EditProfileDisplayLogic {
+final class EditProfileViewController: BaseViewController, EditProfileDisplayLogic {
+
+    // MARK: - UI Components
+
+    private let profileImageView: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.profile
+        return imageView
+    }()
+
+    private let editProfileImageButton: LOCircleButton = {
+        let button = LOCircleButton(style: .photo, diameter: 32)
+        return button
+    }()
+
+    private lazy var nicknameTextfield: LOTextField = {
+        let textField = LOTextField()
+        textField.placeholder = "닉네임을 입력해주세요."
+        return textField
+    }()
+
+    private let nicknameAlertLabel: UILabel = {
+        let label = UILabel()
+        label.font = .loFont(type: .caption)
+        label.textColor = .error
+        return label
+    }()
+
+    private lazy var introduceTextfield: LOTextField = {
+        let textField = LOTextField()
+        textField.placeholder = "소개를 입력해주세요."
+        return textField
+    }()
+
+    private let introduceAlertLabel: UILabel = {
+        let label = UILabel()
+        label.font = .loFont(type: .caption)
+        label.textColor = .error
+        return label
+    }()
+
+    private lazy var checkDuplicateNicknameButton: LOButton = {
+        let button = LOButton(style: .basic)
+        button.isEnabled = false
+        button.setTitle("중복확인", for: .normal)
+        return button
+    }()
+
+    private lazy var confirmButton: LOButton = {
+        let button = LOButton(style: .basic)
+        button.isEnabled = false
+        button.setTitle("완료", for: .normal)
+        return button
+    }()
 
     // MARK: - Properties
 
@@ -24,12 +77,13 @@ final class EditProfileViewController: UIViewController, EditProfileDisplayLogic
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        setup()
     }
-
 
     // MARK: - View Lifecycle
 
@@ -37,4 +91,65 @@ final class EditProfileViewController: UIViewController, EditProfileDisplayLogic
         super.viewDidLoad()
     }
 
+    // MARK: - Methods
+
+    override func setUI() {
+        self.title = "프로필 수정"
+    }
+
+    override func setConstraints() {
+        view.addSubviews(profileImageView, editProfileImageButton, nicknameTextfield, nicknameAlertLabel, introduceTextfield,
+                         introduceAlertLabel, nicknameAlertLabel, checkDuplicateNicknameButton, confirmButton)
+        view.subviews.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+
+        NSLayoutConstraint.activate([
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 26),
+            profileImageView.widthAnchor.constraint(equalToConstant: 72),
+            profileImageView.heightAnchor.constraint(equalToConstant: 72),
+            profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            editProfileImageButton.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
+            editProfileImageButton.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
+
+            nicknameTextfield.heightAnchor.constraint(equalToConstant: 44),
+            nicknameTextfield.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 32),
+            nicknameTextfield.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            nicknameTextfield.trailingAnchor.constraint(equalTo: checkDuplicateNicknameButton.leadingAnchor, constant: -16),
+
+            nicknameAlertLabel.topAnchor.constraint(equalTo: nicknameTextfield.bottomAnchor, constant: 5),
+            nicknameAlertLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            nicknameTextfield.trailingAnchor.constraint(equalTo: nicknameTextfield.trailingAnchor),
+
+            checkDuplicateNicknameButton.heightAnchor.constraint(equalToConstant: 44),
+            checkDuplicateNicknameButton.widthAnchor.constraint(equalToConstant: 83),
+            checkDuplicateNicknameButton.centerYAnchor.constraint(equalTo: nicknameTextfield.centerYAnchor),
+            checkDuplicateNicknameButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+
+            introduceTextfield.heightAnchor.constraint(equalToConstant: 44),
+            introduceTextfield.topAnchor.constraint(equalTo: nicknameAlertLabel.bottomAnchor, constant: 17),
+            introduceTextfield.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            introduceTextfield.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+
+            introduceAlertLabel.topAnchor.constraint(equalTo: introduceTextfield.bottomAnchor, constant: 5),
+            introduceAlertLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            introduceAlertLabel.trailingAnchor.constraint(equalTo: introduceTextfield.trailingAnchor),
+
+            confirmButton.heightAnchor.constraint(equalToConstant: 50),
+            confirmButton.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
+            confirmButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            confirmButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+
+    }
+
+    private func setup() {
+        EditProfileConfigurator.shared.configure(self)
+    }
+
+}
+
+#Preview {
+    UINavigationController(rootViewController: EditProfileViewController())
 }
