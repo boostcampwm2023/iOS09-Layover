@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 protocol ProviderType {
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
@@ -46,6 +47,12 @@ class Provider: ProviderType {
         if authenticationIfNeeded {
             if let token = authManager.accessToken {
                 urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                guard await refreshTokenIfNeeded(), let newToken = authManager.accessToken else {
+                    NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
+                    throw NetworkError.urlRequest
+                }
+                urlRequest.setValue("Bearer \(newToken)", forHTTPHeaderField: "Authorization")
             }
         }
 
@@ -55,12 +62,12 @@ class Provider: ProviderType {
             try self.checkStatusCode(of: response)
         } catch NetworkError.server(let error) {
             if case .unauthorized = error, authenticationIfNeeded {
-                guard retryCount > 0 else {
+                guard retryCount > 0, await refreshTokenIfNeeded() else {
                     authManager.logout()
                     NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
                     throw NetworkError.server(error)
                 }
-                try await refreshTokenIfNeeded()
+
                 return try await request(with: endPoint, authenticationIfNeeded: authenticationIfNeeded, retryCount: retryCount - 1)
             } else {
                 throw NetworkError.server(error)
@@ -94,12 +101,18 @@ class Provider: ProviderType {
         }
     }
 
-    func refreshTokenIfNeeded() async throws {
-        guard let refreshToken = authManager.refreshToken else { return }
+    func refreshTokenIfNeeded() async -> Bool {
+        guard let refreshToken = authManager.refreshToken else { return false }
         let endPoint = loginEndPointFactory.makeTokenRefreshEndPoint(with: refreshToken)
-        let response = try await request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-        authManager.accessToken = response.data?.accessToken
-        authManager.refreshToken = response.data?.refreshToken
+        do {
+            let response = try await request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            authManager.accessToken = response.data?.accessToken
+            authManager.refreshToken = response.data?.refreshToken
+            return true
+        } catch {
+            os_log(.error, "refresh token error: %@", error.localizedDescription)
+            return false
+        }
     }
 }
 
