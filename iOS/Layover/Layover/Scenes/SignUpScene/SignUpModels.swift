@@ -59,4 +59,24 @@ enum SignUpModels {
         }
     }
 
+    // MARK: - Sign Up Use Case
+
+    enum SignUp {
+        enum LoginType {
+            case kakao
+            case apple
+        }
+
+        struct Request {
+            var nickname: String
+        }
+
+        struct Response {
+            var isSuccess: Bool
+        }
+
+        struct ViewModel {
+        }
+    }
+
 }

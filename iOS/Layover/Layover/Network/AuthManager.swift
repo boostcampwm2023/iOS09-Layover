@@ -5,9 +5,10 @@
 //  Created by 김인환 on 11/13/23.
 //
 
-protocol AuthManagerProtocol {
+protocol AuthManagerProtocol: AnyObject {
     var accessToken: String? { get set }
     var refreshToken: String? { get set }
+    var isLoggedIn: Bool { get set }
 }
 
 final class AuthManager: AuthManagerProtocol {

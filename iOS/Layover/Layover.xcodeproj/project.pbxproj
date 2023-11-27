@@ -29,8 +29,11 @@
 		194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552302B04DA1A00299768 /* LOCircleButton.swift */; };
 		194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */; };
 		1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945523A2B05258200299768 /* HomeConfigurator.swift */; };
-		1972CCCF2B12438900C3C762 /* LoginEndPointsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */; };
+		1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */; };
 		1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */; };
+		1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */; };
+		1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */; };
+		1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */; };
 		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
@@ -48,6 +51,8 @@
 		835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619C2B068115002F22A5 /* PlaybackInteractor.swift */; };
 		835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */; };
 		835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */; };
+		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
+		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
 		FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC25119F2B045C0A004717BC /* SignUpInteractor.swift */; };
 		FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A12B045C3F004717BC /* SignUpPresenter.swift */; };
 		FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A32B045D6C004717BC /* SignUpModels.swift */; };
@@ -136,8 +141,11 @@
 		194552302B04DA1A00299768 /* LOCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOCircleButton.swift; sourceTree = "<group>"; };
 		194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
 		1945523A2B05258200299768 /* HomeConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfigurator.swift; sourceTree = "<group>"; };
-		1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointsFactory.swift; sourceTree = "<group>"; };
+		1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointFactory.swift; sourceTree = "<group>"; };
 		1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultStored.swift; sourceTree = "<group>"; };
+		1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
+		1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpEndPointFactory.swift; sourceTree = "<group>"; };
+		1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWorker.swift; sourceTree = "<group>"; };
 		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -157,6 +165,8 @@
 		835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Dashboard-Regular.ttf"; sourceTree = "<group>"; };
 		835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginConfigurator.swift; sourceTree = "<group>"; };
 		835A61AA2B0B85FD002F22A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
+		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
 		FC25119F2B045C0A004717BC /* SignUpInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInteractor.swift; sourceTree = "<group>"; };
 		FC2511A12B045C3F004717BC /* SignUpPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPresenter.swift; sourceTree = "<group>"; };
 		FC2511A32B045D6C004717BC /* SignUpModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModels.swift; sourceTree = "<group>"; };
@@ -284,7 +294,8 @@
 		1972CCCD2B12436300C3C762 /* Factories */ = {
 			isa = PBXGroup;
 			children = (
-				1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */,
+				1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */,
+				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -358,17 +369,28 @@
 		835A61962B0680FC002F22A5 /* Playback */ = {
 			isa = PBXGroup;
 			children = (
+				83C35E1C2B10923000D8DD5C /* Cell */,
 				835A61972B068115002F22A5 /* PlaybackPresenter.swift */,
 				835A61982B068115002F22A5 /* PlaybackWorker.swift */,
 				835A61992B068115002F22A5 /* PlaybackRouter.swift */,
 				835A619A2B068115002F22A5 /* PlaybackModels.swift */,
 				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
 				835A619C2B068115002F22A5 /* PlaybackInteractor.swift */,
+				83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */,
 			);
 			path = Playback;
 			sourceTree = "<group>";
 		};
 		FC2511A72B04DA9C004717BC /* Map */ = {
+		83C35E1C2B10923000D8DD5C /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		FC2511A72B04DA9C004717BC /* MapScene */ = {
 			isa = PBXGroup;
 			children = (
 				FC767FA62B1269980088CF9B /* Views */,
@@ -570,10 +592,12 @@
 		FCEE0FFB2B03AFAA00195BBE /* SignUpScene */ = {
 			isa = PBXGroup;
 			children = (
+				FC2511A32B045D6C004717BC /* SignUpModels.swift */,
+				1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */,
 				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
 				FC25119F2B045C0A004717BC /* SignUpInteractor.swift */,
+				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A12B045C3F004717BC /* SignUpPresenter.swift */,
-				FC2511A32B045D6C004717BC /* SignUpModels.swift */,
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
 			path = SignUpScene;
@@ -698,18 +722,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
 				FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */,
+				1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
+				1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */,
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
@@ -738,6 +765,7 @@
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
+				1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */,
 				FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */,
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
@@ -749,6 +777,7 @@
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
+				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
@@ -767,7 +796,7 @@
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
 				835A61902B067D61002F22A5 /* LOSlider.swift in Sources */,
 				19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */,
-				1972CCCF2B12438900C3C762 /* LoginEndPointsFactory.swift in Sources */,
+				1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */,
 				835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,

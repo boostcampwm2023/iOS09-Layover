@@ -11,9 +11,13 @@ import UIKit
 protocol SignUpBusinessLogic {
     func validateNickname(with request: SignUpModels.ValidateNickname.Request)
     func checkDuplication(with request: SignUpModels.CheckDuplication.Request)
+    func signUp(with request: SignUpModels.SignUp.Request)
 }
 
-protocol SignUpDataStore { }
+protocol SignUpDataStore: AnyObject {
+    var signUpType: SignUpModels.SignUp.LoginType? { get set }
+    var socialToken: String? { get set }
+}
 
 final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
@@ -22,7 +26,11 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
     typealias Models = SignUpModels
 
     var userWorker: UserWorkerProtocol?
+    var signUpWorker: SignUpWorkerProtocol?
     var presenter: SignUpPresentationLogic?
+
+    var signUpType: SignUpModels.SignUp.LoginType?
+    var socialToken: String?
 
     // MARK: - UseCase: 닉네임 유효성 검사
 
@@ -52,6 +60,25 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
             return .init(nicknameState: .invalidCharacter)
         }
         return .init(nicknameState: .valid)
+    }
+
+    // MARK: - UseCase: SignUp
+
+    func signUp(with request: SignUpModels.SignUp.Request) {
+        guard let signUpType, let socialToken else { return }
+
+        Task {
+            switch signUpType {
+            case .kakao:
+                if await signUpWorker?.signUp(withKakao: socialToken, username: request.nickname) == true {
+                    await MainActor.run {
+                        presenter?.presentSignUpSuccess()
+                    }
+                }
+            case .apple:
+                break
+            }
+        }
     }
 
 }

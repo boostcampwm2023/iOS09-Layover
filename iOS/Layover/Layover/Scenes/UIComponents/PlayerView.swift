@@ -62,6 +62,10 @@ final class PlayerView: UIView {
     func isPlaying() -> Bool {
         return playerLayer?.player?.rate != 0 && playerLayer?.player?.error == nil
     }
+
+    func resetPlayer() {
+        playerLayer?.player?.replaceCurrentItem(with: nil)
+    }
 }
 
 #Preview {

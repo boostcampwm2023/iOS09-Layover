@@ -27,7 +27,7 @@ final class LoginWorker {
     let loginEndPointFactory: LoginEndPointFactory
     let authManager: AuthManager
 
-    init(provider: ProviderType = Provider(), loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointsFactory(), authManager: AuthManager = .shared) {
+    init(provider: ProviderType = Provider(), loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(), authManager: AuthManager = .shared) {
         self.provider = provider
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
