@@ -27,10 +27,14 @@ class Provider: ProviderType {
 
     private let session: URLSession
     private let authManager: AuthManagerProtocol
+    private let loginEndPointFactory: LoginEndPointFactory
 
-    init(session: URLSession = URLSession.shared, authManager: AuthManagerProtocol = AuthManager.shared) {
+    init(session: URLSession = URLSession.shared,
+         authManager: AuthManagerProtocol = AuthManager.shared,
+         loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory()) {
         self.session = session
         self.authManager = authManager
+        self.loginEndPointFactory = loginEndPointFactory
     }
 
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
@@ -50,21 +54,21 @@ class Provider: ProviderType {
         do {
             try self.checkStatusCode(of: response)
         } catch NetworkError.server(let error) {
-            if case .unauthorized = error {
+            if case .unauthorized = error, authenticationIfNeeded {
                 guard retryCount > 0 else {
                     throw NetworkError.server(error)
                 }
-
-                // TODO: refresh 해야함
-
+                try await refreshTokenIfNeeded()
                 return try await request(with: endPoint, authenticationIfNeeded: authenticationIfNeeded, retryCount: retryCount - 1)
+            } else {
+                throw NetworkError.server(error)
             }
         }
 
         return try data.decode()
     }
 
-    public func request(url: URL) async throws -> Data {
+    func request(url: URL) async throws -> Data {
         let (data, response) = try await session.data(from: url)
         try self.checkStatusCode(of: response)
         return try data.decode()
@@ -88,6 +92,13 @@ class Provider: ProviderType {
         }
     }
 
+    func refreshTokenIfNeeded() async throws {
+        guard let refreshToken = authManager.refreshToken else { return }
+        let endPoint = loginEndPointFactory.makeTokenRefreshEndPoint(with: refreshToken)
+        let response = try await request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+        authManager.accessToken = response.data?.accessToken
+        authManager.refreshToken = response.data?.refreshToken
+    }
 }
 
 extension Data {
