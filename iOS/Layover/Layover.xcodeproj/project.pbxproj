@@ -154,6 +154,7 @@
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
+		835783C72B14ADB600E7D304 /* Layover.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Layover.entitlements; sourceTree = "<group>"; };
 		835A618F2B067D61002F22A5 /* LOSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOSlider.swift; sourceTree = "<group>"; };
 		835A61912B067FEC002F22A5 /* LOTagStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTagStackView.swift; sourceTree = "<group>"; };
 		835A61932B068096002F22A5 /* LODescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LODescriptionView.swift; sourceTree = "<group>"; };
@@ -460,6 +461,7 @@
 		FC7E45382AFEB623004F155A /* Layover */ = {
 			isa = PBXGroup;
 			children = (
+				835783C72B14ADB600E7D304 /* Layover.entitlements */,
 				FC68E2992B02320F001AABFF /* Network */,
 				FC7E45752AFF6F5B004F155A /* Services */,
 				FC7E45782AFF6F7A004F155A /* Workers */,
@@ -962,6 +964,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Layover/Layover.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
@@ -992,6 +995,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Layover/Layover.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
