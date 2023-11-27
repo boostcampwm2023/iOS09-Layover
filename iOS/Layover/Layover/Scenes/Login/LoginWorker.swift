@@ -8,6 +8,7 @@
 import Foundation
 import KakaoSDKAuth
 import KakaoSDKUser
+import AuthenticationServices
 
 import OSLog
 
@@ -15,9 +16,11 @@ protocol LoginWorkerProtocol {
     @MainActor func fetchKakaoLoginToken() async -> String?
     func isRegisteredKakao(with socialToken: String) async -> Bool
     func loginKakao(with socialToken: String) async -> Bool
+    func isRegisteredApple(with identityToken: String) async -> Bool
+    func loginApple(with identityToken: String) async -> Bool
 }
 
-final class LoginWorker {
+final class LoginWorker: NSObject {
 
     // MARK: - Properties
 
@@ -36,6 +39,7 @@ final class LoginWorker {
 
 extension LoginWorker: LoginWorkerProtocol {
 
+    // MARK: - Kakao Login
     @MainActor
     func fetchKakaoLoginToken() async -> String? {
         if UserApi.isKakaoTalkLoginAvailable() {
@@ -80,6 +84,28 @@ extension LoginWorker: LoginWorkerProtocol {
         do {
             let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+
+            authManager.accessToken = result.data?.accessToken
+            authManager.refreshToken = result.data?.refreshToken
+            authManager.isLoggedIn = true
+            return true
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return false
+        }
+    }
+
+    // MARK: - Apple Login
+
+    func isRegisteredApple(with identityToken: String) async -> Bool {
+        // TODO: 회원가입 여부 판단
+        return false
+    }
+
+    func loginApple(with identityToken: String) async -> Bool {
+        do {
+            let endPoint: EndPoint = loginEndPointFactory.makeAppleLoginEndPoint(with: identityToken)
+            let result: EndPoint<Response<LoginDTO>>.Response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
 
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken

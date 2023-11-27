@@ -5,7 +5,7 @@
 //  Created by 김인환 on 11/14/23.
 //
 
-import UIKit
+import Foundation
 
 enum LoginModels {
 
@@ -26,7 +26,7 @@ enum LoginModels {
 
     enum PerformAppleLogin {
         struct Request {
-
+            let loginViewController: LoginViewController = LoginViewController()
         }
 
         struct Response {
