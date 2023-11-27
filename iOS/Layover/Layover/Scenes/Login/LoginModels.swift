@@ -26,7 +26,7 @@ enum LoginModels {
 
     enum PerformAppleLogin {
         struct Request {
-            let loginViewController: LoginViewController = LoginViewController()
+            let loginViewController: LoginViewController
         }
 
         struct Response {

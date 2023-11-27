@@ -76,7 +76,10 @@ extension LoginInteractor: ASAuthorizationControllerDelegate {
                 return
             }
             Task {
-                if await worker?.isRegisteredApple(with: identityToken) == true, await worker?.loginApple(with: identityToken) == true {
+                async let isRegistered: Bool = worker?.isRegisteredApple(with: identityToken) ?? false
+                async let loginResult: Bool = worker?.loginApple(with: identityToken) ?? false
+
+                if await isRegistered, await loginResult {
                     await MainActor.run {
                         presenter?.presentPerformLogin()
                     }

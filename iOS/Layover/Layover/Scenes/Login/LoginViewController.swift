@@ -127,7 +127,7 @@ final class LoginViewController: BaseViewController {
     }
 
     @objc private func appleLoginButtonTapped(_ sender: UIButton) {
-        let request = LoginModels.PerformAppleLogin.Request()
+        let request = LoginModels.PerformAppleLogin.Request(loginViewController: self)
         interactor?.performAppleLogin(with: request)
     }
 }
@@ -158,6 +158,9 @@ fileprivate extension UIImage {
 
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        self.view.window!
+        guard let window: UIWindow = self.view.window else {
+            return ASPresentationAnchor(frame: .zero)
+        }
+        return window
     }
 }
