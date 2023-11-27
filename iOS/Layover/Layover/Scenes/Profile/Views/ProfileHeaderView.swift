@@ -26,7 +26,7 @@ final class ProfileHeaderView: UICollectionReusableView {
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
+    private let introduceLabel: UILabel = {
         let label: UILabel = UILabel()
         label.text = "안녕하세요 로인서입니다"
         label.textColor = .layoverWhite
@@ -54,9 +54,14 @@ final class ProfileHeaderView: UICollectionReusableView {
 
     // MARK: - Methods
 
+    func configure(profileImageURL: URL?, nickname: String?, introduce: String?) {
+        nicknameLabel.text = nickname
+        introduceLabel.text = introduce
+    }
+
     private func setConstraints() {
-        addSubviews(profileImageView, nicknameLabel, editButton, descriptionLabel)
-        [profileImageView, nicknameLabel, editButton, descriptionLabel].forEach {
+        addSubviews(profileImageView, nicknameLabel, editButton, introduceLabel)
+        subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
@@ -75,10 +80,10 @@ final class ProfileHeaderView: UICollectionReusableView {
             editButton.heightAnchor.constraint(equalToConstant: 34),
             editButton.widthAnchor.constraint(equalToConstant: 58),
 
-            descriptionLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 18),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -21)
+            introduceLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 18),
+            introduceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            introduceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            introduceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -21)
         ])
     }
 

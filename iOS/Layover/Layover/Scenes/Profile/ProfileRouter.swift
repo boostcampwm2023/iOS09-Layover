@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProfileRoutingLogic {
-    func routeToNext()
+    func routeToEditProfileViewController()
 }
 
 protocol ProfileDataPassing {
@@ -25,16 +25,21 @@ class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
 
     // MARK: - Routing
 
-    func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    func routeToEditProfileViewController() {
+        let editProfileViewController = EditProfileViewController()
+        guard let source = dataStore,
+              var destination = editProfileViewController.router?.dataStore
+        else { return }
+
+        passProfileDataToEditProfile(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
     // MARK: - Data Passing
 
-    // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: ProfileDataStore) {
-    //     destinationDS.attribute = sourceDS.attribute
-    // }
+    private func passProfileDataToEditProfile(source: ProfileDataStore, destination: inout EditProfileDataStore) {
+        destination.nickname = source.nickname
+        destination.introduce = source.introduce
+        destination.profileImageURL = source.profileImageURL
+    }
 }

@@ -9,5 +9,23 @@
 import UIKit
 
 enum ProfileModels {
+    enum FetchProfile {
+        struct Request {
 
+        }
+
+        struct Response {
+            var nickname: String?
+            var introduce: String?
+            var profileImageURL: URL?
+            // video data
+        }
+
+        struct ViewModel {
+            var nickname: String?
+            var introduce: String?
+            var profileImageURL: URL?
+            // video data
+        }
+    }
 }
