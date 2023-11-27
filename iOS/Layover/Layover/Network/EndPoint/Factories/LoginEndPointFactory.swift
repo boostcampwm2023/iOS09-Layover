@@ -10,6 +10,7 @@ import Foundation
 
 protocol LoginEndPointFactory {
     func makeKakaoLoginEndPoint(with socialToken: String) -> EndPoint<Response<LoginDTO>>
+    func makeAppleLoginEndPoint(with identityToken: String) -> EndPoint<Response<LoginDTO>>
 }
 
 struct DefaultLoginEndPointFactory: LoginEndPointFactory {
@@ -22,5 +23,16 @@ struct DefaultLoginEndPointFactory: LoginEndPointFactory {
             method: .POST,
             bodyParameters: bodyParameters
         )
+    }
+
+    func makeAppleLoginEndPoint(with identityToken: String) -> EndPoint<Response<LoginDTO>> {
+        var bodyParameters: [String: String] = [String: String]()
+        bodyParameters.updateValue(identityToken, forKey: "identityToken")
+
+        return EndPoint(
+            path: "/oauth/apple",
+            method: .POST,
+            bodyParameters: bodyParameters)
+
     }
 }
