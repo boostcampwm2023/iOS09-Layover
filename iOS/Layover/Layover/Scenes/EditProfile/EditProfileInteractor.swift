@@ -50,9 +50,9 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
     func validateProfileInfo(with request: EditProfileModels.ValidateProfileInfo.Request) {
         let nicknameChanged = nickname != request.nickname
         let introduceChanged = introduce != request.introduce
-        let isChanged = nicknameChanged || request.profileImageChanged || introduceChanged
-        let isValid = (userWorker?.validateNickname(request.nickname) == .valid) && validateIntroduce(request.introduce ?? "")
-        let response = EditProfileModels.ValidateProfileInfo.Response(isValid: isChanged && isValid,
+        let profileInfoChanged = nicknameChanged || request.profileImageChanged || introduceChanged
+        let profileInfoValiation = (userWorker?.validateNickname(request.nickname) == .valid) && validateIntroduce(request.introduce ?? "")
+        let response = EditProfileModels.ValidateProfileInfo.Response(isValid: profileInfoChanged && profileInfoValiation,
                                                                       nicknameChanged: nicknameChanged)
         presenter?.presentProfileInfoValidation(with: response)
     }
