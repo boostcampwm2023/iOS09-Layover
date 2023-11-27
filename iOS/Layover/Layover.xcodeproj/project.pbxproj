@@ -29,8 +29,11 @@
 		194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552302B04DA1A00299768 /* LOCircleButton.swift */; };
 		194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */; };
 		1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945523A2B05258200299768 /* HomeConfigurator.swift */; };
-		1972CCCF2B12438900C3C762 /* LoginEndPointsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */; };
+		1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */; };
 		1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */; };
+		1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */; };
+		1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */; };
+		1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */; };
 		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
@@ -135,8 +138,11 @@
 		194552302B04DA1A00299768 /* LOCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOCircleButton.swift; sourceTree = "<group>"; };
 		194552382B05230E00299768 /* HomeCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
 		1945523A2B05258200299768 /* HomeConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfigurator.swift; sourceTree = "<group>"; };
-		1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointsFactory.swift; sourceTree = "<group>"; };
+		1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointFactory.swift; sourceTree = "<group>"; };
 		1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultStored.swift; sourceTree = "<group>"; };
+		1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
+		1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpEndPointFactory.swift; sourceTree = "<group>"; };
+		1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWorker.swift; sourceTree = "<group>"; };
 		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -282,7 +288,8 @@
 		1972CCCD2B12436300C3C762 /* Factories */ = {
 			isa = PBXGroup;
 			children = (
-				1972CCCE2B12438900C3C762 /* LoginEndPointsFactory.swift */,
+				1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */,
+				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -567,10 +574,12 @@
 		FCEE0FFB2B03AFAA00195BBE /* SignUpScene */ = {
 			isa = PBXGroup;
 			children = (
+				FC2511A32B045D6C004717BC /* SignUpModels.swift */,
+				1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */,
 				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
 				FC25119F2B045C0A004717BC /* SignUpInteractor.swift */,
+				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A12B045C3F004717BC /* SignUpPresenter.swift */,
-				FC2511A32B045D6C004717BC /* SignUpModels.swift */,
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
 			path = SignUpScene;
@@ -702,12 +711,14 @@
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
 				FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */,
+				1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
+				1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */,
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
@@ -734,6 +745,7 @@
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
+				1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */,
 				FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */,
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
@@ -763,7 +775,7 @@
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
 				835A61902B067D61002F22A5 /* LOSlider.swift in Sources */,
 				19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */,
-				1972CCCF2B12438900C3C762 /* LoginEndPointsFactory.swift in Sources */,
+				1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */,
 				835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,

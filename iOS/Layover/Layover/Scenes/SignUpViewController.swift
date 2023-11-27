@@ -11,6 +11,7 @@ import UIKit
 protocol SignUpDisplayLogic: AnyObject {
     func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel)
     func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel)
+    func navigateToMain()
 }
 
 final class SignUpViewController: BaseViewController {
@@ -48,26 +49,39 @@ final class SignUpViewController: BaseViewController {
         return button
     }()
 
-    private let confirmButton: LOButton = {
+    private lazy var confirmButton: LOButton = {
         let button = LOButton(style: .basic)
         button.isEnabled = false
         button.setTitle("회원가입", for: .normal)
+        button.addTarget(self, action: #selector(signUpButtonDidTap(_:)), for: .touchUpInside)
         return button
     }()
 
     var interactor: SignUpBusinessLogic?
+    var router: (SignUpRoutingLogic & SignUpDataPassing)?
 
-    // MARK: - Life Cycle
+    // MARK: - Intiailizer
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    // MARK: - Setup
+
+    private func setup() {
         SignUpConfigurator.shared.configure(self)
-        setConstraints()
     }
 
     // MARK: - UI + Layout
 
     override func setConstraints() {
+        super.setConstraints()
         view.addSubviews(titleLabel, nicknameTextfield, nicknameAlertLabel, checkDuplicateNicknameButton, confirmButton)
         view.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +113,21 @@ final class SignUpViewController: BaseViewController {
         ])
     }
 
-    // MARK: - Custom Method
+    override func setUI() {
+        super.setUI()
+        setNavigationBackButton()
+    }
+
+    // MARK: Methods
+
+    private func setNavigationBackButton() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage.iconTabBack,
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(popViewController))
+    }
+
+    // MARK: - Actions
 
     @objc private func setUpTextFieldState(_ sender: UITextField) {
         guard let nickname = sender.text else { return }
@@ -110,6 +138,15 @@ final class SignUpViewController: BaseViewController {
         guard let nickname = nicknameTextfield.text else { return }
         checkDuplicateNicknameButton.isEnabled = false
         interactor?.checkDuplication(with: SignUpModels.CheckDuplication.Request(nickname: nickname))
+    }
+
+    @objc private func popViewController() {
+        router?.routeToBack()
+    }
+
+    @objc private func signUpButtonDidTap(_ sender: UIButton) {
+        guard let nickname = nicknameTextfield.text else { return }
+        interactor?.signUp(with: SignUpModels.SignUp.Request(nickname: nickname))
     }
 }
 
@@ -129,4 +166,7 @@ extension SignUpViewController: SignUpDisplayLogic {
         confirmButton.isEnabled = response.canSignUp
     }
 
+    func navigateToMain() {
+        router?.navigateToMain()
+    }
 }

@@ -17,7 +17,7 @@ protocol LoginDataPassing {
     var dataStore: LoginDataStore? { get }
 }
 
-final class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
+final class LoginRouter: LoginRoutingLogic, LoginDataPassing {
 
     // MARK: - Properties
 
@@ -32,8 +32,13 @@ final class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     }
 
     func navigateToKakaoSignUp() {
-        // TODO: SignUpRouter로 토큰 값 전달 필요
         let signUpViewController = SignUpViewController()
+
+        guard let source = dataStore,
+              var destination = signUpViewController.router?.dataStore
+        else { return }
+
+        passKakaoDataToSignUp(source: source, destination: &destination)
         viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
     }
 
@@ -41,5 +46,12 @@ final class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
         // TODO: SignUpRouter로 토큰 값 전달 필요
         let signUpViewController = SignUpViewController()
         viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
+    }
+
+    // MARK: - Passing Data
+
+    private func passKakaoDataToSignUp(source: LoginDataStore, destination: inout SignUpDataStore) {
+        destination.signUpType = .kakao
+        destination.socialToken = source.kakaoLoginToken
     }
 }
