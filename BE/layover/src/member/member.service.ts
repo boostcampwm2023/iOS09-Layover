@@ -1,15 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Member } from './member.entity';
+import { makeUploadPreSignedUrl } from 'src/utils/s3Utils';
 
 @Injectable()
 export class MemberService {
   constructor(@Inject('MEMBER_REPOSITORY') private memberRepository: Repository<Member>) {}
 
-  async insertMember(username: string, profile_image_url: string, introduce: string, provider: string, hash: string): Promise<void> {
+  async insertMember(username: string, profile_image_key: string, introduce: string, provider: string, hash: string): Promise<void> {
     const memberEntity = this.memberRepository.create({
       username,
-      profile_image_url,
+      profile_image_key,
       introduce,
       provider,
       hash,
@@ -23,6 +24,10 @@ export class MemberService {
 
   async updateIntroduce(id: number, introduce: string) {
     await this.memberRepository.update({ id }, { introduce });
+  }
+
+  async updateProfileImage(id: number, key: string) {
+    await this.memberRepository.update({ id }, { profile_image_key: key });
   }
 
   async deleteMember(id: number) {
@@ -50,5 +55,9 @@ export class MemberService {
 
   async findMemberById(id: number): Promise<Member> {
     return await this.memberRepository.findOne({ where: { id } });
+  }
+
+  makePreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
+    return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
   }
 }
