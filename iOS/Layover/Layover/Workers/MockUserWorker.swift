@@ -18,7 +18,7 @@ final class MockUserWorker: UserWorkerProtocol {
 
     // MARK: - Methods
 
-    func modifyNickname(to nickname: String) async throws -> String {
+    func updateNickname(to nickname: String) async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "PatchUserName",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -58,7 +58,7 @@ final class MockUserWorker: UserWorkerProtocol {
         return data.exist
     }
 
-    func modifyIntroduce(to introduce: String) async throws -> String {
+    func updateIntroduce(to introduce: String) async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "PatchIntroduce",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -101,10 +101,10 @@ final class MockUserWorker: UserWorkerProtocol {
 }
 
 protocol UserWorkerProtocol {
-    func modifyNickname(to nickname: String) async throws -> String
+    func updateNickname(to nickname: String) async throws -> String
     func checkDuplication(for nickname: String) async throws -> Bool
     // TODO: multipart request 구현
-    // func modifyProfileImage() async throws -> URL
-    func modifyIntroduce(to introduce: String) async throws -> String
+    // func updateProfileImage() async throws -> URL
+    func updateIntroduce(to introduce: String) async throws -> String
     func withdraw() async throws -> String
 }
