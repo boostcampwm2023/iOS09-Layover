@@ -10,6 +10,7 @@ import { CustomResponse } from 'src/response/custom-response';
 import { AxiosError } from 'axios';
 import { hashSHA256 } from 'src/utils/hashUtils';
 import { ECustomCode } from '../response/ecustom-code.jenum';
+import { TokenResDto } from './dtos/token-res.dto';
 
 @Injectable()
 export class OauthService {
@@ -76,7 +77,7 @@ export class OauthService {
     }
   }
 
-  async login(memberHash: string): Promise<{ accessJWT: string; refreshJWT: string }> {
+  async login(memberHash: string): Promise<TokenResDto> {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
     if (!isUserExist) {
@@ -87,7 +88,7 @@ export class OauthService {
     return this.generateAccessRefreshTokens(memberHash);
   }
 
-  async generateAccessRefreshTokens(memberHash: string): Promise<{ accessJWT: string; refreshJWT: string }> {
+  async generateAccessRefreshTokens(memberHash: string): Promise<TokenResDto> {
     // memberHash로부터 해당 회원이 저장된 db pk를 찾아옴.
     const memberId = 777;
 
@@ -113,9 +114,6 @@ export class OauthService {
     }
 
     // 각 토큰 반환
-    return {
-      accessJWT,
-      refreshJWT,
-    };
+    return new TokenResDto(accessJWT, refreshJWT);
   }
 }
