@@ -70,6 +70,10 @@ export class OauthService {
     return this.memberService.isMemberExistByHash(hash);
   }
 
+  async isExistUsername(username: string) {
+    return await this.memberService.isExistUsername(username);
+  }
+
   async signup(
     memberHash: string,
     username: string,

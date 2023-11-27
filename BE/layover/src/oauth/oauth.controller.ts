@@ -153,6 +153,9 @@ export class OauthController {
     const memberHash = await this.oauthService.getKakaoMemberHash(accessToken);
 
     // 닉네임 중복 확인 : MEMBER01
+    if (await this.oauthService.isExistUsername(username)) {
+      throw new CustomResponse(ECustomCode.MEMBER01);
+    }
 
     // signup
     await this.oauthService.signup(memberHash, username, 'kakao');
@@ -196,6 +199,9 @@ export class OauthController {
     const memberHash = this.oauthService.getAppleMemberHash(identityToken);
 
     // 닉네임 중복 확인 : MEMBER01
+    if (await this.oauthService.isExistUsername(username)) {
+      throw new CustomResponse(ECustomCode.MEMBER01);
+    }
 
     // signup
     await this.oauthService.signup(memberHash, username, 'apple');
