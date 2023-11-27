@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Video } from '../video/video.entity';
 import { Member } from '../member/member.entity';
 
@@ -17,7 +11,7 @@ export class Board {
   @JoinColumn({ name: 'member_id' })
   member: Member;
 
-  @ManyToOne(() => Video, (video) => video.id)
+  @OneToOne(() => Video, (video) => video.id)
   @JoinColumn({ name: 'video_id' })
   video: Video;
 
@@ -35,4 +29,7 @@ export class Board {
 
   @Column({ nullable: false })
   location: string;
+
+  @Column({ nullable: false })
+  status: string;
 }
