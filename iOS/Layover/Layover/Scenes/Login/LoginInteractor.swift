@@ -77,9 +77,13 @@ extension LoginInteractor: ASAuthorizationControllerDelegate {
             }
             Task {
                 if await worker?.isRegisteredApple(with: identityToken) == true, await worker?.loginApple(with: identityToken) == true {
-                    presenter?.presentPerformLogin()
+                    await MainActor.run {
+                        presenter?.presentPerformLogin()
+                    }
                 } else {
-                    presenter?.presentSignUp(with: Models.PerformAppleLogin.Response())
+                    await MainActor.run {
+                        presenter?.presentSignUp(with: Models.PerformAppleLogin.Response())
+                    }
                 }
             }
         default:
