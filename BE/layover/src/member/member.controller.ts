@@ -12,7 +12,7 @@ import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { IntroduceDto } from './dtos/introduce.dto';
 import { IntroduceResDto } from './dtos/introduce-res.dto';
 import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
-import { ProfilePresignedUrlDto } from './dtos/presigned-url.dto';
+import { ProfilePresignedUrlDto } from './dtos/profile-presigned-url.dto';
 import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
 
 @ApiTags('Member API')
