@@ -16,10 +16,9 @@ import { JwtValidationPipe } from '../pipes/jwt.validation.pipe';
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
 export class BoardController {
-  constructor(
-    private readonly boardService: BoardService,
-    private readonly logger: Logger = new Logger(BoardController.name),
-  ) {}
+  private readonly logger: Logger = new Logger(BoardController.name);
+
+  constructor(private readonly boardService: BoardService) {}
   @ApiOperation({
     summary: 'presigned url 요청',
     description: 'object storage에 영상을 업로드 하기 위한 presigned url을 요청합니다.',
