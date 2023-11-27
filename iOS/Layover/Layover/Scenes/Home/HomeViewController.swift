@@ -41,7 +41,7 @@ final class HomeViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: url, loopingAt: .zero)
-        cell.playVideo()
+
         return cell
     }
 
@@ -68,6 +68,12 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchCarouselVideos()
+        playVideoAtCenterCell()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        pauseAllVisibleCellsVideo()
     }
 
     // MARK: - UI
@@ -114,6 +120,8 @@ final class HomeViewController: BaseViewController {
             section.interGroupSpacing = 13
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30)
             section.orthogonalScrollingBehavior = .groupPagingCentered
+            section.orthogonalScrollingProperties.decelerationRate = .normal
+            section.orthogonalScrollingProperties.bounce = .never
 
             section.visibleItemsInvalidationHandler = { items, offset, environment in
                 let containerWidth = environment.container.contentSize.width
@@ -136,6 +144,21 @@ final class HomeViewController: BaseViewController {
         return layout
     }
 
+    private func pauseAllVisibleCellsVideo() {
+        carouselCollectionView.visibleCells.forEach { cell in
+            guard let cell = cell as? HomeCarouselCollectionViewCell else { return }
+            cell.pauseVideo()
+        }
+    }
+
+    private func playVideoAtCenterCell() {
+        let centerPoint = self.view.convert(carouselCollectionView.center, to: carouselCollectionView)
+        guard let index = carouselCollectionView.indexPathForItem(at: centerPoint),
+              let centerCell = carouselCollectionView.cellForItem(at: index) as? HomeCarouselCollectionViewCell
+        else { return }
+        centerCell.playVideo()
+    }
+
     // MARK: - Use Case
 
     private func fetchCarouselVideos() {
@@ -147,10 +170,15 @@ final class HomeViewController: BaseViewController {
 
 extension HomeViewController: HomeDisplayLogic {
     func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel) {
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
-        // sample data
-        snapshot.appendSections([UUID()])
-        snapshot.appendItems(viewModel.videoURLs)
-        carouselDatasource.apply(snapshot)
+        Task {
+            var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
+            // sample data
+            snapshot.appendSections([UUID()])
+            snapshot.appendItems(viewModel.videoURLs)
+            await MainActor.run {
+                carouselDatasource.apply(snapshot)
+                playVideoAtCenterCell()
+            }
+        }
     }
 }
