@@ -109,8 +109,9 @@ final class HomeViewController: BaseViewController {
                                                    heightDimension: .fractionalHeight(groupHeightDimension))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                            subitems: [item])
+
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 0
+            section.interGroupSpacing = 13
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30)
             section.orthogonalScrollingBehavior = .groupPagingCentered
 
@@ -121,11 +122,11 @@ final class HomeViewController: BaseViewController {
                     let itemCenterRelativeToOffset = item.frame.midX - offset.x // 아이템 중심점과 container offset(왼쪽)의 거리
                     let distanceFromCenter = abs(itemCenterRelativeToOffset - containerWidth / 2.0) // container 중심점과 아이템 중심점의 거리
                     let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minimumZoomScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
-                    item.transform = CGAffineTransform(scaleX: scale, y: scale)
+                    item.transform = CGAffineTransform(scaleX: 1.0, y: scale)
                     guard let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? HomeCarouselCollectionViewCell else { return }
-                    if scale >= 0.9 && !cell.isPlayingVideos {
+                    if scale >= 0.9 { // 과연 계속 호출해도 괜찮을까?
                         cell.playVideo()
-                    } else if scale < 0.9 && cell.isPlayingVideos {
+                    } else if scale < 0.9 {
                         cell.pauseVideo()
                     }
                 }
