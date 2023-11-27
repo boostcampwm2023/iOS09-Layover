@@ -12,6 +12,8 @@ import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { IntroduceDto } from './dtos/introduce.dto';
 import { IntroduceResDto } from './dtos/introduce-res.dto';
 import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
+import { ProfilePresignedUrlDto } from './dtos/profile-presigned-url.dto';
+import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -132,5 +134,41 @@ export class MemberController {
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new DeleteMemberResDto(memberInfo));
+  }
+
+  @ApiOperation({
+    summary: '프로필 이미지 업로드용 presigned url 요청',
+    description: '프로필 이미지 업로드용 presigned url을 응답으로 줍니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '프로필 이미지 업로드용 presigned url',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'boolean', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(ProfilePresignedUrlResDto) },
+      },
+    },
+  })
+  @Post('profile-image/presigned-url')
+  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload, @Body() body: ProfilePresignedUrlDto) {
+    const id = payload.memberId;
+
+    // 프로필 사진 업로드할 presigned url 가져오기
+    const member = await this.memberService.findMemberById(id);
+    const filename = member.username;
+    const filetype = body.filetype;
+    const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
+    const { preSignedUrl } = this.memberService.makePreSignedUrl(bucketname, filename, 'image', filetype);
+
+    // db에 반영
+    const key = `${filename}.${filetype}`;
+    await this.memberService.updateProfileImage(id, key);
+
+    // 응답
+    throw new CustomResponse(ECustomCode.SUCCESS, new ProfilePresignedUrlResDto(preSignedUrl));
   }
 }

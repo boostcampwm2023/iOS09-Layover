@@ -71,7 +71,7 @@ export class OauthService {
 
   async signup(memberHash: string, username: string, provider: string): Promise<void> {
     try {
-      await this.memberService.insertMember(username, 'default profile_image_url', 'default introduce', provider, memberHash);
+      await this.memberService.insertMember(username, 'default', 'default introduce', provider, memberHash);
     } catch (e) {
       throw new CustomResponse(ECustomCode.OAUTH06);
     }
