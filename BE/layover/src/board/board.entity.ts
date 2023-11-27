@@ -30,6 +30,9 @@ export class Board {
   @Column({ nullable: false })
   location: string;
 
+  @Column()
+  filename: string;
+
   @Column({ nullable: false })
   status: string;
 }
