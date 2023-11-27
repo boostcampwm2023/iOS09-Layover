@@ -6,6 +6,7 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+import PhotosUI
 import UIKit
 
 protocol EditProfileDisplayLogic: AnyObject {
@@ -16,14 +17,26 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
 
     // MARK: - UI Components
 
+    private lazy var phPickerViewController: PHPickerViewController = {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        configuration.selectionLimit = 1
+        let phPickerViewController = PHPickerViewController(configuration: configuration)
+        phPickerViewController.delegate = self
+        return phPickerViewController
+    }()
+
     private let profileImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.image = UIImage.profile
         return imageView
     }()
 
-    private let editProfileImageButton: LOCircleButton = {
+    private lazy var editProfileImageButton: LOCircleButton = {
         let button = LOCircleButton(style: .photo, diameter: 32)
+        button.addAction(UIAction { _ in
+            self.present(self.phPickerViewController, animated: true)
+        }, for: .touchUpInside)
         return button
     }()
 
@@ -148,6 +161,18 @@ final class EditProfileViewController: BaseViewController, EditProfileDisplayLog
         EditProfileConfigurator.shared.configure(self)
     }
 
+}
+
+extension EditProfileViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        let item = results.first?.itemProvider
+        if let item = item, item.canLoadObject(ofClass: UIImage.self) {
+            item.loadObject(ofClass: UIImage.self) { [weak self] (image, _) in
+                // interactor에 전달
+            }
+        }
+    }
 }
 
 #Preview {
