@@ -56,6 +56,8 @@ class Provider: ProviderType {
         } catch NetworkError.server(let error) {
             if case .unauthorized = error, authenticationIfNeeded {
                 guard retryCount > 0 else {
+                    authManager.logout()
+                    NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
                     throw NetworkError.server(error)
                 }
                 try await refreshTokenIfNeeded()

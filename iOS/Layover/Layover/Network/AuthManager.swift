@@ -9,6 +9,8 @@ protocol AuthManagerProtocol: AnyObject {
     var accessToken: String? { get set }
     var refreshToken: String? { get set }
     var isLoggedIn: Bool { get set }
+
+    func logout()
 }
 
 final class AuthManager: AuthManagerProtocol {
@@ -23,4 +25,10 @@ final class AuthManager: AuthManagerProtocol {
     static let shared = AuthManager()
 
     private init() { }
+
+    func logout() {
+        accessToken = nil
+        refreshToken = nil
+        isLoggedIn = false
+    }
 }
