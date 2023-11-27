@@ -10,10 +10,10 @@ import MapKit
 
 final class LOAnnotation: NSObject, MKAnnotation {
     @objc dynamic var coordinate: CLLocationCoordinate2D
-    let thumnailImage: URL
+    let thumnailURL: URL
 
-    init(coordinate: CLLocationCoordinate2D, thumnailImage: URL) {
+    init(coordinate: CLLocationCoordinate2D, thumnailURL: URL) {
         self.coordinate = coordinate
-        self.thumnailImage = thumnailImage
+        self.thumnailURL = thumnailURL
     }
 }
