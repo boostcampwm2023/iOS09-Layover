@@ -45,7 +45,7 @@ final class MockLoginWorker: LoginWorkerProtocol {
 
     func isRegisteredApple(with identityToken: String) async -> Bool {
         // TODO: 로직 구현
-        return true
+        return false
     }
 
     func loginApple(with identityToken: String) async -> Bool {

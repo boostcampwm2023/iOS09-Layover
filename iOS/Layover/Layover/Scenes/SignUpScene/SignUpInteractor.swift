@@ -17,6 +17,7 @@ protocol SignUpBusinessLogic {
 protocol SignUpDataStore: AnyObject {
     var signUpType: SignUpModels.SignUp.LoginType? { get set }
     var socialToken: String? { get set }
+    var identityToken: String? { get set }
 }
 
 final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
@@ -31,6 +32,7 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
     var signUpType: SignUpModels.SignUp.LoginType?
     var socialToken: String?
+    var identityToken: String?
 
     // MARK: - UseCase: 닉네임 유효성 검사
 
@@ -65,18 +67,24 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
     // MARK: - UseCase: SignUp
 
     func signUp(with request: SignUpModels.SignUp.Request) {
-        guard let signUpType, let socialToken else { return }
+        guard let signUpType else { return }
 
         Task {
             switch signUpType {
             case .kakao:
+                guard let socialToken else { return }
                 if await signUpWorker?.signUp(withKakao: socialToken, username: request.nickname) == true {
                     await MainActor.run {
                         presenter?.presentSignUpSuccess()
                     }
                 }
             case .apple:
-                break
+                guard let identityToken else { return }
+                if await signUpWorker?.signUp(withApple: identityToken, username: request.nickname) == true {
+                    await MainActor.run {
+                        presenter?.presentSignUpSuccess()
+                    }
+                }
             }
         }
     }

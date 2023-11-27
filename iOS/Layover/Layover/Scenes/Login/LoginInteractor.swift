@@ -75,6 +75,7 @@ extension LoginInteractor: ASAuthorizationControllerDelegate {
             guard let identityToken: String = String(data: identityTokenData, encoding: .utf8) else {
                 return
             }
+            appleLoginToken = identityToken
             Task {
                 async let isRegistered: Bool = worker?.isRegisteredApple(with: identityToken) ?? false
                 async let loginResult: Bool = worker?.loginApple(with: identityToken) ?? false
