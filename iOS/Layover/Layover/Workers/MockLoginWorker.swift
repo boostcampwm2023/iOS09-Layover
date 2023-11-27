@@ -45,9 +45,8 @@ final class MockLoginWorker: LoginWorkerProtocol {
 
     func isRegisteredApple(with identityToken: String) async -> Bool {
         // TODO: 로직 구현
-        return false
+        return true
     }
-
 
     func loginApple(with identityToken: String) async -> Bool {
         guard let fileLocation: URL = Bundle.main.url(forResource: "LoginData", withExtension: "json") else {
