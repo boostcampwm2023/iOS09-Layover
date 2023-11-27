@@ -73,6 +73,7 @@
 		FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1192B148D160036366D /* EditProfileModels.swift */; };
 		FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE11A2B148D160036366D /* EditProfileViewController.swift */; };
 		FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE11B2B148D160036366D /* EditProfileInteractor.swift */; };
+		FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */; };
 		FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29A2B02325D001AABFF /* Requestable.swift */; };
 		FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29C2B02326A001AABFF /* Responsable.swift */; };
 		FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29E2B023315001AABFF /* HTTPMethod.swift */; };
@@ -193,6 +194,7 @@
 		FC5BE1192B148D160036366D /* EditProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileModels.swift; sourceTree = "<group>"; };
 		FC5BE11A2B148D160036366D /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		FC5BE11B2B148D160036366D /* EditProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractor.swift; sourceTree = "<group>"; };
+		FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileConfigurator.swift; sourceTree = "<group>"; };
 		FC68E29A2B02325D001AABFF /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		FC68E29C2B02326A001AABFF /* Responsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responsable.swift; sourceTree = "<group>"; };
 		FC68E29E2B023315001AABFF /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				FC5BE1192B148D160036366D /* EditProfileModels.swift */,
 				FC5BE1182B148D160036366D /* EditProfileRouter.swift */,
 				FC5BE1172B148D160036366D /* EditProfileWorker.swift */,
+				FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */,
 			);
 			path = EditProfile;
 			sourceTree = "<group>";
@@ -813,6 +816,7 @@
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
+				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
