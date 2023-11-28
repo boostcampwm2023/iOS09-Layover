@@ -14,6 +14,21 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     private let loopingPlayerView = LoopingPlayerView()
 
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .layoverWhite
+        label.font = UIFont.loFont(type: .subtitle)
+        return label
+    }()
+
+    private let tagStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 4
+        stackView.alignment = .center
+        return stackView
+    }()
+
     // MARK: - Properties
 
     var isPlayingVideos: Bool {
@@ -43,14 +58,22 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     }
 
     private func setConstraints() {
-        contentView.addSubviews(loopingPlayerView)
-        [loopingPlayerView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        contentView.addSubviews(loopingPlayerView, titleLabel, tagStackView)
+        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
             loopingPlayerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             loopingPlayerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            tagStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -23),
+            tagStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
+            tagStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            tagStackView.heightAnchor.constraint(equalToConstant: 25),
+
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
+            titleLabel.bottomAnchor.constraint(equalTo: tagStackView.topAnchor, constant: -18)
         ])
     }
 
@@ -60,6 +83,31 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: url, loopStart: time, duration: 3.0)
         loopingPlayerView.player?.isMuted = true
+    }
+
+    func configure(title: String, tags: [String]) {
+        titleLabel.text = title
+        setTagButtons(with: tags)
+    }
+
+    private func setTagButtons(with tags: [String]) {
+        tagStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        tags.forEach {
+            var configuration = UIButton.Configuration.filled()
+            configuration.baseBackgroundColor = UIColor.primaryPurple
+            configuration.title = $0
+            configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = UIFont.loFont(ofSize: 13, weight: .bold)
+                outgoing.foregroundColor = UIColor.layoverWhite
+                return outgoing
+            }
+            let button = UIButton(configuration: configuration)
+            button.clipsToBounds = true
+            button.layer.cornerRadius = 12
+            tagStackView.addArrangedSubview(button)
+        }
+        tagStackView.addArrangedSubview(UIView())
     }
 
     func playVideo() {
