@@ -15,5 +15,5 @@ struct VideoDTO: Codable {
     let tags: [String]
     // TODO: 프로필 완성되면 변경
     let profile: String
-    let videoURLs: [URL]
+    let videoURLs: URL
 }
