@@ -11,7 +11,7 @@ import UIKit
 protocol PlaybackPresentationLogic {
 }
 
-class PlaybackPresenter: PlaybackPresentationLogic {
+final class PlaybackPresenter: PlaybackPresentationLogic {
 
     // MARK: - Properties
 
