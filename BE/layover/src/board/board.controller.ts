@@ -1,17 +1,18 @@
-import { Body, Controller, HttpStatus, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Logger, Post, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { BoardService } from './board.service';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { PresignedUrlDto } from './dtos/presigned-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeaders, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PresignedUrlResDto } from './dtos/presigned-url-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { UploadCallbackDto } from './dtos/upload-callback.dto';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
 import { CustomHeader } from '../pipes/custom-header.decorator';
 import { JwtValidationPipe } from '../pipes/jwt.validation.pipe';
+import { BoardsResDto } from './dtos/boards-res.dto';
 
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
@@ -19,31 +20,6 @@ export class BoardController {
   private readonly logger: Logger = new Logger(BoardController.name);
 
   constructor(private readonly boardService: BoardService) {}
-  @ApiOperation({
-    summary: 'presigned url 요청',
-    description: 'object storage에 영상을 업로드 하기 위한 presigned url을 요청합니다.',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'presigned url 요청 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(PresignedUrlResDto) },
-      },
-    },
-  })
-  @Post('presigned-url')
-  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: PresignedUrlDto) {
-    const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
-    const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
-
-    const { preSignedUrl } = this.boardService.makePreSignedUrl(bucketname, filename, 'video', filetype);
-    throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
-  }
 
   @ApiOperation({
     summary: '게시글 생성 요청',
@@ -62,12 +38,62 @@ export class BoardController {
       },
     },
   })
+  @ApiHeaders([{ name: 'Authorization', description: 'Bearer {token}', required: true }])
   @Post()
   async createBoard(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() createBoardDto: CreateBoardDto) {
     const [title, content, location] = [createBoardDto.title, createBoardDto.content, createBoardDto.location];
     const userId = payload.memberId;
     const boardId = await this.boardService.createBoard(userId, title, content, location);
     throw new CustomResponse(ECustomCode.SUCCESS, new CreateBoardResDto(boardId));
+  }
+
+  @ApiOperation({
+    summary: 'presigned url 요청',
+    description: 'object storage에 영상을 업로드 하기 위한 presigned url을 요청합니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'presigned url 요청 성공',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'string', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(PresignedUrlResDto) },
+      },
+    },
+  })
+  @ApiHeaders([{ name: 'Authorization', description: 'Bearer {token}', required: true }])
+  @Post('presigned-url')
+  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: PresignedUrlDto) {
+    const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
+    const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
+
+    const { preSignedUrl } = this.boardService.makePreSignedUrl(bucketname, filename, 'video', filetype);
+    throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
+  }
+
+  @ApiOperation({
+    summary: '홈 화면 게시글 조회',
+    description: '홈 화면에서 랜덤 포스팅을 조회합니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '홈 화면 게시글 조회 성공',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'string', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { type: 'array', items: { $ref: getSchemaPath(BoardsResDto) } },
+      },
+    },
+  })
+  @Get('home')
+  async getBoardRandom(@Query('pageSize') pageSize: number) {
+    // this.boardService.getBoardRandom(pageSize);
   }
 
   @ApiOperation({
