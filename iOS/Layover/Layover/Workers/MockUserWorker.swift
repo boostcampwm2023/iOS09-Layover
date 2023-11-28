@@ -8,6 +8,23 @@
 
 import Foundation
 
+enum NicknameState {
+    case valid
+    case lessThan2GreaterThan8
+    case invalidCharacter
+
+    var alertDescription: String? {
+        switch self {
+        case .valid:
+            return nil
+        case .lessThan2GreaterThan8:
+            return "2자 이상 8자 이하로 입력해주세요."
+        case .invalidCharacter:
+            return "입력할 수 없는 문자입니다."
+        }
+    }
+}
+
 final class MockUserWorker: UserWorkerProtocol {
 
     // MARK: - Properties
@@ -18,7 +35,16 @@ final class MockUserWorker: UserWorkerProtocol {
 
     // MARK: - Methods
 
-    func modifyNickname(to nickname: String) async throws -> String {
+    func validateNickname(_ nickname: String) -> NicknameState {
+        if nickname.count < 2 || nickname.count > 8 {
+            return .lessThan2GreaterThan8
+        } else if nickname.wholeMatch(of: /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+/) == nil {
+            return .invalidCharacter
+        }
+        return .valid
+    }
+
+    func updateNickname(to nickname: String) async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "PatchUserName",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -58,7 +84,7 @@ final class MockUserWorker: UserWorkerProtocol {
         return data.exist
     }
 
-    func modifyIntroduce(to introduce: String) async throws -> String {
+    func updateIntroduce(to introduce: String) async throws -> String {
         guard let fileLocation = Bundle.main.url(forResource: "PatchIntroduce",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -101,10 +127,11 @@ final class MockUserWorker: UserWorkerProtocol {
 }
 
 protocol UserWorkerProtocol {
-    func modifyNickname(to nickname: String) async throws -> String
+    func validateNickname(_ nickname: String) -> NicknameState
+    func updateNickname(to nickname: String) async throws -> String
     func checkDuplication(for nickname: String) async throws -> Bool
     // TODO: multipart request 구현
-    // func modifyProfileImage() async throws -> URL
-    func modifyIntroduce(to introduce: String) async throws -> String
+    // func updateProfileImage() async throws -> URL
+    func updateIntroduce(to introduce: String) async throws -> String
     func withdraw() async throws -> String
 }
