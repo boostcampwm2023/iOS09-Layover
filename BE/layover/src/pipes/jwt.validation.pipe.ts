@@ -7,18 +7,19 @@ import { ECustomCode } from '../response/ecustom-code.jenum';
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
   transform(header) {
-    const token = header['authorization']?.split(' ')[1];
+    const [tokenType, token] = header['authorization']?.split(' ');
 
-    if (!token)
-      // 토큰 없음!
-      console.log('여기서 요청에 토큰 데이터가 없다고 응답 보내기');
+    // 기본적으로 헤더에 각 데이터들이 들어있는지 확인
+    if (tokenType && tokenType.tolower() !== 'baerer') throw new CustomResponse(ECustomCode.JWT05);
+    if (!token) throw new CustomResponse(ECustomCode.JWT06);
+
     // 1. signature 유효한지 검사
     const headerStr = extractHeaderJWTstr(token);
     const payloadStr = extractPayloadJWTstr(token);
     const signatureStr = extractSignatureJWTstr(token);
     if (signatureStr !== hashHMACSHA256(headerStr + '.' + payloadStr, process.env.JWT_SECRET_KEY)) throw new CustomResponse(ECustomCode.JWT03);
 
-    // 1-1. payload 추출
+    // 1-1. sign 검증됐으면.. payload 추출
     const payload = extractPayloadJWT(token);
 
     // 2. issuer가 일치하는지 검사 (아직은 issuer만 확인)
