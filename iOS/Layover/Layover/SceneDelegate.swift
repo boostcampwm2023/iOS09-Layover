@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = UINavigationController(rootViewController: LoginViewController())
         self.window = window
+        addNotificationObservers()
         window.makeKeyAndVisible()
     }
 
@@ -32,10 +33,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
+        if scene == window?.windowScene {
+            removeNotificationObservers()
+        }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
@@ -58,7 +58,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+}
 
+// MARK: - NotificationCenter
 
+extension SceneDelegate {
+
+    private func addNotificationObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(routeToLoginViewController),
+                                               name: .refreshTokenDidExpired,
+                                               object: nil)
+    }
+
+    private func removeNotificationObservers() {
+        NotificationCenter.default.removeObserver(self,
+                                                    name: .refreshTokenDidExpired,
+                                                    object: nil)
+    }
+
+    @objc private func routeToLoginViewController() {
+        guard let rootNavigationViewController = window?.rootViewController as? UINavigationController else { return }
+        // TODO: 세션이 만료되었습니다. Toast 띄우기
+        rootNavigationViewController.setViewControllers([LoginViewController()], animated: true)
+    }
 }
 

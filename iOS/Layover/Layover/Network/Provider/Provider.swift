@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 protocol ProviderType {
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
@@ -25,13 +26,23 @@ extension ProviderType {
 
 class Provider: ProviderType {
 
+    // MARK: - Properties
+
     private let session: URLSession
     private let authManager: AuthManagerProtocol
+    private let loginEndPointFactory: LoginEndPointFactory
 
-    init(session: URLSession = URLSession.shared, authManager: AuthManagerProtocol = AuthManager.shared) {
+    // MARK: Initializer
+
+    init(session: URLSession = URLSession.shared,
+         authManager: AuthManagerProtocol = AuthManager.shared,
+         loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory()) {
         self.session = session
         self.authManager = authManager
+        self.loginEndPointFactory = loginEndPointFactory
     }
+
+    // MARK: Methods
 
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
                                                       authenticationIfNeeded: Bool,
@@ -42,6 +53,12 @@ class Provider: ProviderType {
         if authenticationIfNeeded {
             if let token = authManager.accessToken {
                 urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                guard await refreshTokenIfNeeded(), let newToken = authManager.accessToken else {
+                    NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
+                    throw NetworkError.urlRequest
+                }
+                urlRequest.setValue("Bearer \(newToken)", forHTTPHeaderField: "Authorization")
             }
         }
 
@@ -50,21 +67,23 @@ class Provider: ProviderType {
         do {
             try self.checkStatusCode(of: response)
         } catch NetworkError.server(let error) {
-            if case .unauthorized = error {
-                guard retryCount > 0 else {
+            if case .unauthorized = error, authenticationIfNeeded {
+                guard retryCount > 0, await refreshTokenIfNeeded() else {
+                    authManager.logout()
+                    NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
                     throw NetworkError.server(error)
                 }
 
-                // TODO: refresh 해야함
-
                 return try await request(with: endPoint, authenticationIfNeeded: authenticationIfNeeded, retryCount: retryCount - 1)
+            } else {
+                throw NetworkError.server(error)
             }
         }
 
         return try data.decode()
     }
 
-    public func request(url: URL) async throws -> Data {
+    func request(url: URL) async throws -> Data {
         let (data, response) = try await session.data(from: url)
         try self.checkStatusCode(of: response)
         return try data.decode()
@@ -77,7 +96,7 @@ class Provider: ProviderType {
         return try data.decode()
     }
 
-    func checkStatusCode(of response: URLResponse) throws {
+    private func checkStatusCode(of response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
             throw NetworkError.unknown
         }
@@ -88,6 +107,19 @@ class Provider: ProviderType {
         }
     }
 
+    private func refreshTokenIfNeeded() async -> Bool {
+        guard let refreshToken = authManager.refreshToken else { return false }
+        let endPoint = loginEndPointFactory.makeTokenRefreshEndPoint(with: refreshToken)
+        do {
+            let response = try await request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            authManager.accessToken = response.data?.accessToken
+            authManager.refreshToken = response.data?.refreshToken
+            return true
+        } catch {
+            os_log(.error, "refresh token error: %@", error.localizedDescription)
+            return false
+        }
+    }
 }
 
 extension Data {
