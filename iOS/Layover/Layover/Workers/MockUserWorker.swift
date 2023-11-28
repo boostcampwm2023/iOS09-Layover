@@ -55,7 +55,7 @@ final class MockUserWorker: UserWorkerProtocol {
                                                             headers: headers)
         let response = try await provider.request(with: endPoint)
         guard let data = response.data else { throw NetworkError.emptyData }
-        return data.exist
+        return data.isValid
     }
 
     func modifyIntroduce(to introduce: String) async throws -> String {

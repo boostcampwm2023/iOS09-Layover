@@ -9,5 +9,5 @@
 import Foundation
 
 struct CheckUserNameDTO: Decodable {
-    let exist: Bool
+    let isValid: Bool
 }

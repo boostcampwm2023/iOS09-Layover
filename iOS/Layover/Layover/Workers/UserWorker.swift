@@ -36,21 +36,32 @@ final class UserWorker: UserWorkerProtocol {
     // MARK: - Methods
 
     func modifyNickname(to nickname: String) async throws -> String {
-        return ""
+        let endPoint = userEndPointFactory.makeUserNameModifyEndPoint(userName: nickname)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = responseData.data else {
+                os_log(.error, log: .default, "Failed to modify nickname with error: %@", responseData.message)
+                return ""
+            }
+            return data.userName
+        } catch {
+            os_log(.error, log: .default, "Failed to modify nickname with error: %@", error.localizedDescription)
+            return ""
+        }
     }
 
     func checkDuplication(for userName: String) async throws -> Bool {
         let endPoint = userEndPointFactory.makeUserNameIsDuplicateEndPoint(of: userName)
         do {
             let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            guard let data = try await provider.request(with: endPoint, authenticationIfNeeded: false).data else {
+            guard let data = responseData.data else {
                 os_log(.error, log: .default, "Failed to check duplicate username with error: %@", responseData.message)
-                return true
+                return false
             }
-            return data.exist
+            return data.isValid
         } catch {
             os_log(.error, log: .default, "Failed to check duplicate username with error: %@", error.localizedDescription)
-            return true
+            return false
         }
     }
 
@@ -58,7 +69,7 @@ final class UserWorker: UserWorkerProtocol {
         let endPoint = userEndPointFactory.makeIntroduceModifyEndPoint(introduce: introduce)
         do {
             let responseData = try await provider.request(with: endPoint)
-            guard let data = try await provider.request(with: endPoint).data else {
+            guard let data = responseData.data else {
                 os_log(.error, log: .default, "Failed to modify introduce with error: %@", responseData.message)
                 return ""
             }
@@ -73,7 +84,7 @@ final class UserWorker: UserWorkerProtocol {
         let endPoint = userEndPointFactory.makeUserWithDrawEndPoint()
         do {
             let responseData = try await provider.request(with: endPoint)
-            guard let data = try await provider.request(with: endPoint).data else {
+            guard let data = responseData.data else {
                 os_log(.error, log: .default, "Failed to withdraw with error: %@", responseData.message)
                 return ""
             }

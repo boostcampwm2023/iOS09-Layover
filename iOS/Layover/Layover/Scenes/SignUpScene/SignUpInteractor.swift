@@ -44,7 +44,7 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
             do {
                 let response = try await userWorker?.checkDuplication(for: request.nickname)
                 await MainActor.run {
-                    presenter?.presentNicknameDuplication(with: SignUpModels.CheckDuplication.Response(isDuplicate: response ?? true))
+                    presenter?.presentNicknameDuplication(with: SignUpModels.CheckDuplication.Response(isValid: response ?? true))
                 }
             } catch let error {
                 // TODO: present toast

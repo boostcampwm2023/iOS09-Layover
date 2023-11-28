@@ -17,7 +17,7 @@ final class SignUpConfigurator: Configurator {
         let viewController = viewController
         let interactor = SignUpInteractor()
         let userWorker = MockUserWorker()
-        let signUpWorker = SignUpWorker()
+        let signUpWorker = MockSignUpWorker()
         let presenter = SignUpPresenter()
         let router = SignUpRouter()
         viewController.interactor = interactor
