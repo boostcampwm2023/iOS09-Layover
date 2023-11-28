@@ -9,13 +9,13 @@
 import Foundation
 
 protocol UserEndPointFactory {
-    func makeCheckUserNameEndPoint(username: String) -> EndPoint<Response<CheckUserNameDTO>>
+    func makeCheckUserNameEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>>
 }
 
 final class DefaultUserEndPointFactory: UserEndPointFactory {
-    func makeCheckUserNameEndPoint(username: String) -> EndPoint<Response<CheckUserNameDTO>> {
+    func makeCheckUserNameEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>> {
         var bodyParameters = [String: String]()
-        bodyParameters.updateValue(username, forKey: "username")
+        bodyParameters.updateValue(userName, forKey: "username")
 
         return EndPoint(
             path: "/member/check-username",

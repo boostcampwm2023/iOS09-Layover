@@ -38,7 +38,7 @@ final class MockUserWorker: UserWorkerProtocol {
         return data.userName
     }
 
-    func checkDuplication(for nickname: String) async throws -> Bool {
+    func checkDuplication(for userName: String) async throws -> Bool {
         guard let fileLocation = Bundle.main.url(forResource: "CheckUserName",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -51,7 +51,7 @@ final class MockUserWorker: UserWorkerProtocol {
         }
         let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
                                                             method: .POST,
-                                                            bodyParameters: NicknameDTO(userName: nickname),
+                                                            bodyParameters: NicknameDTO(userName: userName),
                                                             headers: headers)
         let response = try await provider.request(with: endPoint)
         guard let data = response.data else { throw NetworkError.emptyData }
@@ -98,13 +98,4 @@ final class MockUserWorker: UserWorkerProtocol {
         return data.userName
     }
 
-}
-
-protocol UserWorkerProtocol {
-    func modifyNickname(to nickname: String) async throws -> String
-    func checkDuplication(for nickname: String) async throws -> Bool
-    // TODO: multipart request 구현
-    // func modifyProfileImage() async throws -> URL
-    func modifyIntroduce(to introduce: String) async throws -> String
-    func withdraw() async throws -> String
 }
