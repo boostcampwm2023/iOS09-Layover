@@ -16,17 +16,4 @@ class PlaybackWorker {
 
     // MARK: - Methods
 
-    // MARK: Screen Specific Validation
-
-    func validate(exampleVariable: String?) -> Models.PlaybackError? {
-        var error: Models.PlaybackError?
-
-        if exampleVariable?.isEmpty == false {
-            error = nil
-        } else {
-            error = Models.PlaybackError(type: .emptyExampleVariable)
-        }
-
-        return error
-    }
 }
