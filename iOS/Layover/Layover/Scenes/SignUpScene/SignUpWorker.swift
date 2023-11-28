@@ -46,12 +46,12 @@ extension SignUpWorker: SignUpWorkerProtocol {
             let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
             guard let data = try await provider.request(with: endPoint, authenticationIfNeeded: false).data else {
                 os_log(.error, log: .default, "Failed to check duplicate username with error: %@", responseData.message)
-                return false
+                return true
             }
             return data.exist
         } catch {
             os_log(.error, log: .default, "Failed to check duplicate username with error: %@", error.localizedDescription)
-            return false
+            return true
         }
     }
 

@@ -29,6 +29,10 @@ final class MockSignUpWorker {
 // MARK: - SignUpWorkerProtocol
 
 extension MockSignUpWorker: SignUpWorkerProtocol {
+    func isDuplicate(username: String) async -> Bool {
+        return false
+    }
+    
     func signUp(withKakao socialToken: String, username: String) async -> Bool {
         // TODO: 로직 구현
         return true
