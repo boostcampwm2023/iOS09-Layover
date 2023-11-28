@@ -10,7 +10,7 @@ export class JwtValidationPipe implements PipeTransform {
     const [tokenType, token] = header['authorization']?.split(' ');
 
     // 기본적으로 헤더에 각 데이터들이 들어있는지 확인
-    if (tokenType && tokenType.tolower() !== 'baerer') throw new CustomResponse(ECustomCode.JWT05);
+    if (tokenType && tokenType.toLowerCase() !== 'bearer') throw new CustomResponse(ECustomCode.JWT05);
     if (!token) throw new CustomResponse(ECustomCode.JWT06);
 
     // 1. signature 유효한지 검사
