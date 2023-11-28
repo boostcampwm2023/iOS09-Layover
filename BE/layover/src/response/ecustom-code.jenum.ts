@@ -23,7 +23,7 @@ export class ECustomCode extends EnumType<ECustomCode>() {
 
   static readonly JWT02 = new ECustomCode(HttpStatus.UNAUTHORIZED, 'JWT02', '토큰 만료기간이 경과하였습니다.');
 
-  static readonly JWT03 = new ECustomCode(HttpStatus.UNAUTHORIZED, 'JWT03', '유효하지 않은 JWT 토큰입니다.');
+  static readonly JWT03 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT03', '유효하지 않은 JWT 토큰입니다.');
 
   static readonly JWT04 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT04', '토큰 정보가 올바르지 않습니다.');
 
