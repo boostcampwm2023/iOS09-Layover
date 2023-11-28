@@ -57,6 +57,10 @@ export class MemberService {
     return await this.memberRepository.findOne({ where: { id } });
   }
 
+  async findMemberByHash(memberHash: string): Promise<Member> {
+    return await this.memberRepository.findOne({ where: { hash: memberHash } });
+  }
+
   makeUploadPreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
     return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
   }
