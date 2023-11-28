@@ -18,6 +18,41 @@ import { MemberInfosResDto } from './dtos/member-infos-res.dto';
 
 @ApiTags('Member API')
 @Controller('member')
+@ApiResponse({
+  status: HttpStatus.BAD_REQUEST,
+  description: 'client의 요청이 잘못된 경우',
+  schema: {
+    type: 'object',
+    properties: {
+      customCode: { type: 'string', example: 'OAUTH__' },
+      message: { type: 'string', example: '응답코드에 맞는 메시지' },
+      statusCode: { type: 'number', example: HttpStatus.BAD_REQUEST },
+    },
+  },
+})
+@ApiResponse({
+  description: '예상치 못한 Http Exception',
+  schema: {
+    type: 'object',
+    properties: {
+      customCode: { type: 'string', example: 'NEST_OFFER_EXCEPTION' },
+      message: { type: 'string', example: 'message from nest' },
+      statusCode: { type: 'number', example: HttpStatus.NOT_FOUND },
+    },
+  },
+})
+@ApiResponse({
+  status: HttpStatus.INTERNAL_SERVER_ERROR,
+  description: '예상치 못한 서버 Exception',
+  schema: {
+    type: 'object',
+    properties: {
+      customCode: { type: 'string', example: 'INTERNAL_SERVER_ERROR' },
+      message: { type: 'string', example: 'message from nest' },
+      statusCode: { type: 'number', example: HttpStatus.INTERNAL_SERVER_ERROR },
+    },
+  },
+})
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
@@ -35,6 +70,18 @@ export class MemberController {
         message: { type: 'boolean', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(CheckUsernameResDto) },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '리프레시 토큰 유효기간 만료',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'JWT02' },
+        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
     },
   })
@@ -91,6 +138,18 @@ export class MemberController {
         message: { type: 'boolean', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(IntroduceResDto) },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '리프레시 토큰 유효기간 만료',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'JWT02' },
+        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
     },
   })
@@ -154,6 +213,18 @@ export class MemberController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '리프레시 토큰 유효기간 만료',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'JWT02' },
+        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+      },
+    },
+  })
   @Post('profile-image/presigned-url')
   async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload, @Body() body: ProfilePresignedUrlDto) {
     const id = payload.memberId;
@@ -187,6 +258,18 @@ export class MemberController {
         message: { type: 'boolean', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(MemberInfosResDto) },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '리프레시 토큰 유효기간 만료',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'JWT02' },
+        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
     },
   })
