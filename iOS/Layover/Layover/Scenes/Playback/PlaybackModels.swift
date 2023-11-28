@@ -9,25 +9,34 @@
 import UIKit
 
 enum PlaybackModels {
+    
+    struct Board: Hashable {
+        var id: UUID = UUID()
+        let title: String
+        let content: String
+        let tags: [String]
+        let sdUrl: URL
+        let hdURL: URL
+        let memeber: MemberDTO
+    }
 
     // MARK: - Use Cases
+    
+    enum ParentView {
+        case home
+        case other
+    }
 
     enum PlaybackVideoList {
         struct Request {
-
         }
 
         struct Response {
-
+            let videos: [Board]
         }
 
         struct ViewModel {
-            enum ParentView {
-                case home
-                case other
-            }
-            let parentView: ParentView
-            let videos: [VideoDTO]
+            let videos: [Board]
         }
     }
 

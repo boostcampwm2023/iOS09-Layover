@@ -14,6 +14,13 @@ struct VideoDTO: Codable {
     let location: String
     let tags: [String]
     // TODO: 프로필 완성되면 변경
-    let profile: String
-    let videoURLs: URL
+    let member: MemberDTO
+    let sdURL: URL
+    let hdURL: URL
+
+    enum CodingKeys: String, CodingKey {
+        case title, content, location, tags, member
+        case sdURL = "sd_url"
+        case hdURL = "hd_url"
+    }
 }

@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
     func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel)
+    func routeToPlayback()
 }
 
 final class HomeViewController: BaseViewController {
@@ -41,7 +42,40 @@ final class HomeViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: url, loopingAt: .zero)
-
+        cell.moveToPlaybackSceneCallback = {
+            self.interactor?.moveToPlaybackScene(with: Models.MoveToPlaybackScene.Request(index: indexPath.row, videos: [
+                VideoDTO(title: "찹모찌1",
+                         content: "찹모찌의 뜻은 뭘 까?",
+                         location: "첫번째 우주",
+                         tags: ["찹"],
+                         member: MemberDTO(
+                            username: "찹모찌",
+                            introduce: "찹모찌임당",
+                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!),
+                VideoDTO(title: "찹모찌2",
+                         content: "찹모찌의 뜻은 뭘 까??",
+                         location: "첫번째 우주",
+                         tags: ["찹", "모"],
+                         member: MemberDTO(
+                            username: "찹모찌",
+                            introduce: "찹모찌임당",
+                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!),
+                VideoDTO(title: "찹모찌3",
+                         content: "찹모찌의 뜻은 뭘 까??",
+                         location: "첫번째 우주",
+                         tags: ["찹", "모"],
+                         member: MemberDTO(
+                            username: "찹모찌",
+                            introduce: "찹모찌임당",
+                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
+            ]))
+        }
         return cell
     }
 
@@ -176,5 +210,9 @@ extension HomeViewController: HomeDisplayLogic {
         carouselDatasource.apply(snapshot) {
             self.playVideoAtCenterCell()
         }
+    }
+
+    func routeToPlayback() {
+        router?.routeToPlayback()
     }
 }

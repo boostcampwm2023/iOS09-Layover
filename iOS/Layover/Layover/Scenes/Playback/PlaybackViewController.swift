@@ -10,27 +10,17 @@ import UIKit
 import AVFoundation
 
 protocol PlaybackDisplayLogic: AnyObject {
+    func displayVideoList(viewModel: PlaybackModels.PlaybackVideoList.ViewModel)
 }
 
-final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
+final class PlaybackViewController: BaseViewController {
+
     // MARK: - Type
-    enum ViewType {
-        case home
-        case map
-        case profile
-        case tag
-    }
 
     enum Section {
         case main
     }
 
-    // TODO: VIP 적용 시 Model로 빼서 presenter에서 ViewModel로 받기, 무한 스크롤 테스트 용
-    struct VideoModel: Hashable {
-        var id: UUID = UUID()
-        let title: String
-        let videoURL: URL
-    }
     // MARK: - UI Components
 
     private let playbackCollectionView: UICollectionView = {
@@ -42,23 +32,19 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     // MARK: - Properties
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, VideoModel>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Models.Board>?
 
     private var prevPlaybackCell: PlaybackCell?
 
     private var checkTelePort: Bool = false
 
-    private let video1: VideoModel = VideoModel(title: "1", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-    private let video2: VideoModel = VideoModel(title: "2", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-    private let video3: VideoModel = VideoModel(title: "3", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-    private var videos: [VideoModel] = []
-
     typealias Models = PlaybackModels
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
     var interactor: PlaybackBusinessLogic?
 
-    // TODO: Presenter에서 받기
-    private let viewType: ViewType = .map
+//     TODO: Presenter에서 받기
+//    private let viewType: ViewType = .map
+    private var parentView: Models.ParentView
 
     // MARK: - Object lifecycle
 
@@ -82,11 +68,8 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO: VIP Cycle
-        videos = [video1, video2, video3]
-        setInfiniteScroll()
-        setUI()
         configureDataSource()
+        interactor?.displayVideoList()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
     }
@@ -109,7 +92,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     // MARK: - UI + Layout
 
-    private func setUI() {
+    override func setConstraints() {
         playbackCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(playbackCollectionView)
         NSLayoutConstraint.activate([
@@ -122,6 +105,15 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
 }
 
+extension PlaybackViewController: PlaybackDisplayLogic {
+    func displayVideoList(viewModel: Models.PlaybackVideoList.ViewModel) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Models.Board>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(viewModel.videos)
+        dataSource?.apply(snapshot, animatingDifferences: false)
+    }
+}
+
 // MARK: - Playback Method
 
 private extension PlaybackViewController {
@@ -130,41 +122,31 @@ private extension PlaybackViewController {
             return
         }
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
-        dataSource = UICollectionViewDiffableDataSource<Section, VideoModel>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Models.Board>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
             cell.setPlaybackContents(title: video.title)
-            cell.addAVPlayer(url: video.videoURL)
+            cell.addAVPlayer(url: video.hdURL)
             cell.setPlayerSlider(tabbarHeight: tabbarHeight)
             return cell
         }
-        var snapshot = NSDiffableDataSourceSnapshot<Section, VideoModel>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(videos)
-        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
-    func transDataForInfiniteScroll(_ videos: [VideoModel]) -> [VideoModel] {
-        /// Home과 Home을 제외한 나머지(맵, 프로필, 태그)의 무한 스크롤 동작이 다름
-        /// Home은 내릴 때마다 Video호출 필요, 나머지는 정해진 양이 있음
-        /// Home일 경우는 첫번 째 cell일 때 위로 안올라감.
-        /// 모든 동영상을 다 지나쳐야 첫번째 cell로 이동
-        var transVideos: [VideoModel] = videos
-        if transVideos.count > 0 {
-            var tempLastVideoModel: VideoModel = transVideos[transVideos.count-1]
-            tempLastVideoModel.id = UUID()
-            var tempFirstVideoModel: VideoModel = transVideos[1]
-            tempFirstVideoModel.id = UUID()
-            transVideos.insert(tempLastVideoModel, at: 0)
-            transVideos.append(tempFirstVideoModel)
-        }
-        return transVideos
-    }
-
-    func setInfiniteScroll() {
-        if viewType != .home {
-            videos = transDataForInfiniteScroll(videos)
-        }
-    }
+//    func transDataForInfiniteScroll(_ videos: [VideoModel]) -> [VideoModel] {
+//        /// Home과 Home을 제외한 나머지(맵, 프로필, 태그)의 무한 스크롤 동작이 다름
+//        /// Home은 내릴 때마다 Video호출 필요, 나머지는 정해진 양이 있음
+//        /// Home일 경우는 첫번 째 cell일 때 위로 안올라감.
+//        /// 모든 동영상을 다 지나쳐야 첫번째 cell로 이동
+//        var transVideos: [VideoModel] = videos
+//        if transVideos.count > 0 {
+//            var tempLastVideoModel: VideoModel = transVideos[transVideos.count-1]
+//            tempLastVideoModel.id = UUID()
+//            var tempFirstVideoModel: VideoModel = transVideos[1]
+//            tempFirstVideoModel.id = UUID()
+//            transVideos.insert(tempLastVideoModel, at: 0)
+//            transVideos.append(tempFirstVideoModel)
+//        }
+//        return transVideos
+//    }
 
     func moveCellAtInfiniteScroll(_ scrollView: UIScrollView) {
         // ViewType이 Home이 아닌 경우

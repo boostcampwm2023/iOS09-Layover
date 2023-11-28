@@ -22,8 +22,10 @@ final class PlaybackCell: UICollectionViewCell {
     }
 
     // TODO: VideoModel 받아서 처리
-    func setPlaybackContents(title: String) {
-        playbackView.descriptionView.titleLabel.text = title
+    func setPlaybackContents(viewModel: PlaybackModels.Board) {
+        playbackView.descriptionView.titleLabel.text = viewModel.title
+        playbackView.descriptionView.setText(viewModel.content)
+
     }
 
     func addAVPlayer(url: URL) {

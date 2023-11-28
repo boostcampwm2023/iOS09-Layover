@@ -10,13 +10,14 @@ import UIKit
 
 protocol HomeRoutingLogic {
     func routeToNext()
+    func routeToPlayback()
 }
 
 protocol HomeDataPassing {
     var dataStore: HomeDataStore? { get }
 }
 
-class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
+final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
 
     // MARK: - Properties
 
@@ -30,6 +31,30 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         viewController?.navigationController?.setViewControllers([nextViewController], animated: true)
     }
 
+    func routeToPlayback() {
+        let playbackViewController: PlaybackViewController = PlaybackViewController()
+//        playbackViewController.
+        guard let source = dataStore,
+              var destination = playbackViewController.router?.dataStore
+        else { return }
+        destination.parentView = .home
+        destination.videos = transDTO(videos: source.videos ?? [])
+        destination.index = source.index
+        viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
+    }
+    
+    // Interactor가 해줄 역할? 고민 필요
+    private func transDTO(videos: [VideoDTO]) -> [PlaybackModels.Board] {
+        videos.map { videoDTO in
+            return PlaybackModels.Board(
+                title: videoDTO.title,
+                content: videoDTO.content,
+                tags: videoDTO.tags,
+                sdUrl: videoDTO.sdURL,
+                hdURL: videoDTO.hdURL,
+                memeber: videoDTO.member)
+        }
+    }
     // MARK: - Data Passing
 
     // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: HomeDataStore) {

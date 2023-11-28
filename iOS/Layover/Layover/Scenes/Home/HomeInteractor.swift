@@ -10,19 +10,28 @@ import UIKit
 
 protocol HomeBusinessLogic {
     func fetchVideos(with: HomeModels.CarouselVideos.Request)
+    func moveToPlaybackScene(with: HomeModels.MoveToPlaybackScene.Request)
 }
 
 protocol HomeDataStore {
-
+    var videos: [VideoDTO]? { get set }
+    var parentView: [PlaybackModels.ParentView]? { get set }
+    var index: Int? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
+
 
     // MARK: - Properties
 
     typealias Models = HomeModels
 
     var presenter: HomePresentationLogic?
+
+    var videos: [VideoDTO]?
+
+
+    var index: Int?
 }
 
 // MARK: - Use Case
@@ -34,5 +43,11 @@ extension HomeInteractor: HomeBusinessLogic {
             URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!
         ])
         presenter?.presentVideoURL(with: response)
+    }
+
+    func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
+        videos = request.videos
+        index = request.index
+        presenter?.presentPlaybackScene()
     }
 }

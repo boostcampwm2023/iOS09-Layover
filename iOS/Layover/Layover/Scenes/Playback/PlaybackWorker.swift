@@ -15,5 +15,15 @@ final class PlaybackWorker {
     typealias Models = PlaybackModels
 
     // MARK: - Methods
-
+    
+    func makeInfiniteScroll(videos: [Models.Board]) -> [Models.Board] {
+        var tempVideos: [Models.Board] = videos
+        var tempLastVideo: Models.Board = videos[tempVideos.count-1]
+        tempLastVideo.id = UUID()
+        var tempFirstVideo: Models.Board = videos[1]
+        tempFirstVideo.id = UUID()
+        tempVideos.insert(tempLastVideo, at: 0)
+        tempVideos.append(tempFirstVideo)
+        return tempVideos
+    }
 }
