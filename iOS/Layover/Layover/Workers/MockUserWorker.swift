@@ -18,7 +18,16 @@ final class MockUserWorker: UserWorkerProtocol {
 
     // MARK: - Methods
 
-    func modifyNickname(to nickname: String) async throws -> String {
+    func validateNickname(_ nickname: String) -> NicknameState {
+        if nickname.count < 2 || nickname.count > 8 {
+            return .lessThan2GreaterThan8
+        } else if nickname.wholeMatch(of: /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+/) == nil {
+            return .invalidCharacter
+        }
+        return .valid
+    }
+
+    func modifyNickname(to nickname: String) async throws -> String? {
         guard let fileLocation = Bundle.main.url(forResource: "PatchUserName",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -58,7 +67,7 @@ final class MockUserWorker: UserWorkerProtocol {
         return data.isValid
     }
 
-    func modifyIntroduce(to introduce: String) async throws -> String {
+    func modifyIntroduce(to introduce: String) async throws -> String? {
         guard let fileLocation = Bundle.main.url(forResource: "PatchIntroduce",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)
@@ -79,7 +88,7 @@ final class MockUserWorker: UserWorkerProtocol {
         return data.introduce
     }
 
-    func withdraw() async throws -> String {
+    func withdraw() async throws -> String? {
         guard let fileLocation = Bundle.main.url(forResource: "DeleteUser",
                                                  withExtension: "json") else { throw NetworkError.unknown }
         let mockData = try Data(contentsOf: fileLocation)

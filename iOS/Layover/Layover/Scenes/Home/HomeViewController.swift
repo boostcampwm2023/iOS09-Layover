@@ -41,7 +41,7 @@ final class HomeViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: url, loopingAt: .zero)
-
+        cell.configure(title: "요리왕 비룡 데뷔", tags: ["#천상의맛", "#갈갈갈", "#빨리주세요"])
         return cell
     }
 

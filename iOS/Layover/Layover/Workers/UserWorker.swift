@@ -9,13 +9,31 @@
 import Foundation
 import OSLog
 
+enum NicknameState {
+    case valid
+    case lessThan2GreaterThan8
+    case invalidCharacter
+
+    var alertDescription: String? {
+        switch self {
+        case .valid:
+            return nil
+        case .lessThan2GreaterThan8:
+            return "2자 이상 8자 이하로 입력해주세요."
+        case .invalidCharacter:
+            return "입력할 수 없는 문자입니다."
+        }
+    }
+}
+
 protocol UserWorkerProtocol {
-    func modifyNickname(to nickname: String) async throws -> String
+    func validateNickname(_ nickname: String) -> NicknameState
+    func modifyNickname(to nickname: String) async throws -> String?
     func checkDuplication(for userName: String) async throws -> Bool
     // TODO: multipart request 구현
     // func modifyProfileImage() async throws -> URL
-    func modifyIntroduce(to introduce: String) async throws -> String
-    func withdraw() async throws -> String
+    func modifyIntroduce(to introduce: String) async throws -> String?
+    func withdraw() async throws -> String?
 }
 
 final class UserWorker: UserWorkerProtocol {
@@ -35,18 +53,27 @@ final class UserWorker: UserWorkerProtocol {
 
     // MARK: - Methods
 
-    func modifyNickname(to nickname: String) async throws -> String {
+    func validateNickname(_ nickname: String) -> NicknameState {
+        if nickname.count < 2 || nickname.count > 8 {
+            return .lessThan2GreaterThan8
+        } else if nickname.wholeMatch(of: /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+/) == nil {
+            return .invalidCharacter
+        }
+        return .valid
+    }
+
+    func modifyNickname(to nickname: String) async throws -> String? {
         let endPoint = userEndPointFactory.makeUserNameModifyEndPoint(userName: nickname)
         do {
             let responseData = try await provider.request(with: endPoint)
             guard let data = responseData.data else {
                 os_log(.error, log: .default, "Failed to modify nickname with error: %@", responseData.message)
-                return ""
+                return nil
             }
             return data.userName
         } catch {
             os_log(.error, log: .default, "Failed to modify nickname with error: %@", error.localizedDescription)
-            return ""
+            return nil
         }
     }
 
@@ -65,33 +92,33 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func modifyIntroduce(to introduce: String) async throws -> String {
+    func modifyIntroduce(to introduce: String) async throws -> String? {
         let endPoint = userEndPointFactory.makeIntroduceModifyEndPoint(introduce: introduce)
         do {
             let responseData = try await provider.request(with: endPoint)
             guard let data = responseData.data else {
                 os_log(.error, log: .default, "Failed to modify introduce with error: %@", responseData.message)
-                return ""
+                return nil
             }
             return data.introduce
         } catch {
             os_log(.error, log: .default, "Failed to modify introduce with error: %@", error.localizedDescription)
-            return ""
+            return nil
         }
     }
 
-    func withdraw() async throws -> String {
+    func withdraw() async throws -> String? {
         let endPoint = userEndPointFactory.makeUserWithDrawEndPoint()
         do {
             let responseData = try await provider.request(with: endPoint)
             guard let data = responseData.data else {
                 os_log(.error, log: .default, "Failed to withdraw with error: %@", responseData.message)
-                return ""
+                return nil
             }
             return data.userName
         } catch {
             os_log(.error, log: .default, "Failed to withdraw with error: %@", error.localizedDescription)
-            return ""
+            return nil
         }
     }
 }
