@@ -1,54 +1,40 @@
 //
-//  MockLoginWorker.swift
+//  MockSignUpWorker.swift
 //  Layover
 //
-//  Created by 황지웅 on 11/27/23.
+//  Created by 황지웅 on 11/28/23.
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
 import Foundation
-
 import OSLog
 
-final class MockLoginWorker: LoginWorkerProtocol {
+final class MockSignUpWorker {
 
     // MARK: - Properties
 
+    private let signUpEndPointFactory: SignUpEndPointFactory
     private let provider: ProviderType
-    private let loginEndPointFactory: LoginEndPointFactory
     private let authManager: AuthManager
 
-    init(provider: ProviderType = Provider(session: .initMockSession()), loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(), authManager: AuthManager = .shared) {
+    // MARK: - Initializer
+
+    init(signUpEndPointFactory: SignUpEndPointFactory = DefaultSignUpEndPointFactory(), provider: ProviderType = Provider(session: .initMockSession()), authManager: AuthManager = .shared) {
+        self.signUpEndPointFactory = signUpEndPointFactory
         self.provider = provider
         self.authManager = authManager
-        self.loginEndPointFactory = loginEndPointFactory
     }
+}
 
-    private let headers: [String: String] = ["Content-Type": "application/json", "Authorization": "mock token"]
+// MARK: - SignUpWorkerProtocol
 
-    // MARK: - Methods
-
-    func fetchKakaoLoginToken() async -> String? {
+extension MockSignUpWorker: SignUpWorkerProtocol {
+    func signUp(withKakao socialToken: String, username: String) async -> Bool {
         // TODO: 로직 구현
-        return nil
+        return true
     }
 
-    func isRegisteredKakao(with socialToken: String) async -> Bool {
-        // TODO: 로직 구현
-        return false
-    }
-
-    func loginKakao(with socialToken: String) async -> Bool {
-        // TODO: 로직 구현
-        return false
-    }
-
-    func isRegisteredApple(with identityToken: String) async -> Bool {
-        // TODO: 로직 구현
-        return false
-    }
-
-    func loginApple(with identityToken: String) async -> Bool {
+    func signUp(withApple identityToken: String, username: String) async -> Bool {
         guard let fileLocation: URL = Bundle.main.url(forResource: "LoginData", withExtension: "json") else {
             return false
         }
@@ -63,7 +49,7 @@ final class MockLoginWorker: LoginWorkerProtocol {
             return (response, mockData, nil)
         }
         do {
-            let endPoint: EndPoint = loginEndPointFactory.makeAppleLoginEndPoint(with: identityToken)
+            let endPoint: EndPoint = signUpEndPointFactory.makeAppleSignUpEndPoint(identityToken: identityToken, username: username)
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
             print(response.data?.accessToken ?? "")
             print(response.data?.refreshToken ?? "")
@@ -73,4 +59,5 @@ final class MockLoginWorker: LoginWorkerProtocol {
             return false
         }
     }
+
 }

@@ -76,7 +76,11 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
                     }
                 }
             case .apple:
-                break
+                if await signUpWorker?.signUp(withApple: socialToken, username: request.nickname) == true {
+                    await MainActor.run {
+                        presenter?.presentSignUpSuccess()
+                    }
+                }
             }
         }
     }
