@@ -76,7 +76,7 @@ export class BoardController {
 
   @ApiOperation({
     summary: '홈 화면 게시글 조회',
-    description: '홈 화면에서 랜덤 포스팅을 조회합니다.',
+    description: '랜덤 게시물 (최대) 10개를 조회합니다.',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -92,8 +92,8 @@ export class BoardController {
     },
   })
   @Get('home')
-  async getBoardRandom(@Query('pageSize') pageSize: number) {
-    // this.boardService.getBoardRandom(pageSize);
+  async getBoardRandom() {
+    return await this.boardService.getBoardRandom();
   }
 
   @ApiOperation({
