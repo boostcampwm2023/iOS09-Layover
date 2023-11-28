@@ -90,7 +90,8 @@ export class OauthService {
 
   async generateAccessRefreshTokens(memberHash: string): Promise<TokenResDto> {
     // memberHash로부터 해당 회원이 저장된 db pk를 찾아옴.
-    const memberId = 777;
+    const member = await this.memberService.findMemberByHash(memberHash);
+    const memberId = member.id;
 
     // access, refresh token 생성
     const accessTokenPaylaod = makeJwtPaylaod('access', memberHash, memberId);

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Patch, Post } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
-import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
@@ -15,44 +15,13 @@ import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
 import { ProfilePresignedUrlDto } from './dtos/profile-presigned-url.dto';
 import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
 import { MemberInfosResDto } from './dtos/member-infos-res.dto';
+import { SWAGGER } from 'src/utils/swaggerUtils';
 
 @ApiTags('Member API')
 @Controller('member')
-@ApiResponse({
-  status: HttpStatus.BAD_REQUEST,
-  description: 'client의 요청이 잘못된 경우',
-  schema: {
-    type: 'object',
-    properties: {
-      customCode: { type: 'string', example: 'OAUTH__' },
-      message: { type: 'string', example: '응답코드에 맞는 메시지' },
-      statusCode: { type: 'number', example: HttpStatus.BAD_REQUEST },
-    },
-  },
-})
-@ApiResponse({
-  description: '예상치 못한 Http Exception',
-  schema: {
-    type: 'object',
-    properties: {
-      customCode: { type: 'string', example: 'NEST_OFFER_EXCEPTION' },
-      message: { type: 'string', example: 'message from nest' },
-      statusCode: { type: 'number', example: HttpStatus.NOT_FOUND },
-    },
-  },
-})
-@ApiResponse({
-  status: HttpStatus.INTERNAL_SERVER_ERROR,
-  description: '예상치 못한 서버 Exception',
-  schema: {
-    type: 'object',
-    properties: {
-      customCode: { type: 'string', example: 'INTERNAL_SERVER_ERROR' },
-      message: { type: 'string', example: 'message from nest' },
-      statusCode: { type: 'number', example: HttpStatus.INTERNAL_SERVER_ERROR },
-    },
-  },
-})
+@ApiResponse(SWAGGER.SERVER_CUSTOM_RESPONSE)
+@ApiResponse(SWAGGER.HTTP_ERROR_RESPONSE)
+@ApiResponse(SWAGGER.INTERNAL_SERVER_ERROR_RESPONSE)
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
@@ -70,18 +39,6 @@ export class MemberController {
         message: { type: 'boolean', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(CheckUsernameResDto) },
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '리프레시 토큰 유효기간 만료',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'JWT02' },
-        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
     },
   })
@@ -108,6 +65,8 @@ export class MemberController {
       },
     },
   })
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Patch('username')
   async updateUsername(@CustomHeader(new JwtValidationPipe()) payload, @Body() usernameDto: UsernameDto) {
     const id = payload.memberId;
@@ -141,18 +100,8 @@ export class MemberController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '리프레시 토큰 유효기간 만료',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'JWT02' },
-        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Patch('introduce')
   async updateIntroduce(@CustomHeader(new JwtValidationPipe()) payload, @Body() introduceDto: IntroduceDto) {
     const id = payload.memberId;
@@ -182,6 +131,8 @@ export class MemberController {
       },
     },
   })
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Delete()
   async deleteMember(@CustomHeader(new JwtValidationPipe()) payload) {
     const id = payload.memberId;
@@ -213,18 +164,8 @@ export class MemberController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '리프레시 토큰 유효기간 만료',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'JWT02' },
-        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('profile-image/presigned-url')
   async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload, @Body() body: ProfilePresignedUrlDto) {
     const id = payload.memberId;
@@ -245,12 +186,12 @@ export class MemberController {
   }
 
   @ApiOperation({
-    summary: '회원 정보 요청',
-    description: '회원 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
+    summary: '회원(본인) 정보 요청',
+    description: '회원(본인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: '회원 정보들',
+    description: '회원(본인) 정보들',
     schema: {
       type: 'object',
       properties: {
@@ -261,18 +202,8 @@ export class MemberController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '리프레시 토큰 유효기간 만료',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'JWT02' },
-        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get()
   async getMemberInfos(@CustomHeader(new JwtValidationPipe()) payload) {
     const id = payload.memberId;
@@ -291,6 +222,6 @@ export class MemberController {
     }
 
     // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(username, introduce, preSignedUrl));
+    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
   }
 }
