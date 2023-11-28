@@ -55,10 +55,32 @@ final class UserWorker: UserWorkerProtocol {
     }
 
     func modifyIntroduce(to introduce: String) async throws -> String {
-        return ""
+        let endPoint = userEndPointFactory.makeIntroduceModifyEndPoint(introduce: introduce)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = try await provider.request(with: endPoint).data else {
+                os_log(.error, log: .default, "Failed to modify introduce with error: %@", responseData.message)
+                return ""
+            }
+            return data.introduce
+        } catch {
+            os_log(.error, log: .default, "Failed to modify introduce with error: %@", error.localizedDescription)
+            return ""
+        }
     }
 
     func withdraw() async throws -> String {
-        return ""
+        let endPoint = userEndPointFactory.makeUserWithDrawEndPoint()
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = try await provider.request(with: endPoint).data else {
+                os_log(.error, log: .default, "Failed to withdraw with error: %@", responseData.message)
+                return ""
+            }
+            return data.userName
+        } catch {
+            os_log(.error, log: .default, "Failed to withdraw with error: %@", error.localizedDescription)
+            return ""
+        }
     }
 }

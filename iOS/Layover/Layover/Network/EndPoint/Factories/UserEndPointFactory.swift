@@ -10,7 +10,9 @@ import Foundation
 
 protocol UserEndPointFactory {
     func makeUserNameIsDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>>
-    func makeUserNameModifyEndPoint(into userName: String) -> EndPoint<Response<NicknameDTO>>
+    func makeUserNameModifyEndPoint(userName: String) -> EndPoint<Response<NicknameDTO>>
+    func makeIntroduceModifyEndPoint(introduce: String) -> EndPoint<Response<IntroduceDTO>>
+    func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>>
 }
 
 final class DefaultUserEndPointFactory: UserEndPointFactory {
@@ -25,7 +27,7 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
         )
     }
 
-    func makeUserNameModifyEndPoint(into userName: String) -> EndPoint<Response<NicknameDTO>> {
+    func makeUserNameModifyEndPoint(userName: String) -> EndPoint<Response<NicknameDTO>> {
         var bodyParameters = [String: String]()
         bodyParameters.updateValue(userName, forKey: "username")
 
@@ -33,6 +35,24 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
             path: "/member/username",
             method: .PATCH,
             bodyParameters: bodyParameters
+        )
+    }
+
+    func makeIntroduceModifyEndPoint(introduce: String) -> EndPoint<Response<IntroduceDTO>> {
+        var bodyParameters = [String: String]()
+        bodyParameters.updateValue(introduce, forKey: "introduce")
+
+        return EndPoint(
+            path: "/member/introduce",
+            method: .PATCH,
+            bodyParameters: bodyParameters
+        )
+    }
+
+    func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>> {
+        return EndPoint(
+            path: "/member/withdraw",
+            method: .DELETE
         )
     }
 }
