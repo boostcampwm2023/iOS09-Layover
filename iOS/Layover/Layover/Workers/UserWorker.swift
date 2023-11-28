@@ -28,12 +28,12 @@ enum NicknameState {
 
 protocol UserWorkerProtocol {
     func validateNickname(_ nickname: String) -> NicknameState
-    func modifyNickname(to nickname: String) async throws -> String?
-    func checkDuplication(for userName: String) async throws -> Bool
+    func modifyNickname(to nickname: String) async -> String?
+    func checkDuplication(for userName: String) async -> Bool
     // TODO: multipart request 구현
     // func modifyProfileImage() async throws -> URL
-    func modifyIntroduce(to introduce: String) async throws -> String?
-    func withdraw() async throws -> String?
+    func modifyIntroduce(to introduce: String) async -> String?
+    func withdraw() async -> String?
 }
 
 final class UserWorker: UserWorkerProtocol {
@@ -62,7 +62,7 @@ final class UserWorker: UserWorkerProtocol {
         return .valid
     }
 
-    func modifyNickname(to nickname: String) async throws -> String? {
+    func modifyNickname(to nickname: String) async -> String? {
         let endPoint = userEndPointFactory.makeUserNameModifyEndPoint(userName: nickname)
         do {
             let responseData = try await provider.request(with: endPoint)
@@ -77,7 +77,7 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func checkDuplication(for userName: String) async throws -> Bool {
+    func checkDuplication(for userName: String) async -> Bool {
         let endPoint = userEndPointFactory.makeUserNameIsDuplicateEndPoint(of: userName)
         do {
             let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
@@ -92,7 +92,7 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func modifyIntroduce(to introduce: String) async throws -> String? {
+    func modifyIntroduce(to introduce: String) async -> String? {
         let endPoint = userEndPointFactory.makeIntroduceModifyEndPoint(introduce: introduce)
         do {
             let responseData = try await provider.request(with: endPoint)
@@ -107,7 +107,7 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func withdraw() async throws -> String? {
+    func withdraw() async -> String? {
         let endPoint = userEndPointFactory.makeUserWithDrawEndPoint()
         do {
             let responseData = try await provider.request(with: endPoint)
