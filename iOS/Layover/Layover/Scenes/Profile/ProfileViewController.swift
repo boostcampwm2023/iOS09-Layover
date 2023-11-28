@@ -66,7 +66,7 @@ final class ProfileViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-        setVideoCollectionView()
+        setThumnailCollectionView()
         interactor?.fetchProfile()
     }
 
@@ -117,7 +117,7 @@ final class ProfileViewController: BaseViewController {
         }
     }
 
-    private func setVideoCollectionView() {
+    private func setThumnailCollectionView() {
         thumbnailCollectionView.dataSource = videoDatasource
         var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
         snapshot.appendSections([UUID()])
@@ -140,17 +140,15 @@ extension ProfileViewController: ProfileDisplayLogic {
     func fetchProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
         videoDatasource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
             guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProfileHeaderView.identifier, for: indexPath) as? ProfileHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                         withReuseIdentifier: ProfileHeaderView.identifier,
+                                                                         for: indexPath) as? ProfileHeaderView
             header?.editButton.addTarget(self, action: #selector(self?.editbuttonDidTap), for: .touchUpInside)
-            header?.configure(profileImageURL: viewModel.profileImageURL,
-                             nickname: viewModel.nickname,
-                             introduce: viewModel.introduce)
+            header?.configure(profileImage: viewModel.profileImage,
+                              nickname: viewModel.nickname,
+                              introduce: viewModel.introduce)
             return header
         }
     }
 
-}
-
-#Preview {
-    UINavigationController(rootViewController: ProfileViewController(profileType: .own))
 }

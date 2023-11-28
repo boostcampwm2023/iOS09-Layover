@@ -36,7 +36,7 @@ enum SignUpModels {
         struct ViewModel {
             var canSignUp: Bool
             var alertDescription: String {
-                canSignUp ? "사용가능한 닉네임입니다." : "사용중인 닉네임입니다."
+                canSignUp ? "사용 가능한 닉네임입니다." : "사용 중인 닉네임입니다."
             }
         }
     }

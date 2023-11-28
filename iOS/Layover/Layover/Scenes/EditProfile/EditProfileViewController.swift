@@ -214,12 +214,14 @@ extension EditProfileViewController: EditProfileDisplayLogic {
     func displayProfile(viewModel: Models.FetchProfile.ViewModel) {
         nicknameTextfield.text = viewModel.nickname
 
-        if let url = viewModel.profileImage, let data = try? Data(contentsOf: url) {
-            profileImageView.image = UIImage(data: data)
-        }
-
         if let introduce = viewModel.introduce {
             introduceTextfield.text = introduce
+        }
+
+        if let image = viewModel.profileImage {
+            profileImageView.image = image
+        } else {
+            profileImageView.image = UIImage.profile
         }
     }
 

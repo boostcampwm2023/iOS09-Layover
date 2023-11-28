@@ -14,15 +14,21 @@ protocol ProfileBusinessLogic {
 
 protocol ProfileDataStore {
     var nickname: String? { get set }
-    var profileImageURL: URL? { get set }
     var introduce: String? { get set }
+    var profileImage: UIImage? { get set }
 }
 
 final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
     var nickname: String?
-    var profileImageURL: URL?
     var introduce: String?
+    var profileImage: UIImage?
+
+    private let provider: ProviderType
+
+    init(provider: ProviderType = Provider()) {
+        self.provider = provider
+    }
 
     // MARK: - Properties
 
@@ -31,12 +37,14 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     var presenter: ProfilePresentationLogic?
 
     func fetchProfile() {
+        if let data = try? Data(contentsOf: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!) {
+            profileImage = UIImage(data: data)
+        }
         nickname = "kong"
-        profileImageURL = URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")
         introduce = "콩이라고해"
-        let response = ProfileModels.FetchProfile.Response(nickname: nickname, 
+        let response = ProfileModels.FetchProfile.Response(nickname: nickname,
                                                            introduce: introduce,
-                                                           profileImageURL: profileImageURL)
+                                                           profileImage: profileImage)
         presenter?.present(with: response)
     }
 

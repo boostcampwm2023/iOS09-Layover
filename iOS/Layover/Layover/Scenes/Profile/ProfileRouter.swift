@@ -31,15 +31,12 @@ class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
               var destination = editProfileViewController.router?.dataStore
         else { return }
 
-        passProfileDataToEditProfile(source: source, destination: &destination)
+        // Data Passing
+        destination.nickname = source.nickname
+        destination.introduce = source.introduce
+        destination.profileImage = source.profileImage
+
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
-    // MARK: - Data Passing
-
-    private func passProfileDataToEditProfile(source: ProfileDataStore, destination: inout EditProfileDataStore) {
-        destination.nickname = source.nickname
-        destination.introduce = source.introduce
-        destination.profileImageURL = source.profileImageURL
-    }
 }

@@ -17,8 +17,8 @@ protocol EditProfileBusinessLogic {
 
 protocol EditProfileDataStore {
     var nickname: String? { get set }
-    var profileImageURL: URL? { get set }
     var introduce: String? { get set }
+    var profileImage: UIImage? { get set }
 }
 
 final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStore {
@@ -30,24 +30,21 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
     var userWorker: UserWorkerProtocol?
     var presenter: EditProfilePresentationLogic?
 
-    var nicknameChecked: Bool = true
-    var introduceChecked: Bool = true
-
     // MARK: - Data Store
 
     var nickname: String?
-    var profileImageURL: URL?
     var introduce: String?
+    var profileImage: UIImage?
 
     // MARK: - Use Case
 
     func fetchProfile() {
         presenter?.presentProfile(with: EditProfileModels.FetchProfile.Reponse(nickname: nickname,
                                                                                introduce: introduce,
-                                                                               profileImage: profileImageURL))
+                                                                               profileImage: profileImage))
     }
 
-    func validateProfileInfo(with request: EditProfileModels.ValidateProfileInfo.Request) {
+    func validateProfileInfo(with request: Models.ValidateProfileInfo.Request) {
         let nicknameChanged = nickname != request.nickname
         let introduceChanged = introduce != request.introduce
         let profileInfoChanged = nicknameChanged || request.profileImageChanged || introduceChanged
@@ -57,13 +54,12 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
         presenter?.presentProfileInfoValidation(with: response)
     }
 
-    func checkDuplication(with request: EditProfileModels.CheckNicknameDuplication.Request) {
+    func checkDuplication(with request: Models.CheckNicknameDuplication.Request) {
         Task {
             do {
                 let response = try await userWorker?.checkDuplication(for: request.nickname)
-                nicknameChecked = response ?? true
                 await MainActor.run {
-                    presenter?.presentNicknameDuplication(with: EditProfileModels.CheckNicknameDuplication.Response(isDuplicate: response ?? true))
+                    presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isDuplicate: response ?? true))
                 }
             } catch let error {
                 // TODO: present toast
@@ -72,7 +68,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
         }
     }
 
-    func editProfile(with requeset: EditProfileModels.EditProfile.Request) {
+    func editProfile(with requeset: Models.EditProfile.Request) {
 
     }
 

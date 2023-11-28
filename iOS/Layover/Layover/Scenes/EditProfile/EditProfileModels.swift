@@ -18,13 +18,13 @@ enum EditProfileModels {
         struct Reponse {
             var nickname: String?
             var introduce: String?
-            var profileImage: URL?
+            var profileImage: UIImage?
         }
 
         struct ViewModel {
             var nickname: String?
             var introduce: String?
-            var profileImage: URL?
+            var profileImage: UIImage?
         }
     }
 

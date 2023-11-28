@@ -22,20 +22,20 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     weak var viewController: EditProfileDisplayLogic?
 
     func presentProfile(with response: EditProfileModels.FetchProfile.Reponse) {
-        let viewModel = EditProfileModels.FetchProfile.ViewModel(nickname: response.nickname,
-                                                                 introduce: response.introduce,
-                                                                 profileImage: response.profileImage)
+        let viewModel = Models.FetchProfile.ViewModel(nickname: response.nickname,
+                                                      introduce: response.introduce,
+                                                      profileImage: response.profileImage)
         viewController?.displayProfile(viewModel: viewModel)
     }
 
     func presentProfileInfoValidation(with response: EditProfileModels.ValidateProfileInfo.Response) {
-        let viewModel = EditProfileModels.ValidateProfileInfo.ViewModel(canCheckDuplication: response.nicknameChanged,
-                                                                        canEditProfile: response.isValid)
+        let viewModel = Models.ValidateProfileInfo.ViewModel(canCheckDuplication: response.nicknameChanged,
+                                                             canEditProfile: response.isValid)
         viewController?.displayProfileInfoValidation(viewModel: viewModel)
     }
 
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response) {
-        let viewModel = EditProfileModels.CheckNicknameDuplication.ViewModel(isValidNickname: !response.isDuplicate)
+        let viewModel = Models.CheckNicknameDuplication.ViewModel(isValidNickname: !response.isDuplicate)
         viewController?.displayNicknameDuplication(viewModel: viewModel)
     }
 

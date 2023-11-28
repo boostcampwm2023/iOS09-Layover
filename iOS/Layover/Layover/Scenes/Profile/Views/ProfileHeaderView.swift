@@ -15,6 +15,8 @@ final class ProfileHeaderView: UICollectionReusableView {
     private let profileImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.image = UIImage.profile
+        imageView.layer.cornerRadius = 36
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -54,7 +56,10 @@ final class ProfileHeaderView: UICollectionReusableView {
 
     // MARK: - Methods
 
-    func configure(profileImageURL: URL?, nickname: String?, introduce: String?) {
+    func configure(profileImage: UIImage?,
+                   nickname: String?,
+                   introduce: String?) {
+        profileImageView.image = profileImage
         nicknameLabel.text = nickname
         introduceLabel.text = introduce
     }

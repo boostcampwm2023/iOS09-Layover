@@ -19,11 +19,10 @@ final class ProfilePresenter: ProfilePresentationLogic {
     typealias Models = ProfileModels
     weak var viewController: ProfileDisplayLogic?
 
-    func present(with response: ProfileModels.FetchProfile.Response) {
-        let viewModel = ProfileModels.FetchProfile.ViewModel(nickname: response.nickname,
-                                                             introduce: response.introduce,
-                                                             profileImageURL: response.profileImageURL)
-        viewController?.fetchProfile(viewModel: viewModel)
+    func present(with response: Models.FetchProfile.Response) {
+        viewController?.fetchProfile(viewModel: Models.FetchProfile.ViewModel(nickname: response.nickname,
+                                                                              introduce: response.introduce,
+                                                                              profileImage: response.profileImage))
     }
 
 }
