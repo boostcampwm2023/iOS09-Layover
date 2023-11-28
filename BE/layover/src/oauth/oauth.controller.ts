@@ -106,6 +106,14 @@ export class OauthController {
     // memberHash 구하기
     const memberHash = await this.oauthService.getKakaoMemberHash(accessToken);
 
+    // 이미 회원가입 돼있다면, 바로 로그인 시키기
+    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
+    if (isUserExist) {
+      // Response access token and refresh token
+      const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
+      throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
+    }
+
     // 닉네임 중복 확인 : MEMBER01
     if (await this.oauthService.isExistUsername(username)) {
       throw new CustomResponse(ECustomCode.MEMBER01);
@@ -114,10 +122,8 @@ export class OauthController {
     // signup
     await this.oauthService.signup(memberHash, username, 'kakao');
 
-    // token들 발급
+    // Response access token and refresh token
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
-
-    // return access token and refresh token
     throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 
@@ -146,6 +152,14 @@ export class OauthController {
     // memberHash 구하기
     const memberHash = this.oauthService.getAppleMemberHash(identityToken);
 
+    // 이미 회원가입 돼있다면, 바로 로그인 시키기
+    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
+    if (isUserExist) {
+      // Response access token and refresh token
+      const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
+      throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
+    }
+
     // 닉네임 중복 확인 : MEMBER01
     if (await this.oauthService.isExistUsername(username)) {
       throw new CustomResponse(ECustomCode.MEMBER01);
@@ -154,10 +168,8 @@ export class OauthController {
     // signup
     await this.oauthService.signup(memberHash, username, 'apple');
 
-    // token들 발급
+    // Response access token and refresh token
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
-
-    // return access token and refresh token
     throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
   }
 
