@@ -18,3 +18,21 @@ export function makeUploadPreSignedUrl(bucketname: string, filename: string, fil
   });
   return { preSignedUrl };
 }
+
+export function makeDownloadPreSignedUrl(bucketname: string, key: string): { preSignedUrl: string } {
+  const s3 = new AWS.S3({
+    endpoint: process.env.NCLOUD_S3_ENDPOINT,
+    credentials: {
+      accessKeyId: process.env.NCLOUD_S3_ACCESS_KEY,
+      secretAccessKey: process.env.NCLOUD_S3_SECRET_KEY,
+    },
+    region: process.env.NCLOUD_S3_REGION,
+  });
+
+  const preSignedUrl: string = s3.getSignedUrl('getObject', {
+    Bucket: bucketname,
+    Key: key,
+    Expires: 60 * 60, // URL 만료되는 시간(초 단위)
+  });
+  return { preSignedUrl };
+}

@@ -19,13 +19,17 @@ export class ECustomCode extends EnumType<ECustomCode>() {
 
   static readonly OAUTH07 = new ECustomCode(HttpStatus.BAD_REQUEST, 'OAUTH07', 'identity token을 사용한 인증이 불가능합니다.');
 
-  static readonly JWT01 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT01', '유효하지 않은 토큰입니다.');
+  static readonly JWT01 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT01', '토큰이 JWT 형식이 아닙니다.');
 
   static readonly JWT02 = new ECustomCode(HttpStatus.UNAUTHORIZED, 'JWT02', '토큰 만료기간이 경과하였습니다.');
 
-  static readonly JWT03 = new ECustomCode(HttpStatus.UNAUTHORIZED, 'JWT03', '유효하지 않은 JWT 토큰입니다.');
+  static readonly JWT03 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT03', '유효하지 않은 JWT 토큰입니다.');
 
   static readonly JWT04 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT04', '토큰 정보가 올바르지 않습니다.');
+
+  static readonly JWT05 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT05', '토큰 타입이 Bearer가 아닙니다.');
+
+  static readonly JWT06 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT06', '토큰 데이터가 존재하지 않습니다.');
 
   static readonly MEMBER01 = new ECustomCode(HttpStatus.BAD_REQUEST, 'MEMBER01', '중복 닉네임이 존재합니다.');
 

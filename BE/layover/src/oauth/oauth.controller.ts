@@ -16,7 +16,7 @@ import { CustomHeader } from 'src/pipes/custom-header.decorator';
 @Controller('oauth')
 @ApiResponse({
   status: HttpStatus.BAD_REQUEST,
-  description: 'Client의 잘못된 요청',
+  description: 'Client의 요청이 잘못된 경우',
   schema: {
     type: 'object',
     properties: {
@@ -255,7 +255,7 @@ export class OauthController {
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: '리프레시 토큰 유효기간 경과',
+    description: '리프레시 토큰 유효기간 만료',
     schema: {
       type: 'object',
       properties: {
