@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 
 export const SWAGGER = {
   BAD_REQUEST_RESPONSE: {
-    status: '000',
+    status: 0,
     description: 'Client의 요청이 잘못된 경우',
     schema: {
       type: 'object',
@@ -15,7 +15,7 @@ export const SWAGGER = {
   },
 
   HTTP_ERROR_RESPONSE: {
-    status: '000',
+    status: 0,
     description: '예상치 못한 Http Exception',
     schema: {
       type: 'object',
