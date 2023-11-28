@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
 		194551F32B037F2D00299768 /* LoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551ED2B037F2D00299768 /* LoginWorker.swift */; };
 		194551F42B037F2D00299768 /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EE2B037F2D00299768 /* LoginRouter.swift */; };
@@ -124,6 +125,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
 		194551ED2B037F2D00299768 /* LoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWorker.swift; sourceTree = "<group>"; };
 		194551EE2B037F2D00299768 /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 			children = (
 				1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */,
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
+				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -762,6 +765,7 @@
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
 				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
+				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
