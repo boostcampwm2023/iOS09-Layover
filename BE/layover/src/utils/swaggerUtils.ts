@@ -2,27 +2,27 @@ import { HttpStatus } from '@nestjs/common';
 
 export const SWAGGER = {
   BAD_REQUEST_RESPONSE: {
-    status: HttpStatus.BAD_REQUEST,
+    status: '000',
     description: 'Client의 요청이 잘못된 경우',
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'OAUTH__' },
-        message: { type: 'string', example: '응답코드에 맞는 메시지' },
-        statusCode: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        customCode: { type: 'string', example: '<type><num>' },
+        message: { type: 'string', example: '서버에서 처리한 예외' },
+        statusCode: { type: 'number', example: '000' },
       },
     },
   },
 
   HTTP_ERROR_RESPONSE: {
-    status: HttpStatus.NOT_FOUND,
+    status: '000',
     description: '예상치 못한 Http Exception',
     schema: {
       type: 'object',
       properties: {
         customCode: { type: 'string', example: 'NEST_OFFER_EXCEPTION' },
         message: { type: 'string', example: 'message from nest' },
-        statusCode: { type: 'number', example: HttpStatus.NOT_FOUND },
+        statusCode: { type: 'number', example: '000' },
       },
     },
   },
