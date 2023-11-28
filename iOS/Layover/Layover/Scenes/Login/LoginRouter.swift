@@ -49,7 +49,7 @@ final class LoginRouter: LoginRoutingLogic, LoginDataPassing {
         else { return }
 
         destination.signUpType = .apple
-        destination.identityToken = source.appleLoginToken
+        destination.socialToken = source.appleLoginToken
         viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
     }
 
