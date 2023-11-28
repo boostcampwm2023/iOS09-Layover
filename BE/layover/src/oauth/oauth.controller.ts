@@ -4,51 +4,20 @@ import { OauthService } from './oauth.service';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { CustomResponse } from '../response/custom-response';
 import { ECustomCode } from '../response/ecustom-code.jenum';
-import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { KakaoLoginDto } from './dtos/kakao-login.dto';
 import { AppleLoginDto } from './dtos/apple-login.dto';
 import { KakaoSignupDto } from './dtos/kakao-signup.dto';
 import { AppleSignupDto } from './dtos/apple-signup.dto';
 import { TokenResDto } from './dtos/token-res.dto';
 import { CustomHeader } from 'src/pipes/custom-header.decorator';
+import { SWAGGER } from 'src/utils/swaggerUtils';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
-@ApiResponse({
-  status: HttpStatus.BAD_REQUEST,
-  description: 'Client의 요청이 잘못된 경우',
-  schema: {
-    type: 'object',
-    properties: {
-      customCode: { type: 'string', example: 'OAUTH__' },
-      message: { type: 'string', example: '응답코드에 맞는 메시지' },
-      statusCode: { type: 'number', example: HttpStatus.BAD_REQUEST },
-    },
-  },
-})
-@ApiResponse({
-  description: '예상치 못한 Http Exception',
-  schema: {
-    type: 'object',
-    properties: {
-      customCode: { type: 'string', example: 'NEST_OFFER_EXCEPTION' },
-      message: { type: 'string', example: 'message from nest' },
-      statusCode: { type: 'number', example: HttpStatus.NOT_FOUND },
-    },
-  },
-})
-@ApiResponse({
-  status: HttpStatus.INTERNAL_SERVER_ERROR,
-  description: '예상치 못한 서버 Exception',
-  schema: {
-    type: 'object',
-    properties: {
-      customCode: { type: 'string', example: 'INTERNAL_SERVER_ERROR' },
-      message: { type: 'string', example: 'message from nest' },
-      statusCode: { type: 'number', example: HttpStatus.INTERNAL_SERVER_ERROR },
-    },
-  },
-})
+@ApiResponse(SWAGGER.BAD_REQUEST_RESPONSE)
+@ApiResponse(SWAGGER.HTTP_ERROR_RESPONSE)
+@ApiResponse(SWAGGER.INTERNAL_SERVER_ERROR_RESPONSE)
 export class OauthController {
   constructor(private readonly oauthService: OauthService) {}
 
@@ -69,18 +38,7 @@ export class OauthController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '회원가입 되지 않은 유저',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'OAUTH01' },
-        message: { type: 'string', example: '회원가입이 되지 않은 유저입니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('kakao')
   async processKakaoLogin(@Body() kakaoLoginDto: KakaoLoginDto) {
     // memberHash 구하기
@@ -110,18 +68,7 @@ export class OauthController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '회원가입 되지 않은 유저',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'OAUTH01' },
-        message: { type: 'string', example: '회원가입이 되지 않은 유저입니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('apple')
   async processAppleLogin(@Body() appleLoginDto: AppleLoginDto) {
     // memberHash 구하기
@@ -151,18 +98,7 @@ export class OauthController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '회원가입 되지 않은 유저',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'OAUTH01' },
-        message: { type: 'string', example: '회원가입이 되지 않은 유저입니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('signup/kakao')
   async processKakaoSignup(@Body() kakaoSignupDto: KakaoSignupDto) {
     const [accessToken, username] = [kakaoSignupDto.accessToken, kakaoSignupDto.username];
@@ -202,18 +138,7 @@ export class OauthController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '회원가입 되지 않은 유저',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'OAUTH01' },
-        message: { type: 'string', example: '회원가입이 되지 않은 유저입니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('signup/apple')
   async processAppleSignup(@Body() appleSignupDto: AppleSignupDto) {
     const [identityToken, username] = [appleSignupDto.identityToken, appleSignupDto.username];
@@ -253,18 +178,8 @@ export class OauthController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '리프레시 토큰 유효기간 만료',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'JWT02' },
-        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
-        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-      },
-    },
-  })
+  @ApiResponse(SWAGGER.REFRESH_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('refresh-token')
   async renewTokens(@CustomHeader(new JwtValidationPipe()) payload) {
     // 새로운 토큰을 생성하고 이를 반환함
