@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpStatus, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Patch, Post } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
 import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
@@ -14,6 +14,7 @@ import { IntroduceResDto } from './dtos/introduce-res.dto';
 import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
 import { ProfilePresignedUrlDto } from './dtos/profile-presigned-url.dto';
 import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
+import { MemberInfosResDto } from './dtos/member-infos-res.dto';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -154,15 +155,15 @@ export class MemberController {
     },
   })
   @Post('profile-image/presigned-url')
-  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload, @Body() body: ProfilePresignedUrlDto) {
+  async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload, @Body() body: ProfilePresignedUrlDto) {
     const id = payload.memberId;
 
-    // 프로필 사진 업로드할 presigned url 가져오기
+    // 프로필 사진 업로드할 presigned url 생성하기
     const member = await this.memberService.findMemberById(id);
     const filename = member.username;
     const filetype = body.filetype;
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    const { preSignedUrl } = this.memberService.makePreSignedUrl(bucketname, filename, 'image', filetype);
+    const { preSignedUrl } = this.memberService.makeUploadPreSignedUrl(bucketname, filename, 'image', filetype);
 
     // db에 반영
     const key = `${filename}.${filetype}`;
@@ -170,5 +171,43 @@ export class MemberController {
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new ProfilePresignedUrlResDto(preSignedUrl));
+  }
+
+  @ApiOperation({
+    summary: '회원 정보 요청',
+    description: '회원 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '회원 정보들',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'boolean', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(MemberInfosResDto) },
+      },
+    },
+  })
+  @Get()
+  async getMemberInfos(@CustomHeader(new JwtValidationPipe()) payload) {
+    const id = payload.memberId;
+    const member = await this.memberService.findMemberById(id);
+
+    const username = member.username;
+    const introduce = member.introduce;
+    const profileImageKey = member.profile_image_key;
+
+    const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
+    let preSignedUrl: string;
+    if (profileImageKey !== 'default') {
+      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, member.profile_image_key));
+    } else {
+      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, 'default.jpeg')); // 기본 이미지 사용!
+    }
+
+    // 응답
+    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(username, introduce, preSignedUrl));
   }
 }
