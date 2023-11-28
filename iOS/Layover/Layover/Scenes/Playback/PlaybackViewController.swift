@@ -75,17 +75,7 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - Setup
 
     private func setup() {
-        let viewController = self
-        let interactor = PlaybackInteractor()
-        let presenter = PlaybackPresenter()
-        let router = PlaybackRouter()
-
-        viewController.router = router
-        viewController.interactor = interactor
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+        PlaybackConfigurator.shared.configure(self)
     }
 
     // MARK: - View Lifecycle
