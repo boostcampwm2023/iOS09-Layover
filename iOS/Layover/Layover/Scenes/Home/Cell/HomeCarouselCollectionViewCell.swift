@@ -16,7 +16,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .layoverWhite
         label.font = UIFont.loFont(type: .subtitle)
         return label
     }()
@@ -99,7 +99,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
             configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
                 var outgoing = incoming
                 outgoing.font = UIFont.loFont(ofSize: 13, weight: .bold)
-                outgoing.foregroundColor = UIColor.white
+                outgoing.foregroundColor = UIColor.layoverWhite
                 return outgoing
             }
             let button = UIButton(configuration: configuration)
