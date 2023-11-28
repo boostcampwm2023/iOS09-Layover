@@ -39,8 +39,8 @@ export class MemberController {
   })
   @Post('check-username')
   async checkUsername(@Body() usernameDto: CheckUsernameDto) {
-    const exist = !(await this.memberService.isExistUsername(usernameDto.username));
-    throw new CustomResponse(ECustomCode.SUCCESS, new CheckUsernameResDto(exist));
+    const isValid = !(await this.memberService.isExistUsername(usernameDto.username));
+    throw new CustomResponse(ECustomCode.SUCCESS, new CheckUsernameResDto(isValid));
   }
 
   @ApiOperation({

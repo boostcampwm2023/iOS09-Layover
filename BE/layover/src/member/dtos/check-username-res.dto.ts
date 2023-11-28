@@ -5,9 +5,9 @@ export class CheckUsernameResDto {
     example: 'true',
     description: '닉네임 검증 결과 bool 값',
   })
-  exist: boolean;
+  isValid: boolean;
 
-  constructor(exist: boolean) {
-    this.exist = exist;
+  constructor(isValid: boolean) {
+    this.isValid = isValid;
   }
 }
