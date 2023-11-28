@@ -15,7 +15,7 @@ import { SWAGGER } from 'src/utils/swaggerUtils';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
-@ApiResponse(SWAGGER.BAD_REQUEST_RESPONSE)
+@ApiResponse(SWAGGER.SERVER_CUSTOM_RESPONSE)
 @ApiResponse(SWAGGER.HTTP_ERROR_RESPONSE)
 @ApiResponse(SWAGGER.INTERNAL_SERVER_ERROR_RESPONSE)
 export class OauthController {

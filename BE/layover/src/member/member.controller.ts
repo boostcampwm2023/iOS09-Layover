@@ -19,7 +19,7 @@ import { SWAGGER } from 'src/utils/swaggerUtils';
 
 @ApiTags('Member API')
 @Controller('member')
-@ApiResponse(SWAGGER.BAD_REQUEST_RESPONSE)
+@ApiResponse(SWAGGER.SERVER_CUSTOM_RESPONSE)
 @ApiResponse(SWAGGER.HTTP_ERROR_RESPONSE)
 @ApiResponse(SWAGGER.INTERNAL_SERVER_ERROR_RESPONSE)
 export class MemberController {
