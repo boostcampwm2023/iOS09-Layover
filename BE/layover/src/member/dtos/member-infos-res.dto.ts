@@ -2,6 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class MemberInfosResDto {
   @ApiProperty({
+    example: 221,
+    description: '각 멤버를 유일하게 구분하는 id 값',
+  })
+  id: number;
+
+  @ApiProperty({
     example: 'hwani',
     description: '요청한 회원의 닉네임',
   })
@@ -19,7 +25,8 @@ export class MemberInfosResDto {
   })
   profile_image_url: string;
 
-  constructor(username: string, introduce: string, profile_image_url: string) {
+  constructor(id: number, username: string, introduce: string, profile_image_url: string) {
+    this.id = id;
     this.username = username;
     this.introduce = introduce;
     this.profile_image_url = profile_image_url;

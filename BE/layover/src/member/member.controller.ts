@@ -186,12 +186,12 @@ export class MemberController {
   }
 
   @ApiOperation({
-    summary: '회원 정보 요청',
-    description: '회원 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
+    summary: '회원(본인) 정보 요청',
+    description: '회원(본인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: '회원 정보들',
+    description: '회원(본인) 정보들',
     schema: {
       type: 'object',
       properties: {
@@ -222,6 +222,6 @@ export class MemberController {
     }
 
     // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(username, introduce, preSignedUrl));
+    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
   }
 }
