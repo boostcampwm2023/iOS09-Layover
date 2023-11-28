@@ -33,6 +33,8 @@ export class ECustomCode extends EnumType<ECustomCode>() {
 
   static readonly MEMBER01 = new ECustomCode(HttpStatus.BAD_REQUEST, 'MEMBER01', '중복 닉네임이 존재합니다.');
 
+  static readonly MEMBER02 = new ECustomCode(HttpStatus.BAD_REQUEST, 'MEMBER02', '존재하지 않는 회원 id 입니다.');
+
   private constructor(
     readonly statusCode: HttpStatus,
     readonly customCode: string,

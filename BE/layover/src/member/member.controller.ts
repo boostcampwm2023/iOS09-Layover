@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
@@ -208,6 +208,46 @@ export class MemberController {
   async getMemberInfos(@CustomHeader(new JwtValidationPipe()) payload) {
     const id = payload.memberId;
     const member = await this.memberService.findMemberById(id);
+
+    const username = member.username;
+    const introduce = member.introduce;
+    const profileImageKey = member.profile_image_key;
+
+    const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
+    let preSignedUrl: string;
+    if (profileImageKey !== 'default') {
+      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, member.profile_image_key));
+    } else {
+      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, 'default.jpeg')); // 기본 이미지 사용!
+    }
+
+    // 응답
+    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
+  }
+
+  @ApiOperation({
+    summary: '회원(타인) 정보 요청',
+    description: '회원(타인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '회원(타인) 정보들',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'boolean', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(MemberInfosResDto) },
+      },
+    },
+  })
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @Get(':id')
+  async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload, @Param('id') id: number) {
+    const member = await this.memberService.findMemberById(id);
+    if (member === null) throw new CustomResponse(ECustomCode.MEMBER02);
 
     const username = member.username;
     const introduce = member.introduce;

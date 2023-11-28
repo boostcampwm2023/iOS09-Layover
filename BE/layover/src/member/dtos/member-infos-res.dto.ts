@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class MemberInfosResDto {
   @ApiProperty({
     example: 221,
-    description: '각 멤버를 유일하게 구분하는 id 값',
+    description: '요청한 회원의 id 값(해당 회원을 유일하게 구분하는 값)',
   })
   id: number;
 
