@@ -13,6 +13,8 @@ import { IntroduceResDto } from './member/dtos/introduce-res.dto';
 import { DeleteMemberResDto } from './member/dtos/delete-member-res.dto';
 import { ProfilePresignedUrlResDto } from './member/dtos/profile-presigned-url-res.dto';
 import { MemberInfosResDto } from './member/dtos/member-infos-res.dto';
+import { BoardsResDto } from './board/dtos/boards-res.dto';
+import { BoardResDto } from './board/dtos/board-res-dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -31,7 +33,7 @@ async function bootstrap() {
   );
   const config = new DocumentBuilder().setTitle('Layover API Documentation').setDescription('The Layover API description').setVersion('0.0.0.0.1').addTag('Layover').build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto, CreateBoardResDto, UsernameResDto, IntroduceResDto, DeleteMemberResDto, ProfilePresignedUrlResDto, MemberInfosResDto],
+    extraModels: [TokenResDto, PresignedUrlResDto, CheckUsernameResDto, CreateBoardResDto, UsernameResDto, IntroduceResDto, DeleteMemberResDto, ProfilePresignedUrlResDto, MemberInfosResDto, BoardsResDto, BoardResDto],
   });
   SwaggerModule.setup('api', app, document);
 
