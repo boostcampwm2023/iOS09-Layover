@@ -20,12 +20,12 @@ protocol UserWorkerProtocol {
 
 final class UserWorker: UserWorkerProtocol {
 
-    // MARK: Properties
+    // MARK: - Properties
 
     private let userEndPointFactory: UserEndPointFactory
     private let provider: ProviderType
 
-    // MARK: Intializer
+    // MARK: - Intializer
 
     init(userEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(),
          provider: ProviderType = Provider()) {
@@ -33,14 +33,14 @@ final class UserWorker: UserWorkerProtocol {
         self.provider = provider
     }
 
-    // MARK: Methods
+    // MARK: - Methods
 
     func modifyNickname(to nickname: String) async throws -> String {
         return ""
     }
 
     func checkDuplication(for userName: String) async throws -> Bool {
-        let endPoint = userEndPointFactory.makeCheckUserNameEndPoint(of: userName)
+        let endPoint = userEndPointFactory.makeUserNameIsDuplicateEndPoint(of: userName)
         do {
             let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
             guard let data = try await provider.request(with: endPoint, authenticationIfNeeded: false).data else {

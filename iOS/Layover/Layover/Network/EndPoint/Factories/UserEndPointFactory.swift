@@ -9,17 +9,29 @@
 import Foundation
 
 protocol UserEndPointFactory {
-    func makeCheckUserNameEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>>
+    func makeUserNameIsDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>>
+    func makeUserNameModifyEndPoint(into userName: String) -> EndPoint<Response<NicknameDTO>>
 }
 
 final class DefaultUserEndPointFactory: UserEndPointFactory {
-    func makeCheckUserNameEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>> {
+    func makeUserNameIsDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>> {
         var bodyParameters = [String: String]()
         bodyParameters.updateValue(userName, forKey: "username")
 
         return EndPoint(
             path: "/member/check-username",
             method: .POST,
+            bodyParameters: bodyParameters
+        )
+    }
+
+    func makeUserNameModifyEndPoint(into userName: String) -> EndPoint<Response<NicknameDTO>> {
+        var bodyParameters = [String: String]()
+        bodyParameters.updateValue(userName, forKey: "username")
+
+        return EndPoint(
+            path: "/member/username",
+            method: .PATCH,
             bodyParameters: bodyParameters
         )
     }
