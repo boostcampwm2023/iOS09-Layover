@@ -29,6 +29,8 @@ export function makeDownloadPreSignedUrl(bucketname: string, key: string): { pre
     region: process.env.NCLOUD_S3_REGION,
   });
 
+  console.log(bucketname);
+
   const preSignedUrl: string = s3.getSignedUrl('getObject', {
     Bucket: bucketname,
     Key: key,
