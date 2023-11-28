@@ -11,7 +11,8 @@ import UIKit
 enum PlaybackModels {
 
     // MARK: - Use Cases
-    enum PerformPlayback {
+
+    enum PlaybackVideoList {
         struct Request {
 
         }
@@ -21,7 +22,12 @@ enum PlaybackModels {
         }
 
         struct ViewModel {
-            
+            enum ParentView {
+                case home
+                case other
+            }
+            let parentView: ParentView
+            let videos: [VideoDTO]
         }
     }
 
