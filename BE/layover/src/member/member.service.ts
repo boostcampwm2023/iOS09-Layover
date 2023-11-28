@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Member } from './member.entity';
-import { makeUploadPreSignedUrl } from 'src/utils/s3Utils';
+import { makeDownloadPreSignedUrl, makeUploadPreSignedUrl } from 'src/utils/s3Utils';
 
 @Injectable()
 export class MemberService {
@@ -57,7 +57,11 @@ export class MemberService {
     return await this.memberRepository.findOne({ where: { id } });
   }
 
-  makePreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
+  makeUploadPreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
     return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
+  }
+
+  makeDownloadPresignedUrl(bucketname: string, key: string): { preSignedUrl: string } {
+    return makeDownloadPreSignedUrl(bucketname, key);
   }
 }

@@ -15,14 +15,14 @@ import { CustomHeader } from 'src/pipes/custom-header.decorator';
 @ApiTags('OAuth API')
 @Controller('oauth')
 @ApiResponse({
-  status: HttpStatus.UNAUTHORIZED,
-  description: '잘못된 요청',
+  status: HttpStatus.BAD_REQUEST,
+  description: 'client의 요청이 잘못된 경우',
   schema: {
     type: 'object',
     properties: {
       customCode: { type: 'string', example: 'OAUTH__' },
       message: { type: 'string', example: '응답코드에 맞는 메시지' },
-      statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+      statusCode: { type: 'number', example: HttpStatus.BAD_REQUEST },
     },
   },
 })
@@ -69,6 +69,18 @@ export class OauthController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '회원가입 되지 않은 경우',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'OAUTH__' },
+        message: { type: 'string', example: '응답코드에 맞는 메시지' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+      },
+    },
+  })
   @Post('kakao')
   async processKakaoLogin(@Body() kakaoLoginDto: KakaoLoginDto) {
     // memberHash 구하기
@@ -98,6 +110,18 @@ export class OauthController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '회원가입 되지 않은 경우',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'OAUTH__' },
+        message: { type: 'string', example: '응답코드에 맞는 메시지' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+      },
+    },
+  })
   @Post('apple')
   async processAppleLogin(@Body() appleLoginDto: AppleLoginDto) {
     // memberHash 구하기
@@ -124,6 +148,18 @@ export class OauthController {
         message: { type: 'string', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(TokenResDto) },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '회원가입 되지 않은 경우',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'OAUTH__' },
+        message: { type: 'string', example: '응답코드에 맞는 메시지' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
     },
   })
@@ -166,6 +202,18 @@ export class OauthController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '회원가입 되지 않은 경우',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'OAUTH__' },
+        message: { type: 'string', example: '응답코드에 맞는 메시지' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+      },
+    },
+  })
   @Post('signup/apple')
   async processAppleSignup(@Body() appleSignupDto: AppleSignupDto) {
     const [identityToken, username] = [appleSignupDto.identityToken, appleSignupDto.username];
@@ -202,6 +250,18 @@ export class OauthController {
         message: { type: 'string', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(TokenResDto) },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '리프레시 토큰 유효기간 만료',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'JWT02' },
+        message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
+        statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
     },
   })
