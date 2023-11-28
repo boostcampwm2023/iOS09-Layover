@@ -48,4 +48,15 @@ export class BoardResDto {
     description: '영상 인코딩 상태',
   })
   status: string;
+
+  constructor(id: number, sd_url: string, hd_url: string, video_thumbnail: string, location: string, title: string, content: string, status: string) {
+    this.id = id;
+    this.sd_url = sd_url;
+    this.hd_url = hd_url;
+    this.video_thumbnail = video_thumbnail;
+    this.location = location;
+    this.title = title;
+    this.content = content;
+    this.status = status;
+  }
 }

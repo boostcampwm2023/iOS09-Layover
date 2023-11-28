@@ -14,4 +14,10 @@ export class BoardsResDto {
     description: '게시글의 태그',
   })
   tag: string[];
+
+  constructor(member: MemberInfosResDto, board: BoardResDto, tag: string[]) {
+    this.member = member;
+    this.board = board;
+    this.tag = tag;
+  }
 }
