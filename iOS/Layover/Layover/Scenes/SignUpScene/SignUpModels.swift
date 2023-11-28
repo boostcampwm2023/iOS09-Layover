@@ -31,7 +31,7 @@ enum SignUpModels {
             var nickname: String
         }
         struct Response {
-            var isDuplicate: Bool
+            var isValid: Bool
         }
         struct ViewModel {
             var canSignUp: Bool

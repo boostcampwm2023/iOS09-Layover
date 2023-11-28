@@ -7,23 +7,7 @@
 //
 
 import Foundation
-
-enum NicknameState {
-    case valid
-    case lessThan2GreaterThan8
-    case invalidCharacter
-
-    var alertDescription: String? {
-        switch self {
-        case .valid:
-            return nil
-        case .lessThan2GreaterThan8:
-            return "2자 이상 8자 이하로 입력해주세요."
-        case .invalidCharacter:
-            return "입력할 수 없는 문자입니다."
-        }
-    }
-}
+import OSLog
 
 final class MockUserWorker: UserWorkerProtocol {
 
@@ -44,94 +28,106 @@ final class MockUserWorker: UserWorkerProtocol {
         return .valid
     }
 
-    func updateNickname(to nickname: String) async throws -> String {
+    func modifyNickname(to nickname: String) async -> String? {
         guard let fileLocation = Bundle.main.url(forResource: "PatchUserName",
-                                                 withExtension: "json") else { throw NetworkError.unknown }
-        let mockData = try Data(contentsOf: fileLocation)
-        MockURLProtocol.requestHandler = { request in
-            let response = HTTPURLResponse(url: request.url!,
-                                           statusCode: 200,
-                                           httpVersion: nil,
-                                           headerFields: nil)
-            return (response, mockData, nil)
+                                                 withExtension: "json") else { return nil }
+
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint: EndPoint = EndPoint<Response<NicknameDTO>>(path: "/member/username",
+                                                                     method: .PATCH,
+                                                                     bodyParameters: NicknameDTO(userName: nickname),
+                                                                     headers: headers)
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { return nil }
+            return data.userName
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
         }
-        let endPoint: EndPoint = EndPoint<Response<NicknameDTO>>(path: "/member/username",
-                                                            method: .PATCH,
-                                                            bodyParameters: NicknameDTO(userName: nickname),
-                                                            headers: headers)
-        let response = try await provider.request(with: endPoint)
-        guard let data = response.data else { throw NetworkError.emptyData }
-        return data.userName
     }
 
-    func checkDuplication(for nickname: String) async throws -> Bool {
+    func checkDuplication(for userName: String) async -> Bool {
         guard let fileLocation = Bundle.main.url(forResource: "CheckUserName",
-                                                 withExtension: "json") else { throw NetworkError.unknown }
-        let mockData = try Data(contentsOf: fileLocation)
-        MockURLProtocol.requestHandler = { request in
-            let response = HTTPURLResponse(url: request.url!,
-                                           statusCode: 200,
-                                           httpVersion: nil,
-                                           headerFields: nil)
-            return (response, mockData, nil)
+                                                 withExtension: "json") else { return false }
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
+                                                                method: .POST,
+                                                                bodyParameters: NicknameDTO(userName: userName),
+                                                                headers: headers)
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { throw NetworkError.emptyData }
+            return data.isValid
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return false
         }
-        let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
-                                                            method: .POST,
-                                                            bodyParameters: NicknameDTO(userName: nickname),
-                                                            headers: headers)
-        let response = try await provider.request(with: endPoint)
-        guard let data = response.data else { throw NetworkError.emptyData }
-        return data.exist
     }
 
-    func updateIntroduce(to introduce: String) async throws -> String {
+    func modifyIntroduce(to introduce: String) async -> String? {
         guard let fileLocation = Bundle.main.url(forResource: "PatchIntroduce",
-                                                 withExtension: "json") else { throw NetworkError.unknown }
-        let mockData = try Data(contentsOf: fileLocation)
-        MockURLProtocol.requestHandler = { request in
-            let response = HTTPURLResponse(url: request.url!,
-                                           statusCode: 200,
-                                           httpVersion: nil,
-                                           headerFields: nil)
-            return (response, mockData, nil)
-        }
+                                                 withExtension: "json") else { return nil }
 
-        let endPoint = EndPoint<Response<IntroduceDTO>>(path: "/member/introduce",
-                                                      method: .PATCH,
-                                                      bodyParameters: IntroduceDTO(introduce: introduce),
-                                                      headers: headers)
-        let response = try await provider.request(with: endPoint)
-        guard let data = response.data else { throw NetworkError.emptyData }
-        return data.introduce
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+
+            let endPoint = EndPoint<Response<IntroduceDTO>>(path: "/member/introduce",
+                                                            method: .PATCH,
+                                                            bodyParameters: IntroduceDTO(introduce: introduce),
+                                                            headers: headers)
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { return nil }
+            return data.introduce
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
     }
 
-    func withdraw() async throws -> String {
+    func withdraw() async -> String? {
         guard let fileLocation = Bundle.main.url(forResource: "DeleteUser",
-                                                 withExtension: "json") else { throw NetworkError.unknown }
-        let mockData = try Data(contentsOf: fileLocation)
-        MockURLProtocol.requestHandler = { request in
-            let response = HTTPURLResponse(url: request.url!,
-                                           statusCode: 200,
-                                           httpVersion: nil,
-                                           headerFields: nil)
-            return (response, mockData, nil)
+                                                 withExtension: "json") else { return nil }
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint = EndPoint<Response<NicknameDTO>>(path: "/member",
+                                                           method: .DELETE,
+                                                           headers: ["Authorization": "mock token"])
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { throw NetworkError.emptyData }
+            return data.userName
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
         }
-        let endPoint = EndPoint<Response<NicknameDTO>>(path: "/member",
-                                                  method: .DELETE,
-                                                  headers: ["Authorization": "mock token"])
-        let response = try await provider.request(with: endPoint)
-        guard let data = response.data else { throw NetworkError.emptyData }
-        return data.userName
     }
 
-}
-
-protocol UserWorkerProtocol {
-    func validateNickname(_ nickname: String) -> NicknameState
-    func updateNickname(to nickname: String) async throws -> String
-    func checkDuplication(for nickname: String) async throws -> Bool
-    // TODO: multipart request 구현
-    // func updateProfileImage() async throws -> URL
-    func updateIntroduce(to introduce: String) async throws -> String
-    func withdraw() async throws -> String
 }

@@ -24,10 +24,10 @@ final class SignUpWorker {
 
     // MARK: Intializer
 
-    init(endPointFactory: SignUpEndPointFactory = DefaultSignUpEndPointFactory(), 
+    init(signUpEndPointFactory: SignUpEndPointFactory = DefaultSignUpEndPointFactory(),
          provider: ProviderType = Provider(),
          authManager: AuthManagerProtocol = AuthManager.shared) {
-        self.signUpEndPointFactory = endPointFactory
+        self.signUpEndPointFactory = signUpEndPointFactory
         self.provider = provider
         self.authManager = authManager
     }
@@ -36,6 +36,7 @@ final class SignUpWorker {
 // MARK: - SignUpWorkerProtocol
 
 extension SignUpWorker: SignUpWorkerProtocol {
+
     func signUp(withKakao socialToken: String, username: String) async -> Bool {
         let endPoint = signUpEndPointFactory.makeKakaoSignUpEndPoint(socialToken: socialToken, username: username)
         do {

@@ -36,7 +36,7 @@ struct DefaultLoginEndPointFactory: LoginEndPointFactory {
             bodyParameters: bodyParameters
         )
     }
-    
+
     func makeAppleLoginEndPoint(with identityToken: String) -> EndPoint<Response<LoginDTO>> {
         var bodyParameters: [String: String] = [String: String]()
         bodyParameters.updateValue(identityToken, forKey: "identityToken")
