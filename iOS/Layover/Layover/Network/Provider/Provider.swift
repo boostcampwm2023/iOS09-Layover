@@ -26,9 +26,13 @@ extension ProviderType {
 
 class Provider: ProviderType {
 
+    // MARK: - Properties
+
     private let session: URLSession
     private let authManager: AuthManagerProtocol
     private let loginEndPointFactory: LoginEndPointFactory
+
+    // MARK: Initializer
 
     init(session: URLSession = URLSession.shared,
          authManager: AuthManagerProtocol = AuthManager.shared,
@@ -37,6 +41,8 @@ class Provider: ProviderType {
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
     }
+
+    // MARK: Methods
 
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E,
                                                       authenticationIfNeeded: Bool,
@@ -90,7 +96,7 @@ class Provider: ProviderType {
         return try data.decode()
     }
 
-    func checkStatusCode(of response: URLResponse) throws {
+    private func checkStatusCode(of response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
             throw NetworkError.unknown
         }
@@ -101,7 +107,7 @@ class Provider: ProviderType {
         }
     }
 
-    func refreshTokenIfNeeded() async -> Bool {
+    private func refreshTokenIfNeeded() async -> Bool {
         guard let refreshToken = authManager.refreshToken else { return false }
         let endPoint = loginEndPointFactory.makeTokenRefreshEndPoint(with: refreshToken)
         do {
