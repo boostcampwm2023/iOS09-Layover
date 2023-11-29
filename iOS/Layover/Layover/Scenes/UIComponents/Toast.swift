@@ -9,46 +9,39 @@
 import UIKit
 
 final class Toast {
-    private let toastMessageLabel: UILabel = {
-        let label: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 192, height: 46))
-        // Font 추천 바람
-        label.font = .loFont(type: .body2Semibold)
-        label.layer.cornerRadius = 8
-        label.backgroundColor = .background
-        label.textColor = .layoverWhite
-        label.alpha = 0.0
-        label.textAlignment = .center
-        return label
-    }()
-
     static let shared = Toast()
 
-    private init() {
+    private init() {}
+
+    func showToast(message: String) {
         let scenes: Set<UIScene> = UIApplication.shared.connectedScenes
         let windowScene: UIWindowScene? = scenes.first as? UIWindowScene
         let window: UIWindow? = windowScene?.windows.first
-        window?.addSubview(toastMessageLabel)
-        guard let windowWidth: CGFloat = windowScene?.screen.bounds.width else {
-            return
-        }
-        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else {
-            return
-        }
-        toastMessageLabel.frame = CGRect(
-            x: (windowWidth - 192) / 2,
-            y: (windowHeight - 46) / 2,
-            width: 192,
-            height: 46)
-    }
+        let toastLabel: UILabel = UILabel()
+        guard let windowWidth: CGFloat = windowScene?.screen.bounds.width else { return }
+        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
+        toastLabel.backgroundColor = .background
+        toastLabel.textColor = .layoverWhite
+        toastLabel.textAlignment = .center
+        toastLabel.font = .loFont(type: .body2)
+        toastLabel.text = message
+        toastLabel.layer.cornerRadius = 8
+        toastLabel.clipsToBounds  =  true
+        toastLabel.numberOfLines = 1
+        toastLabel.layer.opacity = 0.8
+        let size: CGSize = toastLabel.intrinsicContentSize
+        toastLabel.frame = CGRect(
+            x: (windowWidth - size.width) / 2,
+            y: (windowHeight - size.height) / 2,
+            width: size.width,
+            height: size.height)
 
-    func showToast(message: String) {
-        toastMessageLabel.text = message
-        UIView.animate(withDuration: 1.0, delay: 0.1, animations: {
-            self.toastMessageLabel.alpha = 1.0
+        window?.addSubview(toastLabel)
+
+        UIView.animate(withDuration: 2.0, delay: 0.1, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
         }, completion: { _ in
-            UIView.animate(withDuration: 1.0, delay: 0.1, animations: {
-                self.toastMessageLabel.alpha = 0.0
-            })
+            toastLabel.removeFromSuperview()
         })
     }
 }
