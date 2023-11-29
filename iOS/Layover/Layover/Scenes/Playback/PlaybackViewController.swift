@@ -18,6 +18,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -85,8 +86,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        prevPlaybackCell?.playbackView.playerSlider.isHidden = true
-//        prevPlaybackCell?.playbackView.stopPlayer()
+        interactor?.leavePlaybackView()
     }
 
     override func viewDidLayoutSubviews() {
@@ -161,6 +161,11 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         guard let indexPathRow = viewModel.indexPathRow else { return }
         let willTeleportlocation: CGFloat = CGFloat(indexPathRow) * playbackCollectionView.bounds.height
         playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: willTeleportlocation), animated: false)
+    }
+
+    func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        viewModel.prevCell?.playbackView.playerSlider.isHidden = true
+        viewModel.prevCell?.playbackView.stopPlayer()
     }
 }
 
