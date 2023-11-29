@@ -80,6 +80,7 @@ extension SceneDelegate {
     @objc private func routeToLoginViewController() {
         guard let rootNavigationViewController = window?.rootViewController as? UINavigationController else { return }
         // TODO: 세션이 만료되었습니다. Toast 띄우기
+        rootNavigationViewController.setNavigationBarHidden(false, animated: false)
         rootNavigationViewController.setViewControllers([LoginViewController()], animated: true)
     }
 }

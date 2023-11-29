@@ -35,7 +35,7 @@ class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         destination.nickname = source.nickname
         destination.introduce = source.introduce
         destination.profileImage = source.profileImage
-
+        editProfileViewController.hidesBottomBarWhenPushed = true
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
