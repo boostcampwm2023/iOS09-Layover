@@ -6,10 +6,11 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+import AVFoundation
 import UIKit
 
 protocol EditVideoDisplayLogic: AnyObject {
-    func displayVideo()
+    func displayVideo(viewModel: EditVideoModels.FetchVideo.ViewModel)
 }
 
 final class EditVideoViewController: BaseViewController {
@@ -21,13 +22,15 @@ final class EditVideoViewController: BaseViewController {
         return playerView
     }()
 
-    private let soundButton: LOCircleButton = {
+    private lazy var soundButton: LOCircleButton = {
         let button = LOCircleButton(style: .sound, diameter: 52)
+        button.addTarget(self, action: #selector(soundButtonDidTap), for: .touchUpInside)
         return button
     }()
 
-    private let cutButton: LOCircleButton = {
+    private lazy var cutButton: LOCircleButton = {
         let button = LOCircleButton(style: .scissors, diameter: 52)
+        button.addTarget(self, action: #selector(cutButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -65,6 +68,7 @@ final class EditVideoViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        interactor?.fetchVideo()
     }
 
     override func setConstraints() {
@@ -92,12 +96,30 @@ final class EditVideoViewController: BaseViewController {
         ])
     }
 
+    @objc private func soundButtonDidTap() {
+        loopingPlayerView.player?.isMuted.toggle()
+        soundButton.isSelected.toggle()
+    }
+
+    @objc private func cutButtonDidTap() {
+        // route EditViewController
+    }
+
 }
 
 extension EditVideoViewController: EditVideoDisplayLogic {
 
-    func displayVideo() {
-
+    func displayVideo(viewModel: EditVideoModels.FetchVideo.ViewModel) {
+        Task {
+            let duration = try await AVAsset(url: viewModel.videoURL).load(.duration)
+            let seconds = CMTimeGetSeconds(duration)
+            await MainActor.run {
+                loopingPlayerView.prepareVideo(with: viewModel.videoURL,
+                                               loopStart: .zero,
+                                               duration: seconds)
+                loopingPlayerView.play()
+            }
+        }
     }
 
 }

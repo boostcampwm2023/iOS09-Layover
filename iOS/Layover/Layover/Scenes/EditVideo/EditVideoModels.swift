@@ -10,4 +10,16 @@ import UIKit
 
 enum EditVideoModels {
 
+    enum FetchVideo {
+        struct Request {
+
+        }
+        struct Response {
+            var videoURL: URL
+        }
+        struct ViewModel {
+            var videoURL: URL
+        }
+    }
+
 }

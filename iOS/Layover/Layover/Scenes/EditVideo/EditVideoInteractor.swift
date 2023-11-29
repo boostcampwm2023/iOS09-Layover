@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditVideoBusinessLogic {
-
+    func fetchVideo()
 }
 
 protocol EditVideoDataStore {
@@ -25,6 +25,9 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
     lazy var worker = EditVideoWorker()
     var presenter: EditVideoPresentationLogic?
 
-    var exampleVariable: String?
+    func fetchVideo() {
+        let response =  Models.FetchVideo.Response(videoURL: URL(string: "https://assets.afcdn.com/video49/20210722/v_645516.m3u8")!)
+        presenter?.presentVideo(with: response)
+    }
 
 }

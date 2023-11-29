@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditVideoPresentationLogic {
-
+    func presentVideo(with response: EditVideoModels.FetchVideo.Response)
 }
 
 final class EditVideoPresenter: EditVideoPresentationLogic {
@@ -19,4 +19,8 @@ final class EditVideoPresenter: EditVideoPresentationLogic {
     typealias Models = EditVideoModels
     weak var viewController: EditVideoDisplayLogic?
 
+    func presentVideo(with response: EditVideoModels.FetchVideo.Response) {
+        let viewModel = Models.FetchVideo.ViewModel(videoURL: response.videoURL)
+        viewController?.displayVideo(viewModel: viewModel)
+    }
 }
