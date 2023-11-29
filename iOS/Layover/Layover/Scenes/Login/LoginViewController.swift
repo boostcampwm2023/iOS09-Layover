@@ -128,8 +128,7 @@ final class LoginViewController: BaseViewController {
 
     @objc private func appleLoginButtonTapped(_ sender: UIButton) {
         let request = LoginModels.PerformAppleLogin.Request(loginViewController: self)
-//        interactor?.performAppleLogin(with: request)
-        Toast.shared.showToast(message: "토스트 테스트용 입니다.")
+        interactor?.performAppleLogin(with: request)
     }
 }
 
