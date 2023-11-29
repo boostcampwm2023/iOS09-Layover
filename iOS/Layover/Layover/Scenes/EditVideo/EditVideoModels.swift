@@ -16,9 +16,13 @@ enum EditVideoModels {
         }
         struct Response {
             var videoURL: URL
+            var duration: Double
+            var isWithinRange: Bool
         }
         struct ViewModel {
             var videoURL: URL
+            var duration: Double
+            var canNext: Bool
         }
     }
 

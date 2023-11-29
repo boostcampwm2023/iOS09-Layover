@@ -20,7 +20,9 @@ final class EditVideoPresenter: EditVideoPresentationLogic {
     weak var viewController: EditVideoDisplayLogic?
 
     func presentVideo(with response: EditVideoModels.FetchVideo.Response) {
-        let viewModel = Models.FetchVideo.ViewModel(videoURL: response.videoURL)
+        let viewModel = Models.FetchVideo.ViewModel(videoURL: response.videoURL,
+                                                    duration: response.duration,
+                                                    canNext: response.isWithinRange)
         viewController?.displayVideo(viewModel: viewModel)
     }
 }

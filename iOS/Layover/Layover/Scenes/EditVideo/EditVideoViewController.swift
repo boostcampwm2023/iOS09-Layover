@@ -72,6 +72,7 @@ final class EditVideoViewController: BaseViewController {
     }
 
     override func setConstraints() {
+        super.setConstraints()
         view.addSubviews(loopingPlayerView, soundButton, cutButton, nextButton)
         view.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +87,7 @@ final class EditVideoViewController: BaseViewController {
             soundButton.trailingAnchor.constraint(equalTo: cutButton.leadingAnchor, constant: -9),
             soundButton.bottomAnchor.constraint(equalTo: loopingPlayerView.bottomAnchor, constant: -15),
 
-            cutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            cutButton.trailingAnchor.constraint(equalTo: loopingPlayerView.trailingAnchor, constant: -15),
             cutButton.bottomAnchor.constraint(equalTo: loopingPlayerView.bottomAnchor, constant: -15),
 
             nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
@@ -110,16 +111,11 @@ final class EditVideoViewController: BaseViewController {
 extension EditVideoViewController: EditVideoDisplayLogic {
 
     func displayVideo(viewModel: EditVideoModels.FetchVideo.ViewModel) {
-        Task {
-            let duration = try await AVAsset(url: viewModel.videoURL).load(.duration)
-            let seconds = CMTimeGetSeconds(duration)
-            await MainActor.run {
-                loopingPlayerView.prepareVideo(with: viewModel.videoURL,
-                                               loopStart: .zero,
-                                               duration: seconds)
-                loopingPlayerView.play()
-            }
-        }
+        loopingPlayerView.prepareVideo(with: viewModel.videoURL,
+                                       loopStart: .zero,
+                                       duration: viewModel.duration)
+        loopingPlayerView.play()
+        nextButton.isEnabled = viewModel.canNext
     }
 
 }
