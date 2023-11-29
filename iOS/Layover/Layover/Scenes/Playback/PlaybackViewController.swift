@@ -73,6 +73,11 @@ final class PlaybackViewController: BaseViewController {
         interactor?.displayVideoList()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        } catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
