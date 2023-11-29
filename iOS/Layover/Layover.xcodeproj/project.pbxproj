@@ -58,6 +58,7 @@
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */; };
 		836C338F2B160CC700ECAFB0 /* MemberDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338E2B160CC700ECAFB0 /* MemberDTO.swift */; };
+		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
 		FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC25119F2B045C0A004717BC /* SignUpInteractor.swift */; };
@@ -180,6 +181,7 @@
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
 		836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDTO.swift; sourceTree = "<group>"; };
 		836C338E2B160CC700ECAFB0 /* MemberDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDTO.swift; sourceTree = "<group>"; };
+		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
 		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
 		FC25119F2B045C0A004717BC /* SignUpInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInteractor.swift; sourceTree = "<group>"; };
@@ -417,6 +419,7 @@
 				FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */,
 				FC2511B02B04EAEC004717BC /* MapModels.swift */,
 				FC767FA92B126D080088CF9B /* LOAnnotation.swift */,
+				836C33902B17629400ECAFB0 /* MapRouter.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -807,6 +810,7 @@
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
 				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
+				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,

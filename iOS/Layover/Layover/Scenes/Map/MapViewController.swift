@@ -11,6 +11,7 @@ import UIKit
 
 protocol MapDisplayLogic: AnyObject {
     func displayFetchedVideos(viewModel: MapModels.FetchVideo.ViewModel)
+    func routeToPlayback()
 }
 
 final class MapViewController: BaseViewController {
@@ -61,6 +62,41 @@ final class MapViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.configure(url: item.videoURL)
+        cell.moveToPlaybackSceneCallback = {
+            self.interactor?.moveToPlaybackScene(with: Models.MoveToPlaybackScene.Request(index: indexPath.row, videos: [
+                VideoDTO(title: "찹모찌1",
+                         content: "찹모찌의 뜻은 뭘 까?",
+                         location: "첫번째 우주",
+                         tags: ["찹"],
+                         member: MemberDTO(
+                            username: "찹모찌",
+                            introduce: "찹모찌임당",
+                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!),
+                VideoDTO(title: "찹모찌2",
+                         content: "찹모찌의 뜻은 뭘 까??",
+                         location: "첫번째 우주",
+                         tags: ["찹", "모"],
+                         member: MemberDTO(
+                            username: "찹모찌",
+                            introduce: "찹모찌임당",
+                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!),
+                VideoDTO(title: "찹모찌3",
+                         content: "찹모찌의 뜻은 뭘 까??",
+                         location: "첫번째 우주",
+                         tags: ["찹", "모"],
+                         member: MemberDTO(
+                            username: "찹모찌",
+                            introduce: "찹모찌임당",
+                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
+            ]))
+        }
+        cell.addLoopingViewGesture()
         return cell
     }
 
@@ -69,6 +105,7 @@ final class MapViewController: BaseViewController {
     typealias Models = MapModels
     typealias ViewModel = Models.FetchVideo.ViewModel
     var interactor: MapBusinessLogic?
+    var router: (MapRoutingLogic & MapDataPassing)?
 
     private lazy var carouselCollectionViewHeight: NSLayoutConstraint = carouselCollectionView.heightAnchor.constraint(equalToConstant: 0)
 
@@ -215,6 +252,10 @@ extension MapViewController: MapDisplayLogic {
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.videoDataSources)
         carouselDatasource.apply(snapshot)
+    }
+
+    func routeToPlayback() {
+        router?.routeToPlayback()
     }
 
 }

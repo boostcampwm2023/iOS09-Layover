@@ -25,6 +25,8 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         render()
     }
 
+    var moveToPlaybackSceneCallback: (() -> Void) = { }
+
     func configure(url: URL) {
         loopingPlayerView.prepareVideo(with: url,
                                        timeRange: CMTimeRange(start: .zero, duration: CMTime(value: 1800, timescale: 600)))
@@ -48,4 +50,13 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         clipsToBounds = true
     }
 
+    func addLoopingViewGesture() {
+        let loopingViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(moveToPlaybackScene))
+        loopingPlayerView.addGestureRecognizer(loopingViewGesture)
+    }
+
+    @objc func moveToPlaybackScene() {
+        moveToPlaybackSceneCallback()
+        loopingPlayerView.pause()
+    }
 }

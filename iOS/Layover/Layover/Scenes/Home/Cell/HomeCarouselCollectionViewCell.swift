@@ -73,7 +73,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.pause()
     }
 
-    func loopingViewAddGesture() {
+    func addLoopingViewGesture() {
         let loopingViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(moveToPlaybackScene))
         loopingPlayerView.addGestureRecognizer(loopingViewGesture)
     }
