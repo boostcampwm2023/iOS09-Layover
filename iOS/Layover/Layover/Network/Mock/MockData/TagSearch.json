@@ -10,7 +10,8 @@
                 "id" : 1,
                 "url" : "https://assets.afcdn.com/video49/20210722/v_645516.m3u8",
                 "video_thumbnail" : "https://think-note.com/wp-content/uploads/2023/07/eta_3.jpg",
-                "location" : "locatoin_value",
+                "longitude" : "37.0532156213",
+                "latitude" : "127.060123123",
                 "title" : "최강 아이돌",
                 "content" : "게시글 설명"
             },
@@ -26,7 +27,8 @@
                 "id" : 2,
                 "url" : "https://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8",
                 "video_thumbnail" : "video_thumbnail_link",
-                "location" : "locatoin_value",
+                "longitude" : "37.0532156213",
+                "latitude" : "127.060123123",
                 "title" : "프로듀스 101",
                 "content" : "게시글 설명"
             },
@@ -42,7 +44,8 @@
                 "id" : 3,
                 "url" : "https://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8",
                 "video_thumbnail" : "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize",
-                "location" : "",
+                "longitude" : "37.0532156213",
+                "latitude" : "127.060123123",
                 "title" : "프로미스 나인",
                 "content" : "게시글 설명"
             },
@@ -59,7 +62,8 @@
                 "id" : 4,
                 "url" : "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
                 "video_thumbnail" : "https://res.heraldm.com/content/image/2023/04/16/20230416000040_0.jpg",
-                "location" : "locatoin_value",
+                "longitude" : "37.0532156213",
+                "latitude" : "127.060123123",
                 "title" : "아이즈원",
                 "content" : "게시글 설명2"
             },
