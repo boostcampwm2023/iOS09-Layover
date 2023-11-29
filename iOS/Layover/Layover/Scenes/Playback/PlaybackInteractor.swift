@@ -12,7 +12,6 @@ protocol PlaybackBusinessLogic {
     func displayVideoList()
     func moveInitialPlaybackCell()
     func hidePlayerSlider()
-    func moveCellIfInfinite(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func setInitialPlaybackCell()
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
@@ -61,6 +60,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         presenter?.presentVideoList(with: response)
     }
 
+    // MARK: - UseCase Load Video List
+
     func moveInitialPlaybackCell() {
         let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
         if parentView == .other {
@@ -68,9 +69,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         } else {
             presenter?.presentMoveInitialPlaybackCell(with: response)
         }
-    }
-
-    func moveCellIfInfinite(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
     }
 
     func setInitialPlaybackCell() {
@@ -85,6 +83,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
         presenter?.presentSetInitialPlaybackCell(with: response)
     }
+
+    // MARK: - UseCase Playback Video
 
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
         prevCell = request.curCell
@@ -106,6 +106,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             isTeleport = false
             return
         }
+        // Home이 아닌 다른 뷰에서 왔을 경우(로드한 목록 무한 반복)
         if parentView == .other {
             if request.indexPathRow == (videos.count - 1) {
                 response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, prevCell: prevCell, curCell: nil)
@@ -122,6 +123,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             presenter?.presentTeleportCell(with: response)
             return
         }
+        // Home이면 다음 셀로 이동(추가적인 비디오 로드)
         isTeleport = false
         response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
         prevCell = request.curCell

@@ -25,11 +25,11 @@ enum PlaybackModels {
         case other
     }
 
-    // MARK: - Use Cases
+    // MARK: - UseCase Load Video List
 
     enum LoadPlaybackVideoList {
         struct Request {
-            
+
         }
 
         struct Response {
@@ -40,6 +40,24 @@ enum PlaybackModels {
             let videos: [Board]
         }
     }
+
+    // MARK: - UseCase Set Init Playback Scene
+
+    enum SetInitialPlaybackCell {
+        struct Request {
+            let indexPathRow: Int
+        }
+
+        struct Response {
+            let indexPathRow: Int
+        }
+
+        struct ViewModel {
+            let indexPathRow: Int
+        }
+    }
+
+    // MARK: - UseCase Playback Video
 
     enum DisplayPlaybackVideo {
         struct Request {
@@ -69,20 +87,6 @@ enum PlaybackModels {
                 self.prevCell = prevCell
                 self.curCell = curCell
             }
-        }
-    }
-
-    enum SetInitialPlaybackCell {
-        struct Request {
-            let indexPathRow: Int
-        }
-
-        struct Response {
-            let indexPathRow: Int
-        }
-
-        struct ViewModel {
-            let indexPathRow: Int
         }
     }
 

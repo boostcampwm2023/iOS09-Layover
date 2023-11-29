@@ -11,13 +11,12 @@ import UIKit
 protocol PlaybackPresentationLogic {
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response)
     func presentSetCellIfInfinite()
-    func presentMoveCellInfinite()
     func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
+    func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
-    func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
 }
 
@@ -28,7 +27,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     typealias Models = PlaybackModels
     weak var viewController: PlaybackDisplayLogic?
 
-    // MARK: - UseCase
+    // MARK: - UseCase Load Video List
 
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
         let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
@@ -39,14 +38,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
         viewController?.displayMoveCellIfinfinite()
     }
 
-    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: response.curCell)
-        viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
-    }
-
-    func presentMoveCellInfinite() {
-        //
-    }
+    // MARK: - UseCase Set Init Playback Scene
 
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
         let viewModel: Models.SetInitialPlaybackCell.ViewModel = Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow)
@@ -56,6 +48,13 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
         let viewModel: Models.SetInitialPlaybackCell.ViewModel = Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow)
         viewController?.moveInitialPlaybackCell(viewModel: viewModel)
+    }
+
+    // MARK: - UseCase Playback Video
+
+    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: response.curCell)
+        viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
     }
 
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
