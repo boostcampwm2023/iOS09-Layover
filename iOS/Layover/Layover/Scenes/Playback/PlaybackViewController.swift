@@ -17,6 +17,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -159,6 +160,12 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         let willMoveLocation: CGFloat = CGFloat(viewModel.indexPathRow) * playbackCollectionView.bounds.height
         playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: willMoveLocation), animated: false)
     }
+
+    func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        guard let indexPathRow = viewModel.indexPathRow else { return }
+        let willTeleportlocation: CGFloat = CGFloat(indexPathRow) * playbackCollectionView.bounds.height
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: willTeleportlocation), animated: false)
+    }
 }
 
 // MARK: - Playback Method
@@ -279,15 +286,12 @@ extension PlaybackViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if checkTelePort {
-//            let count: Int = videos.count
-//            guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
-//                return
-//            }
-//            if indexPath.row == 1 || indexPath.row == count - 2 {
-//                stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
-//            }
-//        }
+        guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
+            return
+        }
+
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, curCell: currentPlaybackCell)
+        interactor?.playTeleportVideo(with: request)
     }
 }
 //#Preview {

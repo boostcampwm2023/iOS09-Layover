@@ -48,13 +48,27 @@ enum PlaybackModels {
         }
 
         struct Response {
+            let indexPathRow: Int?
             let prevCell: PlaybackCell?
             let curCell: PlaybackCell?
+
+            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+                self.indexPathRow = indexPathRow
+                self.prevCell = prevCell
+                self.curCell = curCell
+            }
         }
 
         struct ViewModel {
+            let indexPathRow: Int?
             let prevCell: PlaybackCell?
             let curCell: PlaybackCell?
+
+            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+                self.indexPathRow = indexPathRow
+                self.prevCell = prevCell
+                self.curCell = curCell
+            }
         }
     }
 

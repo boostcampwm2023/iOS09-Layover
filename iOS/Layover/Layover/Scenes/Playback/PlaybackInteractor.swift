@@ -16,6 +16,7 @@ protocol PlaybackBusinessLogic {
     func setInitialPlaybackCell()
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -23,6 +24,7 @@ protocol PlaybackDataStore: AnyObject {
     var parentView: PlaybackModels.ParentView? { get set }
     var prevCell: PlaybackCell? { get set }
     var index: Int? { get set }
+    var isTeleport: Bool? { get set }
 }
 
 final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
@@ -33,10 +35,16 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     lazy var worker = PlaybackWorker()
     var presenter: PlaybackPresentationLogic?
+
     var videos: [Models.Board]?
+
     var parentView: Models.ParentView?
+
     var prevCell: PlaybackCell?
+
     var index: Int?
+
+    var isTeleport: Bool?
 
     func displayVideoList() {
         guard let parentView: Models.ParentView else {
@@ -47,6 +55,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
         if parentView == .other {
             videos = worker.makeInfiniteScroll(videos: videos)
+            self.videos = videos
         }
         let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
         presenter?.presentVideoList(with: response)
@@ -89,19 +98,46 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        guard let videos else { return }
         var response: Models.DisplayPlaybackVideo.Response
         if prevCell == request.curCell {
             response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
             presenter?.presentShowPlayerSlider(with: response)
+            isTeleport = false
             return
         }
         if parentView == .other {
-            // TelePort
-            // 특정 조건 때 다른 Present call
+            if request.indexPathRow == (videos.count - 1) {
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, prevCell: prevCell, curCell: nil)
+            } else if request.indexPathRow == 0 {
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: videos.count - 2, prevCell: prevCell, curCell: nil)
+            } else {
+                response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+                prevCell = request.curCell
+                presenter?.presentMoveCellNext(with: response)
+                isTeleport = false
+                return
+            }
+            isTeleport = true
+            presenter?.presentTeleportCell(with: response)
             return
         }
+        isTeleport = false
         response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
         prevCell = request.curCell
         presenter?.presentMoveCellNext(with: response)
+    }
+
+    func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        guard let isTeleport else { return }
+        guard let videos else { return }
+        if isTeleport {
+            if request.indexPathRow == 1 || request.indexPathRow == (videos.count - 2) {
+                let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+                prevCell = request.curCell
+                presenter?.presentMoveCellNext(with: response)
+                self.isTeleport = false
+            }
+        }
     }
 }
