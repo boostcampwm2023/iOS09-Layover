@@ -3,10 +3,11 @@ import { CustomResponse } from 'src/response/custom-response';
 import { hashHMACSHA256 } from 'src/utils/hashUtils';
 import { extractHeaderJWTstr, extractPayloadJWT, extractPayloadJWTstr, extractSignatureJWTstr } from 'src/utils/jwtUtils';
 import { ECustomCode } from '../response/ecustom-code.jenum';
+import { tokenPayload } from 'src/utils/interfaces/token.payload';
 
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
-  transform(header) {
+  transform(header): tokenPayload {
     const [tokenType, token] = header['authorization']?.split(' ');
 
     // 기본적으로 헤더에 각 데이터들이 들어있는지 확인
@@ -29,7 +30,7 @@ export class JwtValidationPipe implements PipeTransform {
     // 3. exp를 지났는지 검사
     if (Math.floor(Date.now() / 1000) > payload.exp) throw new CustomResponse(ECustomCode.JWT02);
 
-    // jwt 페이로드를 객체로 변환하여 넘겨줌
-    return extractPayloadJWT(token);
+    // jwt 페이로드를 넘겨줌 (객체형태)
+    return payload;
   }
 }
