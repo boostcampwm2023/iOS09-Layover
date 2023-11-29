@@ -15,6 +15,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -120,7 +121,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         if let prevCell = viewModel.prevCell {
             prevCell.playbackView.stopPlayer()
-            prevPlaybackCell?.playbackView.replayPlayer()
+            prevCell.playbackView.replayPlayer()
         }
         if let curCell = viewModel.curCell {
             curCell.playbackView.playPlayer()
@@ -132,13 +133,19 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: viewModel.indexPathRow, section: 0)) as? PlaybackCell else {
             return
         }
-        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: nil, prevCell: nil, curCell: currentPlaybackCell)
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: nil, curCell: currentPlaybackCell)
         interactor?.playInitialPlaybackCell(with: request)
     }
 
     func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         if let prevCell = viewModel.prevCell {
-            prevCell.playbackView.playerSlider.isHidden = false
+            prevCell.playbackView.playerSlider.isHidden = true
+        }
+    }
+
+    func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        if let curCell = viewModel.curCell {
+            curCell.playbackView.playerSlider.isHidden = false
         }
     }
 }
@@ -248,15 +255,16 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 
 extension PlaybackViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        moveCellAtInfiniteScroll(scrollView)
         let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
-//        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPathRow)
-//        interactor?.moveCellIfInfinite(with: request)
-
+        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
+            return
+        }
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPathRow, curCell: currentPlaybackCell)
+        interactor?.playVideo(with: request)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
+        interactor?.hidePlayerSlider()
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

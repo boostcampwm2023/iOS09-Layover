@@ -12,10 +12,11 @@ protocol PlaybackPresentationLogic {
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response)
     func presentSetCellIfInfinite()
     func presentMoveCellInfinite()
-    func presentMoveCellNext(with response: PlaybackModels.LoadPlaybackVideoList.Response)
+    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -36,8 +37,9 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
         viewController?.displayMoveCellIfinfinite()
     }
 
-    func presentMoveCellNext(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
-//        viewController
+    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: response.curCell)
+        viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
     }
 
     func presentMoveCellInfinite() {
@@ -57,5 +59,10 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
         let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: nil)
         viewController?.hidePlayerSlider(viewModel: viewModel)
+    }
+
+    func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        viewController?.showPlayerSlider(viewModel: viewModel)
     }
 }

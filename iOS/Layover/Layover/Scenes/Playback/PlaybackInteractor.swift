@@ -15,6 +15,7 @@ protocol PlaybackBusinessLogic {
     func moveCellIfInfinite(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func setInitialPlaybackCell()
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -79,5 +80,22 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func hidePlayerSlider() {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
         presenter?.presentHidePlayerSlider(with: response)
+    }
+
+    func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        var response: Models.DisplayPlaybackVideo.Response
+        if prevCell == request.curCell {
+            response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
+            presenter?.presentShowPlayerSlider(with: response)
+            return
+        }
+        if parentView == .other {
+            // TelePort
+            // 특정 조건 때 다른 Present call
+            return
+        }
+        response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+        prevCell = request.curCell
+        presenter?.presentMoveCellNext(with: response)
     }
 }

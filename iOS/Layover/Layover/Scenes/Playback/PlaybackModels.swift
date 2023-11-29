@@ -44,7 +44,6 @@ enum PlaybackModels {
     enum DisplayPlaybackVideo {
         struct Request {
             let indexPathRow: Int?
-            let prevCell: PlaybackCell?
             let curCell: PlaybackCell?
         }
 
@@ -61,7 +60,7 @@ enum PlaybackModels {
 
     enum SetInitialPlaybackCell {
         struct Request {
-            
+
         }
 
         struct Response {
