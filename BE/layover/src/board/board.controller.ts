@@ -5,7 +5,7 @@ import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { PresignedUrlDto } from './dtos/presigned-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { ApiHeaders, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiHeaders, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PresignedUrlResDto } from './dtos/presigned-url-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { UploadCallbackDto } from './dtos/upload-callback.dto';
@@ -13,6 +13,7 @@ import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
 import { CustomHeader } from '../pipes/custom-header.decorator';
 import { JwtValidationPipe } from '../pipes/jwt.validation.pipe';
 import { BoardsResDto } from './dtos/boards-res.dto';
+import { SWAGGER } from '../utils/swaggerUtils';
 
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
@@ -38,7 +39,7 @@ export class BoardController {
       },
     },
   })
-  @ApiHeaders([{ name: 'Authorization', description: 'Bearer {token}', required: true }])
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post()
   async createBoard(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() createBoardDto: CreateBoardDto) {
     const [title, content, location] = [createBoardDto.title, createBoardDto.content, createBoardDto.location];
@@ -64,7 +65,7 @@ export class BoardController {
       },
     },
   })
-  @ApiHeaders([{ name: 'Authorization', description: 'Bearer {token}', required: true }])
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('presigned-url')
   async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: PresignedUrlDto) {
     const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
@@ -91,6 +92,7 @@ export class BoardController {
       },
     },
   })
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('home')
   async getBoardRandom() {
     return await this.boardService.getBoardRandom();
