@@ -76,6 +76,7 @@
 		FC3752352B170A620000D439 /* EditVideoInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522F2B170A620000D439 /* EditVideoInteractor.swift */; };
 		FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3752362B170B230000D439 /* EditVideoConfigurator.swift */; };
 		FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */; };
+		FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
@@ -211,6 +212,7 @@
 		FC37522F2B170A620000D439 /* EditVideoInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoInteractor.swift; sourceTree = "<group>"; };
 		FC3752362B170B230000D439 /* EditVideoConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoConfigurator.swift; sourceTree = "<group>"; };
 		FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
+		FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFileWorker.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
 				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
 				193686732B15C489008902CD /* UserWorker.swift */,
+				FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -855,6 +858,7 @@
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
+				FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */,
 				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */,
