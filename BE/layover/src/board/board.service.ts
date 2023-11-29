@@ -6,6 +6,10 @@ import { VideoService } from '../video/video.service';
 import { Member } from '../member/member.entity';
 import { Video } from '../video/video.entity';
 import { makeUploadPreSignedUrl } from 'src/utils/s3Utils';
+import { MemberInfosResDto } from '../member/dtos/member-infos-res.dto';
+import { BoardResDto } from './dtos/board-res-dto';
+import { TagService } from '../tag/tag.service';
+import { BoardsResDto } from './dtos/boards-res.dto';
 
 @Injectable()
 export class BoardService {
@@ -13,6 +17,7 @@ export class BoardService {
     @Inject('BOARD_REPOSITORY') private boardRepository: Repository<Board>,
     private memberService: MemberService,
     private videoService: VideoService,
+    private tagService: TagService,
   ) {}
 
   makePreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
@@ -35,6 +40,24 @@ export class BoardService {
     });
     const savedBoard: Board = await this.boardRepository.save(boardEntity);
     return savedBoard.id;
+  }
+
+  async getBoardRandom() {
+    const count = await this.boardRepository.count();
+    const random = Math.floor(Math.random() * count);
+    const n = 10; // 최대 10개 데이터를 가져온다.
+
+    const boards: Board[] = await this.boardRepository.createQueryBuilder('board').skip(random).take(n).getMany();
+
+    return Promise.all(
+      boards.map(async (board) => {
+        const tags = await this.tagService.findByBoardId(board.id);
+        const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
+        const boardInfo = new BoardResDto(board.id, board.video.sd_url, board.video.hd_url, board.video_thumbnail, board.location, board.title, board.content, board.status);
+        const tag = tags.map((tag) => tag.tagname);
+        return new BoardsResDto(member, boardInfo, tag);
+      }),
+    );
   }
 
   async setOriginalVideoUrl(filename: string) {
