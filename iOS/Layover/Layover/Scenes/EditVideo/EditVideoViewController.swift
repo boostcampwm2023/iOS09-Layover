@@ -12,7 +12,30 @@ protocol EditVideoDisplayLogic: AnyObject {
     func displayVideo()
 }
 
-final class EditVideoViewController: UIViewController {
+final class EditVideoViewController: BaseViewController {
+
+    // MARK: - UI Components
+
+    private let loopingPlayerView: LoopingPlayerView = {
+        let playerView = LoopingPlayerView()
+        return playerView
+    }()
+
+    private let soundButton: LOCircleButton = {
+        let button = LOCircleButton(style: .sound, diameter: 52)
+        return button
+    }()
+
+    private let cutButton: LOCircleButton = {
+        let button = LOCircleButton(style: .scissors, diameter: 52)
+        return button
+    }()
+
+    private let nextButton: LOButton = {
+        let button = LOButton(style: .basic)
+        button.setTitle("다음", for: .normal)
+        return button
+    }()
 
     // MARK: - Properties
 
@@ -44,8 +67,32 @@ final class EditVideoViewController: UIViewController {
         super.viewDidLoad()
     }
 
-}
+    override func setConstraints() {
+        view.addSubviews(loopingPlayerView, soundButton, cutButton, nextButton)
+        view.subviews.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
 
+        NSLayoutConstraint.activate([
+            loopingPlayerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            loopingPlayerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            loopingPlayerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            loopingPlayerView.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -19),
+
+            soundButton.trailingAnchor.constraint(equalTo: cutButton.leadingAnchor, constant: -9),
+            soundButton.bottomAnchor.constraint(equalTo: loopingPlayerView.bottomAnchor, constant: -15),
+
+            cutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            cutButton.bottomAnchor.constraint(equalTo: loopingPlayerView.bottomAnchor, constant: -15),
+
+            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            nextButton.widthAnchor.constraint(equalToConstant: 117),
+            nextButton.heightAnchor.constraint(equalToConstant: 50),
+            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -13)
+        ])
+    }
+
+}
 
 extension EditVideoViewController: EditVideoDisplayLogic {
 
@@ -53,4 +100,8 @@ extension EditVideoViewController: EditVideoDisplayLogic {
 
     }
 
+}
+
+#Preview {
+    EditVideoViewController()
 }
