@@ -35,31 +35,18 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
     // MARK: - UseCase: 닉네임 유효성 검사
 
     func validateNickname(with request: SignUpModels.ValidateNickname.Request) {
-        let response = check(nickname: request.nickname)
-        presenter?.presentNicknameValidation(with: response)
+        guard let userWorker else { return }
+        let response = userWorker.validateNickname(request.nickname)
+        presenter?.presentNicknameValidation(with: SignUpModels.ValidateNickname.Response(nicknameState: response))
     }
 
     func checkDuplication(with request: SignUpModels.CheckDuplication.Request) {
         Task {
-            do {
-                let response = try await userWorker?.checkDuplication(for: request.nickname)
-                await MainActor.run {
-                    presenter?.presentNicknameDuplication(with: SignUpModels.CheckDuplication.Response(isDuplicate: response ?? true))
-                }
-            } catch let error {
-                // TODO: present toast
-                print(error.localizedDescription)
+            let response = await userWorker?.checkDuplication(for: request.nickname)
+            await MainActor.run {
+                presenter?.presentNicknameDuplication(with: SignUpModels.CheckDuplication.Response(isValid: response ?? false))
             }
         }
-    }
-
-    private func check(nickname: String) -> SignUpModels.ValidateNickname.Response {
-        if nickname.count < 2 || nickname.count > 8 {
-            return .init(nicknameState: .lessThan2GreaterThan8)
-        } else if nickname.wholeMatch(of: /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+/) == nil {
-            return .init(nicknameState: .invalidCharacter)
-        }
-        return .init(nicknameState: .valid)
     }
 
     // MARK: - UseCase: SignUp

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
+		193686742B15C489008902CD /* UserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686732B15C489008902CD /* UserWorker.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
 		194551F32B037F2D00299768 /* LoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551ED2B037F2D00299768 /* LoginWorker.swift */; };
 		194551F42B037F2D00299768 /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EE2B037F2D00299768 /* LoginRouter.swift */; };
@@ -75,6 +77,13 @@
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
 		FC4975992B03439000D8627F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4975982B03439000D8627F /* UIFont+.swift */; };
+		FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1162B148D160036366D /* EditProfilePresenter.swift */; };
+		FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1172B148D160036366D /* EditProfileWorker.swift */; };
+		FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1182B148D160036366D /* EditProfileRouter.swift */; };
+		FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1192B148D160036366D /* EditProfileModels.swift */; };
+		FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE11A2B148D160036366D /* EditProfileViewController.swift */; };
+		FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE11B2B148D160036366D /* EditProfileInteractor.swift */; };
+		FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */; };
 		FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29A2B02325D001AABFF /* Requestable.swift */; };
 		FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29C2B02326A001AABFF /* Responsable.swift */; };
 		FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E29E2B023315001AABFF /* HTTPMethod.swift */; };
@@ -128,6 +137,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
+		193686732B15C489008902CD /* UserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWorker.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
 		194551ED2B037F2D00299768 /* LoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWorker.swift; sourceTree = "<group>"; };
 		194551EE2B037F2D00299768 /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
@@ -198,6 +209,13 @@
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		FC4975982B03439000D8627F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		FC5BE1162B148D160036366D /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
+		FC5BE1172B148D160036366D /* EditProfileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileWorker.swift; sourceTree = "<group>"; };
+		FC5BE1182B148D160036366D /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
+		FC5BE1192B148D160036366D /* EditProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileModels.swift; sourceTree = "<group>"; };
+		FC5BE11A2B148D160036366D /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		FC5BE11B2B148D160036366D /* EditProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractor.swift; sourceTree = "<group>"; };
+		FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileConfigurator.swift; sourceTree = "<group>"; };
 		FC68E29A2B02325D001AABFF /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		FC68E29C2B02326A001AABFF /* Responsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responsable.swift; sourceTree = "<group>"; };
 		FC68E29E2B023315001AABFF /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
@@ -313,6 +331,7 @@
 			children = (
 				1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */,
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
+				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -435,6 +454,29 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		FC5BE1112B148AF00036366D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC930E7F2B0CFB0B00AA48E3 /* ProfileHeaderView.swift */,
+				FC930E7D2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FC5BE1152B148B540036366D /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				FC5BE11A2B148D160036366D /* EditProfileViewController.swift */,
+				FC5BE11B2B148D160036366D /* EditProfileInteractor.swift */,
+				FC5BE1162B148D160036366D /* EditProfilePresenter.swift */,
+				FC5BE1192B148D160036366D /* EditProfileModels.swift */,
+				FC5BE1182B148D160036366D /* EditProfileRouter.swift */,
+				FC5BE1172B148D160036366D /* EditProfileWorker.swift */,
+				FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */,
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
 		FC68E2992B02320F001AABFF /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -533,6 +575,7 @@
 				FC7E458F2AFF746E004F155A /* DummyWorker.swift */,
 				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
 				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
+				193686732B15C489008902CD /* UserWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -549,6 +592,7 @@
 				194551EB2B037F1E00299768 /* Login */,
 				1945521A2B0478A100299768 /* Home */,
 				FC930E6E2B0CD73B00AA48E3 /* Profile */,
+				FC5BE1152B148B540036366D /* EditProfile */,
 				194552272B0479B600299768 /* BaseViewController.swift */,
 			);
 			path = Scenes;
@@ -593,14 +637,13 @@
 		FC930E6E2B0CD73B00AA48E3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				FC5BE1112B148AF00036366D /* Views */,
 				FC930E732B0CD75C00AA48E3 /* ProfileViewController.swift */,
 				FC930E742B0CD75C00AA48E3 /* ProfileInteractor.swift */,
 				FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */,
 				FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */,
 				FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */,
 				FC930E7B2B0CD80800AA48E3 /* ProfileConfigurator.swift */,
-				FC930E7D2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift */,
-				FC930E7F2B0CFB0B00AA48E3 /* ProfileHeaderView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -757,32 +800,39 @@
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
 				FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */,
 				1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */,
+				FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
+				FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */,
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
 				1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */,
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
+				FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
+				FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
 				836C338F2B160CC700ECAFB0 /* MemberDTO.swift in Sources */,
 				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
+				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
 				FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */,
+				FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */,
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
+				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
 				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */,
@@ -791,6 +841,7 @@
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				FC930E802B0CFB0B00AA48E3 /* ProfileHeaderView.swift in Sources */,
+				193686742B15C489008902CD /* UserWorker.swift in Sources */,
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
@@ -805,6 +856,7 @@
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
 				836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */,
+				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,

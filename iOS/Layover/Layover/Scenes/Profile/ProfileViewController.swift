@@ -9,10 +9,10 @@
 import UIKit
 
 protocol ProfileDisplayLogic: AnyObject {
-
+    func fetchProfile(viewModel: ProfileModels.FetchProfile.ViewModel)
 }
 
-final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
+final class ProfileViewController: BaseViewController {
 
     // MARK: - Type
 
@@ -66,7 +66,8 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-        setVideoCollectionView()
+        setThumnailCollectionView()
+        interactor?.fetchProfile()
     }
 
     override func setConstraints() {
@@ -108,7 +109,7 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
             let barButtonItem: UIBarButtonItem = UIBarButtonItem(title: nil,
                                                                  image: UIImage(resource: .setting),
                                                                  target: self,
-                                                                 action: #selector(didTapSettingButton))
+                                                                 action: #selector(settingButtonDidTap))
             barButtonItem.tintColor = .layoverWhite
             self.navigationItem.rightBarButtonItem = barButtonItem
         case .other:
@@ -116,26 +117,38 @@ final class ProfileViewController: BaseViewController, ProfileDisplayLogic {
         }
     }
 
-    private func setVideoCollectionView() {
+    private func setThumnailCollectionView() {
         thumbnailCollectionView.dataSource = videoDatasource
         var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         videoDatasource.apply(snapshot)
-        videoDatasource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
-            guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProfileHeaderView.identifier, for: indexPath) as? ProfileHeaderView
-            header?.editButton.isHidden = self?.profileType == .other
-            return header
-        }
     }
 
-    @objc private func didTapSettingButton() {
+    @objc private func editbuttonDidTap() {
+        router?.routeToEditProfileViewController()
+    }
+
+    @objc private func settingButtonDidTap() {
 
     }
 
 }
 
-#Preview {
-    ProfileViewController(profileType: .own)
+extension ProfileViewController: ProfileDisplayLogic {
+
+    func fetchProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
+        videoDatasource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
+            guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                         withReuseIdentifier: ProfileHeaderView.identifier,
+                                                                         for: indexPath) as? ProfileHeaderView
+            header?.editButton.addTarget(self, action: #selector(self?.editbuttonDidTap), for: .touchUpInside)
+            header?.configure(profileImage: viewModel.profileImage,
+                              nickname: viewModel.nickname,
+                              introduce: viewModel.introduce)
+            return header
+        }
+    }
+
 }

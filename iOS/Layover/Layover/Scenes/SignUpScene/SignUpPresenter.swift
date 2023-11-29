@@ -30,7 +30,7 @@ final class SignUpPresenter: SignUpPresentationLogic {
     }
 
     func presentNicknameDuplication(with response: SignUpModels.CheckDuplication.Response) {
-        let viewModel = Models.CheckDuplication.ViewModel(canSignUp: !response.isDuplicate)
+        let viewModel = Models.CheckDuplication.ViewModel(canSignUp: response.isValid)
         viewController?.displayNickanmeDuplication(response: viewModel)
     }
 

@@ -9,14 +9,20 @@
 import UIKit
 
 protocol ProfilePresentationLogic {
-
+    func present(with response: ProfileModels.FetchProfile.Response)
 }
 
-class ProfilePresenter: ProfilePresentationLogic {
+final class ProfilePresenter: ProfilePresentationLogic {
 
     // MARK: - Properties
 
     typealias Models = ProfileModels
     weak var viewController: ProfileDisplayLogic?
+
+    func present(with response: Models.FetchProfile.Response) {
+        viewController?.fetchProfile(viewModel: Models.FetchProfile.ViewModel(nickname: response.nickname,
+                                                                              introduce: response.introduce,
+                                                                              profileImage: response.profileImage))
+    }
 
 }
