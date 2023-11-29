@@ -118,10 +118,12 @@ final class EditProfileViewController: BaseViewController {
     // MARK: - Methods
 
     override func setUI() {
+        super.setUI()
         self.title = "프로필 수정"
     }
 
     override func setConstraints() {
+        super.setConstraints()
         view.addSubviews(profileImageView, editProfileImageButton, nicknameTextfield, nicknameAlertLabel, introduceTextfield,
                          introduceAlertLabel, nicknameAlertLabel, checkDuplicateNicknameButton, confirmButton)
         view.subviews.forEach {
