@@ -18,5 +18,4 @@ final class TagPlayListPresenter: TagPlayListPresentationLogic {
 
     weak var viewController: TagPlayListDisplayLogic?
 
-
 }

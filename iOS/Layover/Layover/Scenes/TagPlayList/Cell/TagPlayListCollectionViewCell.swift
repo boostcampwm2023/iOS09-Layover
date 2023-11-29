@@ -35,11 +35,13 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setUI()
         setConstraints()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setUI()
         setConstraints()
     }
 
@@ -59,6 +61,12 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14)
         ])
+    }
+
+    private func setUI() {
+        clipsToBounds = true
+        layer.cornerRadius = 10
+        backgroundColor = .darkGrey
     }
 
     func configure(playID: Int, thumbnailImage: UIImage, title: String) {
