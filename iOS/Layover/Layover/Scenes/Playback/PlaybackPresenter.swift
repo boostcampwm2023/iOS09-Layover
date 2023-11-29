@@ -17,6 +17,7 @@ protocol PlaybackPresentationLogic {
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -26,7 +27,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     typealias Models = PlaybackModels
     weak var viewController: PlaybackDisplayLogic?
 
-    // MARK: - UseCase 비디오 목록 출력
+    // MARK: - UseCase
 
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
         let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
@@ -49,6 +50,11 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
         let viewModel: Models.SetInitialPlaybackCell.ViewModel = Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow)
         viewController?.setInitialPlaybackCell(viewModel: viewModel)
+    }
+
+    func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
+        let viewModel: Models.SetInitialPlaybackCell.ViewModel = Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow)
+        viewController?.moveInitialPlaybackCell(viewModel: viewModel)
     }
 
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {

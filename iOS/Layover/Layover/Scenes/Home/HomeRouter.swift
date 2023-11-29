@@ -37,6 +37,7 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
               let destination = playbackViewController.router?.dataStore
         else { return }
         destination.parentView = .home
+        destination.index = source.index
         destination.videos = transDTO(videos: source.videos ?? [])
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }

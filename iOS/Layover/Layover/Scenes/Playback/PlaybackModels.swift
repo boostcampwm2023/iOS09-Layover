@@ -60,7 +60,7 @@ enum PlaybackModels {
 
     enum SetInitialPlaybackCell {
         struct Request {
-
+            let indexPathRow: Int
         }
 
         struct Response {

@@ -14,6 +14,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func displayMoveCellIfinfinite()
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
+    func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
 }
@@ -93,7 +94,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        interactor?.setCellIfInfinite()
+        interactor?.moveInitialPlaybackCell()
     }
 
     // MARK: - UI + Layout
@@ -152,6 +153,11 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         if let curCell = viewModel.curCell {
             curCell.playbackView.playerSlider.isHidden = false
         }
+    }
+
+    func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
+        let willMoveLocation: CGFloat = CGFloat(viewModel.indexPathRow) * playbackCollectionView.bounds.height
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: willMoveLocation), animated: false)
     }
 }
 

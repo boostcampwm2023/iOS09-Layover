@@ -10,7 +10,7 @@ import UIKit
 
 protocol PlaybackBusinessLogic {
     func displayVideoList()
-    func setCellIfInfinite()
+    func moveInitialPlaybackCell()
     func hidePlayerSlider()
     func moveCellIfInfinite(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func setInitialPlaybackCell()
@@ -22,6 +22,7 @@ protocol PlaybackDataStore: AnyObject {
     var videos: [PlaybackModels.Board]? { get set }
     var parentView: PlaybackModels.ParentView? { get set }
     var prevCell: PlaybackCell? { get set }
+    var index: Int? { get set }
 }
 
 final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
@@ -35,6 +36,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     var videos: [Models.Board]?
     var parentView: Models.ParentView?
     var prevCell: PlaybackCell?
+    var index: Int?
 
     func displayVideoList() {
         guard let parentView: Models.ParentView else {
@@ -50,9 +52,12 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         presenter?.presentVideoList(with: response)
     }
 
-    func setCellIfInfinite() {
+    func moveInitialPlaybackCell() {
+        let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
         if parentView == .other {
             presenter?.presentSetCellIfInfinite()
+        } else {
+            presenter?.presentMoveInitialPlaybackCell(with: response)
         }
     }
 
@@ -61,12 +66,13 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func setInitialPlaybackCell() {
         guard let parentView else { return }
+        guard let index else { return }
         let response: Models.SetInitialPlaybackCell.Response
         switch parentView {
         case .home:
-            response = Models.SetInitialPlaybackCell.Response(indexPathRow: 0)
+            response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
         case .other:
-            response = Models.SetInitialPlaybackCell.Response(indexPathRow: 1)
+            response = Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1)
         }
         presenter?.presentSetInitialPlaybackCell(with: response)
     }
