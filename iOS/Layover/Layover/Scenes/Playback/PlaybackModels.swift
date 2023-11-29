@@ -6,10 +6,10 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum PlaybackModels {
-    
+    // MARK: - Properties Type
     struct Board: Hashable {
         var id: UUID = UUID()
         let title: String
@@ -20,15 +20,16 @@ enum PlaybackModels {
         let memeber: MemberDTO
     }
 
-    // MARK: - Use Cases
-    
     enum ParentView {
         case home
         case other
     }
 
-    enum PlaybackVideoList {
+    // MARK: - Use Cases
+
+    enum LoadPlaybackVideoList {
         struct Request {
+            
         }
 
         struct Response {
@@ -37,6 +38,38 @@ enum PlaybackModels {
 
         struct ViewModel {
             let videos: [Board]
+        }
+    }
+
+    enum DisplayPlaybackVideo {
+        struct Request {
+            let indexPathRow: Int?
+            let prevCell: PlaybackCell?
+            let curCell: PlaybackCell?
+        }
+
+        struct Response {
+            let prevCell: PlaybackCell?
+            let curCell: PlaybackCell?
+        }
+
+        struct ViewModel {
+            let prevCell: PlaybackCell?
+            let curCell: PlaybackCell?
+        }
+    }
+
+    enum SetInitialPlaybackCell {
+        struct Request {
+            
+        }
+
+        struct Response {
+            let indexPathRow: Int
+        }
+
+        struct ViewModel {
+            let indexPathRow: Int
         }
     }
 

@@ -10,7 +10,11 @@ import UIKit
 import AVFoundation
 
 protocol PlaybackDisplayLogic: AnyObject {
-    func displayVideoList(viewModel: PlaybackModels.PlaybackVideoList.ViewModel)
+    func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
+    func displayMoveCellIfinfinite()
+    func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
+    func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -42,10 +46,6 @@ final class PlaybackViewController: BaseViewController {
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
     var interactor: PlaybackBusinessLogic?
 
-//     TODO: Presenter에서 받기
-//    private let viewType: ViewType = .map
-    private var parentView: Models.ParentView
-
     // MARK: - Object lifecycle
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -76,7 +76,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        initPrevPlayerCell()
+        interactor?.setInitialPlaybackCell()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,7 +87,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+        interactor?.setCellIfInfinite()
     }
 
     // MARK: - UI + Layout
@@ -106,11 +106,40 @@ final class PlaybackViewController: BaseViewController {
 }
 
 extension PlaybackViewController: PlaybackDisplayLogic {
-    func displayVideoList(viewModel: Models.PlaybackVideoList.ViewModel) {
+    func displayVideoList(viewModel: Models.LoadPlaybackVideoList.ViewModel) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Models.Board>()
         snapshot.appendSections([.main])
         snapshot.appendItems(viewModel.videos)
         dataSource?.apply(snapshot, animatingDifferences: false)
+    }
+
+    func displayMoveCellIfinfinite() {
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+    }
+
+    func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        if let prevCell = viewModel.prevCell {
+            prevCell.playbackView.stopPlayer()
+            prevPlaybackCell?.playbackView.replayPlayer()
+        }
+        if let curCell = viewModel.curCell {
+            curCell.playbackView.playPlayer()
+            curCell.playbackView.playerSlider.isHidden = false
+        }
+    }
+
+    func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
+        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: viewModel.indexPathRow, section: 0)) as? PlaybackCell else {
+            return
+        }
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: nil, prevCell: nil, curCell: currentPlaybackCell)
+        interactor?.playInitialPlaybackCell(with: request)
+    }
+
+    func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        if let prevCell = viewModel.prevCell {
+            prevCell.playbackView.playerSlider.isHidden = false
+        }
     }
 }
 
@@ -124,7 +153,7 @@ private extension PlaybackViewController {
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
         dataSource = UICollectionViewDiffableDataSource<Section, Models.Board>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
-            cell.setPlaybackContents(title: video.title)
+            cell.setPlaybackContents(viewModel: video)
             cell.addAVPlayer(url: video.hdURL)
             cell.setPlayerSlider(tabbarHeight: tabbarHeight)
             return cell
@@ -149,25 +178,25 @@ private extension PlaybackViewController {
 //    }
 
     func moveCellAtInfiniteScroll(_ scrollView: UIScrollView) {
-        // ViewType이 Home이 아닌 경우
-        let count: Int = videos.count
-        if count == 0 {
-            return
-        }
-        if viewType == .home {
-            // 마지막 Cell에 도달하면 비디오 추가 로드
-            // 마지막 Video까지 다 재생했다면 다른 ViewType과 마찬가지로 동작 시작
-        }
+//        // ViewType이 Home이 아닌 경우
+//        let count: Int = videos.count
+//        if count == 0 {
+//            return
+//        }
+//        if viewType == .home {
+//            // 마지막 Cell에 도달하면 비디오 추가 로드
+//            // 마지막 Video까지 다 재생했다면 다른 ViewType과 마찬가지로 동작 시작
+//        }
         // 첫번째에 위치한 마지막 cell에 도달했을 때
-        if scrollView.contentOffset.y == 0 {
-            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
-            checkTelePort = true
-        } else if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
-            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
-            checkTelePort = true
-        } else {
-            normalPlayerScroll(scrollView)
-        }
+//        if scrollView.contentOffset.y == 0 {
+//            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
+//            checkTelePort = true
+//        } else if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
+//            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+//            checkTelePort = true
+//        } else {
+//            normalPlayerScroll(scrollView)
+//        }
 
     }
 
@@ -219,23 +248,27 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 
 extension PlaybackViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        moveCellAtInfiniteScroll(scrollView)
+//        moveCellAtInfiniteScroll(scrollView)
+        let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
+//        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPathRow)
+//        interactor?.moveCellIfInfinite(with: request)
+
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        prevPlaybackCell?.playbackView.playerSlider.isHidden = true
+        
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if checkTelePort {
-            let count: Int = videos.count
-            guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
-                return
-            }
-            if indexPath.row == 1 || indexPath.row == count - 2 {
-                stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
-            }
-        }
+//        if checkTelePort {
+//            let count: Int = videos.count
+//            guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
+//                return
+//            }
+//            if indexPath.row == 1 || indexPath.row == count - 2 {
+//                stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
+//            }
+//        }
     }
 }
 //#Preview {

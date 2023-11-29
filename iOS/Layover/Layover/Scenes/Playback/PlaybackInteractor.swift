@@ -10,12 +10,17 @@ import UIKit
 
 protocol PlaybackBusinessLogic {
     func displayVideoList()
+    func setCellIfInfinite()
+    func hidePlayerSlider()
+    func moveCellIfInfinite(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func setInitialPlaybackCell()
+    func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
     var videos: [PlaybackModels.Board]? { get set }
     var parentView: PlaybackModels.ParentView? { get set }
-    var index: Int? { get set }
+    var prevCell: PlaybackCell? { get set }
 }
 
 final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
@@ -28,7 +33,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     var presenter: PlaybackPresentationLogic?
     var videos: [Models.Board]?
     var parentView: Models.ParentView?
-    var index: Int?
+    var prevCell: PlaybackCell?
 
     func displayVideoList() {
         guard let parentView: Models.ParentView else {
@@ -40,8 +45,39 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         if parentView == .other {
             videos = worker.makeInfiniteScroll(videos: videos)
         }
-        let response: Models.PlaybackVideoList.Response = Models.PlaybackVideoList.Response(videos: videos)
+        let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
         presenter?.presentVideoList(with: response)
     }
 
+    func setCellIfInfinite() {
+        if parentView == .other {
+            presenter?.presentSetCellIfInfinite()
+        }
+    }
+
+    func moveCellIfInfinite(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+    }
+
+    func setInitialPlaybackCell() {
+        guard let parentView else { return }
+        let response: Models.SetInitialPlaybackCell.Response
+        switch parentView {
+        case .home:
+            response = Models.SetInitialPlaybackCell.Response(indexPathRow: 0)
+        case .other:
+            response = Models.SetInitialPlaybackCell.Response(indexPathRow: 1)
+        }
+        presenter?.presentSetInitialPlaybackCell(with: response)
+    }
+
+    func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        prevCell = request.curCell
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: request.curCell)
+        presenter?.presentPlayInitialPlaybackCell(with: response)
+    }
+
+    func hidePlayerSlider() {
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
+        presenter?.presentHidePlayerSlider(with: response)
+    }
 }

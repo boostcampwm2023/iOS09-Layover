@@ -15,12 +15,10 @@ protocol HomeBusinessLogic {
 
 protocol HomeDataStore {
     var videos: [VideoDTO]? { get set }
-    var parentView: [PlaybackModels.ParentView]? { get set }
     var index: Int? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
-
 
     // MARK: - Properties
 
@@ -29,7 +27,6 @@ final class HomeInteractor: HomeDataStore {
     var presenter: HomePresentationLogic?
 
     var videos: [VideoDTO]?
-
 
     var index: Int?
 }

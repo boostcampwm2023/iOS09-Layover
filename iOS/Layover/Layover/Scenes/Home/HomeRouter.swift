@@ -33,16 +33,14 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
 
     func routeToPlayback() {
         let playbackViewController: PlaybackViewController = PlaybackViewController()
-//        playbackViewController.
         guard let source = dataStore,
-              var destination = playbackViewController.router?.dataStore
+              let destination = playbackViewController.router?.dataStore
         else { return }
         destination.parentView = .home
         destination.videos = transDTO(videos: source.videos ?? [])
-        destination.index = source.index
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
-    
+
     // Interactor가 해줄 역할? 고민 필요
     private func transDTO(videos: [VideoDTO]) -> [PlaybackModels.Board] {
         videos.map { videoDTO in

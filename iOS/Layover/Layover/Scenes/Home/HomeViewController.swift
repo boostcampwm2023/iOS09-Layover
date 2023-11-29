@@ -76,6 +76,7 @@ final class HomeViewController: BaseViewController {
                          hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
             ]))
         }
+        cell.loopingViewAddGesture()
         return cell
     }
 
