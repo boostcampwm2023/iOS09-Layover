@@ -27,10 +27,6 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    // MARK: - Properties
-
-    private(set) var playID: Int?
-
     // MARK: - Initializer
 
     override init(frame: CGRect) {
@@ -69,8 +65,7 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
         backgroundColor = .darkGrey
     }
 
-    func configure(playID: Int, thumbnailImage: UIImage, title: String) {
-        self.playID = playID
+    func configure(thumbnailImage: UIImage, title: String) {
         thumbnailImageView.image = thumbnailImage
         titleLabel.text = title
     }

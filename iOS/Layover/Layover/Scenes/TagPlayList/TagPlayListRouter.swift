@@ -8,8 +8,8 @@
 
 import UIKit
 
-@objc protocol TagPlayListRoutingLogic {
-
+protocol TagPlayListRoutingLogic {
+    
 }
 
 protocol TagPlayListDataPassing {
@@ -19,6 +19,9 @@ protocol TagPlayListDataPassing {
 final class TagPlayListRouter: TagPlayListRoutingLogic, TagPlayListDataPassing {
 
     // MARK: - Properties
+
+    var titleTag: String?
+    
 
     weak var viewController: TagPlayListViewController?
     var dataStore: TagPlayListDataStore?

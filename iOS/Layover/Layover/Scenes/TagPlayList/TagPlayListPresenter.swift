@@ -9,13 +9,18 @@
 import UIKit
 
 protocol TagPlayListPresentationLogic {
-
+    func presentPlayList(response: TagPlayListModels.FetchPosts.Response)
 }
 
 final class TagPlayListPresenter: TagPlayListPresentationLogic {
 
     // MARK: - Properties
-
+    typealias Model = TagPlayListModels
     weak var viewController: TagPlayListDisplayLogic?
 
+    // MARK: - Methods
+
+    func presentPlayList(response: TagPlayListModels.FetchPosts.Response) {
+        
+    }
 }

@@ -18,3 +18,14 @@ struct MemberDTO: Decodable {
         case profileImageURL = "profile_image_url"
     }
 }
+
+extension MemberDTO {
+    func toDomain() -> Member {
+        return Member(
+            identifier: id,
+            username: username,
+            introduce: introduce,
+            profileImageURL: URL(string: profileImageURL)
+        )
+    }
+}

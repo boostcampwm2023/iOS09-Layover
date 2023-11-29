@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TagPlayListDisplayLogic: AnyObject {
-
+    func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel)
 }
 
 final class TagPlayListViewController: BaseViewController {
@@ -29,8 +29,11 @@ final class TagPlayListViewController: BaseViewController {
 
     // MARK: - Properties
 
+    typealias Model = TagPlayListModels
     var interactor: TagPlayListBusinessLogic?
     var router: (TagPlayListRoutingLogic & TagPlayListDataPassing)?
+
+    private var displayedPosts: [Model.FetchPosts.ViewModel.DisplayedPost] = []
 
     // MARK: - Intializer
 
@@ -50,6 +53,13 @@ final class TagPlayListViewController: BaseViewController {
         TagPlayListConfigurator.shared.configure(self)
     }
 
+    // MARK: - View lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchPlayList()
+    }
+
     // MARK: - Layout
 
     override func setConstraints() {
@@ -67,17 +77,14 @@ final class TagPlayListViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-    }
-
-    // MARK: - View lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        setNavigationBar()
     }
 
     // MARK: - Methods
 
-    private func setNavigationBar(with title: String) {
+    private func setNavigationBar() {
+        guard let titleTag = router?.dataStore?.titleTag else { return }
+
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = UIColor.primaryPurple
         configuration.title = title
@@ -87,17 +94,46 @@ final class TagPlayListViewController: BaseViewController {
             outgoing.foregroundColor = UIColor.layoverWhite
             return outgoing
         }
+
         let button = UIButton(configuration: configuration)
         button.clipsToBounds = true
         button.layer.cornerRadius = 15
         navigationItem.titleView = button
+    }
+
+    private func fetchPlayList() {
+        guard let titleTag = router?.dataStore?.titleTag else { return }
+        interactor?.fetchPlayList(request: TagPlayListModels.FetchPosts.Request(tag: titleTag))
+    }
+}
+
+extension TagPlayListViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return displayedPosts.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagPlayListCollectionViewCell.identifier,
+                                                            for: indexPath) as? TagPlayListCollectionViewCell
+        else { return UICollectionViewCell() }
+
+        let data = displayedPosts[indexPath.item]
+        guard let imageData = data.thumbnailImage,
+              let image = UIImage(data: imageData)
+        else { return UICollectionViewCell() }
+
+        cell.configure(thumbnailImage: image, title: data.title)
+        return cell
     }
 }
 
 // MARK: - TagPlayListDisplayLogic
 
 extension TagPlayListViewController: TagPlayListDisplayLogic {
-
+    func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel) {
+        displayedPosts = viewModel.displayedPost
+        collectionView.reloadData()
+    }
 }
 
 #Preview {

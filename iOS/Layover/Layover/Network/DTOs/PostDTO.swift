@@ -13,3 +13,13 @@ struct PostDTO: Decodable {
     let board: BoardDTO
     let tag: [String]
 }
+
+extension PostDTO {
+    func toDomain() -> Post {
+        return Post(
+            member: member.toDomain(),
+            board: board.toDomain(),
+            tag: tag
+        )
+    }
+}

@@ -7,7 +7,42 @@
 //
 
 import UIKit
+import OSLog
 
-final class TagPlayListWorker {
+protocol TagPlayListWorkerProtocol {
+    func fetchPlayList(by tag: String) async -> [Post]?
+}
 
+final class TagPlayListWorker: TagPlayListWorkerProtocol {
+
+    // MARK: - Properties
+
+    typealias Models = TagPlayListModels
+
+    let provider: ProviderType
+    let authManager: AuthManager
+    let postEndPointFactory: PostEndPointFactory
+
+    // MARK: - Initializer
+
+    init(provider: ProviderType = Provider(),
+         postEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(),
+         authManager: AuthManager = AuthManager.shared) {
+        self.provider = provider
+        self.postEndPointFactory = postEndPointFactory
+        self.authManager = authManager
+    }
+
+    // MARK: - Methods
+
+    func fetchPlayList(by tag: String) async -> [Post]? {
+        let endPoint = postEndPointFactory.makeTagSearchPostListEndPoint(by: tag)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            return responseData.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .default, "Error occured while fetching post list: %s", error.localizedDescription)
+            return nil
+        }
+    }
 }

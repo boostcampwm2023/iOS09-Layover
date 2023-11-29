@@ -45,12 +45,15 @@
 		19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169212B176C5F00DB34C0 /* TagPlayListViewController.swift */; };
 		19A169282B176C5F00DB34C0 /* TagPlayListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169222B176C5F00DB34C0 /* TagPlayListInteractor.swift */; };
 		19A1692A2B176D6E00DB34C0 /* TagPlayListConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169292B176D6E00DB34C0 /* TagPlayListConfigurator.swift */; };
-		19A1692D2B17750B00DB34C0 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1692C2B17750B00DB34C0 /* PlayList.swift */; };
+		19A1692D2B17750B00DB34C0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1692C2B17750B00DB34C0 /* Post.swift */; };
 		19A169302B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1692F2B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift */; };
-		19A169362B178EA500DB34C0 /* TagSearch.json in Resources */ = {isa = PBXBuildFile; fileRef = 19A169352B178EA500DB34C0 /* TagSearch.json */; };
+		19A169362B178EA500DB34C0 /* PostList.json in Resources */ = {isa = PBXBuildFile; fileRef = 19A169352B178EA500DB34C0 /* PostList.json */; };
 		19A169382B17BCA800DB34C0 /* PostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169372B17BCA800DB34C0 /* PostDTO.swift */; };
 		19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169392B17BCC400DB34C0 /* MemberDTO.swift */; };
 		19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */; };
+		19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */; };
+		19A169422B17C70C00DB34C0 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169412B17C70C00DB34C0 /* Member.swift */; };
+		19A169442B17C71C00DB34C0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169432B17C71C00DB34C0 /* Board.swift */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
@@ -183,12 +186,15 @@
 		19A169212B176C5F00DB34C0 /* TagPlayListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListViewController.swift; sourceTree = "<group>"; };
 		19A169222B176C5F00DB34C0 /* TagPlayListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListInteractor.swift; sourceTree = "<group>"; };
 		19A169292B176D6E00DB34C0 /* TagPlayListConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListConfigurator.swift; sourceTree = "<group>"; };
-		19A1692C2B17750B00DB34C0 /* PlayList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
+		19A1692C2B17750B00DB34C0 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		19A1692F2B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListCollectionViewCell.swift; sourceTree = "<group>"; };
-		19A169352B178EA500DB34C0 /* TagSearch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TagSearch.json; sourceTree = "<group>"; };
+		19A169352B178EA500DB34C0 /* PostList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostList.json; sourceTree = "<group>"; };
 		19A169372B17BCA800DB34C0 /* PostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDTO.swift; sourceTree = "<group>"; };
 		19A169392B17BCC400DB34C0 /* MemberDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDTO.swift; sourceTree = "<group>"; };
 		19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardDTO.swift; sourceTree = "<group>"; };
+		19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEndPointFactory.swift; sourceTree = "<group>"; };
+		19A169412B17C70C00DB34C0 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
+		19A169432B17C71C00DB34C0 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		19AACFCB2B0F7D730088143E /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
@@ -350,6 +356,7 @@
 				1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */,
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
+				19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -380,7 +387,9 @@
 		19A1692B2B1774F900DB34C0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				19A1692C2B17750B00DB34C0 /* PlayList.swift */,
+				19A1692C2B17750B00DB34C0 /* Post.swift */,
+				19A169412B17C70C00DB34C0 /* Member.swift */,
+				19A169432B17C71C00DB34C0 /* Board.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -547,7 +556,7 @@
 				FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */,
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 				835783C52B14A5C800E7D304 /* LoginData.json */,
-				19A169352B178EA500DB34C0 /* TagSearch.json */,
+				19A169352B178EA500DB34C0 /* PostList.json */,
 			);
 			path = MockData;
 			sourceTree = "<group>";
@@ -822,7 +831,7 @@
 				835783C62B14A5C800E7D304 /* LoginData.json in Resources */,
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
-				19A169362B178EA500DB34C0 /* TagSearch.json in Resources */,
+				19A169362B178EA500DB34C0 /* PostList.json in Resources */,
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
@@ -858,6 +867,7 @@
 				FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
+				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */,
@@ -880,7 +890,7 @@
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
-				19A1692D2B17750B00DB34C0 /* PlayList.swift in Sources */,
+				19A1692D2B17750B00DB34C0 /* Post.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
@@ -890,8 +900,10 @@
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
 				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
+				19A169422B17C70C00DB34C0 /* Member.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */,
+				19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */,
 				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
 				1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
