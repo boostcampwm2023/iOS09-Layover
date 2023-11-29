@@ -6,7 +6,7 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol SignUpRoutingLogic {
     func routeToBack()
@@ -33,6 +33,7 @@ final class SignUpRouter: SignUpRoutingLogic, SignUpDataPassing {
 
     func navigateToMain() {
         let mainTabBarViewController = MainTabBarViewController()
+        viewController?.navigationController?.setNavigationBarHidden(true, animated: false)
         viewController?.navigationController?.setViewControllers([mainTabBarViewController], animated: true)
     }
 }
