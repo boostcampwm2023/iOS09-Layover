@@ -24,4 +24,18 @@ enum HomeModels {
             var videoURLs: [URL]
         }
     }
+
+    enum SelectVideo {
+        struct Request {
+            var videoURL: URL
+        }
+
+        struct Response {
+
+        }
+
+        struct ViewModel {
+
+        }
+    }
 }

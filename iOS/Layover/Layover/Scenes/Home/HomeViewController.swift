@@ -6,6 +6,7 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+import PhotosUI
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
@@ -22,7 +23,23 @@ final class HomeViewController: BaseViewController {
 
     // MARK: - UI Components
 
-    private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
+    private lazy var phPickerViewController: PHPickerViewController = {
+        var configuration = PHPickerConfiguration()
+        configuration.preferredAssetRepresentationMode = .current
+        configuration.filter = .videos
+        configuration.selectionLimit = 1
+        let phPickerViewController = PHPickerViewController(configuration: configuration)
+        phPickerViewController.delegate = self
+        return phPickerViewController
+    }()
+
+    private lazy var uploadButton: LOCircleButton = {
+        let button = LOCircleButton(style: .add, diameter: 52)
+        button.addAction(UIAction { _ in
+            self.present(self.phPickerViewController, animated: true)
+        }, for: .touchUpInside)
+        return button
+    }()
 
     private lazy var carouselCollectionView: UICollectionView = {
         let layout = createCarouselLayout(groupWidthDimension: 314/375,
@@ -164,6 +181,25 @@ final class HomeViewController: BaseViewController {
     private func fetchCarouselVideos() {
         interactor?.fetchVideos(with: Models.CarouselVideos.Request())
     }
+}
+
+// MARK: - PHPickerViewControllerDelegate
+
+extension HomeViewController: PHPickerViewControllerDelegate {
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        self.phPickerViewController.dismiss(animated: true)
+        guard let result = results.first else { return }
+        result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, _ in
+            if let url {
+                self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
+                DispatchQueue.main.async {
+                    self.router?.routeToEditVideo()
+                }
+            }
+        }
+    }
+
 }
 
 // MARK: - DisplayLogic

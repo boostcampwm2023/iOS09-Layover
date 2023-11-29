@@ -6,14 +6,16 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+import AVFoundation
 import UIKit
 
 protocol HomeBusinessLogic {
     func fetchVideos(with: HomeModels.CarouselVideos.Request)
+    func selectVideo(with request: HomeModels.SelectVideo.Request)
 }
 
 protocol HomeDataStore {
-
+    var selectedVideoURL: URL? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
@@ -23,6 +25,22 @@ final class HomeInteractor: HomeDataStore {
     typealias Models = HomeModels
 
     var presenter: HomePresentationLogic?
+
+    var selectedVideoURL: URL?
+
+    func selectVideo(with request: Models.SelectVideo.Request) {
+        // TODO: 지도에서도 쓸 로직, 워커로 분리
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileName = "\(Int(Date().timeIntervalSince1970)).\(request.videoURL.pathExtension)"
+        let newUrl = documentsURL.appending(path: fileName)
+        do {
+            try FileManager.default.copyItem(at: request.videoURL as URL, to: newUrl)
+            selectedVideoURL = newUrl
+        } catch {
+
+        }
+    }
+
 }
 
 // MARK: - Use Case

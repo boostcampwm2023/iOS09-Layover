@@ -14,7 +14,7 @@ protocol EditVideoBusinessLogic {
 }
 
 protocol EditVideoDataStore {
-
+    var videoURL: URL? { get set }
 }
 
 final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
@@ -26,8 +26,10 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
     lazy var worker = EditVideoWorker()
     var presenter: EditVideoPresentationLogic?
 
+    var videoURL: URL?
+
     func fetchVideo() {
-        let videoURL =  URL(string: "https://assets.afcdn.com/video49/20210722/v_645516.m3u8")!
+        guard let videoURL else { return }
         Task {
             let duration = try await AVAsset(url: videoURL).load(.duration)
             let seconds = CMTimeGetSeconds(duration)

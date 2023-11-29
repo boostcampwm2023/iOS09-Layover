@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomeRoutingLogic {
     func routeToNext()
+    func routeToEditVideo()
 }
 
 protocol HomeDataPassing {
@@ -28,6 +29,17 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
     func routeToNext() {
         let nextViewController = MainTabBarViewController()
         viewController?.navigationController?.setViewControllers([nextViewController], animated: true)
+    }
+
+    func routeToEditVideo() {
+        let nextViewController = EditVideoViewController()
+        guard let source = dataStore,
+              var destination = nextViewController.router?.dataStore
+        else { return }
+
+        // Data Passing
+        destination.videoURL = source.selectedVideoURL
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
     // MARK: - Data Passing
