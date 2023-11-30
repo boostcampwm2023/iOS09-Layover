@@ -26,7 +26,7 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
 
     // MARK: - DataStore
 
-    var titleTag: String?
+    var titleTag: String? = "몰라요"
 
     // MARK: - TagPlayListBusinessLogic
 

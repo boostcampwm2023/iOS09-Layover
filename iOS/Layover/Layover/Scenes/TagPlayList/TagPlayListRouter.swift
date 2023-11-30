@@ -20,9 +20,6 @@ final class TagPlayListRouter: TagPlayListRoutingLogic, TagPlayListDataPassing {
 
     // MARK: - Properties
 
-    var titleTag: String?
-    
-
     weak var viewController: TagPlayListViewController?
     var dataStore: TagPlayListDataStore?
 }

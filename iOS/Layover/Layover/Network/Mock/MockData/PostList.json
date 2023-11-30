@@ -1,9 +1,13 @@
 {
-    "data" : [
+    "customCode": "SUCCESS",
+    "message": "요청이 성공적으로 처리되었습니다.",
+    "statusCode": 200,
+    "data": [
         {
             "member" : {
                 "id" : 1,
                 "username" : "loinsir",
+                "introduce" : "Hi, my name is hwani",
                 "profile_image_url" : "https://i.namu.wiki/i/HPFgEkrlX8wtU-agoxsqlzllzfJrcFkDSJYFQxdBHUNyjyZtUpS9zy-7-6lfz4ngzB-1wbLRyhIP4TmnwPwKJ0mUec5403r5TJnI3NZpsYJL6GEVQTmR52YoFGLMbaIe4aGSzh4B4InI9r2g0VV74g.svg"
             },
             "board" : {
@@ -21,6 +25,7 @@
             "member" : {
                 "id" : 2,
                 "username" : "chopmozzi",
+                "introduce" : "Hi, my name is hwani",
                 "profile_image_url" : "https://m.segye.com/content/image/2023/03/15/20230315514234.jpg"
             },
             "board" : {
@@ -38,6 +43,7 @@
             "member" : {
                 "id" : 3,
                 "username" : "anyukyung",
+                "introduce" : "Hi, my name is hwani",
                 "profile_image_url" : "https://images.khan.co.kr/article/2021/11/15/l_2021111502000877900178361.jpg"
             },
             "board" : {
@@ -51,11 +57,11 @@
             },
             "tag" : ["해시태그1", "해시태그2"]
         },
-        
         {
             "member" : {
                 "id" : 4,
                 "username" : "layover",
+                "introduce" : "Hi, my name is hwani",
                 "profile_image_url" : "profile_image_link"
             },
             "board" : {

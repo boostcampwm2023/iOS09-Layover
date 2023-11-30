@@ -24,6 +24,9 @@ final class TagPlayListViewController: BaseViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        collectionView.register(TagPlayListCollectionViewCell.self,
+                                forCellWithReuseIdentifier: TagPlayListCollectionViewCell.identifier)
+        collectionView.dataSource = self
         return collectionView
     }()
 
