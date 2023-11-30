@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Post {
+struct Post: Hashable {
     let member: Member
     let board: Board
     let tag: [String]

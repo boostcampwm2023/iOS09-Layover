@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Member {
+struct Member: Hashable {
     let identifier: Int
     let username: String
     let introduce: String

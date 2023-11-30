@@ -10,31 +10,25 @@ import UIKit
 import AVFoundation
 
 protocol PlaybackDisplayLogic: AnyObject {
-    func displayFetchFromLocalDataStore(with viewModel: PlaybackModels.FetchFromLocalDataStore.ViewModel)
-    func displayFetchFromRemoteDataStore(with viewModel: PlaybackModels.FetchFromRemoteDataStore.ViewModel)
-    func displayTrackAnalytics(with viewModel: PlaybackModels.TrackAnalytics.ViewModel)
-    func displayPerformPlayback(with viewModel: PlaybackModels.PerformPlayback.ViewModel)
+    func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
+    func displayMoveCellIfinfinite()
+    func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
+    func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
+    func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
 }
 
-final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
+final class PlaybackViewController: BaseViewController {
+
     // MARK: - Type
-    enum ViewType {
-        case home
-        case map
-        case profile
-        case tag
-    }
 
     enum Section {
         case main
     }
 
-    // TODO: VIP 적용 시 Model로 빼서 presenter에서 ViewModel로 받기, 무한 스크롤 테스트 용
-    struct VideoModel: Hashable {
-        var id: UUID = UUID()
-        let title: String
-        let videoURL: URL
-    }
     // MARK: - UI Components
 
     private let playbackCollectionView: UICollectionView = {
@@ -46,23 +40,11 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
 
     // MARK: - Properties
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, VideoModel>?
-
-    private var prevPlaybackCell: PlaybackCell?
-
-    private var checkTelePort: Bool = false
-
-    private let video1: VideoModel = VideoModel(title: "1", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-    private let video2: VideoModel = VideoModel(title: "2", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-    private let video3: VideoModel = VideoModel(title: "3", videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-    private var videos: [VideoModel] = []
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
 
     typealias Models = PlaybackModels
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
     var interactor: PlaybackBusinessLogic?
-
-    // TODO: Presenter에서 받기
-    private let viewType: ViewType = .map
 
     // MARK: - Object lifecycle
 
@@ -79,60 +61,42 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
     // MARK: - Setup
 
     private func setup() {
-        let viewController = self
-        let interactor = PlaybackInteractor()
-        let presenter = PlaybackPresenter()
-        let router = PlaybackRouter()
-
-        viewController.router = router
-        viewController.interactor = interactor
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+        PlaybackConfigurator.shared.configure(self)
     }
 
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO: VIP Cycle
-        videos = [video1, video2, video3]
-        setupFetchFromLocalDataStore()
-        setInfiniteScroll()
-        setUI()
         configureDataSource()
+        interactor?.displayVideoList()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupFetchFromRemoteDataStore()
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        } catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        trackScreenViewAnalytics()
-        registerNotifications()
-        initPrevPlayerCell()
+        interactor?.setInitialPlaybackCell()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        prevPlaybackCell?.playbackView.playerSlider.isHidden = true
-        prevPlaybackCell?.playbackView.stopPlayer()
-        unregisterNotifications()
+        interactor?.leavePlaybackView()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+        interactor?.moveInitialPlaybackCell()
     }
 
     // MARK: - UI + Layout
 
-    private func setUI() {
+    override func setConstraints() {
         playbackCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(playbackCollectionView)
         NSLayoutConstraint.activate([
@@ -142,83 +106,66 @@ final class PlaybackViewController: UIViewController, PlaybackDisplayLogic {
             playbackCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    // MARK: - Notifications
 
-    func registerNotifications() {
-        let selector = #selector(trackScreenViewAnalytics)
-        let notification = UIApplication.didBecomeActiveNotification
-        NotificationCenter.default.addObserver(self, selector: selector, name: notification, object: nil)
+}
+
+extension PlaybackViewController: PlaybackDisplayLogic {
+    func displayVideoList(viewModel: Models.LoadPlaybackVideoList.ViewModel) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Models.PlaybackVideo>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(viewModel.videos)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
-    func unregisterNotifications() {
-        NotificationCenter.default.removeObserver(self)
+    func displayMoveCellIfinfinite() {
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
     }
 
-    // MARK: - Use Case - Fetch From Local DataStore
-
-    @IBOutlet var exampleLocalLabel: UILabel! = UILabel()
-    func setupFetchFromLocalDataStore() {
-        let request = Models.FetchFromLocalDataStore.Request()
-        interactor?.fetchFromLocalDataStore(with: request)
+    func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        if let prevCell = viewModel.prevCell {
+            prevCell.playbackView.stopPlayer()
+            prevCell.playbackView.replayPlayer()
+        }
+        if let curCell = viewModel.curCell {
+            curCell.playbackView.playPlayer()
+            curCell.playbackView.playerSlider.isHidden = false
+        }
     }
 
-    func displayFetchFromLocalDataStore(with viewModel: PlaybackModels.FetchFromLocalDataStore.ViewModel) {
-        exampleLocalLabel.text = viewModel.exampleTranslation
-    }
-
-    // MARK: - Use Case - Fetch From Remote DataStore
-
-    @IBOutlet var exampleRemoteLabel: UILabel! = UILabel()
-    func setupFetchFromRemoteDataStore() {
-        let request = Models.FetchFromRemoteDataStore.Request()
-        interactor?.fetchFromRemoteDataStore(with: request)
-    }
-
-    func displayFetchFromRemoteDataStore(with viewModel: PlaybackModels.FetchFromRemoteDataStore.ViewModel) {
-        exampleRemoteLabel.text = viewModel.exampleVariable
-    }
-
-    // MARK: - Use Case - Track Analytics
-
-    @objc
-    func trackScreenViewAnalytics() {
-        trackAnalytics(event: .screenView)
-    }
-
-    func trackAnalytics(event: PlaybackModels.AnalyticsEvents) {
-        let request = Models.TrackAnalytics.Request(event: event)
-        interactor?.trackAnalytics(with: request)
-    }
-
-    func displayTrackAnalytics(with viewModel: PlaybackModels.TrackAnalytics.ViewModel) {
-        // do something after tracking analytics (if needed)
-    }
-
-    // MARK: - Use Case - Playback
-
-    func performPlayback(_ sender: Any) {
-        let request = Models.PerformPlayback.Request(exampleVariable: exampleLocalLabel.text)
-        interactor?.performPlayback(with: request)
-    }
-
-    func displayPerformPlayback(with viewModel: PlaybackModels.PerformPlayback.ViewModel) {
-        // handle error and ui element error states
-        // based on error type
-        if let error = viewModel.error {
-            switch error.type {
-            case .emptyExampleVariable:
-                exampleLocalLabel.text = error.message
-
-            case .networkError:
-                exampleLocalLabel.text = error.message
-            }
-
+    func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
+        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: viewModel.indexPathRow, section: 0)) as? PlaybackCell else {
             return
         }
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: nil, curCell: currentPlaybackCell)
+        interactor?.playInitialPlaybackCell(with: request)
+    }
 
-        // handle ui element success state and
-        // route to next screen
-        router?.routeToNext()
+    func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        if let prevCell = viewModel.prevCell {
+            prevCell.playbackView.playerSlider.isHidden = true
+        }
+    }
+
+    func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        if let curCell = viewModel.curCell {
+            curCell.playbackView.playerSlider.isHidden = false
+        }
+    }
+
+    func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
+        let willMoveLocation: CGFloat = CGFloat(viewModel.indexPathRow) * playbackCollectionView.bounds.height
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: willMoveLocation), animated: false)
+    }
+
+    func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        guard let indexPathRow = viewModel.indexPathRow else { return }
+        let willTeleportlocation: CGFloat = CGFloat(indexPathRow) * playbackCollectionView.bounds.height
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: willTeleportlocation), animated: false)
+    }
+
+    func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        viewModel.prevCell?.playbackView.playerSlider.isHidden = true
+        viewModel.prevCell?.playbackView.stopPlayer()
     }
 }
 
@@ -230,89 +177,13 @@ private extension PlaybackViewController {
             return
         }
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
-        dataSource = UICollectionViewDiffableDataSource<Section, VideoModel>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
-            cell.setPlaybackContents(title: video.title)
-            cell.addAVPlayer(url: video.videoURL)
+            guard let videoURL: URL = video.post.board.videoURL else { return PlaybackCell()}
+            cell.setPlaybackContents(viewModel: video)
+            cell.addAVPlayer(url: videoURL)
             cell.setPlayerSlider(tabbarHeight: tabbarHeight)
             return cell
-        }
-        var snapshot = NSDiffableDataSourceSnapshot<Section, VideoModel>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(videos)
-        dataSource?.apply(snapshot, animatingDifferences: false)
-    }
-
-    func transDataForInfiniteScroll(_ videos: [VideoModel]) -> [VideoModel] {
-        /// Home과 Home을 제외한 나머지(맵, 프로필, 태그)의 무한 스크롤 동작이 다름
-        /// Home은 내릴 때마다 Video호출 필요, 나머지는 정해진 양이 있음
-        /// Home일 경우는 첫번 째 cell일 때 위로 안올라감.
-        /// 모든 동영상을 다 지나쳐야 첫번째 cell로 이동
-        var transVideos: [VideoModel] = videos
-        if transVideos.count > 0 {
-            var tempLastVideoModel: VideoModel = transVideos[transVideos.count-1]
-            tempLastVideoModel.id = UUID()
-            var tempFirstVideoModel: VideoModel = transVideos[1]
-            tempFirstVideoModel.id = UUID()
-            transVideos.insert(tempLastVideoModel, at: 0)
-            transVideos.append(tempFirstVideoModel)
-        }
-        return transVideos
-    }
-
-    func setInfiniteScroll() {
-        if viewType != .home {
-            videos = transDataForInfiniteScroll(videos)
-        }
-    }
-
-    func moveCellAtInfiniteScroll(_ scrollView: UIScrollView) {
-        // ViewType이 Home이 아닌 경우
-        let count: Int = videos.count
-        if count == 0 {
-            return
-        }
-        if viewType == .home {
-            // 마지막 Cell에 도달하면 비디오 추가 로드
-            // 마지막 Video까지 다 재생했다면 다른 ViewType과 마찬가지로 동작 시작
-        }
-        // 첫번째에 위치한 마지막 cell에 도달했을 때
-        if scrollView.contentOffset.y == 0 {
-            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height * Double(count - 2)), animated: false)
-            checkTelePort = true
-        } else if scrollView.contentOffset.y == Double(count-1) * playbackCollectionView.bounds.height {
-            scrollView.setContentOffset(.init(x: scrollView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
-            checkTelePort = true
-        } else {
-            normalPlayerScroll(scrollView)
-        }
-
-    }
-
-    func normalPlayerScroll(_ scrollView: UIScrollView) {
-        let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
-        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
-            return
-        }
-        stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
-        checkTelePort = false
-    }
-
-    func initPrevPlayerCell() {
-        if prevPlaybackCell == nil {
-            prevPlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: 1, section: 0)) as? PlaybackCell
-        }
-        prevPlaybackCell?.playbackView.playerSlider.isHidden = false
-        prevPlaybackCell?.playbackView.playPlayer()
-    }
-
-    func stopPrevPlayerAndPlayCurrnetPlayer(_ currentPlaybackCell: PlaybackCell) {
-        if prevPlaybackCell != currentPlaybackCell {
-            prevPlaybackCell?.playbackView.stopPlayer()
-            prevPlaybackCell?.playbackView.replayPlayer()
-            currentPlaybackCell.playbackView.playPlayer()
-            prevPlaybackCell = currentPlaybackCell
-            currentPlaybackCell.playbackView.playerSlider.isHidden = false
         }
     }
 }
@@ -337,23 +208,25 @@ extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
 
 extension PlaybackViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        moveCellAtInfiniteScroll(scrollView)
+        let indexPathRow: Int = Int(scrollView.contentOffset.y / playbackCollectionView.frame.height)
+        guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
+            return
+        }
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPathRow, curCell: currentPlaybackCell)
+        interactor?.playVideo(with: request)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        prevPlaybackCell?.playbackView.playerSlider.isHidden = true
+        interactor?.hidePlayerSlider()
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if checkTelePort {
-            let count: Int = videos.count
-            guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
-                return
-            }
-            if indexPath.row == 1 || indexPath.row == count - 2 {
-                stopPrevPlayerAndPlayCurrnetPlayer(currentPlaybackCell)
-            }
+        guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
+            return
         }
+
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, curCell: currentPlaybackCell)
+        interactor?.playTeleportVideo(with: request)
     }
 }
 //#Preview {

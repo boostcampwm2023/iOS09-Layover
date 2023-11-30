@@ -12,9 +12,13 @@ import Foundation
 protocol MapBusinessLogic {
     func checkLocationAuthorizationStatus()
     func fetchVideos()
+    func moveToPlaybackScene(with: MapModels.MoveToPlaybackScene.Request)
 }
 
-protocol MapDataStore { }
+protocol MapDataStore { 
+    var videos: [Post]? { get set }
+    var index: Int? { get set }
+}
 
 final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
@@ -28,6 +32,10 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
     private var longitude: Double?
 
+    var index: Int?
+
+    var videos: [Post]?
+    
     var presenter: MapPresentationLogic?
 
     override init() {
@@ -49,6 +57,12 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"]
             .compactMap { URL(string: $0) }
         presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Reponse(videoURLs: dummyURLs))
+    }
+
+    func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
+        videos = request.videos
+        index = request.index
+        presenter?.presentPlaybackScene()
     }
 
     private func checkCurrentLocationAuthorization(for status: CLAuthorizationStatus) {

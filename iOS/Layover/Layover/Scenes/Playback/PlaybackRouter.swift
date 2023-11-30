@@ -16,7 +16,7 @@ protocol PlaybackDataPassing {
     var dataStore: PlaybackDataStore? { get }
 }
 
-class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing {
+final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing {
 
     // MARK: - Properties
 
@@ -26,15 +26,6 @@ class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing {
     // MARK: - Routing
 
     func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+        
     }
-
-    // MARK: - Data Passing
-
-    // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: PlaybackDataStore) {
-    //     destinationDS.attribute = sourceDS.attribute
-    // }
 }

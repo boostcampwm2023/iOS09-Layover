@@ -27,5 +27,7 @@ final class HomeConfigurator: Configurator {
         interactor.videoFileWorker = videoFileWorker
         viewController.router = router
         viewController.interactor = interactor
+
+        router.dataStore = interactor
     }
 }
