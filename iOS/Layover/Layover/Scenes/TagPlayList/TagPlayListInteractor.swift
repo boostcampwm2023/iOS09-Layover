@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import OSLog
 
 protocol TagPlayListBusinessLogic {
     func fetchPlayList(request: TagPlayListModels.FetchPosts.Request)
@@ -31,9 +32,22 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
 
     func fetchPlayList(request: Model.FetchPosts.Request) {
         Task {
-            guard let post = await worker?.fetchPlayList(by: request.tag) else { return }
-            await MainActor.run {
-                presenter?.presentPlayList(response: Model.FetchPosts.Response(post: post))
+            guard let posts = await worker?.fetchPlayList(by: request.tag) else { return }
+
+            do {
+                let responsePosts = try await posts.concurrentMap {
+                    if let imageURL = $0.board.thumbnailImageURL,
+                       let imageData = await self.worker?.loadImageData(from: imageURL) {
+                        return Model.DisplayedPost(thumbnailImageData: imageData, title: $0.board.title)
+                    } else {
+                        return nil
+                    }
+                }.compactMap { $0 }
+                await MainActor.run {
+                    presenter?.presentPlayList(response: Model.FetchPosts.Response(post: responsePosts))
+                }
+            } catch {
+                os_log(.error, log: .default, "Error: %@", error.localizedDescription)
             }
         }
     }

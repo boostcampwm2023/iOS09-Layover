@@ -11,6 +11,7 @@ import OSLog
 
 protocol TagPlayListWorkerProtocol {
     func fetchPlayList(by tag: String) async -> [Post]?
+    func loadImageData(from url: URL) async -> Data?
 }
 
 final class TagPlayListWorker: TagPlayListWorkerProtocol {
@@ -42,6 +43,15 @@ final class TagPlayListWorker: TagPlayListWorkerProtocol {
             return responseData.data?.map { $0.toDomain() }
         } catch {
             os_log(.error, log: .default, "Error occured while fetching post list: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func loadImageData(from url: URL) async -> Data? {
+        do {
+            return try await provider.request(url: url)
+        } catch {
+            os_log(.error, log: .default, "Error occured while fetching image data: %s", error.localizedDescription)
             return nil
         }
     }

@@ -54,6 +54,9 @@
 		19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */; };
 		19A169422B17C70C00DB34C0 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169412B17C70C00DB34C0 /* Member.swift */; };
 		19A169442B17C71C00DB34C0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169432B17C71C00DB34C0 /* Board.swift */; };
+		19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */; };
+		19A169492B181AE300DB34C0 /* Sequence+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169482B181AE300DB34C0 /* Sequence+.swift */; };
+		19A1694B2B18225F00DB34C0 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 19A1694A2B18225F00DB34C0 /* sample.jpeg */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
@@ -121,7 +124,6 @@
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45502AFEB62C004F155A /* LayoverTests.swift */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
-		FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458F2AFF746E004F155A /* DummyWorker.swift */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
 		FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */; };
@@ -195,6 +197,9 @@
 		19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEndPointFactory.swift; sourceTree = "<group>"; };
 		19A169412B17C70C00DB34C0 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		19A169432B17C71C00DB34C0 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTagPlayListWorker.swift; sourceTree = "<group>"; };
+		19A169482B181AE300DB34C0 /* Sequence+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+.swift"; sourceTree = "<group>"; };
+		19A1694A2B18225F00DB34C0 /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		19AACFCB2B0F7D730088143E /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
@@ -268,7 +273,6 @@
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		FC7E458F2AFF746E004F155A /* DummyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyWorker.swift; sourceTree = "<group>"; };
 		FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModels.swift; sourceTree = "<group>"; };
@@ -400,6 +404,18 @@
 				19A1692F2B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		19A169452B17D10500DB34C0 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				19A1694A2B18225F00DB34C0 /* sample.jpeg */,
+				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
+				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
+				FC767F832B1214A70088CF9B /* MockUserWorker.swift */,
+				19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		19AACFC82B0F7C200088143E /* DTOs */ = {
@@ -630,10 +646,7 @@
 		FC7E45782AFF6F7A004F155A /* Workers */ = {
 			isa = PBXGroup;
 			children = (
-				FC767F832B1214A70088CF9B /* MockUserWorker.swift */,
-				FC7E458F2AFF746E004F155A /* DummyWorker.swift */,
-				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
-				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
+				19A169452B17D10500DB34C0 /* Mocks */,
 				193686732B15C489008902CD /* UserWorker.swift */,
 			);
 			path = Workers;
@@ -681,6 +694,7 @@
 				FCE52FF92B0FCB0A002CDB75 /* URLSession+.swift */,
 				FC767FA42B125F430088CF9B /* UIViewController+.swift */,
 				1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */,
+				19A169482B181AE300DB34C0 /* Sequence+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -835,6 +849,7 @@
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
+				19A1694B2B18225F00DB34C0 /* sample.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,6 +873,7 @@
 				19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */,
 				19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
+				19A169492B181AE300DB34C0 /* Sequence+.swift in Sources */,
 				1972CCDF2B14C9B000C3C762 /* Notification.Name+.swift in Sources */,
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
@@ -887,6 +903,7 @@
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
 				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
+				19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */,
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
@@ -936,7 +953,6 @@
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
 				835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */,
 				835A61922B067FEC002F22A5 /* LOTagStackView.swift in Sources */,
-				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
 				19A169282B176C5F00DB34C0 /* TagPlayListInteractor.swift in Sources */,
 				FC930E7A2B0CD75C00AA48E3 /* ProfileInteractor.swift in Sources */,
 				FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */,

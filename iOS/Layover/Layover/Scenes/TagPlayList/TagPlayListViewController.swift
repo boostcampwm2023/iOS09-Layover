@@ -33,7 +33,7 @@ final class TagPlayListViewController: BaseViewController {
     var interactor: TagPlayListBusinessLogic?
     var router: (TagPlayListRoutingLogic & TagPlayListDataPassing)?
 
-    private var displayedPosts: [Model.FetchPosts.ViewModel.DisplayedPost] = []
+    private var displayedPosts: [Model.DisplayedPost] = []
 
     // MARK: - Intializer
 
@@ -87,7 +87,7 @@ final class TagPlayListViewController: BaseViewController {
 
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = UIColor.primaryPurple
-        configuration.title = title
+        configuration.title = titleTag
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = UIFont.loFont(ofSize: 13, weight: .bold)
@@ -118,7 +118,7 @@ extension TagPlayListViewController: UICollectionViewDataSource {
         else { return UICollectionViewCell() }
 
         let data = displayedPosts[indexPath.item]
-        guard let imageData = data.thumbnailImage,
+        guard let imageData = data.thumbnailImageData,
               let image = UIImage(data: imageData)
         else { return UICollectionViewCell() }
 

@@ -11,20 +11,21 @@ import UIKit
 enum TagPlayListModels {
     // MARK: Use cases
 
+    struct DisplayedPost {
+        let thumbnailImageData: Data?
+        let title: String
+    }
+
     enum FetchPosts {
         struct Request {
             let tag: String
         }
 
         struct Response {
-            let post: [Post]
+            let post: [DisplayedPost]
         }
 
         struct ViewModel {
-            struct DisplayedPost {
-                let thumbnailImage: Data?
-                let title: String
-            }
             let displayedPost: [DisplayedPost]
         }
     }

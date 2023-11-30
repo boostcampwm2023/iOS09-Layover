@@ -21,6 +21,7 @@ final class TagPlayListPresenter: TagPlayListPresentationLogic {
     // MARK: - Methods
 
     func presentPlayList(response: TagPlayListModels.FetchPosts.Response) {
-        
+        let displayedPosts = response.post
+        viewController?.displayPlayList(viewModel: Model.FetchPosts.ViewModel(displayedPost: displayedPosts))
     }
 }

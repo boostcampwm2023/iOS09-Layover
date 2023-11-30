@@ -18,7 +18,7 @@ final class TagPlayListConfigurator: Configurator {
         let viewController = viewController
         let interactor = TagPlayListInteractor()
         let presenter = TagPlayListPresenter()
-        let worker = TagPlayListWorker()
+        let worker = MockTagPlayListWorker()
         let router = TagPlayListRouter()
 
         router.viewController = viewController
