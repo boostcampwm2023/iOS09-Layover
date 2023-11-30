@@ -6,83 +6,83 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum PlaybackModels {
+    // MARK: - Properties Type
+    struct PlaybackVideo: Hashable {
+        var id: UUID = UUID()
+        let post: Post
+    }
 
-    // MARK: - Use Cases
+    enum ParentView {
+        case home
+        case other
+    }
 
-    enum FetchFromLocalDataStore {
+    // MARK: - UseCase Load Video List
+
+    enum LoadPlaybackVideoList {
         struct Request {
+
         }
 
         struct Response {
+            let videos: [PlaybackVideo]
         }
 
         struct ViewModel {
-            var exampleTranslation: String?
+            let videos: [PlaybackVideo]
         }
     }
 
-    enum FetchFromRemoteDataStore {
+    // MARK: - UseCase Set Init Playback Scene
+
+    enum SetInitialPlaybackCell {
         struct Request {
+            let indexPathRow: Int
         }
 
         struct Response {
-            var exampleVariable: String?
+            let indexPathRow: Int
         }
 
         struct ViewModel {
-            var exampleVariable: String?
+            let indexPathRow: Int
         }
     }
 
-    enum TrackAnalytics {
+    // MARK: - UseCase Playback Video
+
+    enum DisplayPlaybackVideo {
         struct Request {
-            var event: AnalyticsEvents
+            let indexPathRow: Int?
+            let curCell: PlaybackCell?
         }
 
         struct Response {
+            let indexPathRow: Int?
+            let prevCell: PlaybackCell?
+            let curCell: PlaybackCell?
+
+            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+                self.indexPathRow = indexPathRow
+                self.prevCell = prevCell
+                self.curCell = curCell
+            }
         }
 
         struct ViewModel {
+            let indexPathRow: Int?
+            let prevCell: PlaybackCell?
+            let curCell: PlaybackCell?
+
+            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+                self.indexPathRow = indexPathRow
+                self.prevCell = prevCell
+                self.curCell = curCell
+            }
         }
     }
 
-    enum PerformPlayback {
-        struct Request {
-            var exampleVariable: String?
-        }
-
-        struct Response {
-            var error: PlaybackError?
-        }
-
-        struct ViewModel {
-            var error: PlaybackError?
-        }
-    }
-
-    // MARK: - Types
-
-    // replace with `AnalyticsEvents` with `AnalyticsConstants` if needed
-    typealias AnalyticsEvents = ExampleAnalyticsEvents
-    typealias PlaybackError = Error<PlaybackErrorType>
-
-    enum ExampleAnalyticsEvents {
-        case screenView
-    }
-
-    enum PlaybackErrorType {
-        case emptyExampleVariable, networkError
-    }
-
-    struct Error<T> {
-        var type: T
-        var message: String?
-
-        init(type: T) {
-            self.type = type
-        }
-    }
 }

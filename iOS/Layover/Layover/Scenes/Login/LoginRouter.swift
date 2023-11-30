@@ -45,7 +45,7 @@ final class LoginRouter: LoginRoutingLogic, LoginDataPassing {
     func navigateToAppleSignUp() {
         let signUpViewController = SignUpViewController()
         guard let source = dataStore,
-              var destination = signUpViewController.router?.dataStore
+              let destination = signUpViewController.router?.dataStore
         else { return }
 
         destination.signUpType = .apple
