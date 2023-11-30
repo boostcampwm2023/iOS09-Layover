@@ -18,18 +18,25 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
     // MARK: - Properties
 
     private let fileManager: FileManager
+    private let directoryPath: String
+    private let fileName: String
 
     // MARK: - Intializer
 
-    init(fileManager: FileManager = FileManager.default) {
+    init(fileManager: FileManager = FileManager.default,
+         directoryPath: String = "layover",
+         fileName: String = "\(Date().timeIntervalSince1970)") {
         self.fileManager = fileManager
+        self.directoryPath = directoryPath
+        self.fileName = fileName
+
     }
 
     // MARK: - Methods
 
     func copyToNewURL(at videoURL: URL) -> URL? {
         let documentsURL = FileManager.default.temporaryDirectory
-        let fileName = "layover/\(Int(Date().timeIntervalSince1970)).\(videoURL.pathExtension)"
+        let fileName = "\(directoryPath)/\(directoryPath).\(videoURL.pathExtension)"
         let newURL = documentsURL.appending(path: fileName)
         do {
             if fileManager.fileExists(atPath: newURL.path()) {

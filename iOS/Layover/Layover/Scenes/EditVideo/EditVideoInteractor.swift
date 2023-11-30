@@ -39,7 +39,7 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
             let response = Models.FetchVideo.Response(isEdited: isEdited,
                                                       videoURL: videoURL,
                                                       duration: seconds,
-                                                      isWithinRange: 3.0...60.0 ~= seconds)
+                                                      isWithinRange: request.videoRange ~= seconds)
             await MainActor.run {
                 presenter?.presentVideo(with: response)
             }

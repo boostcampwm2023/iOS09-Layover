@@ -35,9 +35,7 @@ final class HomeViewController: BaseViewController {
 
     private lazy var uploadButton: LOCircleButton = {
         let button = LOCircleButton(style: .add, diameter: 52)
-        button.addAction(UIAction { _ in
-            self.present(self.phPickerViewController, animated: true)
-        }, for: .touchUpInside)
+        button.addTarget(self, action: #selector(uploadButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -174,6 +172,10 @@ final class HomeViewController: BaseViewController {
               let centerCell = carouselCollectionView.cellForItem(at: index) as? HomeCarouselCollectionViewCell
         else { return }
         centerCell.playVideo()
+    }
+
+    @objc private func uploadButtonDidTap() {
+        self.present(phPickerViewController, animated: true)
     }
 
     // MARK: - Use Case

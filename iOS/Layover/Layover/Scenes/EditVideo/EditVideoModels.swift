@@ -13,12 +13,13 @@ enum EditVideoModels {
     enum FetchVideo {
         struct Request {
             let editedVideoURL: URL?
+            var videoRange: ClosedRange<Double> = 3.0...60.0
         }
         struct Response {
             let isEdited: Bool
             let videoURL: URL
             let duration: Double
-            let isWithinRange: Bool
+            var isWithinRange: Bool
         }
         struct ViewModel {
             let isEdited: Bool
