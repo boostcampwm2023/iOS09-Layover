@@ -1,0 +1,25 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { MemberService } from 'src/member/member.service';
+import { Report } from './report.entity';
+import { Repository } from 'typeorm';
+import { BoardService } from 'src/board/board.service';
+
+@Injectable()
+export class ReportService {
+  constructor(
+    @Inject('REPORT_REPOSITORY') private readonly reportRepository: Repository<Report>,
+    private readonly memberService: MemberService,
+    private readonly boardService: BoardService,
+  ) {}
+
+  async insertReport(memberId: number, boardId: number, reportType: string): Promise<Report> {
+    const member = await this.memberService.findMemberById(memberId);
+    const board = await this.boardService.findBoardById(boardId);
+    const newReport: Report = await this.reportRepository.save({
+      member: member,
+      board: board,
+      report_type: reportType,
+    });
+    return newReport;
+  }
+}

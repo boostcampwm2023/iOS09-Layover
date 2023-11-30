@@ -8,9 +8,10 @@ import { join } from 'path';
 import { BoardModule } from './board/board.module';
 import { VideoModule } from './video/video.module';
 import { TagModule } from './tag/tag.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
-  imports: [DatabaseModule, OauthModule, ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }), BoardModule, VideoModule, TagModule],
+  imports: [DatabaseModule, OauthModule, ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }), BoardModule, VideoModule, TagModule, ReportModule],
   controllers: [AppController],
   providers: [AppService],
 })

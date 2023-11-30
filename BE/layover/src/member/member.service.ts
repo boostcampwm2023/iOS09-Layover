@@ -15,7 +15,7 @@ export class MemberService {
       provider,
       hash,
     });
-    await this.memberRepository.save(memberEntity);
+    await this.memberRepository.insert(memberEntity);
   }
 
   async updateUsername(id: number, username: string) {

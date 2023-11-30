@@ -2,6 +2,7 @@ import { ACCESS_TOKEN_EXP_IN_SECOND, REFRESH_TOKEN_EXP_IN_SECOND } from 'src/con
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { v4 } from 'uuid';
+import { tokenPayload } from './interfaces/token.payload';
 
 type tokenType = 'access' | 'refresh';
 
@@ -46,7 +47,7 @@ export function extractPayloadJWTstr(token: string): string {
   return payload;
 }
 
-export function extractPayloadJWT(token: string) {
+export function extractPayloadJWT(token: string): tokenPayload {
   const payload = extractPayloadJWTstr(token);
   return JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
 }
