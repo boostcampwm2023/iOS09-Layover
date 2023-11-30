@@ -40,6 +40,7 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
 
         // Data Passing
         destination.videoURL = videoURL
+        viewController?.hidesBottomBarWhenPushed = true
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
