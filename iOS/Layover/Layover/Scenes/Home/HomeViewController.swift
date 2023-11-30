@@ -203,7 +203,9 @@ extension HomeViewController: PHPickerViewControllerDelegate {
                 }
             }
             if let error {
-                Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다. T.T")
+                DispatchQueue.main.async {
+                    Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+                }
             }
         }
     }
