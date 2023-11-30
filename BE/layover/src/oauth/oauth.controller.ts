@@ -1,18 +1,18 @@
-import { Post, Body, HttpStatus } from '@nestjs/common';
+import { Post, Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { OauthService } from './oauth.service';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { CustomResponse } from '../response/custom-response';
 import { ECustomCode } from '../response/ecustom-code.jenum';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { KakaoLoginDto } from './dtos/kakao-login.dto';
 import { AppleLoginDto } from './dtos/apple-login.dto';
 import { KakaoSignupDto } from './dtos/kakao-signup.dto';
 import { AppleSignupDto } from './dtos/apple-signup.dto';
-import { TokenResDto } from './dtos/token-res.dto';
 import { CustomHeader } from 'src/pipes/custom-header.decorator';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
+import { OAUTH_SWAGGER } from './oauth.swagger';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
@@ -26,19 +26,7 @@ export class OauthController {
     summary: '카카오 로그인',
     description: '카카오 로그인을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '카카오 로그인 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(TokenResDto) },
-      },
-    },
-  })
+  @ApiResponse(OAUTH_SWAGGER.PROCESS_KAKAO_LOGIN_SUCCESS)
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('kakao')
   async processKakaoLogin(@Body() kakaoLoginDto: KakaoLoginDto) {
@@ -56,19 +44,7 @@ export class OauthController {
     summary: '애플 로그인',
     description: '애플 로그인을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '애플 로그인 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(TokenResDto) },
-      },
-    },
-  })
+  @ApiResponse(OAUTH_SWAGGER.PROCESS_APPLE_LOGIN_SUCCESS)
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('apple')
   async processAppleLogin(@Body() appleLoginDto: AppleLoginDto) {
@@ -86,19 +62,7 @@ export class OauthController {
     summary: '카카오 회원가입',
     description: '카카오 회원가입을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '카카오 회원가입 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(TokenResDto) },
-      },
-    },
-  })
+  @ApiResponse(OAUTH_SWAGGER.PROCESS_KAKAO_SIGNUP_SUCCESS)
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('signup/kakao')
   async processKakaoSignup(@Body() kakaoSignupDto: KakaoSignupDto) {
@@ -132,19 +96,7 @@ export class OauthController {
     summary: '애플 회원가입',
     description: '애플 회원가입을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '애플 회원가입 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(TokenResDto) },
-      },
-    },
-  })
+  @ApiResponse(OAUTH_SWAGGER.PROCESS_APPLE_SIGNUP_SUCCESS)
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('signup/apple')
   async processAppleSignup(@Body() appleSignupDto: AppleSignupDto) {
@@ -178,19 +130,7 @@ export class OauthController {
     summary: 'Access token 재발급',
     description: 'refresh token을 이용해 access token을 재발급합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '토큰 재발급 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(TokenResDto) },
-      },
-    },
-  })
+  @ApiResponse(OAUTH_SWAGGER.RENEW_TOKENS_SUCCESS)
   @ApiResponse(SWAGGER.REFRESH_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('refresh-token')
