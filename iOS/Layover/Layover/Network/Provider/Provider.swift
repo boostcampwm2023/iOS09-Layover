@@ -86,14 +86,14 @@ class Provider: ProviderType {
     func request(url: URL) async throws -> Data {
         let (data, response) = try await session.data(from: url)
         try self.checkStatusCode(of: response)
-        return try data.decode()
+        return data
     }
 
     func request(url: String) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
         let (data, response) = try await session.data(from: url)
         try self.checkStatusCode(of: response)
-        return try data.decode()
+        return data
     }
 
     private func checkStatusCode(of response: URLResponse) throws {

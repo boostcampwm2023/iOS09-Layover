@@ -31,7 +31,7 @@ final class MainTabBarConfigurator: Configurator {
         profileViewController.tabBarItem = UITabBarItem(title: "프로필",
                                                         image: profileIconImage.withTintColor(.white),
                                                         selectedImage: nil)
-
+        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
         viewController.setViewControllers([
             homeViewController,
             mapViewController,
