@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import OSLog
 
 final class MockLoginWorker: LoginWorkerProtocol {
@@ -18,7 +17,9 @@ final class MockLoginWorker: LoginWorkerProtocol {
     private let loginEndPointFactory: LoginEndPointFactory
     private let authManager: AuthManager
 
-    init(provider: ProviderType = Provider(session: .initMockSession()), loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(), authManager: AuthManager = .shared) {
+    init(provider: ProviderType = Provider(session: .initMockSession()),
+         loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(),
+         authManager: AuthManager = .shared) {
         self.provider = provider
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
@@ -29,18 +30,15 @@ final class MockLoginWorker: LoginWorkerProtocol {
     // MARK: - Methods
 
     func fetchKakaoLoginToken() async -> String? {
-        // TODO: 로직 구현
-        return nil
+        return "mock token"
     }
 
     func isRegisteredKakao(with socialToken: String) async -> Bool {
-        // TODO: 로직 구현
         return false
     }
 
     func loginKakao(with socialToken: String) async -> Bool {
-        // TODO: 로직 구현
-        return false
+        return true
     }
 
     func isRegisteredApple(with identityToken: String) async -> Bool {
@@ -65,8 +63,6 @@ final class MockLoginWorker: LoginWorkerProtocol {
         do {
             let endPoint: EndPoint = loginEndPointFactory.makeAppleLoginEndPoint(with: identityToken)
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-            print(response.data?.accessToken ?? "")
-            print(response.data?.refreshToken ?? "")
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
