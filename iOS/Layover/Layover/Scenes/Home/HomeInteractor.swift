@@ -14,7 +14,7 @@ protocol HomeBusinessLogic {
 }
 
 protocol HomeDataStore {
-    var videos: [VideoDTO]? { get set }
+    var videos: [Post]? { get set }
     var index: Int? { get set }
 }
 
@@ -26,7 +26,7 @@ final class HomeInteractor: HomeDataStore {
 
     var presenter: HomePresentationLogic?
 
-    var videos: [VideoDTO]?
+    var videos: [Post]?
 
     var index: Int?
 }

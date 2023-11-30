@@ -44,38 +44,61 @@ final class HomeViewController: BaseViewController {
         cell.setVideo(url: url, loopingAt: .zero)
         cell.configure(title: "요리왕 비룡 데뷔", tags: ["#천상의맛", "#갈갈갈", "#빨리주세요"])
         cell.moveToPlaybackSceneCallback = {
-            self.interactor?.moveToPlaybackScene(with: Models.MoveToPlaybackScene.Request(index: indexPath.row, videos: [
-                VideoDTO(title: "찹모찌1",
-                         content: "찹모찌의 뜻은 뭘 까?",
-                         location: "첫번째 우주",
-                         tags: ["찹"],
-                         member: MemberDTO(
-                            username: "찹모찌",
-                            introduce: "찹모찌임당",
-                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!),
-                VideoDTO(title: "찹모찌2",
-                         content: "찹모찌의 뜻은 뭘 까??",
-                         location: "첫번째 우주",
-                         tags: ["찹", "모"],
-                         member: MemberDTO(
-                            username: "찹모찌",
-                            introduce: "찹모찌임당",
-                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!),
-                VideoDTO(title: "찹모찌3",
-                         content: "찹모찌의 뜻은 뭘 까??",
-                         location: "첫번째 우주",
-                         tags: ["찹", "모"],
-                         member: MemberDTO(
-                            username: "찹모찌",
-                            introduce: "찹모찌임당",
-                            profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                         sdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                         hdURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!)
-            ]))
+            self.interactor?.moveToPlaybackScene(
+                with: Models.MoveToPlaybackScene.Request(
+                    index: indexPath.row,
+                    videos: [
+                        Post(
+                            member: Member(
+                                identifier: 1,
+                                username: "찹모찌",
+                                introduce: "찹모찌데스",
+                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                            board: Board(
+                                identifier: 1,
+                                title: "찹찹찹",
+                                description: "찹모찌의 뜻은 뭘까?",
+                                thumbnailImageURL: nil,
+                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                                latitude: nil,
+                                longitude: nil),
+                            tag: ["찹", "모", "찌"]
+                            ),
+                        Post(
+                            member: Member(
+                                identifier: 2,
+                                username: "로인설",
+                                introduce: "로인설데스",
+                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                            board: Board(
+                                identifier: 2,
+                                title: "설설설",
+                                description: "로인설의 뜻은 뭘까?",
+                                thumbnailImageURL: nil,
+                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                                latitude: nil,
+                                longitude: nil),
+                            tag: ["로", "인", "설"]
+                            ),
+                        Post(
+                            member: Member(
+                                identifier: 3,
+                                username: "콩콩콩",
+                                introduce: "콩콩콩데스",
+                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
+                            board: Board(
+                                identifier: 1,
+                                title: "콩콩콩",
+                                description: "콩콩콩의 뜻은 뭘까?",
+                                thumbnailImageURL: nil,
+                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
+                                latitude: nil,
+                                longitude: nil),
+                            tag: ["콩", "콩", "콩"]
+                            )
+                    ]
+                )
+            )
         }
         cell.addLoopingViewGesture()
         return cell

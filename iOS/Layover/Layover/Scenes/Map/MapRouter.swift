@@ -32,19 +32,13 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
         else { return }
         destination.parentView = .other
         destination.index = source.index
-        destination.videos = transDTO(videos: source.videos ?? [])
+        destination.videos = transData(videos: source.videos ?? [])
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
 
-    private func transDTO(videos: [VideoDTO]) -> [PlaybackModels.Board] {
-        videos.map { videoDTO in
-            return PlaybackModels.Board(
-                title: videoDTO.title,
-                content: videoDTO.content,
-                tags: videoDTO.tags,
-                sdUrl: videoDTO.sdURL,
-                hdURL: videoDTO.hdURL,
-                memeber: videoDTO.member)
+    private func transData(videos: [Post]) -> [PlaybackModels.PlaybackVideo] {
+        videos.map { video in
+            return PlaybackModels.PlaybackVideo(post: video)
         }
     }
 

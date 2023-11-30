@@ -36,17 +36,17 @@ enum MapModels {
     enum MoveToPlaybackScene {
         struct Request {
             let index: Int
-            let videos: [VideoDTO]
+            let videos: [Post]
         }
 
         struct Response {
             let index: Int
-            let videos: [VideoDTO]
+            let videos: [Post]
         }
 
         struct ViewModel {
             let index: Int
-            let videos: [VideoDTO]
+            let videos: [Post]
         }
     }
 

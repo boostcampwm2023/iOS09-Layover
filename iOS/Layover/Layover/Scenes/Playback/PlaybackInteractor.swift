@@ -20,7 +20,7 @@ protocol PlaybackBusinessLogic {
 }
 
 protocol PlaybackDataStore: AnyObject {
-    var videos: [PlaybackModels.Board]? { get set }
+    var videos: [PlaybackModels.PlaybackVideo]? { get set }
     var parentView: PlaybackModels.ParentView? { get set }
     var prevCell: PlaybackCell? { get set }
     var index: Int? { get set }
@@ -36,7 +36,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     lazy var worker = PlaybackWorker()
     var presenter: PlaybackPresentationLogic?
 
-    var videos: [Models.Board]?
+    var videos: [PlaybackModels.PlaybackVideo]?
 
     var parentView: Models.ParentView?
 
@@ -52,7 +52,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         guard let parentView: Models.ParentView else {
             return
         }
-        guard var videos: [PlaybackModels.Board] else {
+        guard var videos: [PlaybackModels.PlaybackVideo] else {
             return
         }
         if parentView == .other {

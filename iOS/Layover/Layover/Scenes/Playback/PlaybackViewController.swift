@@ -40,7 +40,7 @@ final class PlaybackViewController: BaseViewController {
 
     // MARK: - Properties
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Models.Board>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
 
     typealias Models = PlaybackModels
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
@@ -111,7 +111,7 @@ final class PlaybackViewController: BaseViewController {
 
 extension PlaybackViewController: PlaybackDisplayLogic {
     func displayVideoList(viewModel: Models.LoadPlaybackVideoList.ViewModel) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Models.Board>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Models.PlaybackVideo>()
         snapshot.appendSections([.main])
         snapshot.appendItems(viewModel.videos)
         dataSource?.apply(snapshot, animatingDifferences: false)
@@ -177,10 +177,11 @@ private extension PlaybackViewController {
             return
         }
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
-        dataSource = UICollectionViewDiffableDataSource<Section, Models.Board>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
+            guard let videoURL: URL = video.post.board.videoURL else { return PlaybackCell()}
             cell.setPlaybackContents(viewModel: video)
-            cell.addAVPlayer(url: video.hdURL)
+            cell.addAVPlayer(url: videoURL)
             cell.setPlayerSlider(tabbarHeight: tabbarHeight)
             return cell
         }

@@ -10,14 +10,9 @@ import Foundation
 
 enum PlaybackModels {
     // MARK: - Properties Type
-    struct Board: Hashable {
+    struct PlaybackVideo: Hashable {
         var id: UUID = UUID()
-        let title: String
-        let content: String
-        let tags: [String]
-        let sdUrl: URL
-        let hdURL: URL
-        let memeber: MemberDTO
+        let post: Post
     }
 
     enum ParentView {
@@ -33,11 +28,11 @@ enum PlaybackModels {
         }
 
         struct Response {
-            let videos: [Board]
+            let videos: [PlaybackVideo]
         }
 
         struct ViewModel {
-            let videos: [Board]
+            let videos: [PlaybackVideo]
         }
     }
 

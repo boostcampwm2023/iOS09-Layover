@@ -22,9 +22,9 @@ final class PlaybackCell: UICollectionViewCell {
     }
 
     // TODO: VideoModel 받아서 처리
-    func setPlaybackContents(viewModel: PlaybackModels.Board) {
-        playbackView.descriptionView.titleLabel.text = viewModel.title
-        playbackView.descriptionView.setText(viewModel.content)
+    func setPlaybackContents(viewModel: PlaybackModels.PlaybackVideo) {
+        playbackView.descriptionView.titleLabel.text = viewModel.post.board.title
+        playbackView.descriptionView.setText(viewModel.post.board.description ?? "")
 
     }
 

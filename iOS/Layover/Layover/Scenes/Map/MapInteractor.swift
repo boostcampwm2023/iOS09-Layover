@@ -16,7 +16,7 @@ protocol MapBusinessLogic {
 }
 
 protocol MapDataStore { 
-    var videos: [VideoDTO]? { get set }
+    var videos: [Post]? { get set }
     var index: Int? { get set }
 }
 
@@ -34,7 +34,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
     var index: Int?
 
-    var videos: [VideoDTO]?
+    var videos: [Post]?
     
     var presenter: MapPresentationLogic?
 

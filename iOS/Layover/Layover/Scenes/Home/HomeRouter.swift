@@ -38,20 +38,13 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         else { return }
         destination.parentView = .home
         destination.index = source.index
-        destination.videos = transDTO(videos: source.videos ?? [])
+        destination.videos = transData(videos: source.videos ?? [])
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
 
-    // Interactor가 해줄 역할? 고민 필요
-    private func transDTO(videos: [VideoDTO]) -> [PlaybackModels.Board] {
-        videos.map { videoDTO in
-            return PlaybackModels.Board(
-                title: videoDTO.title,
-                content: videoDTO.content,
-                tags: videoDTO.tags,
-                sdUrl: videoDTO.sdURL,
-                hdURL: videoDTO.hdURL,
-                memeber: videoDTO.member)
+    private func transData(videos: [Post]) -> [PlaybackModels.PlaybackVideo] {
+        videos.map { video in
+            return PlaybackModels.PlaybackVideo(post: video)
         }
     }
     // MARK: - Data Passing
