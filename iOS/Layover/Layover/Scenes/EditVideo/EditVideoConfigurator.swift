@@ -18,6 +18,7 @@ final class EditVideoConfigurator: Configurator {
 
     func configure(_ viewController: ViewController) {
         let viewController = viewController
+        let videoFileWorker = VideoFileWorker()
         let interactor = EditVideoInteractor()
         let presenter = EditVideoPresenter()
         let router = EditVideoRouter()
@@ -27,6 +28,7 @@ final class EditVideoConfigurator: Configurator {
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
+        interactor.videoFileWorker = videoFileWorker
         presenter.viewController = viewController
     }
 

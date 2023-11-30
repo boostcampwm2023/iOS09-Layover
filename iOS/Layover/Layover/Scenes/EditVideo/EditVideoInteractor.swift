@@ -11,6 +11,7 @@ import UIKit
 
 protocol EditVideoBusinessLogic {
     func fetchVideo(request: EditVideoModels.FetchVideo.Request)
+    func deleteVideo()
 }
 
 protocol EditVideoDataStore {
@@ -23,7 +24,7 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
 
     typealias Models = EditVideoModels
 
-    lazy var worker = EditVideoWorker()
+    var videoFileWorker: VideoFileWorker?
     var presenter: EditVideoPresentationLogic?
 
     var videoURL: URL?
@@ -43,6 +44,11 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
                 presenter?.presentVideo(with: response)
             }
         }
+    }
+
+    func deleteVideo() {
+        guard let videoURL else { return }
+        videoFileWorker?.delete(at: videoURL)
     }
 
 }

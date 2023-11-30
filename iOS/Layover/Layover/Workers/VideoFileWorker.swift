@@ -28,7 +28,7 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
     // MARK: - Methods
 
     func copyToNewURL(at videoURL: URL) -> URL? {
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let documentsURL = FileManager.default.temporaryDirectory
         let fileName = "layover/\(Int(Date().timeIntervalSince1970)).\(videoURL.pathExtension)"
         let newURL = documentsURL.appending(path: fileName)
         do {

@@ -73,6 +73,10 @@ final class EditVideoViewController: BaseViewController {
         interactor?.fetchVideo(request: Models.FetchVideo.Request())
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        interactor?.deleteVideo()
+    }
+
     override func setConstraints() {
         super.setConstraints()
         view.addSubviews(loopingPlayerView, soundButton, cutButton, nextButton)
@@ -110,7 +114,7 @@ final class EditVideoViewController: BaseViewController {
             let editController = UIVideoEditorController()
             editController.videoPath = videoPath
             editController.videoMaximumDuration = 60.0
-            editController.modalPresentationStyle = .fullScreen
+            editController.modalPresentationStyle = .overCurrentContext
             editController.videoQuality = .typeHigh
             editController.delegate = self
             self.present(editController, animated: true)
