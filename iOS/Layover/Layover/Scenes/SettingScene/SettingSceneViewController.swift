@@ -161,9 +161,3 @@ extension SettingSceneViewController: UITableViewDataSource {
     navi.pushViewController(SettingSceneViewController(), animated: false)
     return navi
 }
-
-//#Preview {
-//    let navi = UINavigationController(rootViewController: UIViewController())
-//    navi.pushViewController(TagPlayListViewController(), animated: false)
-//    return navi
-//}
