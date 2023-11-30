@@ -26,5 +26,7 @@ final class HomeConfigurator: Configurator {
 
         viewController.router = router
         viewController.interactor = interactor
+
+        router.dataStore = interactor
     }
 }

@@ -9,58 +9,77 @@
 import UIKit
 
 protocol PlaybackPresentationLogic {
-    func presentFetchFromLocalDataStore(with response: PlaybackModels.FetchFromLocalDataStore.Response)
-    func presentFetchFromRemoteDataStore(with response: PlaybackModels.FetchFromRemoteDataStore.Response)
-    func presentTrackAnalytics(with response: PlaybackModels.TrackAnalytics.Response)
-    func presentPerformPlayback(with response: PlaybackModels.PerformPlayback.Response)
+    func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response)
+    func presentSetCellIfInfinite()
+    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
+    func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
+    func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response)
 }
 
-class PlaybackPresenter: PlaybackPresentationLogic {
+final class PlaybackPresenter: PlaybackPresentationLogic {
 
     // MARK: - Properties
 
     typealias Models = PlaybackModels
     weak var viewController: PlaybackDisplayLogic?
 
-    // MARK: - Use Case - Fetch From Local DataStore
+    // MARK: - UseCase Load Video List
 
-    func presentFetchFromLocalDataStore(with response: PlaybackModels.FetchFromLocalDataStore.Response) {
-        let translation = "Some localized text."
-        let viewModel = Models.FetchFromLocalDataStore.ViewModel(exampleTranslation: translation)
-        viewController?.displayFetchFromLocalDataStore(with: viewModel)
+    func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
+        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
+        viewController?.displayVideoList(viewModel: viewModel)
     }
 
-    // MARK: - Use Case - Fetch From Remote DataStore
-
-    func presentFetchFromRemoteDataStore(with response: PlaybackModels.FetchFromRemoteDataStore.Response) {
-        let formattedExampleVariable = response.exampleVariable ?? ""
-        let viewModel = Models.FetchFromRemoteDataStore.ViewModel(exampleVariable: formattedExampleVariable)
-        viewController?.displayFetchFromRemoteDataStore(with: viewModel)
+    func presentSetCellIfInfinite() {
+        viewController?.displayMoveCellIfinfinite()
     }
 
-    // MARK: - Use Case - Track Analytics
+    // MARK: - UseCase Set Init Playback Scene
 
-    func presentTrackAnalytics(with response: PlaybackModels.TrackAnalytics.Response) {
-        let viewModel = Models.TrackAnalytics.ViewModel()
-        viewController?.displayTrackAnalytics(with: viewModel)
+    func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
+        let viewModel: Models.SetInitialPlaybackCell.ViewModel = Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow)
+        viewController?.setInitialPlaybackCell(viewModel: viewModel)
     }
 
-    // MARK: - Use Case - Playback
+    func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
+        let viewModel: Models.SetInitialPlaybackCell.ViewModel = Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow)
+        viewController?.moveInitialPlaybackCell(viewModel: viewModel)
+    }
 
-    func presentPerformPlayback(with response: PlaybackModels.PerformPlayback.Response) {
-        var responseError = response.error
+    // MARK: - UseCase Playback Video
 
-        if let error = responseError {
-            switch error.type {
-            case .emptyExampleVariable:
-                responseError?.message = "Localized empty/nil error message."
+    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: response.curCell)
+        viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
+    }
 
-            case .networkError:
-                responseError?.message = "Localized network error message."
-            }
-        }
+    func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
+    }
 
-        let viewModel = Models.PerformPlayback.ViewModel(error: responseError)
-        viewController?.displayPerformPlayback(with: viewModel)
+    func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: nil)
+        viewController?.hidePlayerSlider(viewModel: viewModel)
+    }
+
+    func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        viewController?.showPlayerSlider(viewModel: viewModel)
+    }
+
+    func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(indexPathRow: response.indexPathRow, prevCell: nil, curCell: nil)
+        viewController?.teleportPlaybackCell(viewModel: viewModel)
+    }
+
+    func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: nil)
+        viewController?.leavePlaybackView(viewModel: viewModel)
     }
 }

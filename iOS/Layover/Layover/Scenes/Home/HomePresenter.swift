@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomePresentationLogic {
     func presentVideoURL(with response: HomeModels.CarouselVideos.Response)
+    func presentPlaybackScene()
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -24,5 +25,11 @@ final class HomePresenter: HomePresentationLogic {
     func presentVideoURL(with response: HomeModels.CarouselVideos.Response) {
         let viewModel = HomeModels.CarouselVideos.ViewModel(videoURLs: response.videoURLs)
         viewController?.displayVideoURLs(with: viewModel)
+    }
+
+    // MARK: - UseCase Present PlaybackScene
+
+    func presentPlaybackScene() {
+        viewController?.routeToPlayback()
     }
 }

@@ -10,10 +10,12 @@ import UIKit
 
 protocol HomeBusinessLogic {
     func fetchVideos(with: HomeModels.CarouselVideos.Request)
+    func moveToPlaybackScene(with: HomeModels.MoveToPlaybackScene.Request)
 }
 
 protocol HomeDataStore {
-
+    var videos: [VideoDTO]? { get set }
+    var index: Int? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
@@ -23,6 +25,10 @@ final class HomeInteractor: HomeDataStore {
     typealias Models = HomeModels
 
     var presenter: HomePresentationLogic?
+
+    var videos: [VideoDTO]?
+
+    var index: Int?
 }
 
 // MARK: - Use Case
@@ -37,5 +43,11 @@ extension HomeInteractor: HomeBusinessLogic {
             URL(string: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")!
         ])
         presenter?.presentVideoURL(with: response)
+    }
+
+    func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
+        videos = request.videos
+        index = request.index
+        presenter?.presentPlaybackScene()
     }
 }

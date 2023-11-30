@@ -12,6 +12,7 @@ protocol MapPresentationLogic {
     func presentCurrentLocation()
     func presentDefaultLocation()
     func presentFetchedVideos(with response: MapModels.FetchVideo.Reponse)
+    func presentPlaybackScene()
 }
 
 final class MapPresenter: MapPresentationLogic {
@@ -32,5 +33,9 @@ final class MapPresenter: MapPresentationLogic {
     func presentFetchedVideos(with response: MapModels.FetchVideo.Reponse) {
         let viewModel = MapModels.FetchVideo.ViewModel(videoDataSources: response.videoURLs.map { .init(videoURL: $0) })
         viewController?.displayFetchedVideos(viewModel: viewModel)
+    }
+
+    func presentPlaybackScene() {
+        viewController?.routeToPlayback()
     }
 }

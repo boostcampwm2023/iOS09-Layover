@@ -9,17 +9,25 @@
 import UIKit
 
 protocol PlaybackBusinessLogic {
-    func fetchFromLocalDataStore(with request: PlaybackModels.FetchFromLocalDataStore.Request)
-    func fetchFromRemoteDataStore(with request: PlaybackModels.FetchFromRemoteDataStore.Request)
-    func trackAnalytics(with request: PlaybackModels.TrackAnalytics.Request)
-    func performPlayback(with request: PlaybackModels.PerformPlayback.Request)
+    func displayVideoList()
+    func moveInitialPlaybackCell()
+    func hidePlayerSlider()
+    func setInitialPlaybackCell()
+    func leavePlaybackView()
+    func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
 }
 
-protocol PlaybackDataStore {
-    var exampleVariable: String? { get set }
+protocol PlaybackDataStore: AnyObject {
+    var videos: [PlaybackModels.Board]? { get set }
+    var parentView: PlaybackModels.ParentView? { get set }
+    var prevCell: PlaybackCell? { get set }
+    var index: Int? { get set }
+    var isTeleport: Bool? { get set }
 }
 
-class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
+final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     // MARK: - Properties
 
@@ -28,59 +36,118 @@ class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     lazy var worker = PlaybackWorker()
     var presenter: PlaybackPresentationLogic?
 
-    var exampleVariable: String?
+    var videos: [Models.Board]?
 
-    // MARK: - Use Case - Fetch From Local DataStore
+    var parentView: Models.ParentView?
 
-    func fetchFromLocalDataStore(with request: PlaybackModels.FetchFromLocalDataStore.Request) {
-        let response = Models.FetchFromLocalDataStore.Response()
-        presenter?.presentFetchFromLocalDataStore(with: response)
-    }
+    var prevCell: PlaybackCell?
 
-    // MARK: - Use Case - Fetch From Remote DataStore
+    var index: Int?
 
-    func fetchFromRemoteDataStore(with request: PlaybackModels.FetchFromRemoteDataStore.Request) {
-        // fetch something from backend and return the values here
-        // <#Network Worker Instance#>.fetchFromRemoteDataStore(completion: { [weak self] code in
-        //     let response = Models.FetchFromRemoteDataStore.Response(exampleVariable: code)
-        //     self?.presenter?.presentFetchFromRemoteDataStore(with: response)
-        // })
-    }
+    var isTeleport: Bool?
 
-    // MARK: - Use Case - Track Analytics
+    // MARK: - UseCase Load Video List
 
-    func trackAnalytics(with request: PlaybackModels.TrackAnalytics.Request) {
-        // call analytics library/wrapper here to track analytics
-        // <#Analytics Worker Instance#>.trackAnalytics(event: request.event)
-
-        let response = Models.TrackAnalytics.Response()
-        presenter?.presentTrackAnalytics(with: response)
-    }
-
-    // MARK: - Use Case - Playback
-
-    func performPlayback(with request: PlaybackModels.PerformPlayback.Request) {
-        let error = worker.validate(exampleVariable: request.exampleVariable)
-
-        if let error = error {
-            let response = Models.PerformPlayback.Response(error: error)
-            presenter?.presentPerformPlayback(with: response)
+    func displayVideoList() {
+        guard let parentView: Models.ParentView else {
             return
         }
-
-        // <#Network Worker Instance#>.performPlayback(completion: { [weak self, weak request] isSuccessful, error in
-        //     self?.completion(request?.exampleVariable, isSuccessful, error)
-        // })
-    }
-
-    private func completion(_ exampleVariable: String?, _ isSuccessful: Bool, _ error: Models.PlaybackError?) {
-        if isSuccessful {
-            // do something on success
-            let goodExample = exampleVariable ?? ""
-            self.exampleVariable = goodExample
+        guard var videos: [PlaybackModels.Board] else {
+            return
         }
-
-        let response = Models.PerformPlayback.Response(error: error)
-        presenter?.presentPerformPlayback(with: response)
+        if parentView == .other {
+            videos = worker.makeInfiniteScroll(videos: videos)
+            self.videos = videos
+        }
+        let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+        presenter?.presentVideoList(with: response)
     }
+
+
+    func moveInitialPlaybackCell() {
+        let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
+        if parentView == .other {
+            presenter?.presentSetCellIfInfinite()
+        } else {
+            presenter?.presentMoveInitialPlaybackCell(with: response)
+        }
+    }
+
+    func setInitialPlaybackCell() {
+        guard let parentView else { return }
+        guard let index else { return }
+        let response: Models.SetInitialPlaybackCell.Response
+        switch parentView {
+        case .home:
+            response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
+        case .other:
+            response = Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1)
+        }
+        presenter?.presentSetInitialPlaybackCell(with: response)
+    }
+
+    // MARK: - UseCase Playback Video
+
+    func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        prevCell = request.curCell
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: request.curCell)
+        presenter?.presentPlayInitialPlaybackCell(with: response)
+    }
+
+    func hidePlayerSlider() {
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
+        presenter?.presentHidePlayerSlider(with: response)
+    }
+
+    func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        guard let videos else { return }
+        var response: Models.DisplayPlaybackVideo.Response
+        if prevCell == request.curCell {
+            response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
+            presenter?.presentShowPlayerSlider(with: response)
+            isTeleport = false
+            return
+        }
+        // Home이 아닌 다른 뷰에서 왔을 경우(로드한 목록 무한 반복)
+        if parentView == .other {
+            if request.indexPathRow == (videos.count - 1) {
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, prevCell: prevCell, curCell: nil)
+            } else if request.indexPathRow == 0 {
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: videos.count - 2, prevCell: prevCell, curCell: nil)
+            } else {
+                response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+                prevCell = request.curCell
+                presenter?.presentMoveCellNext(with: response)
+                isTeleport = false
+                return
+            }
+            isTeleport = true
+            presenter?.presentTeleportCell(with: response)
+            return
+        }
+        // Home이면 다음 셀로 이동(추가적인 비디오 로드)
+        isTeleport = false
+        response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+        prevCell = request.curCell
+        presenter?.presentMoveCellNext(with: response)
+    }
+
+    func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        guard let isTeleport else { return }
+        guard let videos else { return }
+        if isTeleport {
+            if request.indexPathRow == 1 || request.indexPathRow == (videos.count - 2) {
+                let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+                prevCell = request.curCell
+                presenter?.presentMoveCellNext(with: response)
+                self.isTeleport = false
+            }
+        }
+    }
+
+    func leavePlaybackView() {
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
+        presenter?.presentLeavePlaybackView(with: response)
+    }
+
 }

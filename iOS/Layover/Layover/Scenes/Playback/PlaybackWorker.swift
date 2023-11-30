@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlaybackWorker {
+final class PlaybackWorker {
 
     // MARK: - Properties
 
@@ -16,17 +16,14 @@ class PlaybackWorker {
 
     // MARK: - Methods
 
-    // MARK: Screen Specific Validation
-
-    func validate(exampleVariable: String?) -> Models.PlaybackError? {
-        var error: Models.PlaybackError?
-
-        if exampleVariable?.isEmpty == false {
-            error = nil
-        } else {
-            error = Models.PlaybackError(type: .emptyExampleVariable)
-        }
-
-        return error
+    func makeInfiniteScroll(videos: [Models.Board]) -> [Models.Board] {
+        var tempVideos: [Models.Board] = videos
+        var tempLastVideo: Models.Board = videos[tempVideos.count-1]
+        tempLastVideo.id = UUID()
+        var tempFirstVideo: Models.Board = videos[1]
+        tempFirstVideo.id = UUID()
+        tempVideos.insert(tempLastVideo, at: 0)
+        tempVideos.append(tempFirstVideo)
+        return tempVideos
     }
 }
