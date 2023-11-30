@@ -30,4 +30,24 @@ enum MapModels {
             }
         }
     }
+
+    // MARK: - Move To Playback Scene
+
+    enum MoveToPlaybackScene {
+        struct Request {
+            let index: Int
+            let videos: [Post]
+        }
+
+        struct Response {
+            let index: Int
+            let videos: [Post]
+        }
+
+        struct ViewModel {
+            let index: Int
+            let videos: [Post]
+        }
+    }
+
 }

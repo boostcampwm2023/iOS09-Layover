@@ -10,13 +10,15 @@ import UIKit
 
 protocol HomeRoutingLogic {
     func routeToNext()
+    func routeToEditVideo()
+    func routeToPlayback()
 }
 
 protocol HomeDataPassing {
     var dataStore: HomeDataStore? { get }
 }
 
-class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
+final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
 
     // MARK: - Properties
 
@@ -30,6 +32,34 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         viewController?.navigationController?.setViewControllers([nextViewController], animated: true)
     }
 
+    func routeToPlayback() {
+        let playbackViewController: PlaybackViewController = PlaybackViewController()
+        guard let source = dataStore,
+              let destination = playbackViewController.router?.dataStore
+        else { return }
+        destination.parentView = .home
+        destination.index = source.index
+        destination.videos = transData(videos: source.videos ?? [])
+        viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
+    }
+    func routeToEditVideo() {
+        let nextViewController = EditVideoViewController()
+        guard let source = dataStore,
+              var destination = nextViewController.router?.dataStore,
+              let videoURL = source.selectedVideoURL
+        else { return }
+
+        // Data Passing
+        destination.videoURL = videoURL
+        nextViewController.hidesBottomBarWhenPushed = true
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+
+    private func transData(videos: [Post]) -> [PlaybackModels.PlaybackVideo] {
+        videos.map { video in
+            return PlaybackModels.PlaybackVideo(post: video)
+        }
+    }
     // MARK: - Data Passing
 
     // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: HomeDataStore) {

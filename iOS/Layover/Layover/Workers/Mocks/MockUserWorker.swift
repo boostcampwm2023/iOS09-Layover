@@ -14,8 +14,6 @@ final class MockUserWorker: UserWorkerProtocol {
     // MARK: - Properties
 
     private let provider: ProviderType = Provider(session: .initMockSession())
-    private let headers: [String: String] = ["Content-Type": "application/json",
-                                             "Authorization": "mock token"]
 
     // MARK: - Methods
 
@@ -43,8 +41,7 @@ final class MockUserWorker: UserWorkerProtocol {
             }
             let endPoint: EndPoint = EndPoint<Response<NicknameDTO>>(path: "/member/username",
                                                                      method: .PATCH,
-                                                                     bodyParameters: NicknameDTO(userName: nickname),
-                                                                     headers: headers)
+                                                                     bodyParameters: NicknameDTO(userName: nickname))
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
             return data.userName
@@ -68,9 +65,8 @@ final class MockUserWorker: UserWorkerProtocol {
             }
             let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
                                                                 method: .POST,
-                                                                bodyParameters: NicknameDTO(userName: userName),
-                                                                headers: headers)
-            let response = try await provider.request(with: endPoint)
+                                                                bodyParameters: NicknameDTO(userName: userName))
+            let response = try await provider.request(with: endPoint, authenticationIfNeeded: false)
             guard let data = response.data else { throw NetworkError.emptyData }
             return data.isValid
         } catch {
@@ -95,8 +91,7 @@ final class MockUserWorker: UserWorkerProtocol {
 
             let endPoint = EndPoint<Response<IntroduceDTO>>(path: "/member/introduce",
                                                             method: .PATCH,
-                                                            bodyParameters: IntroduceDTO(introduce: introduce),
-                                                            headers: headers)
+                                                            bodyParameters: IntroduceDTO(introduce: introduce))
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
             return data.introduce
@@ -119,8 +114,7 @@ final class MockUserWorker: UserWorkerProtocol {
                 return (response, mockData, nil)
             }
             let endPoint = EndPoint<Response<NicknameDTO>>(path: "/member",
-                                                           method: .DELETE,
-                                                           headers: ["Authorization": "mock token"])
+                                                           method: .DELETE)
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { throw NetworkError.emptyData }
             return data.userName

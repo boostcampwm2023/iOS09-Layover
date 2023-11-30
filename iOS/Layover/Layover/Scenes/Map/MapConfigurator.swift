@@ -19,8 +19,12 @@ final class MapConfigurator: Configurator {
         let viewController = viewController
         let interactor = MapInteractor()
         let presenter = MapPresenter()
+        let router = MapRouter()
+        router.viewController = viewController
         viewController.interactor = interactor
         interactor.presenter = presenter
         presenter.viewController = viewController
+        viewController.router = router
+        router.dataStore = interactor
     }
 }
