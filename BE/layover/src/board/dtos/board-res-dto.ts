@@ -8,28 +8,29 @@ export class BoardResDto {
   id: number;
 
   @ApiProperty({
-    example: 'https://qc66zhsq1708.edge.naverncp.com/hls/fMG98Ec1UirV-awtm4qKJyhanmRFlPLZbTs_/layover-station/sv_AVC_SD_1Pass_30fps.mp4/index.m3u8',
-    description: '게시글 영상의 SD 화질 hls URL',
+    example:
+      'https://qc66zhsq1708.edge.naverncp.com/hls/fMG98Ec1UirV-awtm4qKJyhanmRFlPLZbTs_/layover-station/sv_AVC_HD, SD_1Pass_30fps.mp4/index.m3u8',
+    description: 'ABR 이 적용된 인코딩 된 영상 url',
   })
-  sd_url: string;
-
-  @ApiProperty({
-    example: 'https://qc66zhsq1708.edge.naverncp.com/hls/fMGEEU8c1UrV-awtm4qKyhaHnDymRFlPLZbTs_/layover-station/sv_AVC_HD_1Pass_30fps.mp4/index.m3u8',
-    description: '게시글 영상의 HD 화질 hls URL',
-  })
-  hd_url: string;
+  encoded_video_url: string;
 
   @ApiProperty({
     example: 'https://layover-video-thumbnail.kr.obj...',
-    description: '게시글 영상의 썸네일 사진 key',
+    description: '게시글 영상의 썸네일 사진 url',
   })
-  video_thumbnail: string;
+  video_thumbnail_url: string;
 
   @ApiProperty({
     example: '37.0532156213',
-    description: '게시글 위도 경도',
+    description: '게시글 위도',
   })
-  location: string;
+  latitude: string;
+
+  @ApiProperty({
+    example: '37.0532156213',
+    description: '게시글 경도',
+  })
+  longitude: string;
 
   @ApiProperty({
     example: '붓산 광안리',
@@ -49,12 +50,21 @@ export class BoardResDto {
   })
   status: string;
 
-  constructor(id: number, sd_url: string, hd_url: string, video_thumbnail: string, location: string, title: string, content: string, status: string) {
+  constructor(
+    id: number,
+    encoded_video_url: string,
+    video_thumbnail: string,
+    latitude: string,
+    longitude: string,
+    title: string,
+    content: string,
+    status: string,
+  ) {
     this.id = id;
-    this.sd_url = sd_url;
-    this.hd_url = hd_url;
-    this.video_thumbnail = video_thumbnail;
-    this.location = location;
+    this.encoded_video_url = encoded_video_url;
+    this.video_thumbnail_url = video_thumbnail;
+    this.latitude = latitude;
+    this.longitude = longitude;
     this.title = title;
     this.content = content;
     this.status = status;
