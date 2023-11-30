@@ -16,10 +16,8 @@ final class Toast {
     func showToast(message: String) {
         let scenes: Set<UIScene> = UIApplication.shared.connectedScenes
         let windowScene: UIWindowScene? = scenes.first as? UIWindowScene
-        let window: UIWindow? = windowScene?.windows.first
+        guard let window: UIWindow = windowScene?.windows.first else { return }
         let toastLabel: UILabel = UILabel()
-        guard let windowWidth: CGFloat = windowScene?.screen.bounds.width else { return }
-        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
         toastLabel.backgroundColor = .background
         toastLabel.textColor = .layoverWhite
         toastLabel.textAlignment = .center
@@ -29,15 +27,9 @@ final class Toast {
         toastLabel.clipsToBounds  =  true
         toastLabel.numberOfLines = 1
         toastLabel.layer.opacity = 0.8
-        let size: CGSize = toastLabel.intrinsicContentSize
-        toastLabel.frame = CGRect(
-            x: (windowWidth - size.width) / 2,
-            y: (windowHeight - size.height) / 2,
-            width: size.width,
-            height: size.height)
-
-        window?.addSubview(toastLabel)
-
+        toastLabel.frame.size = toastLabel.intrinsicContentSize
+        window.addSubview(toastLabel)
+        toastLabel.center = window.center
         UIView.animate(withDuration: 2.0, delay: 0.1, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
         }, completion: { _ in
