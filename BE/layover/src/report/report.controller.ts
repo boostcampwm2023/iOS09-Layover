@@ -7,7 +7,6 @@ import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { SWAGGER } from 'src/utils/swaggerUtils';
-import { Report } from './report.entity';
 import { ReportResDto } from './dtos/report-res.dto';
 import { ReportDto } from './dtos/report.dto';
 
@@ -40,7 +39,7 @@ export class ReportController {
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post()
   async receiveReport(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ReportDto) {
-    const responseData: Report = await this.reportService.insertReport(payload.memberId, body.boardId, body.reportType);
+    const responseData: ReportResDto = await this.reportService.insertReport(payload.memberId, body.boardId, body.reportType);
 
     throw new CustomResponse(ECustomCode.SUCCESS, responseData);
   }
