@@ -25,10 +25,10 @@ export class Board {
   @Column({ nullable: false })
   video_thumbnail: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: 'double' })
   latitude: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: 'double' })
   longitude: number;
 
   @Column()
