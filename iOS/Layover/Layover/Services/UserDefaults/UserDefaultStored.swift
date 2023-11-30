@@ -30,4 +30,5 @@ struct UserDefaultStored<T> {
 
 enum UserDefaultKey {
     static let isLoggedIn = "isLoggedIn"
+    static let hasBeenLaunchedBefore = "hasBeenLaunchedBefore"
 }
