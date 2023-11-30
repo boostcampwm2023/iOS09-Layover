@@ -34,11 +34,12 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
     func routeToEditVideo() {
         let nextViewController = EditVideoViewController()
         guard let source = dataStore,
-              var destination = nextViewController.router?.dataStore
+              var destination = nextViewController.router?.dataStore,
+              let videoURL = source.selectedVideoURL
         else { return }
 
         // Data Passing
-        destination.videoURL = source.selectedVideoURL
+        destination.videoURL = videoURL
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
