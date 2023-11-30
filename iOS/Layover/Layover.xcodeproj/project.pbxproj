@@ -38,6 +38,25 @@
 		1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */; };
 		1972CCDF2B14C9B000C3C762 /* Notification.Name+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */; };
 		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
+		19A169232B176C5F00DB34C0 /* TagPlayListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */; };
+		19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */; };
+		19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */; };
+		19A169262B176C5F00DB34C0 /* TagPlayListModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169202B176C5F00DB34C0 /* TagPlayListModels.swift */; };
+		19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169212B176C5F00DB34C0 /* TagPlayListViewController.swift */; };
+		19A169282B176C5F00DB34C0 /* TagPlayListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169222B176C5F00DB34C0 /* TagPlayListInteractor.swift */; };
+		19A1692A2B176D6E00DB34C0 /* TagPlayListConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169292B176D6E00DB34C0 /* TagPlayListConfigurator.swift */; };
+		19A1692D2B17750B00DB34C0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1692C2B17750B00DB34C0 /* Post.swift */; };
+		19A169302B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1692F2B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift */; };
+		19A169362B178EA500DB34C0 /* PostList.json in Resources */ = {isa = PBXBuildFile; fileRef = 19A169352B178EA500DB34C0 /* PostList.json */; };
+		19A169382B17BCA800DB34C0 /* PostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169372B17BCA800DB34C0 /* PostDTO.swift */; };
+		19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169392B17BCC400DB34C0 /* MemberDTO.swift */; };
+		19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */; };
+		19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */; };
+		19A169422B17C70C00DB34C0 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169412B17C70C00DB34C0 /* Member.swift */; };
+		19A169442B17C71C00DB34C0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169432B17C71C00DB34C0 /* Board.swift */; };
+		19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */; };
+		19A169492B181AE300DB34C0 /* Sequence+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169482B181AE300DB34C0 /* Sequence+.swift */; };
+		19A1694D2B18327E00DB34C0 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 19A1694C2B18327E00DB34C0 /* sample.jpeg */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
@@ -106,7 +125,6 @@
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45502AFEB62C004F155A /* LayoverTests.swift */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
-		FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E458F2AFF746E004F155A /* DummyWorker.swift */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
 		FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */; };
@@ -164,6 +182,25 @@
 		1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWorker.swift; sourceTree = "<group>"; };
 		1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name+.swift"; sourceTree = "<group>"; };
 		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListPresenter.swift; sourceTree = "<group>"; };
+		19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListWorker.swift; sourceTree = "<group>"; };
+		19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListRouter.swift; sourceTree = "<group>"; };
+		19A169202B176C5F00DB34C0 /* TagPlayListModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListModels.swift; sourceTree = "<group>"; };
+		19A169212B176C5F00DB34C0 /* TagPlayListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListViewController.swift; sourceTree = "<group>"; };
+		19A169222B176C5F00DB34C0 /* TagPlayListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListInteractor.swift; sourceTree = "<group>"; };
+		19A169292B176D6E00DB34C0 /* TagPlayListConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListConfigurator.swift; sourceTree = "<group>"; };
+		19A1692C2B17750B00DB34C0 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		19A1692F2B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListCollectionViewCell.swift; sourceTree = "<group>"; };
+		19A169352B178EA500DB34C0 /* PostList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostList.json; sourceTree = "<group>"; };
+		19A169372B17BCA800DB34C0 /* PostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDTO.swift; sourceTree = "<group>"; };
+		19A169392B17BCC400DB34C0 /* MemberDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDTO.swift; sourceTree = "<group>"; };
+		19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardDTO.swift; sourceTree = "<group>"; };
+		19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEndPointFactory.swift; sourceTree = "<group>"; };
+		19A169412B17C70C00DB34C0 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
+		19A169432B17C71C00DB34C0 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTagPlayListWorker.swift; sourceTree = "<group>"; };
+		19A169482B181AE300DB34C0 /* Sequence+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+.swift"; sourceTree = "<group>"; };
+		19A1694C2B18327E00DB34C0 /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		19AACFCB2B0F7D730088143E /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
@@ -238,7 +275,6 @@
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		FC7E458F2AFF746E004F155A /* DummyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyWorker.swift; sourceTree = "<group>"; };
 		FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModels.swift; sourceTree = "<group>"; };
@@ -326,6 +362,7 @@
 				1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */,
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
+				19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -338,6 +375,51 @@
 			path = UserDefaults;
 			sourceTree = "<group>";
 		};
+		19A1691C2B176C2C00DB34C0 /* TagPlayList */ = {
+			isa = PBXGroup;
+			children = (
+				19A1692E2B1776B200DB34C0 /* Cell */,
+				19A169292B176D6E00DB34C0 /* TagPlayListConfigurator.swift */,
+				19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */,
+				19A169212B176C5F00DB34C0 /* TagPlayListViewController.swift */,
+				19A169222B176C5F00DB34C0 /* TagPlayListInteractor.swift */,
+				19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */,
+				19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */,
+				19A169202B176C5F00DB34C0 /* TagPlayListModels.swift */,
+			);
+			path = TagPlayList;
+			sourceTree = "<group>";
+		};
+		19A1692B2B1774F900DB34C0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				19A1692C2B17750B00DB34C0 /* Post.swift */,
+				19A169412B17C70C00DB34C0 /* Member.swift */,
+				19A169432B17C71C00DB34C0 /* Board.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		19A1692E2B1776B200DB34C0 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				19A1692F2B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		19A169452B17D10500DB34C0 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				19A1694C2B18327E00DB34C0 /* sample.jpeg */,
+				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
+				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
+				FC767F832B1214A70088CF9B /* MockUserWorker.swift */,
+				19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		19AACFC82B0F7C200088143E /* DTOs */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,6 +429,9 @@
 				FC767F922B1220CC0088CF9B /* NicknameDTO.swift */,
 				FC767F942B1222350088CF9B /* ProfileImageDTO.swift */,
 				FC767F962B1224B80088CF9B /* IntroduceDTO.swift */,
+				19A169372B17BCA800DB34C0 /* PostDTO.swift */,
+				19A169392B17BCC400DB34C0 /* MemberDTO.swift */,
+				19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -490,6 +575,7 @@
 				FC767F9E2B12283D0088CF9B /* PatchProfileImage.json */,
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 				835783C52B14A5C800E7D304 /* LoginData.json */,
+				19A169352B178EA500DB34C0 /* PostList.json */,
 			);
 			path = MockData;
 			sourceTree = "<group>";
@@ -530,6 +616,7 @@
 				FC68E2992B02320F001AABFF /* Network */,
 				FC7E45752AFF6F5B004F155A /* Services */,
 				FC7E45782AFF6F7A004F155A /* Workers */,
+				19A1692B2B1774F900DB34C0 /* Models */,
 				FC7E457B2AFF6F9D004F155A /* Scenes */,
 				FC7E45802AFF6FE9004F155A /* DesignSystem */,
 				FC7E45392AFEB623004F155A /* AppDelegate.swift */,
@@ -562,10 +649,7 @@
 		FC7E45782AFF6F7A004F155A /* Workers */ = {
 			isa = PBXGroup;
 			children = (
-				FC767F832B1214A70088CF9B /* MockUserWorker.swift */,
-				FC7E458F2AFF746E004F155A /* DummyWorker.swift */,
-				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
-				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
+				19A169452B17D10500DB34C0 /* Mocks */,
 				193686732B15C489008902CD /* UserWorker.swift */,
 			);
 			path = Workers;
@@ -582,6 +666,7 @@
 				194552032B038FC400299768 /* Tabbar */,
 				194551EB2B037F1E00299768 /* Login */,
 				1945521A2B0478A100299768 /* Home */,
+				19A1691C2B176C2C00DB34C0 /* TagPlayList */,
 				FC930E6E2B0CD73B00AA48E3 /* Profile */,
 				FC5BE1152B148B540036366D /* EditProfile */,
 				194552272B0479B600299768 /* BaseViewController.swift */,
@@ -612,6 +697,7 @@
 				FCE52FF92B0FCB0A002CDB75 /* URLSession+.swift */,
 				FC767FA42B125F430088CF9B /* UIViewController+.swift */,
 				1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */,
+				19A169482B181AE300DB34C0 /* Sequence+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -756,12 +842,14 @@
 				FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */,
 				FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */,
 				FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */,
+				19A1694D2B18327E00DB34C0 /* sample.jpeg in Resources */,
 				FC767F9F2B12283D0088CF9B /* PatchUserName.json in Resources */,
 				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
 				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
 				835783C62B14A5C800E7D304 /* LoginData.json in Resources */,
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
+				19A169362B178EA500DB34C0 /* PostList.json in Resources */,
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
@@ -785,16 +873,21 @@
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
+				19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */,
+				19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
+				19A169492B181AE300DB34C0 /* Sequence+.swift in Sources */,
 				1972CCDF2B14C9B000C3C762 /* Notification.Name+.swift in Sources */,
 				FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */,
 				19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */,
 				836C33872B15A29600ECAFB0 /* Toast.swift in Sources */,
 				FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */,
+				19A169302B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift in Sources */,
 				1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */,
 				FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
+				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */,
@@ -805,6 +898,7 @@
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
 				FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */,
+				19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
@@ -813,9 +907,11 @@
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
 				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
+				19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */,
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
+				19A1692D2B17750B00DB34C0 /* Post.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
@@ -825,23 +921,28 @@
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
 				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
+				19A169422B17C70C00DB34C0 /* Member.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
 				834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */,
+				19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */,
 				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
 				1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				FC930E802B0CFB0B00AA48E3 /* ProfileHeaderView.swift in Sources */,
 				193686742B15C489008902CD /* UserWorker.swift in Sources */,
+				19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */,
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
 				1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */,
+				19A169262B176C5F00DB34C0 /* TagPlayListModels.swift in Sources */,
 				FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */,
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
 				FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */,
 				FC767FA82B1269DB0088CF9B /* LOAnnotationView.swift in Sources */,
+				19A169232B176C5F00DB34C0 /* TagPlayListPresenter.swift in Sources */,
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
@@ -856,12 +957,13 @@
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
 				835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */,
 				835A61922B067FEC002F22A5 /* LOTagStackView.swift in Sources */,
-				FC7E45902AFF746E004F155A /* DummyWorker.swift in Sources */,
+				19A169282B176C5F00DB34C0 /* TagPlayListInteractor.swift in Sources */,
 				FC930E7A2B0CD75C00AA48E3 /* ProfileInteractor.swift in Sources */,
 				FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */,
 				835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */,
 				1945520F2B03AEA400299768 /* Configurator.swift in Sources */,
 				835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */,
+				19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */,
 				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
 				FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */,
 				835A619D2B068115002F22A5 /* PlaybackPresenter.swift in Sources */,
@@ -872,6 +974,8 @@
 				1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */,
 				835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
+				19A169382B17BCA800DB34C0 /* PostDTO.swift in Sources */,
+				19A1692A2B176D6E00DB34C0 /* TagPlayListConfigurator.swift in Sources */,
 				FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */,
 				FC2511A92B04DAD4004717BC /* MapViewController.swift in Sources */,
 				FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */,
