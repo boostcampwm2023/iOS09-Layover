@@ -17,7 +17,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    'prettier/prettier': ['error', { endOfLine: 'auto', printWidth: 250 }],
+    'prettier/prettier': ['error', { endOfLine: 'auto', printWidth: 150 }],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
