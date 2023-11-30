@@ -16,6 +16,7 @@ import { ProfilePresignedUrlDto } from './dtos/profile-presigned-url.dto';
 import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
 import { MemberInfosResDto } from './dtos/member-infos-res.dto';
 import { SWAGGER } from 'src/utils/swaggerUtils';
+import { tokenPayload } from 'src/utils/interfaces/token.payload';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -68,7 +69,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Patch('username')
-  async updateUsername(@CustomHeader(new JwtValidationPipe()) payload, @Body() usernameDto: UsernameDto) {
+  async updateUsername(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() usernameDto: UsernameDto) {
     const id = payload.memberId;
     const username = usernameDto.username;
     // 중복 검증
@@ -103,7 +104,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Patch('introduce')
-  async updateIntroduce(@CustomHeader(new JwtValidationPipe()) payload, @Body() introduceDto: IntroduceDto) {
+  async updateIntroduce(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() introduceDto: IntroduceDto) {
     const id = payload.memberId;
     const introduce = introduceDto.introduce;
 
@@ -134,7 +135,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Delete()
-  async deleteMember(@CustomHeader(new JwtValidationPipe()) payload) {
+  async deleteMember(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
     const id = payload.memberId;
 
     // 삭제될 유저 정보 가져오기
@@ -167,7 +168,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('profile-image/presigned-url')
-  async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload, @Body() body: ProfilePresignedUrlDto) {
+  async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ProfilePresignedUrlDto) {
     const id = payload.memberId;
 
     // 프로필 사진 업로드할 presigned url 생성하기
@@ -205,7 +206,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get()
-  async getMemberInfos(@CustomHeader(new JwtValidationPipe()) payload) {
+  async getMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
     const id = payload.memberId;
     const member = await this.memberService.findMemberById(id);
 
@@ -245,7 +246,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get(':id')
-  async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload, @Param('id') id: number) {
+  async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Param('id') id: number) {
     const member = await this.memberService.findMemberById(id);
     if (member === null) throw new CustomResponse(ECustomCode.MEMBER02);
 

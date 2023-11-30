@@ -126,4 +126,8 @@ export class BoardService {
   async findByBoardId(boardId: number): Promise<Board> {
     return await this.boardRepository.findOne({ where: { id: boardId } });
   }
+
+  async findBoardById(id: number): Promise<Board> {
+    return await this.boardRepository.findOne({ where: { id } });
+  }
 }

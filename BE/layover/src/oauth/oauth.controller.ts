@@ -12,6 +12,7 @@ import { AppleSignupDto } from './dtos/apple-signup.dto';
 import { TokenResDto } from './dtos/token-res.dto';
 import { CustomHeader } from 'src/pipes/custom-header.decorator';
 import { SWAGGER } from 'src/utils/swaggerUtils';
+import { tokenPayload } from 'src/utils/interfaces/token.payload';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
@@ -193,7 +194,7 @@ export class OauthController {
   @ApiResponse(SWAGGER.REFRESH_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('refresh-token')
-  async renewTokens(@CustomHeader(new JwtValidationPipe()) payload) {
+  async renewTokens(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
     // 새로운 토큰을 생성하고 이를 반환함
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
