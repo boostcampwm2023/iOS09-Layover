@@ -18,7 +18,6 @@ enum TagPlayListModels {
 
     enum FetchPosts {
         struct Request {
-            let tag: String
         }
 
         struct Response {
@@ -27,6 +26,19 @@ enum TagPlayListModels {
 
         struct ViewModel {
             let displayedPost: [DisplayedPost]
+        }
+    }
+
+    enum FetchTitleTag {
+        struct Request {
+        }
+
+        struct Response {
+            let titleTag: String
+        }
+
+        struct ViewModel {
+            let title: String
         }
     }
 }

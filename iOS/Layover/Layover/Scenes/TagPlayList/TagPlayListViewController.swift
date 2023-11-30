@@ -9,6 +9,7 @@ import UIKit
 
 protocol TagPlayListDisplayLogic: AnyObject {
     func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel)
+    func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel)
 }
 
 final class TagPlayListViewController: BaseViewController {
@@ -23,7 +24,7 @@ final class TagPlayListViewController: BaseViewController {
         layout.itemSize = CGSize(width: (view.bounds.width - 29) / 2, height: ((view.bounds.width - 29) / 2) * 289/173)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        collectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
         collectionView.register(TagPlayListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: TagPlayListCollectionViewCell.identifier)
         collectionView.dataSource = self
@@ -32,11 +33,11 @@ final class TagPlayListViewController: BaseViewController {
 
     // MARK: - Properties
 
-    typealias Model = TagPlayListModels
+    typealias Models = TagPlayListModels
     var interactor: TagPlayListBusinessLogic?
     var router: (TagPlayListRoutingLogic & TagPlayListDataPassing)?
 
-    private var displayedPosts: [Model.DisplayedPost] = []
+    private var displayedPosts: [Models.DisplayedPost] = []
 
     // MARK: - Intializer
 
@@ -80,17 +81,15 @@ final class TagPlayListViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        setNavigationBar()
+        fetchTitleTag()
     }
 
     // MARK: - Methods
 
-    private func setNavigationBar() {
-        guard let titleTag = router?.dataStore?.titleTag else { return }
-
+    private func setNavigationBar(with title: String) {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = UIColor.primaryPurple
-        configuration.title = titleTag
+        configuration.title = title
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = UIFont.loFont(ofSize: 13, weight: .bold)
@@ -104,11 +103,16 @@ final class TagPlayListViewController: BaseViewController {
         navigationItem.titleView = button
     }
 
+    private func fetchTitleTag() {
+        interactor?.fetchTitleTag(request: Models.FetchTitleTag.Request())
+    }
+
     private func fetchPlayList() {
-        guard let titleTag = router?.dataStore?.titleTag else { return }
-        interactor?.fetchPlayList(request: TagPlayListModels.FetchPosts.Request(tag: titleTag))
+        interactor?.fetchPlayList(request: Models.FetchPosts.Request())
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension TagPlayListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -133,9 +137,13 @@ extension TagPlayListViewController: UICollectionViewDataSource {
 // MARK: - TagPlayListDisplayLogic
 
 extension TagPlayListViewController: TagPlayListDisplayLogic {
-    func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel) {
+    func displayPlayList(viewModel: Models.FetchPosts.ViewModel) {
         displayedPosts = viewModel.displayedPost
         collectionView.reloadData()
+    }
+
+    func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel) {
+        setNavigationBar(with: viewModel.title)
     }
 }
 

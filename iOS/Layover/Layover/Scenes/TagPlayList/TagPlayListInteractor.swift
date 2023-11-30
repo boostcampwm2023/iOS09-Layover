@@ -10,6 +10,7 @@ import UIKit
 import OSLog
 
 protocol TagPlayListBusinessLogic {
+    func fetchTitleTag(request: TagPlayListModels.FetchTitleTag.Request)
     func fetchPlayList(request: TagPlayListModels.FetchPosts.Request)
 }
 
@@ -21,7 +22,7 @@ protocol TagPlayListDataStore {
 final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStore {
     // MARK: - Properties
 
-    typealias Model = TagPlayListModels
+    typealias Models = TagPlayListModels
     var presenter: TagPlayListPresentationLogic?
     var worker: TagPlayListWorkerProtocol?
 
@@ -32,21 +33,27 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
 
     // MARK: - TagPlayListBusinessLogic
 
-    func fetchPlayList(request: Model.FetchPosts.Request) {
+    func fetchTitleTag(request: TagPlayListModels.FetchTitleTag.Request) {
+        guard let titleTag = titleTag else { return }
+        presenter?.presentTitleTag(response: Models.FetchTitleTag.Response(titleTag: titleTag))
+    }
+
+    func fetchPlayList(request: Models.FetchPosts.Request) {
         Task {
-            guard let posts = await worker?.fetchPlayList(by: request.tag) else { return }
+            guard let titleTag = titleTag,
+                  let posts = await worker?.fetchPlayList(by: titleTag) else { return }
             self.posts = posts
             do {
                 let responsePosts = try await posts.concurrentMap {
                     if let imageURL = $0.board.thumbnailImageURL,
                        let imageData = await self.worker?.loadImageData(from: imageURL) {
-                        return Model.DisplayedPost(thumbnailImageData: imageData, title: $0.board.title)
+                        return Models.DisplayedPost(thumbnailImageData: imageData, title: $0.board.title)
                     } else {
                         return nil
                     }
                 }.compactMap { $0 }
                 await MainActor.run {
-                    presenter?.presentPlayList(response: Model.FetchPosts.Response(post: responsePosts))
+                    presenter?.presentPlayList(response: Models.FetchPosts.Response(post: responsePosts))
                 }
             } catch {
                 os_log(.error, log: .default, "Error: %@", error.localizedDescription)
