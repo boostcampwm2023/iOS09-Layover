@@ -12,7 +12,7 @@ enum EditVideoModels {
 
     enum FetchVideo {
         struct Request {
-            let editedVideoURL: URL?
+            var editedVideoURL: URL?
             var videoRange: ClosedRange<Double> = 3.0...60.0
         }
         struct Response {

@@ -70,7 +70,7 @@ final class EditVideoViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.fetchVideo(request: Models.FetchVideo.Request())
+        interactor?.fetchVideo(request: Models.FetchVideo.Request(editedVideoURL: nil))
     }
 
     override func viewWillDisappear(_ animated: Bool) {

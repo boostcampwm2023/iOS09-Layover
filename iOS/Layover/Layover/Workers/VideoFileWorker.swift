@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OSLog
 
 protocol VideoFileWorkerProtocol {
     func copyToNewURL(at videoURL: URL) -> URL?
@@ -25,7 +26,7 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
 
     init(fileManager: FileManager = FileManager.default,
          directoryPath: String = "layover",
-         fileName: String = "\(Date().timeIntervalSince1970)") {
+         fileName: String = "\(Int(Date().timeIntervalSince1970))") {
         self.fileManager = fileManager
         self.directoryPath = directoryPath
         self.fileName = fileName
@@ -35,9 +36,9 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
     // MARK: - Methods
 
     func copyToNewURL(at videoURL: URL) -> URL? {
-        let documentsURL = FileManager.default.temporaryDirectory
-        let fileName = "\(directoryPath)/\(directoryPath).\(videoURL.pathExtension)"
-        let newURL = documentsURL.appending(path: fileName)
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+        let fileName = "\(directoryPath)/\(fileName).\(videoURL.pathExtension)"
+        let newURL = temporaryDirectory.appending(path: fileName)
         do {
             if fileManager.fileExists(atPath: newURL.path()) {
                 delete(at: newURL)
@@ -45,6 +46,7 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
             try FileManager.default.copyItem(at: videoURL as URL, to: newURL)
             return newURL
         } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
         }
     }
