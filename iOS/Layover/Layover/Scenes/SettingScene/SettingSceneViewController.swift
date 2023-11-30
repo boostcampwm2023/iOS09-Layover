@@ -144,6 +144,7 @@ extension SettingSceneViewController: UITableViewDataSource {
         case 1:
             content.text = versionInfo[indexPath.row]
             content.secondaryText = "1.0.0"
+            content.prefersSideBySideTextAndSecondaryText = true
             cell.contentConfiguration = content
         case 2:
             content.text = userInfo[indexPath.row]
