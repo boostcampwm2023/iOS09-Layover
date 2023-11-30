@@ -12,14 +12,14 @@ export class ReportService {
     private readonly boardService: BoardService,
   ) {}
 
-  async insertReport(memberId: number, boardId: number, reportType: string) {
+  async insertReport(memberId: number, boardId: number, reportType: string): Promise<Report> {
     const member = await this.memberService.findMemberById(memberId);
     const board = await this.boardService.findBoardById(boardId);
-    const reportEntity = this.reportRepository.create({
+    const newReport: Report = await this.reportRepository.save({
       member: member,
       board: board,
       report_type: reportType,
     });
-    await this.reportRepository.insert(reportEntity);
+    return newReport;
   }
 }
