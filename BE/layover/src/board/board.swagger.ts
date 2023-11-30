@@ -35,7 +35,7 @@ export const BOARD_SWAGGER = {
 
   GET_BOARD_SUCCESS: {
     status: HttpStatus.OK,
-    description: '홈 화면 게시글 조회 성공',
+    description: '게시글 조회 성공',
     schema: {
       type: 'object',
       properties: {
