@@ -17,11 +17,25 @@ enum HomeModels {
         }
 
         struct Response {
-            var videoURLs: [URL]
+            let videoURLs: [URL]
         }
 
         struct ViewModel {
-            var videoURLs: [URL]
+            let videoURLs: [URL]
+        }
+    }
+
+    enum SelectVideo {
+        struct Request {
+            let videoURL: URL
+        }
+
+        struct Response {
+
+        }
+
+        struct ViewModel {
+
         }
     }
 

@@ -32,7 +32,7 @@ final class LoopingPlayerView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        playerLayer?.frame = bounds
+        playerLayer?.bounds = bounds
         playerLayer?.videoGravity = .resizeAspectFill
     }
 

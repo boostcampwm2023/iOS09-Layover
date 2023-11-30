@@ -16,14 +16,15 @@ final class HomeConfigurator: Configurator {
 
     func configure(_ viewController: HomeViewController) {
         let router = HomeRouter()
-        router.viewController = viewController
-
         let presenter = HomePresenter()
-        presenter.viewController = viewController
-
         let interactor = HomeInteractor()
-        interactor.presenter = presenter
+        let videoFileWorker = VideoFileWorker()
 
+        router.viewController = viewController
+        router.dataStore = interactor
+        presenter.viewController = viewController
+        interactor.presenter = presenter
+        interactor.videoFileWorker = videoFileWorker
         viewController.router = router
         viewController.interactor = interactor
 

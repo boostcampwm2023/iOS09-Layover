@@ -11,11 +11,13 @@ import UIKit
 protocol HomeBusinessLogic {
     func fetchVideos(with: HomeModels.CarouselVideos.Request)
     func moveToPlaybackScene(with: HomeModels.MoveToPlaybackScene.Request)
+    func selectVideo(with request: HomeModels.SelectVideo.Request)
 }
 
 protocol HomeDataStore {
     var videos: [Post]? { get set }
     var index: Int? { get set }
+    var selectedVideoURL: URL? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
@@ -24,11 +26,18 @@ final class HomeInteractor: HomeDataStore {
 
     typealias Models = HomeModels
 
+    var videoFileWorker: VideoFileWorkerProtocol?
     var presenter: HomePresentationLogic?
 
     var videos: [Post]?
 
     var index: Int?
+    
+    var selectedVideoURL: URL?
+
+    func selectVideo(with request: Models.SelectVideo.Request) {
+        selectedVideoURL = videoFileWorker?.copyToNewURL(at: request.videoURL)
+    }
 }
 
 // MARK: - Use Case

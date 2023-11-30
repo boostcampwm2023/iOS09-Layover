@@ -38,9 +38,7 @@ final class EditProfileViewController: BaseViewController {
 
     private lazy var editProfileImageButton: LOCircleButton = {
         let button = LOCircleButton(style: .photo, diameter: 32)
-        button.addAction(UIAction { _ in
-            self.present(self.phPickerViewController, animated: true)
-        }, for: .touchUpInside)
+        button.addTarget(self, action: #selector(editProfileImageButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -190,6 +188,10 @@ final class EditProfileViewController: BaseViewController {
 
         let request = Models.CheckNicknameDuplication.Request(nickname: nickname)
         interactor?.checkDuplication(with: request)
+    }
+
+    @objc private func editProfileImageButtonDidTap() {
+        self.present(phPickerViewController, animated: true)
     }
 
 }

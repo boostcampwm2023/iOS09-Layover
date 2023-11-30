@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomeRoutingLogic {
     func routeToNext()
+    func routeToEditVideo()
     func routeToPlayback()
 }
 
@@ -40,6 +41,18 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         destination.index = source.index
         destination.videos = transData(videos: source.videos ?? [])
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
+    }
+    func routeToEditVideo() {
+        let nextViewController = EditVideoViewController()
+        guard let source = dataStore,
+              var destination = nextViewController.router?.dataStore,
+              let videoURL = source.selectedVideoURL
+        else { return }
+
+        // Data Passing
+        destination.videoURL = videoURL
+        nextViewController.hidesBottomBarWhenPushed = true
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
     private func transData(videos: [Post]) -> [PlaybackModels.PlaybackVideo] {
