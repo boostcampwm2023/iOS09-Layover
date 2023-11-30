@@ -15,6 +15,7 @@ protocol TagPlayListBusinessLogic {
 
 protocol TagPlayListDataStore {
     var titleTag: String? { get set }
+    var posts: [Post] { get set }
 }
 
 final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStore {
@@ -27,13 +28,14 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
     // MARK: - DataStore
 
     var titleTag: String? = "몰라요"
+    var posts: [Post] = []
 
     // MARK: - TagPlayListBusinessLogic
 
     func fetchPlayList(request: Model.FetchPosts.Request) {
         Task {
             guard let posts = await worker?.fetchPlayList(by: request.tag) else { return }
-
+            self.posts = posts
             do {
                 let responsePosts = try await posts.concurrentMap {
                     if let imageURL = $0.board.thumbnailImageURL,
