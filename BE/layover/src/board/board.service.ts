@@ -2,21 +2,19 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { MemberService } from '../member/member.service';
-import { VideoService } from '../video/video.service';
 import { Member } from '../member/member.entity';
-import { Video } from '../video/video.entity';
 import { makeUploadPreSignedUrl } from 'src/utils/s3Utils';
 import { MemberInfosResDto } from '../member/dtos/member-infos-res.dto';
 import { BoardResDto } from './dtos/board-res-dto';
 import { TagService } from '../tag/tag.service';
 import { BoardsResDto } from './dtos/boards-res.dto';
+import { CreateBoardResDto } from './dtos/create-board-res.dto';
 
 @Injectable()
 export class BoardService {
   constructor(
     @Inject('BOARD_REPOSITORY') private boardRepository: Repository<Board>,
     private memberService: MemberService,
-    private videoService: VideoService,
     private tagService: TagService,
   ) {}
 
@@ -24,22 +22,25 @@ export class BoardService {
     return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
   }
 
-  async createBoard(userId: number, title: string, content: string, location: string): Promise<number> {
+  async createBoard(userId: number, title: string, content: string, latitude: string, longitude: string, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
-    const video: Video = await this.videoService.createEmptyVideo();
-    const boardEntity: Board = this.boardRepository.create({
+    const savedBoard: Board = await this.boardRepository.save({
       member: member,
-      video: video,
       title: title,
       content: content,
       original_video_url: '',
+      encoded_video_url: '',
       video_thumbnail: '',
-      location: location,
+      latitude: latitude,
+      longitude: longitude,
       filename: '',
       status: 'RUNNING',
     });
-    const savedBoard: Board = await this.boardRepository.save(boardEntity);
-    return savedBoard.id;
+    tag.map(async (tagname) => {
+      await this.tagService.saveTag(savedBoard, tagname);
+    });
+
+    return new CreateBoardResDto(savedBoard.id, savedBoard.title, savedBoard.content, savedBoard.latitude, savedBoard.longitude, tag);
   }
 
   async getBoardRandom() {
@@ -53,7 +54,16 @@ export class BoardService {
       boards.map(async (board) => {
         const tags = await this.tagService.findByBoardId(board.id);
         const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
-        const boardInfo = new BoardResDto(board.id, board.video.sd_url, board.video.hd_url, board.video_thumbnail, board.location, board.title, board.content, board.status);
+        const boardInfo = new BoardResDto(
+          board.id,
+          board.encoded_video_url,
+          board.video_thumbnail,
+          board.latitude,
+          board.longitude,
+          board.title,
+          board.content,
+          board.status,
+        );
         const tag = tags.map((tag) => tag.tagname);
         return new BoardsResDto(member, boardInfo, tag);
       }),
@@ -73,22 +83,14 @@ export class BoardService {
 
   async setEncodedVideoUrl(filename: string) {
     const board: Board = await this.boardRepository.findOne({ where: { filename } });
-    const video: Video = board.video;
-    // filename 으로 sd 인지 hd 인지 구분해야함.
-
-    if (filename === 'HD') {
-      video.hd_url = this.generateEncodedVideoHLS(filename);
-    }
-
-    if (filename === 'SD') {
-      video.hd_url = this.generateEncodedVideoHLS(filename);
-    }
-
-    await this.videoService.saveVideo(video);
+    board.encoded_video_url = this.generateEncodedVideoHLS(filename);
+    await this.boardRepository.save(board);
   }
 
   generateEncodedVideoHLS(filename: string) {
+    //prefix, suffix 파싱해야함
+
     return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
-    /${filename}/index.m3u8`;
+    /${filename}.smil/master.m3u8`;
   }
 }
