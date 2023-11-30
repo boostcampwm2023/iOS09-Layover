@@ -44,9 +44,16 @@ export class BoardService {
   }
 
   async getBoardRandom() {
-    const count = await this.boardRepository.count();
-    const random = Math.floor(Math.random() * count);
+    const limit = await this.boardRepository.count();
+    let random = Math.floor(Math.random() * limit);
     const n = 10; // 최대 10개 데이터를 가져온다.
+
+    // 데이터가 10개 이하라면 첫번째 데이터부터 가져옴.
+    if (random < 10) {
+      random = 0;
+    } else {
+      if (limit - random < 10) random = limit - 10;
+    }
 
     const boards: Board[] = await this.boardRepository.createQueryBuilder('board').skip(random).take(n).getMany();
 
