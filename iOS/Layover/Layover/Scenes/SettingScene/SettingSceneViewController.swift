@@ -19,6 +19,14 @@ final class SettingSceneViewController: BaseViewController {
     var router: (NSObjectProtocol & SettingSceneRoutingLogic & SettingSceneDataPassing)?
     var interactor: SettingSceneBusinessLogic?
 
+    private let backButton: UIBarButtonItem = {
+        let button: UIBarButtonItem = UIBarButtonItem()
+        button.image = UIImage(systemName: "chevron.left")
+        button.tintColor = .layoverWhite
+        button.target = SettingSceneViewController.self
+        button.action = #selector(popViewController)
+        return button
+    }()
     private let settingSceneTableView: UITableView = {
         let tableView: UITableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -75,6 +83,20 @@ final class SettingSceneViewController: BaseViewController {
         ])
     }
 
+    override func setUI() {
+        setNavigationBar()
+    }
+
+    private func setNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .layoverWhite
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.topItem?.title = "설정"
+        self.navigationItem.leftBarButtonItem = backButton
+    }
+
+    @objc func popViewController() {
+        self.navigationController?.popViewController(animated: true)
+    }
 }
 
 extension SettingSceneViewController: SettingSceneDisplayLogic {
@@ -134,5 +156,13 @@ extension SettingSceneViewController: UITableViewDataSource {
 }
 
 #Preview {
-    SettingSceneViewController()
+    let navi = UINavigationController(rootViewController: UIViewController())
+    navi.pushViewController(SettingSceneViewController(), animated: false)
+    return navi
 }
+
+//#Preview {
+//    let navi = UINavigationController(rootViewController: UIViewController())
+//    navi.pushViewController(TagPlayListViewController(), animated: false)
+//    return navi
+//}
