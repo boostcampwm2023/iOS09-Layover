@@ -10,10 +10,11 @@ import UIKit
 
 protocol HomeBusinessLogic {
     func fetchVideos(with: HomeModels.CarouselVideos.Request)
+    func selectVideo(with request: HomeModels.SelectVideo.Request)
 }
 
 protocol HomeDataStore {
-
+    var selectedVideoURL: URL? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
@@ -22,7 +23,15 @@ final class HomeInteractor: HomeDataStore {
 
     typealias Models = HomeModels
 
+    var videoFileWorker: VideoFileWorkerProtocol?
     var presenter: HomePresentationLogic?
+
+    var selectedVideoURL: URL?
+
+    func selectVideo(with request: Models.SelectVideo.Request) {
+        selectedVideoURL = videoFileWorker?.copyToNewURL(at: request.videoURL)
+    }
+
 }
 
 // MARK: - Use Case

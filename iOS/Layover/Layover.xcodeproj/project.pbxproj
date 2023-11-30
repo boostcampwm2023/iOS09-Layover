@@ -88,7 +88,15 @@
 		FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AC2B04EACD004717BC /* MapInteractor.swift */; };
 		FC2511AF2B04EAD9004717BC /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511AE2B04EAD9004717BC /* MapPresenter.swift */; };
 		FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511B02B04EAEC004717BC /* MapModels.swift */; };
+		FC3752302B170A620000D439 /* EditVideoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522A2B170A620000D439 /* EditVideoPresenter.swift */; };
+		FC3752312B170A620000D439 /* EditVideoWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522B2B170A620000D439 /* EditVideoWorker.swift */; };
+		FC3752322B170A620000D439 /* EditVideoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522C2B170A620000D439 /* EditVideoRouter.swift */; };
+		FC3752332B170A620000D439 /* EditVideoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522D2B170A620000D439 /* EditVideoModels.swift */; };
+		FC3752342B170A620000D439 /* EditVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522E2B170A620000D439 /* EditVideoViewController.swift */; };
+		FC3752352B170A620000D439 /* EditVideoInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522F2B170A620000D439 /* EditVideoInteractor.swift */; };
+		FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3752362B170B230000D439 /* EditVideoConfigurator.swift */; };
 		FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */; };
+		FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
@@ -235,7 +243,15 @@
 		FC2511AC2B04EACD004717BC /* MapInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractor.swift; sourceTree = "<group>"; };
 		FC2511AE2B04EAD9004717BC /* MapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
 		FC2511B02B04EAEC004717BC /* MapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModels.swift; sourceTree = "<group>"; };
+		FC37522A2B170A620000D439 /* EditVideoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoPresenter.swift; sourceTree = "<group>"; };
+		FC37522B2B170A620000D439 /* EditVideoWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoWorker.swift; sourceTree = "<group>"; };
+		FC37522C2B170A620000D439 /* EditVideoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoRouter.swift; sourceTree = "<group>"; };
+		FC37522D2B170A620000D439 /* EditVideoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoModels.swift; sourceTree = "<group>"; };
+		FC37522E2B170A620000D439 /* EditVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoViewController.swift; sourceTree = "<group>"; };
+		FC37522F2B170A620000D439 /* EditVideoInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoInteractor.swift; sourceTree = "<group>"; };
+		FC3752362B170B230000D439 /* EditVideoConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoConfigurator.swift; sourceTree = "<group>"; };
 		FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
+		FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFileWorker.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
@@ -519,6 +535,20 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		FC3752292B170A050000D439 /* EditVideo */ = {
+			isa = PBXGroup;
+			children = (
+				FC37522E2B170A620000D439 /* EditVideoViewController.swift */,
+				FC37522F2B170A620000D439 /* EditVideoInteractor.swift */,
+				FC37522A2B170A620000D439 /* EditVideoPresenter.swift */,
+				FC37522D2B170A620000D439 /* EditVideoModels.swift */,
+				FC37522B2B170A620000D439 /* EditVideoWorker.swift */,
+				FC37522C2B170A620000D439 /* EditVideoRouter.swift */,
+				FC3752362B170B230000D439 /* EditVideoConfigurator.swift */,
+			);
+			path = EditVideo;
+			sourceTree = "<group>";
+		};
 		FC4975852B0342CE00D8627F /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -651,6 +681,7 @@
 			children = (
 				19A169452B17D10500DB34C0 /* Mocks */,
 				193686732B15C489008902CD /* UserWorker.swift */,
+				FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -669,6 +700,7 @@
 				19A1691C2B176C2C00DB34C0 /* TagPlayList */,
 				FC930E6E2B0CD73B00AA48E3 /* Profile */,
 				FC5BE1152B148B540036366D /* EditProfile */,
+				FC3752292B170A050000D439 /* EditVideo */,
 				194552272B0479B600299768 /* BaseViewController.swift */,
 			);
 			path = Scenes;
@@ -873,6 +905,7 @@
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
+				FC3752312B170A620000D439 /* EditVideoWorker.swift in Sources */,
 				19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */,
 				19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
@@ -887,6 +920,7 @@
 				FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
+				FC3752342B170A620000D439 /* EditVideoViewController.swift in Sources */,
 				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
@@ -901,6 +935,10 @@
 				19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
+				FC3752332B170A620000D439 /* EditVideoModels.swift in Sources */,
+				FC3752322B170A620000D439 /* EditVideoRouter.swift in Sources */,
+				FC3752352B170A620000D439 /* EditVideoInteractor.swift in Sources */,
+				FC3752302B170A620000D439 /* EditVideoPresenter.swift in Sources */,
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
 				FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
@@ -920,6 +958,7 @@
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
+				FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */,
 				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
 				19A169422B17C70C00DB34C0 /* Member.swift in Sources */,
 				194551F52B037F2D00299768 /* LoginModels.swift in Sources */,
@@ -927,6 +966,7 @@
 				19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */,
 				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
 				1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */,
+				FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				FC930E802B0CFB0B00AA48E3 /* ProfileHeaderView.swift in Sources */,
