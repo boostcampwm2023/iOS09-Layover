@@ -65,7 +65,8 @@ export class BoardController {
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('home')
   async getBoardRandom() {
-    return await this.boardService.getBoardRandom();
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardRandom();
+    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
   @ApiOperation({
