@@ -1,14 +1,15 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CustomHeader } from 'src/pipes/custom-header.decorator';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { ReportService } from './report.service';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { ReportResDto } from './dtos/report-res.dto';
 import { ReportDto } from './dtos/report.dto';
+import { REPORT_SWAGGER } from './report.swagger';
 
 @ApiTags('Report API')
 @Controller('report')
@@ -23,19 +24,7 @@ export class ReportController {
     summary: '신고 요청',
     description: '특정 게시글을 신고합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '신고 요청 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(ReportResDto) },
-      },
-    },
-  })
+  @ApiResponse(REPORT_SWAGGER.RECEIVE_REPORT_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post()
   async receiveReport(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ReportDto) {
