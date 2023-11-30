@@ -31,8 +31,8 @@ export class BoardService {
       original_video_url: '',
       encoded_video_url: '',
       video_thumbnail: '',
-      latitude: latitude,
-      longitude: longitude,
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude),
       filename: '',
       status: 'RUNNING',
     });
@@ -40,7 +40,7 @@ export class BoardService {
       await this.tagService.saveTag(savedBoard, tagname);
     });
 
-    return new CreateBoardResDto(savedBoard.id, savedBoard.title, savedBoard.content, savedBoard.latitude, savedBoard.longitude, tag);
+    return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag);
   }
 
   async getBoardRandom() {
@@ -62,24 +62,41 @@ export class BoardService {
       .take(n)
       .getMany();
 
-    return Promise.all(
-      boards.map(async (board: Board) => {
-        const tags = await this.tagService.findByBoardId(board.id);
-        const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
-        const boardInfo = new BoardResDto(
-          board.id,
-          board.encoded_video_url,
-          board.video_thumbnail,
-          board.latitude,
-          board.longitude,
-          board.title,
-          board.content,
-          board.status,
-        );
-        const tag = tags.map((tag) => tag.tagname);
-        return new BoardsResDto(member, boardInfo, tag);
-      }),
+    return Promise.all(boards.map((board) => this.createBoardResDto(board)));
+  }
+
+  async createBoardResDto(board: Board): Promise<BoardsResDto> {
+    const tags = await this.tagService.findByBoardId(board.id);
+    const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
+    const boardInfo = new BoardResDto(
+      board.id,
+      board.encoded_video_url,
+      board.video_thumbnail,
+      board.latitude.toString(),
+      board.longitude.toString(),
+      board.title,
+      board.content,
+      board.status,
     );
+    const tag = tags.map((tag) => tag.tagname);
+    return new BoardsResDto(member, boardInfo, tag);
+  }
+
+  async getBoardMap(lat: string, lon: string) {
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(lon);
+
+    const boards: Board[] = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .where(`ST_Distance_Sphere(point(:longitude, :latitude), point(board.longitude, board.latitude)) < :distance`, {
+        longitude,
+        latitude,
+        distance: 1000, // 1km
+      })
+      .getMany();
+
+    return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
   async setOriginalVideoUrl(filename: string) {

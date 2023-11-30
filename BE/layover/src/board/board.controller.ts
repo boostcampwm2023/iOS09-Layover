@@ -61,7 +61,7 @@ export class BoardController {
     summary: '홈 화면 게시글 조회',
     description: '랜덤 게시물 (최대) 10개를 조회합니다.',
   })
-  @ApiResponse(BOARD_SWAGGER.GET_BOARD_RANDOM_SUCCESS)
+  @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('home')
   async getBoardRandom() {
@@ -73,9 +73,12 @@ export class BoardController {
     summary: '지도 화면 게시글 조회',
     description: '거리에 따라 지도 화면에 보여질 게시물들을 조회합니다.',
   })
+  @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('map')
   async getBoardMap(@Query('latitude') latitude: string, @Query('longitude') longitude: string) {
-    // return await this.boardService.getBoardMap(latitude, longitude);
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardMap(latitude, longitude);
+    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
   @ApiOperation({

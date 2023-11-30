@@ -26,10 +26,10 @@ export class Board {
   video_thumbnail: string;
 
   @Column({ nullable: false })
-  latitude: string;
+  latitude: number;
 
   @Column({ nullable: false })
-  longitude: string;
+  longitude: number;
 
   @Column()
   filename: string;
