@@ -91,4 +91,8 @@ export class BoardService {
     return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
     /${filename}/index.m3u8`;
   }
+
+  async findBoardById(id: number): Promise<Board> {
+    return await this.boardRepository.findOne({ where: { id } });
+  }
 }
