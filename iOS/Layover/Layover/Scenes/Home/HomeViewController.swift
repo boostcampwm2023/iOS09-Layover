@@ -190,13 +190,16 @@ final class HomeViewController: BaseViewController {
 extension HomeViewController: PHPickerViewControllerDelegate {
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        self.phPickerViewController.dismiss(animated: true)
-        guard let result = results.first else { return }
+        guard let result = results.first else {
+            self.phPickerViewController.dismiss(animated: true)
+            return
+        }
         result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, _ in
             if let url {
                 self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
                 DispatchQueue.main.async {
                     self.router?.routeToEditVideo()
+                    self.phPickerViewController.dismiss(animated: true)
                 }
             }
         }

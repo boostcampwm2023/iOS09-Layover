@@ -36,9 +36,9 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
     // MARK: - Methods
 
     func copyToNewURL(at videoURL: URL) -> URL? {
-        let temporaryDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let path = "\(directoryPath)/\(fileName).\(videoURL.pathExtension)"
-        let newURL = temporaryDirectory.appending(path: path)
+        let newURL = documentDirectory.appending(path: path)
         do {
             if fileManager.fileExists(atPath: newURL.path()) {
                 delete(at: newURL)
