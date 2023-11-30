@@ -55,11 +55,16 @@ export class BoardService {
       if (limit - random < 10) random = limit - 10;
     }
 
-    const boards: Board[] = await this.boardRepository.createQueryBuilder('board').skip(random).take(n).getMany();
+    const boards: Board[] = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .skip(random)
+      .take(n)
+      .getMany();
 
     return Promise.all(
-      boards.map(async (board) => {
-        const tags = await this.tagService.findByBoardId(board.id);
+      boards.map(async (board: Board) => {
+        const tags = await this.tagService.findTagByBoard(board.id);
         const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
         const boardInfo = new BoardResDto(
           board.id,
@@ -99,5 +104,9 @@ export class BoardService {
 
     return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
     /${filename}.smil/master.m3u8`;
+  }
+
+  async findByBoardId(boardId: number): Promise<Board> {
+    return await this.boardRepository.findOne({ where: { id: boardId } });
   }
 }
