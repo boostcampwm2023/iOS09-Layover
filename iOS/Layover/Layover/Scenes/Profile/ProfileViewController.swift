@@ -130,7 +130,7 @@ final class ProfileViewController: BaseViewController {
     }
 
     @objc private func settingButtonDidTap() {
-
+        router?.routeToSettingSceneViewController()
     }
 
 }
