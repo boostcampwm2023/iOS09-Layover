@@ -10,13 +10,14 @@ import UIKit
 
 protocol ProfileRoutingLogic {
     func routeToEditProfileViewController()
+    func routeToSettingSceneViewController()
 }
 
 protocol ProfileDataPassing {
     var dataStore: ProfileDataStore? { get }
 }
 
-class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
+final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
 
     // MARK: - Properties
 
@@ -38,5 +39,9 @@ class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         editProfileViewController.hidesBottomBarWhenPushed = true
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
-
+    
+    func routeToSettingSceneViewController() {
+        let settingSceneViewController: SettingSceneViewController = SettingSceneViewController()
+        viewController?.navigationController?.pushViewController(settingSceneViewController, animated: true)
+    }
 }
