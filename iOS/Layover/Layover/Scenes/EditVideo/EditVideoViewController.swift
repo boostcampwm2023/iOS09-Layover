@@ -46,6 +46,8 @@ final class EditVideoViewController: BaseViewController {
     var router: (NSObjectProtocol & EditVideoRoutingLogic & EditVideoDataPassing)?
     var interactor: EditVideoBusinessLogic?
 
+    private var originalVideoURL: URL?
+
     // MARK: - Object lifecycle
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -68,7 +70,7 @@ final class EditVideoViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.fetchVideo()
+        interactor?.fetchVideo(request: Models.FetchVideo.Request())
     }
 
     override func setConstraints() {
@@ -103,7 +105,26 @@ final class EditVideoViewController: BaseViewController {
     }
 
     @objc private func cutButtonDidTap() {
-        // route EditViewController
+        guard let videoPath = originalVideoURL?.path() else { return }
+        if UIVideoEditorController.canEditVideo(atPath: videoPath) {
+            let editController = UIVideoEditorController()
+            editController.videoPath = videoPath
+            editController.videoMaximumDuration = 60.0
+            editController.modalPresentationStyle = .fullScreen
+            editController.videoQuality = .typeHigh
+            editController.delegate = self
+            self.present(editController, animated: true)
+        }
+    }
+
+}
+
+extension EditVideoViewController: UINavigationControllerDelegate, UIVideoEditorControllerDelegate {
+
+    func videoEditorController(_ editor: UIVideoEditorController, didSaveEditedVideoToPath editedVideoPath: String) {
+        let editedVideoURL = NSURL(fileURLWithPath: editedVideoPath) as URL
+        interactor?.fetchVideo(request: EditVideoModels.FetchVideo.Request(editedVideoURL: editedVideoURL))
+        dismiss(animated: true)
     }
 
 }
@@ -111,6 +132,10 @@ final class EditVideoViewController: BaseViewController {
 extension EditVideoViewController: EditVideoDisplayLogic {
 
     func displayVideo(viewModel: EditVideoModels.FetchVideo.ViewModel) {
+        if !viewModel.isEdited {
+            self.originalVideoURL = viewModel.videoURL
+        }
+        loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: viewModel.videoURL,
                                        loopStart: .zero,
                                        duration: viewModel.duration)
@@ -118,8 +143,4 @@ extension EditVideoViewController: EditVideoDisplayLogic {
         nextButton.isEnabled = viewModel.canNext
     }
 
-}
-
-#Preview {
-    EditVideoViewController()
 }

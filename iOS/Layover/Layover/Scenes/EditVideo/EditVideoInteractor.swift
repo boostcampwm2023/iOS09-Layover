@@ -10,7 +10,7 @@ import AVFoundation
 import UIKit
 
 protocol EditVideoBusinessLogic {
-    func fetchVideo()
+    func fetchVideo(request: EditVideoModels.FetchVideo.Request)
 }
 
 protocol EditVideoDataStore {
@@ -28,12 +28,15 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
 
     var videoURL: URL?
 
-    func fetchVideo() {
-        guard let videoURL else { return }
+    func fetchVideo(request: EditVideoModels.FetchVideo.Request) {
+        let isEdited = request.editedVideoURL != nil
+        guard let videoURL = isEdited ? request.editedVideoURL : videoURL else { return }
+
         Task {
             let duration = try await AVAsset(url: videoURL).load(.duration)
             let seconds = CMTimeGetSeconds(duration)
-            let response = Models.FetchVideo.Response(videoURL: videoURL,
+            let response = Models.FetchVideo.Response(isEdited: isEdited,
+                                                      videoURL: videoURL,
                                                       duration: seconds,
                                                       isWithinRange: 3.0...60.0 ~= seconds)
             await MainActor.run {
