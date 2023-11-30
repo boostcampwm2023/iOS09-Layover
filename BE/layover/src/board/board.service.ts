@@ -64,7 +64,7 @@ export class BoardService {
 
     return Promise.all(
       boards.map(async (board: Board) => {
-        const tags = await this.tagService.findTagByBoard(board.id);
+        const tags = await this.tagService.findByBoardId(board.id);
         const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
         const boardInfo = new BoardResDto(
           board.id,
