@@ -38,11 +38,14 @@ final class VideoFileWorker: VideoFileWorkerProtocol {
     func copyToNewURL(at videoURL: URL) -> URL? {
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let path = "\(directoryPath)/\(fileName).\(videoURL.pathExtension)"
+
         let newURL = documentDirectory.appending(path: path)
         do {
             if fileManager.fileExists(atPath: newURL.path()) {
                 delete(at: newURL)
             }
+            try fileManager.createDirectory(at: documentDirectory.appending(path: directoryPath),
+                                            withIntermediateDirectories: true)
             try fileManager.copyItem(at: videoURL as URL, to: newURL)
             return newURL
         } catch {
