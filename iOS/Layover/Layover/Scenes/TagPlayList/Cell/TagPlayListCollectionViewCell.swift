@@ -16,7 +16,6 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .lightGray
-        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -51,7 +50,7 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 14),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14),
@@ -62,7 +61,7 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
     private func setUI() {
         clipsToBounds = true
         layer.cornerRadius = 10
-        backgroundColor = .darkGrey
+        backgroundColor = .darkGray
     }
 
     func configure(thumbnailImage: UIImage, title: String) {

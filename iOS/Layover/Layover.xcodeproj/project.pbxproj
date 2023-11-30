@@ -56,7 +56,7 @@
 		19A169442B17C71C00DB34C0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169432B17C71C00DB34C0 /* Board.swift */; };
 		19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */; };
 		19A169492B181AE300DB34C0 /* Sequence+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A169482B181AE300DB34C0 /* Sequence+.swift */; };
-		19A1694B2B18225F00DB34C0 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 19A1694A2B18225F00DB34C0 /* sample.jpeg */; };
+		19A1694D2B18327E00DB34C0 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 19A1694C2B18327E00DB34C0 /* sample.jpeg */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
@@ -199,7 +199,7 @@
 		19A169432B17C71C00DB34C0 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTagPlayListWorker.swift; sourceTree = "<group>"; };
 		19A169482B181AE300DB34C0 /* Sequence+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+.swift"; sourceTree = "<group>"; };
-		19A1694A2B18225F00DB34C0 /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
+		19A1694C2B18327E00DB34C0 /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		19AACFCB2B0F7D730088143E /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
@@ -409,7 +409,7 @@
 		19A169452B17D10500DB34C0 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				19A1694A2B18225F00DB34C0 /* sample.jpeg */,
+				19A1694C2B18327E00DB34C0 /* sample.jpeg */,
 				834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */,
 				835783C22B14A41600E7D304 /* MockLoginWorker.swift */,
 				FC767F832B1214A70088CF9B /* MockUserWorker.swift */,
@@ -839,6 +839,7 @@
 				FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */,
 				FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */,
 				FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */,
+				19A1694D2B18327E00DB34C0 /* sample.jpeg in Resources */,
 				FC767F9F2B12283D0088CF9B /* PatchUserName.json in Resources */,
 				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
 				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
@@ -849,7 +850,6 @@
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
-				19A1694B2B18225F00DB34C0 /* sample.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
