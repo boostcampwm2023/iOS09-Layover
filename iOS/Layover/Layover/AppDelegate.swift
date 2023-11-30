@@ -14,7 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        // remove keychain data when app is first launched
+        if System.isFirstLaunch() {
+            AuthManager.shared.logout()
+        }
+
+        // kakao
         guard let KAKAO_APP_KEY = Bundle.main.object(forInfoDictionaryKey: "KAKAO_APP_KEY") as? String else { return true }
         KakaoSDK.initSDK(appKey: KAKAO_APP_KEY)
         return true
