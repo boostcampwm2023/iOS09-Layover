@@ -12,7 +12,7 @@ final class LOImageLabel: UIView {
 
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
@@ -27,7 +27,7 @@ final class LOImageLabel: UIView {
         super.init(frame: frame)
         setConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setConstraints()
@@ -47,14 +47,14 @@ final class LOImageLabel: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            iconImageView.topAnchor.constraint(equalTo: topAnchor),
             iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            iconImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 22),
+            iconImageView.heightAnchor.constraint(equalToConstant: 22),
             iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 10),
+//            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

@@ -9,13 +9,10 @@
 import UIKit
 
 protocol UploadPostDisplayLogic: AnyObject {
-    func displayFetchFromLocalDataStore(with viewModel: UploadPostModels.FetchFromLocalDataStore.ViewModel)
-    func displayFetchFromRemoteDataStore(with viewModel: UploadPostModels.FetchFromRemoteDataStore.ViewModel)
-    func displayTrackAnalytics(with viewModel: UploadPostModels.TrackAnalytics.ViewModel)
-    func displayPerformUploadPost(with viewModel: UploadPostModels.PerformUploadPost.ViewModel)
+
 }
 
-class UploadPostViewController: UIViewController, UploadPostDisplayLogic {
+class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
 
     // MARK: - UI Components
 
@@ -25,6 +22,68 @@ class UploadPostViewController: UIViewController, UploadPostDisplayLogic {
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         return imageView
+    }()
+
+    private let titleImageLabel: LOImageLabel = {
+        let imageLabel = LOImageLabel()
+        imageLabel.setIconImage(UIImage(resource: .title))
+        imageLabel.setTitle("제목")
+        return imageLabel
+    }()
+
+    private let titleTextField: LOTextField = {
+        let textField = LOTextField()
+        textField.placeholder = "제목"
+        return textField
+    }()
+
+    private let tagImageLabel: LOImageLabel = {
+        let imageLabel = LOImageLabel()
+        imageLabel.setIconImage(UIImage(resource: .tag))
+        imageLabel.setTitle("태그")
+        return imageLabel
+    }()
+
+    private let tagStackView: LOTagStackView = {
+        let stackView = LOTagStackView()
+        return stackView
+    }()
+
+    private let addTagButton: LOCircleButton = {
+        let button = LOCircleButton(style: .add, diameter: 25)
+        return button
+    }()
+
+    private let locationImageLabel: LOImageLabel = {
+        let imageLabel = LOImageLabel()
+        imageLabel.setIconImage(UIImage(resource: .locationPin))
+        imageLabel.setTitle("위치")
+        return imageLabel
+    }()
+
+    private let locationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .loFont(type: .body2)
+        label.text = "대구시 달서구 유천동"
+        return label
+    }()
+
+    private let contentImageLabel: LOImageLabel = {
+        let imageLabel = LOImageLabel()
+        imageLabel.setIconImage(UIImage(resource: .content))
+        imageLabel.setTitle("내용")
+        return imageLabel
+    }()
+
+    private let contentTextView: UITextView = {
+        let textView = UITextView()
+        return textView
+    }()
+
+    private let uploadButton: LOButton = {
+        let button = LOButton(style: .basic)
+        button.setTitle("업로드", for: .normal)
+        return button
     }()
 
     // MARK: - Properties
@@ -65,101 +124,72 @@ class UploadPostViewController: UIViewController, UploadPostDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupFetchFromLocalDataStore()
+        setConstraints()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupFetchFromRemoteDataStore()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        trackScreenViewAnalytics()
-        registerNotifications()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        unregisterNotifications()
-    }
-
-    // MARK: - Notifications
-
-    func registerNotifications() {
-        let selector = #selector(trackScreenViewAnalytics)
-        let notification = UIApplication.didBecomeActiveNotification
-        NotificationCenter.default.addObserver(self, selector: selector, name: notification, object: nil)
-    }
-
-    func unregisterNotifications() {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    // MARK: - Use Case - Fetch From Local DataStore
-
-    @IBOutlet var exampleLocalLabel: UILabel! = UILabel()
-    func setupFetchFromLocalDataStore() {
-        let request = Models.FetchFromLocalDataStore.Request()
-        interactor?.fetchFromLocalDataStore(with: request)
-    }
-
-    func displayFetchFromLocalDataStore(with viewModel: UploadPostModels.FetchFromLocalDataStore.ViewModel) {
-        exampleLocalLabel.text = viewModel.exampleTranslation
-    }
-
-    // MARK: - Use Case - Fetch From Remote DataStore
-
-    @IBOutlet var exampleRemoteLabel: UILabel! = UILabel()
-    func setupFetchFromRemoteDataStore() {
-        let request = Models.FetchFromRemoteDataStore.Request()
-        interactor?.fetchFromRemoteDataStore(with: request)
-    }
-
-    func displayFetchFromRemoteDataStore(with viewModel: UploadPostModels.FetchFromRemoteDataStore.ViewModel) {
-        exampleRemoteLabel.text = viewModel.exampleVariable
-    }
-
-    // MARK: - Use Case - Track Analytics
-
-    @objc
-    func trackScreenViewAnalytics() {
-        trackAnalytics(event: .screenView)
-    }
-
-    func trackAnalytics(event: UploadPostModels.AnalyticsEvents) {
-        let request = Models.TrackAnalytics.Request(event: event)
-        interactor?.trackAnalytics(with: request)
-    }
-
-    func displayTrackAnalytics(with viewModel: UploadPostModels.TrackAnalytics.ViewModel) {
-        // do something after tracking analytics (if needed)
-    }
-
-    // MARK: - Use Case - UploadPost
-
-    func performUploadPost(_ sender: Any) {
-        let request = Models.PerformUploadPost.Request(exampleVariable: exampleLocalLabel.text)
-        interactor?.performUploadPost(with: request)
-    }
-
-    func displayPerformUploadPost(with viewModel: UploadPostModels.PerformUploadPost.ViewModel) {
-        // handle error and ui element error states
-        // based on error type
-        if let error = viewModel.error {
-            switch error.type {
-            case .emptyExampleVariable:
-                exampleLocalLabel.text = error.message
-
-            case .networkError:
-                exampleLocalLabel.text = error.message
-            }
-
-            return
+    override func setConstraints() {
+        super.setConstraints()
+        view.addSubviews(thumnailImageView, titleImageLabel, titleTextField, tagImageLabel, tagStackView, addTagButton,
+                         locationImageLabel, locationLabel, contentImageLabel, contentTextView, uploadButton)
+        view.subviews.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        // handle ui element success state and
-        // route to next screen
-        router?.routeToNext()
+        NSLayoutConstraint.activate([
+            thumnailImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            thumnailImageView.widthAnchor.constraint(equalToConstant: 156),
+            thumnailImageView.heightAnchor.constraint(equalToConstant: 251),
+            thumnailImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+
+            titleImageLabel.topAnchor.constraint(equalTo: thumnailImageView.bottomAnchor, constant: 22),
+            titleImageLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleImageLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            titleImageLabel.heightAnchor.constraint(equalToConstant: 22),
+
+            titleTextField.topAnchor.constraint(equalTo: titleImageLabel.bottomAnchor, constant: 10),
+            titleTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            titleTextField.heightAnchor.constraint(equalToConstant: 44),
+
+            tagImageLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 22),
+            tagImageLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tagImageLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tagImageLabel.heightAnchor.constraint(equalToConstant: 22),
+
+            tagStackView.topAnchor.constraint(equalTo: tagImageLabel.bottomAnchor, constant: 10),
+            tagStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tagStackView.heightAnchor.constraint(equalToConstant: 25),
+
+            addTagButton.centerYAnchor.constraint(equalTo: tagStackView.centerYAnchor),
+            addTagButton.leadingAnchor.constraint(equalTo: tagStackView.trailingAnchor, constant: 5),
+
+            locationImageLabel.topAnchor.constraint(equalTo: tagStackView.bottomAnchor, constant: 22),
+            locationImageLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+//            locationImageLabel.trailingAnchor.constraint(equalTo: locationLabel.leadingAnchor, constant: -16),
+            locationImageLabel.heightAnchor.constraint(equalToConstant: 22),
+
+            locationLabel.centerYAnchor.constraint(equalTo: locationImageLabel.centerYAnchor),
+            locationLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            locationLabel.leadingAnchor.constraint(equalTo: locationImageLabel.trailingAnchor),
+
+            contentImageLabel.topAnchor.constraint(equalTo: locationImageLabel.bottomAnchor, constant: 22),
+            contentImageLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            contentImageLabel.trailingAnchor.constraint(equalTo: locationLabel.leadingAnchor, constant: -16),
+            contentImageLabel.heightAnchor.constraint(equalToConstant: 22),
+
+            contentTextView.topAnchor.constraint(equalTo: contentImageLabel.bottomAnchor, constant: 10),
+            contentTextView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            contentTextView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+
+            uploadButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            uploadButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            uploadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            uploadButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
+
+}
+
+#Preview {
+    UploadPostViewController()
 }

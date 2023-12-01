@@ -16,17 +16,4 @@ class UploadPostWorker {
 
     // MARK: - Methods
 
-    // MARK: Screen Specific Validation
-
-    func validate(exampleVariable: String?) -> Models.UploadPostError? {
-        var error: Models.UploadPostError?
-
-        if exampleVariable?.isEmpty == false {
-            error = nil
-        } else {
-            error = Models.UploadPostError(type: .emptyExampleVariable)
-        }
-
-        return error
-    }
 }
