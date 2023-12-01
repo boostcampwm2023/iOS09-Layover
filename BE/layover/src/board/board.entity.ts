@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Member } from '../member/member.entity';
+import { Tag } from '../tag/tag.entity';
 
 @Entity()
 export class Board {
@@ -33,6 +34,9 @@ export class Board {
 
   @Column()
   filename: string;
+
+  @OneToMany(() => Tag, (tag) => tag.board)
+  tags: Tag[];
 
   @Column({ nullable: false })
   status: string;

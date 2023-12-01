@@ -58,6 +58,7 @@ export class BoardService {
     const boards: Board[] = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
       .skip(random)
       .take(n)
       .getMany();
@@ -66,7 +67,6 @@ export class BoardService {
   }
 
   async createBoardResDto(board: Board): Promise<BoardsResDto> {
-    const tags = await this.tagService.findByBoardId(board.id);
     const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
     const boardInfo = new BoardResDto(
       board.id,
@@ -78,7 +78,7 @@ export class BoardService {
       board.content,
       board.status,
     );
-    const tag = tags.map((tag) => tag.tagname);
+    const tag = board.tags.map((tag) => tag.tagname);
     return new BoardsResDto(member, boardInfo, tag);
   }
 
@@ -89,6 +89,7 @@ export class BoardService {
     const boards: Board[] = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
       .where(`ST_Distance_Sphere(point(:longitude, :latitude), point(board.longitude, board.latitude)) < :distance`, {
         longitude,
         latitude,
@@ -97,6 +98,26 @@ export class BoardService {
       .getMany();
 
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
+  }
+
+  async getBoardTag(tag: string) {
+    const boards: Board[] = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
+      .where('tag.tagname = :tag', { tag })
+      .getMany();
+
+    const boardIds = boards.map((board) => board.id);
+
+    const allBoards: Board[] = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
+      .whereInIds(boardIds)
+      .getMany();
+
+    return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
   async setOriginalVideoUrl(filename: string) {
