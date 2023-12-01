@@ -51,8 +51,8 @@ export class BoardService {
     // 데이터가 10개 이하라면 첫번째 데이터부터 가져옴.
     if (random < 10) {
       random = 0;
-    } else {
-      if (limit - random < 10) random = limit - 10;
+    } else if (limit - random < 10) {
+      random = limit - 10;
     }
 
     const boards: Board[] = await this.boardRepository
