@@ -1,5 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Video } from '../video/video.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Member } from '../member/member.entity';
 
 @Entity()
@@ -11,10 +10,6 @@ export class Board {
   @JoinColumn({ name: 'member_id' })
   member: Member;
 
-  @OneToOne(() => Video, (video) => video.id)
-  @JoinColumn({ name: 'video_id' })
-  video: Video;
-
   @Column({ nullable: false })
   title: string;
 
@@ -25,10 +20,16 @@ export class Board {
   original_video_url: string;
 
   @Column({ nullable: false })
-  video_thumbnail: string;
+  encoded_video_url: string;
 
   @Column({ nullable: false })
-  location: string;
+  video_thumbnail: string;
+
+  @Column({ nullable: false, type: 'double' })
+  latitude: number;
+
+  @Column({ nullable: false, type: 'double' })
+  longitude: number;
 
   @Column()
   filename: string;

@@ -5,7 +5,7 @@ import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { PresignedUrlDto } from './dtos/presigned-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { ApiHeader, ApiHeaders, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PresignedUrlResDto } from './dtos/presigned-url-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { UploadCallbackDto } from './dtos/upload-callback.dto';
@@ -14,6 +14,7 @@ import { CustomHeader } from '../pipes/custom-header.decorator';
 import { JwtValidationPipe } from '../pipes/jwt.validation.pipe';
 import { BoardsResDto } from './dtos/boards-res.dto';
 import { SWAGGER } from '../utils/swaggerUtils';
+import { BOARD_SWAGGER } from './board.swagger';
 
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
@@ -26,45 +27,26 @@ export class BoardController {
     summary: '게시글 생성 요청',
     description: '게시글에 들어갈 내용들과 함께 업로드를 요청합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '게시글 생성 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(CreateBoardResDto) },
-      },
-    },
-  })
+  @ApiResponse(BOARD_SWAGGER.CREATE_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post()
   async createBoard(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() createBoardDto: CreateBoardDto) {
-    const [title, content, location] = [createBoardDto.title, createBoardDto.content, createBoardDto.location];
-    const userId = payload.memberId;
-    const boardId = await this.boardService.createBoard(userId, title, content, location);
-    throw new CustomResponse(ECustomCode.SUCCESS, new CreateBoardResDto(boardId));
+    const savedBoard: CreateBoardResDto = await this.boardService.createBoard(
+      payload.memberId,
+      createBoardDto.title,
+      createBoardDto.content,
+      createBoardDto.latitude,
+      createBoardDto.longitude,
+      createBoardDto.tag,
+    );
+    throw new CustomResponse(ECustomCode.SUCCESS, savedBoard);
   }
 
   @ApiOperation({
     summary: 'presigned url 요청',
     description: 'object storage에 영상을 업로드 하기 위한 presigned url을 요청합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'presigned url 요청 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(PresignedUrlResDto) },
-      },
-    },
-  })
+  @ApiResponse(BOARD_SWAGGER.GET_PRESIGNED_URL_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('presigned-url')
   async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: PresignedUrlDto) {
@@ -79,23 +61,24 @@ export class BoardController {
     summary: '홈 화면 게시글 조회',
     description: '랜덤 게시물 (최대) 10개를 조회합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '홈 화면 게시글 조회 성공',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { type: 'array', items: { $ref: getSchemaPath(BoardsResDto) } },
-      },
-    },
-  })
+  @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('home')
   async getBoardRandom() {
-    return await this.boardService.getBoardRandom();
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardRandom();
+    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+  }
+
+  @ApiOperation({
+    summary: '지도 화면 게시글 조회',
+    description: '거리에 따라 지도 화면에 보여질 게시물들을 조회합니다.',
+  })
+  @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @Get('map')
+  async getBoardMap(@Query('latitude') latitude: string, @Query('longitude') longitude: string) {
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardMap(latitude, longitude);
+    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
   @ApiOperation({
