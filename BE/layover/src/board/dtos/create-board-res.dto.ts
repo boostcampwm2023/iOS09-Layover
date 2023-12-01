@@ -23,13 +23,13 @@ export class CreateBoardResDto {
     example: '37.12310530',
     description: '위도',
   })
-  readonly latitude: string;
+  readonly latitude: number;
 
   @ApiProperty({
     example: '127.12310530',
     description: '경도',
   })
-  readonly longitude: string;
+  readonly longitude: number;
 
   @ApiProperty({
     example: ['부산', '광안리', '바다'],
@@ -37,7 +37,7 @@ export class CreateBoardResDto {
   })
   readonly tag: string[];
 
-  constructor(id: number, title: string, content: string, latitude: string, longitude: string, tag: string[]) {
+  constructor(id: number, title: string, content: string, latitude: number, longitude: number, tag: string[]) {
     this.id = id;
     this.title = title;
     this.content = content;
