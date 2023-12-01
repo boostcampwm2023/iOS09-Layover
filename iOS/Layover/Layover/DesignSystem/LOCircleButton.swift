@@ -83,7 +83,7 @@ final class LOCircleButton: UIButton {
         case .add:
             setImage(.plus, for: .normal)
         case .locate:
-            setImage(.location, for: .normal)
+            setImage(.myLocation, for: .normal)
         case .photo:
             setImage(.photo, for: .normal)
         case .sound:
