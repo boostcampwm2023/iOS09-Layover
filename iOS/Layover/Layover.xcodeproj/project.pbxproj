@@ -96,6 +96,7 @@
 		FC0E80272B1A0BBB00EF56D6 /* UploadPostModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E80212B1A0BBB00EF56D6 /* UploadPostModels.swift */; };
 		FC0E80282B1A0BBB00EF56D6 /* UploadPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E80222B1A0BBB00EF56D6 /* UploadPostViewController.swift */; };
 		FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E80232B1A0BBB00EF56D6 /* UploadPostInteractor.swift */; };
+		FC0E80302B1A15D600EF56D6 /* LOImageLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E802F2B1A15D500EF56D6 /* LOImageLabel.swift */; };
 		FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC25119F2B045C0A004717BC /* SignUpInteractor.swift */; };
 		FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A12B045C3F004717BC /* SignUpPresenter.swift */; };
 		FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2511A32B045D6C004717BC /* SignUpModels.swift */; };
@@ -268,6 +269,7 @@
 		FC0E80212B1A0BBB00EF56D6 /* UploadPostModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostModels.swift; sourceTree = "<group>"; };
 		FC0E80222B1A0BBB00EF56D6 /* UploadPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostViewController.swift; sourceTree = "<group>"; };
 		FC0E80232B1A0BBB00EF56D6 /* UploadPostInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostInteractor.swift; sourceTree = "<group>"; };
+		FC0E802F2B1A15D500EF56D6 /* LOImageLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LOImageLabel.swift; sourceTree = "<group>"; };
 		FC25119F2B045C0A004717BC /* SignUpInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInteractor.swift; sourceTree = "<group>"; };
 		FC2511A12B045C3F004717BC /* SignUpPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPresenter.swift; sourceTree = "<group>"; };
 		FC2511A32B045D6C004717BC /* SignUpModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModels.swift; sourceTree = "<group>"; };
@@ -782,6 +784,7 @@
 				835A618F2B067D61002F22A5 /* LOSlider.swift */,
 				835A61912B067FEC002F22A5 /* LOTagStackView.swift */,
 				835A61932B068096002F22A5 /* LODescriptionView.swift */,
+				FC0E802F2B1A15D500EF56D6 /* LOImageLabel.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -1027,6 +1030,7 @@
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
 				FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */,
+				FC0E80302B1A15D600EF56D6 /* LOImageLabel.swift in Sources */,
 				FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */,
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
