@@ -81,6 +81,14 @@ export class BoardController {
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
+  @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @Get('tag')
+  async getBoardTag(@Query('tag') tag: string) {
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardTag(tag);
+    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+  }
+
   @ApiOperation({
     summary: '원본 영상 업로드 완료 콜백',
     description: '클라이언트를 통해 원본 영상이 업로드 되면 호출되고, 원본 hls link 를 db에 저장합니다.',
