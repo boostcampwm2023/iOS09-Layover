@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
@@ -17,6 +17,7 @@ import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto'
 import { MemberInfosResDto } from './dtos/member-infos-res.dto';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
+import { MEMBER_SWAGGER } from './member.swagger';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -30,19 +31,7 @@ export class MemberController {
     summary: '닉네임 검증(중복)',
     description: '닉네임 검증을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '닉네임 검증 결과',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(CheckUsernameResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.CHECK_USER_NAME_SUCCESS)
   @Post('check-username')
   async checkUsername(@Body() usernameDto: CheckUsernameDto) {
     const isValid = !(await this.memberService.isExistUsername(usernameDto.username));
@@ -53,19 +42,7 @@ export class MemberController {
     summary: '닉네임 수정',
     description: '닉네임 수정을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '닉네임 수정 결과',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(UsernameResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.UPDATE_USER_NAME_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Patch('username')
@@ -88,19 +65,7 @@ export class MemberController {
     summary: '자기소개 수정',
     description: '자기소개 수정을 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '자기소개 수정 결과',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(IntroduceResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.UPDATE_INTRODUCE_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Patch('introduce')
@@ -119,19 +84,7 @@ export class MemberController {
     summary: '회원 탈퇴(삭제)',
     description: '회원 삭제를 수행합니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '삭제된 회원 정보(닉네임)',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(DeleteMemberResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.DELETE_MEMBER_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Delete()
@@ -152,19 +105,7 @@ export class MemberController {
     summary: '프로필 이미지 업로드용 presigned url 요청',
     description: '프로필 이미지 업로드용 presigned url을 응답으로 줍니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '프로필 이미지 업로드용 presigned url',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(ProfilePresignedUrlResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.GET_UPLOAD_PROFILE_PRESIGNED_URL_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('profile-image/presigned-url')
@@ -190,19 +131,7 @@ export class MemberController {
     summary: '회원(본인) 정보 요청',
     description: '회원(본인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '회원(본인) 정보들',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(MemberInfosResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.GET_MEMBER_INFOS_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get()
@@ -230,19 +159,7 @@ export class MemberController {
     summary: '회원(타인) 정보 요청',
     description: '회원(타인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '회원(타인) 정보들',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(MemberInfosResDto) },
-      },
-    },
-  })
+  @ApiResponse(MEMBER_SWAGGER.GET_OTHER_MEMBER_INFOS_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get(':id')

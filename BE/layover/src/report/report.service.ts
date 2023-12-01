@@ -3,6 +3,7 @@ import { MemberService } from 'src/member/member.service';
 import { Report } from './report.entity';
 import { Repository } from 'typeorm';
 import { BoardService } from 'src/board/board.service';
+import { ReportResDto } from './dtos/report-res.dto';
 
 @Injectable()
 export class ReportService {
@@ -12,14 +13,14 @@ export class ReportService {
     private readonly boardService: BoardService,
   ) {}
 
-  async insertReport(memberId: number, boardId: number, reportType: string): Promise<Report> {
+  async insertReport(memberId: number, boardId: number, reportType: string): Promise<ReportResDto> {
     const member = await this.memberService.findMemberById(memberId);
     const board = await this.boardService.findBoardById(boardId);
-    const newReport: Report = await this.reportRepository.save({
+    await this.reportRepository.insert({
       member: member,
       board: board,
       report_type: reportType,
     });
-    return newReport;
+    return new ReportResDto(member.id, board.id, reportType);
   }
 }
