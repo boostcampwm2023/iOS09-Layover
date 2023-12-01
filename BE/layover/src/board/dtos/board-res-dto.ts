@@ -24,13 +24,13 @@ export class BoardResDto {
     example: '37.0532156213',
     description: '게시글 위도',
   })
-  latitude: string;
+  latitude: number;
 
   @ApiProperty({
     example: '37.0532156213',
     description: '게시글 경도',
   })
-  longitude: string;
+  longitude: number;
 
   @ApiProperty({
     example: '붓산 광안리',
@@ -54,8 +54,8 @@ export class BoardResDto {
     id: number,
     encoded_video_url: string,
     video_thumbnail: string,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     title: string,
     content: string,
     status: string,

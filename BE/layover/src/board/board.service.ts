@@ -22,7 +22,7 @@ export class BoardService {
     return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
   }
 
-  async createBoard(userId: number, title: string, content: string, latitude: string, longitude: string, tag: string[]): Promise<CreateBoardResDto> {
+  async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
     const savedBoard: Board = await this.boardRepository.save({
       member: member,
@@ -31,8 +31,8 @@ export class BoardService {
       original_video_url: '',
       encoded_video_url: '',
       video_thumbnail: '',
-      latitude: parseFloat(latitude),
-      longitude: parseFloat(longitude),
+      latitude: latitude,
+      longitude: longitude,
       filename: '',
       status: 'RUNNING',
     });
@@ -72,8 +72,8 @@ export class BoardService {
       board.id,
       board.encoded_video_url,
       board.video_thumbnail,
-      board.latitude.toString(),
-      board.longitude.toString(),
+      board.latitude,
+      board.longitude,
       board.title,
       board.content,
       board.status,

@@ -20,13 +20,13 @@ export class CreateBoardDto {
     example: '37.0532156213',
     description: '게시글 위도',
   })
-  latitude: string;
+  latitude: number;
 
   @ApiProperty({
     example: '37.0532156213',
     description: '게시글 경도',
   })
-  longitude: string;
+  longitude: number;
 
   @ApiProperty({
     example: ['부산', '광안리', '바다'],
