@@ -9,16 +9,17 @@
 import UIKit
 
 protocol HomeBusinessLogic {
-    func fetchVideos(with: HomeModels.CarouselVideos.Request)
+    func fetchPosts(with: HomeModels.FetchPosts.Request)
     func moveToPlaybackScene(with: HomeModels.MoveToPlaybackScene.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
 }
 
 protocol HomeDataStore {
-    var videos: [Post]? { get set }
+    var posts: [Post]? { get set }
     var index: Int? { get set }
     var selectedVideoURL: URL? { get set }
 }
+
 
 final class HomeInteractor: HomeDataStore {
 
@@ -32,7 +33,7 @@ final class HomeInteractor: HomeDataStore {
 
     // MARK: - DataStore
 
-    var videos: [Post]?
+    var posts: [Post]?
     var index: Int?
     var selectedVideoURL: URL?
 
@@ -44,19 +45,19 @@ final class HomeInteractor: HomeDataStore {
 // MARK: - Use Case
 
 extension HomeInteractor: HomeBusinessLogic {
-    func fetchVideos(with request: Models.CarouselVideos.Request) {
-        let response = Models.CarouselVideos.Response(videoURLs: [
-            URL(string: "https://assets.afcdn.com/video49/20210722/v_645516.m3u8")!,
-            URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!,
-            URL(string: "https://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8")!,
-            URL(string: "https://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8")!,
-            URL(string: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")!
-        ])
-        presenter?.presentVideoURL(with: response)
+    func fetchPosts(with request: Models.FetchPosts.Request) {
+        Task {
+            guard let posts = await homeWorker?.fetchPosts() else { return }
+            let response = Models.FetchPosts.Response(posts: posts)
+
+            await MainActor.run {
+                presenter?.presentPosts(with: response)
+            }
+        }
     }
 
     func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
-        videos = request.videos
+        posts = request.videos
         index = request.index
         presenter?.presentPlaybackScene()
     }

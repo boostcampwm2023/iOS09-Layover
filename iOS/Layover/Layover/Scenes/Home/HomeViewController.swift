@@ -10,7 +10,7 @@ import PhotosUI
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-    func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel)
+    func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel)
     func routeToPlayback()
 }
 
@@ -53,10 +53,11 @@ final class HomeViewController: BaseViewController {
         return collectionView
     }()
 
-    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: carouselCollectionView) { collectionView, indexPath, url in
+    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Models.DisplayedPost>(collectionView: carouselCollectionView) { collectionView, indexPath, post in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
-        cell.setVideo(url: url, loopingAt: .zero)
+        cell.setVideo(url: post.videoURL, loopingAt: .zero)
+        cell.configure(title: post.title, tags: post.tags)
         return cell
     }
 
@@ -178,7 +179,7 @@ final class HomeViewController: BaseViewController {
     // MARK: - Use Case
 
     private func fetchCarouselVideos() {
-        interactor?.fetchVideos(with: Models.CarouselVideos.Request())
+        interactor?.fetchPosts(with: Models.FetchPosts.Request())
     }
 }
 
@@ -194,9 +195,11 @@ extension HomeViewController: PHPickerViewControllerDelegate {
 
         _ = result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, error in
 
-            if let error = error {
-                DispatchQueue.main.async {
-                    Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+            if error != nil {
+                Task {
+                    await MainActor.run {
+                        Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+                    }
                 }
             }
 
@@ -215,10 +218,10 @@ extension HomeViewController: PHPickerViewControllerDelegate {
 // MARK: - DisplayLogic
 
 extension HomeViewController: HomeDisplayLogic {
-    func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel) {
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
+    func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel) {
+        var snapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()
         snapshot.appendSections([UUID()])
-        snapshot.appendItems(viewModel.videoURLs)
+        snapshot.appendItems(viewModel.displayedPosts)
         carouselDatasource.apply(snapshot) {
             self.playVideoAtCenterCell()
         }

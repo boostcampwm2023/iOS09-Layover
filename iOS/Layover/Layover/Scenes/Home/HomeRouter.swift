@@ -39,7 +39,7 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         else { return }
         destination.parentView = .home
         destination.index = source.index
-        destination.videos = transData(videos: source.videos ?? [])
+        destination.videos = transData(videos: source.posts ?? [])
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
     func routeToEditVideo() {
