@@ -11,7 +11,7 @@ import UIKit
 protocol HomePresentationLogic {
     func presentPosts(with response: HomeModels.FetchPosts.Response)
     func presentThumbnailImage(with response: HomeModels.FetchThumbnailImageData.Response)
-    func presentPlaybackScene()
+    func presentPlaybackScene(with response: HomeModels.PlayPosts.Response)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -49,7 +49,7 @@ final class HomePresenter: HomePresentationLogic {
 
     // MARK: - UseCase Present PlaybackScene
 
-    func presentPlaybackScene() {
+    func presentPlaybackScene(with response: HomeModels.PlayPosts.Response) {
         viewController?.routeToPlayback()
     }
 }

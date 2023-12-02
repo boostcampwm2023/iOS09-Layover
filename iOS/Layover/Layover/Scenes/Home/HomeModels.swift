@@ -49,6 +49,18 @@ enum HomeModels {
         }
     }
 
+    enum PlayPosts {
+        struct Request {
+            let selectedIndex: Int
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
+        }
+    }
+
     enum SelectVideo {
         struct Request {
             let videoURL: URL

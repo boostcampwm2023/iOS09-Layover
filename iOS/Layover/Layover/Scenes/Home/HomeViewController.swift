@@ -118,6 +118,7 @@ final class HomeViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         carouselCollectionView.dataSource = carouselDatasource
+        carouselCollectionView.delegate = self
     }
 
     private func createCarouselLayout(groupWidthDimension: CGFloat,
@@ -187,6 +188,12 @@ final class HomeViewController: BaseViewController {
     }
 }
 
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+    }
+}
+
 // MARK: - PHPickerViewControllerDelegate
 
 extension HomeViewController: PHPickerViewControllerDelegate {
@@ -235,7 +242,7 @@ extension HomeViewController: HomeDisplayLogic {
         guard let cell = carouselCollectionView.cellForItem(at: viewModel.indexPath) as? HomeCarouselCollectionViewCell,
               let thumbnailImage = UIImage(data: viewModel.imageData)
         else { return }
-        
+
         cell.configure(thumbnailImage: thumbnailImage)
     }
 

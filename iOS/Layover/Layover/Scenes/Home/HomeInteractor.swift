@@ -11,13 +11,13 @@ import UIKit
 protocol HomeBusinessLogic {
     func fetchPosts(with request: HomeModels.FetchPosts.Request)
     func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request)
-    func moveToPlaybackScene(with: HomeModels.MoveToPlaybackScene.Request)
+    func playPosts(with request: HomeModels.PlayPosts.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
 }
 
 protocol HomeDataStore {
     var posts: [Post]? { get set }
-    var index: Int? { get set }
+    var postPlayStartIndex: Int? { get set }
     var selectedVideoURL: URL? { get set }
 }
 
@@ -34,7 +34,7 @@ final class HomeInteractor: HomeDataStore {
     // MARK: - DataStore
 
     var posts: [Post]?
-    var index: Int?
+    var postPlayStartIndex: Int?
     var selectedVideoURL: URL?
 
     func selectVideo(with request: Models.SelectVideo.Request) {
@@ -68,9 +68,8 @@ extension HomeInteractor: HomeBusinessLogic {
         }
     }
 
-    func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
-        posts = request.videos
-        index = request.index
-        presenter?.presentPlaybackScene()
+    func playPosts(with request: HomeModels.PlayPosts.Request) {
+        postPlayStartIndex = request.selectedIndex
+        presenter?.presentPlaybackScene(with: Models.PlayPosts.Response())
     }
 }
