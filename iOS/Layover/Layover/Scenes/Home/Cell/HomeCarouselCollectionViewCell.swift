@@ -35,9 +35,6 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.isPlaying
     }
 
-    // 다른 방법도 많이 알려주세요
-    var moveToPlaybackSceneCallback: (() -> Void) = { }
-
     // MARK: - Object lifecycle
 
     override init(frame: CGRect) {
@@ -118,16 +115,6 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     }
 
     func pauseVideo() {
-        loopingPlayerView.pause()
-    }
-
-    func addLoopingViewGesture() {
-        let loopingViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(moveToPlaybackScene))
-        loopingPlayerView.addGestureRecognizer(loopingViewGesture)
-    }
-
-    @objc func moveToPlaybackScene() {
-        moveToPlaybackSceneCallback()
         loopingPlayerView.pause()
     }
 }
