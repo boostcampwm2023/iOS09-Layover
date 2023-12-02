@@ -191,17 +191,20 @@ extension HomeViewController: PHPickerViewControllerDelegate {
             self.phPickerViewController.dismiss(animated: true)
             return
         }
+
         _ = result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, error in
+
+            if let error = error {
+                DispatchQueue.main.async {
+                    Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+                }
+            }
+
             if let url {
                 self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
                 DispatchQueue.main.async {
                     self.router?.routeToEditVideo()
                     self.phPickerViewController.dismiss(animated: true)
-                }
-            }
-            if let _ {
-                DispatchQueue.main.async {
-                    Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
                 }
             }
         }

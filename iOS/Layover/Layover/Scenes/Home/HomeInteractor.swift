@@ -27,12 +27,13 @@ final class HomeInteractor: HomeDataStore {
     typealias Models = HomeModels
 
     var videoFileWorker: VideoFileWorkerProtocol?
+    var homeWorker: HomeWorker?
     var presenter: HomePresentationLogic?
 
-    var videos: [Post]?
+    // MARK: - DataStore
 
+    var videos: [Post]?
     var index: Int?
-    
     var selectedVideoURL: URL?
 
     func selectVideo(with request: Models.SelectVideo.Request) {
