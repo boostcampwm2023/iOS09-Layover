@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 
+import OSLog
+
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func displayMoveCellIfinfinite()
@@ -75,7 +77,7 @@ final class PlaybackViewController: BaseViewController {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
         } catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+            os_log("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
     }
 
@@ -97,6 +99,7 @@ final class PlaybackViewController: BaseViewController {
     // MARK: - UI + Layout
 
     override func setConstraints() {
+        super.setConstraints()
         playbackCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(playbackCollectionView)
         NSLayoutConstraint.activate([
@@ -107,6 +110,16 @@ final class PlaybackViewController: BaseViewController {
         ])
     }
 
+    override func setUI() {
+        super.setUI()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        self.tabBarController?.tabBar.backgroundImage = UIImage()
+        self.tabBarController?.tabBar.shadowImage = UIImage()
+        self.tabBarController?.tabBar.clipsToBounds = true
+    }
 }
 
 extension PlaybackViewController: PlaybackDisplayLogic {
