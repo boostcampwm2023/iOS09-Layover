@@ -12,7 +12,20 @@ protocol EditTagDisplayLogic: AnyObject {
 
 }
 
-final class EditTagViewController: UIViewController, EditTagDisplayLogic {
+final class EditTagViewController: BaseViewController, EditTagDisplayLogic {
+
+    // MARK: - UI Components
+
+    private let tagTextField: LOTextField = {
+        let textField: LOTextField = LOTextField()
+        textField.placeholder = "태그"
+        return textField
+    }()
+
+    private let tagStackView: LOTagStackView = {
+        let stackView: LOTagStackView = LOTagStackView(style: .edit)
+        return stackView
+    }()
 
     // MARK: - Properties
 
@@ -35,27 +48,42 @@ final class EditTagViewController: UIViewController, EditTagDisplayLogic {
     // MARK: - Setup
 
     private func setup() {
-        let viewController = self
-        let interactor = EditTagInteractor()
-        let presenter = EditTagPresenter()
-        let router = EditTagRouter()
-
-        viewController.router = router
-        viewController.interactor = interactor
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+        EditTagConfigurator.shared.configure(self)
     }
 
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tagTextField.delegate = self
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func setConstraints() {
+        super.setConstraints()
+        view.addSubviews(tagTextField, tagStackView)
+        view.subviews.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+
+        NSLayoutConstraint.activate([
+            tagTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            tagTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tagTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tagTextField.heightAnchor.constraint(equalToConstant: 44),
+
+            tagStackView.topAnchor.constraint(equalTo: tagTextField.bottomAnchor, constant: 14),
+            tagStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tagStackView.heightAnchor.constraint(equalToConstant: 25)
+        ])
     }
 
+}
+
+extension EditTagViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let tagText = textField.text else { return true }
+        let tag = tagStackView.addTags(tagText)
+        textField.text = nil
+        return true
+    }
 }
