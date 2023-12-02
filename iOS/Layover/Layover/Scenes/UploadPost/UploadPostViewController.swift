@@ -211,16 +211,16 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
             contentTextView.topAnchor.constraint(equalTo: contentImageLabel.bottomAnchor, constant: 10),
             contentTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            contentTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
     private func addTarget() {
-        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(myTapMethod))
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         scrollView.addGestureRecognizer(singleTapGestureRecognizer)
     }
 
-    @objc private func myTapMethod() {
+    @objc private func viewDidTap() {
         self.view.endEditing(true)
     }
 
