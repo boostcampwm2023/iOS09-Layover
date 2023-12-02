@@ -20,7 +20,6 @@ protocol HomeDataStore {
     var selectedVideoURL: URL? { get set }
 }
 
-
 final class HomeInteractor: HomeDataStore {
 
     // MARK: - Properties
@@ -28,7 +27,7 @@ final class HomeInteractor: HomeDataStore {
     typealias Models = HomeModels
 
     var videoFileWorker: VideoFileWorkerProtocol?
-    var homeWorker: HomeWorker?
+    var homeWorker: HomeWorkerProtocol?
     var presenter: HomePresentationLogic?
 
     // MARK: - DataStore
