@@ -113,13 +113,13 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
+        let navigationBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
 
-        self.tabBarController?.tabBar.backgroundImage = UIImage()
-        self.tabBarController?.tabBar.shadowImage = UIImage()
-        self.tabBarController?.tabBar.clipsToBounds = true
+        let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithTransparentBackground()
+        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
 
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
