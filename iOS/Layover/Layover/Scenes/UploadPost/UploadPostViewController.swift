@@ -48,7 +48,7 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
     }()
 
     private let tagStackView: LOTagStackView = {
-        let stackView = LOTagStackView()
+        let stackView = LOTagStackView(style: .edit)
         return stackView
     }()
 

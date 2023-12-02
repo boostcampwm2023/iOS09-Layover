@@ -12,12 +12,21 @@ final class LOTagStackView: UIStackView {
     lazy var tagButton2: UIButton = setButton("#시차")
     lazy var tagButton3: UIButton = setButton("#고양이")
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    enum Style {
+        case basic
+        case edit
+    }
+
+    private let style: Style
+
+    init(style: Style) {
+        self.style = style
+        super.init(frame: .zero)
         setUpConstraints()
     }
 
     required init(coder: NSCoder) {
+        self.style = .basic
         super.init(coder: coder)
         setUpConstraints()
     }
@@ -45,8 +54,33 @@ final class LOTagStackView: UIStackView {
         button.setTitleColor(UIColor.layoverWhite, for: .normal)
         button.setTitle(content, for: .normal)
         button.configuration = config
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 8.0)
         button.layer.cornerRadius = 12
+
+        switch style {
+        case .basic:
+            button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 8.0)
+        case .edit:
+            let editButton: UIButton = UIButton()
+
+            button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 25)
+            button.addSubview(editButton)
+
+            editButton.setBackgroundImage(UIImage(resource: .close), for: .normal)
+            editButton.addTarget(self, action: #selector(tagDeleteButtonDidTap), for: .touchUpInside)
+            editButton.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                editButton.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -8),
+                editButton.widthAnchor.constraint(equalToConstant: 12),
+                editButton.heightAnchor.constraint(equalToConstant: 12),
+                editButton.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+            ])
+        }
         return button
+    }
+
+    @objc private func tagDeleteButtonDidTap(_ sender: UIButton) {
+        guard let button = sender.superview else { return }
+        button.removeFromSuperview()
+        layoutIfNeeded()
     }
 }
