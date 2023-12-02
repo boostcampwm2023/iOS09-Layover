@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomePresentationLogic {
     func presentPosts(with response: HomeModels.FetchPosts.Response)
+    func presentThumbnailImage(with response: HomeModels.FetchThumbnailImageData.Response)
     func presentPlaybackScene()
 }
 
@@ -22,7 +23,7 @@ final class HomePresenter: HomePresentationLogic {
 
     // MARK: - Use Case - Home
 
-    func presentPosts(with response: HomeModels.FetchPosts.Response) {
+    func presentPosts(with response: Models.FetchPosts.Response) {
         var displayedPosts = [Models.DisplayedPost]()
 
         for post in response.posts {
@@ -38,6 +39,12 @@ final class HomePresenter: HomePresentationLogic {
 
         let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPosts)
         viewController?.displayPosts(with: viewModel)
+    }
+
+    func presentThumbnailImage(with response: Models.FetchThumbnailImageData.Response) {
+        let viewModel = Models.FetchThumbnailImageData.ViewModel(imageData: response.imageData,
+                                                                 indexPath: response.indexPath)
+        viewController?.displayThumbnailImage(with: viewModel)
     }
 
     // MARK: - UseCase Present PlaybackScene

@@ -9,7 +9,8 @@
 import UIKit
 
 protocol HomeBusinessLogic {
-    func fetchPosts(with: HomeModels.FetchPosts.Request)
+    func fetchPosts(with request: HomeModels.FetchPosts.Request)
+    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request)
     func moveToPlaybackScene(with: HomeModels.MoveToPlaybackScene.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
 }
@@ -51,6 +52,18 @@ extension HomeInteractor: HomeBusinessLogic {
 
             await MainActor.run {
                 presenter?.presentPosts(with: response)
+            }
+        }
+    }
+
+    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request) {
+        Task {
+            guard let imageData = await homeWorker?.fetchImageData(of: request.imageURL) else { return }
+            let response = Models.FetchThumbnailImageData.Response(imageData: imageData,
+                                                                   indexPath: request.indexPath)
+
+            await MainActor.run {
+                presenter?.presentThumbnailImage(with: response)
             }
         }
     }

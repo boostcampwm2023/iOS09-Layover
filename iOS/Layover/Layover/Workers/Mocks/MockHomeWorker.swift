@@ -11,7 +11,6 @@ import OSLog
 
 final class MockHomeWorker: HomeWorkerProtocol {
 
-
     // MARK: - Properties
 
     private let provider: ProviderType = Provider(session: .initMockSession(),
@@ -37,6 +36,28 @@ final class MockHomeWorker: HomeWorkerProtocol {
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
             return data.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImageData(of url: URL) async -> Data? {
+        do {
+            guard let imageURL = Bundle.main.url(forResource: "sample", withExtension: "jpeg") else {
+                return nil
+            }
+            let mockData = try? Data(contentsOf: imageURL)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+
+            let data = try await provider.request(url: url)
+            return data
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil

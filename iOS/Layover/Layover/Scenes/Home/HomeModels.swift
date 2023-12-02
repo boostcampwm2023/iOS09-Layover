@@ -32,6 +32,23 @@ enum HomeModels {
         }
     }
 
+    enum FetchThumbnailImageData {
+        struct Request {
+            let imageURL: URL
+            let indexPath: IndexPath
+        }
+
+        struct Response {
+            let imageData: Data
+            let indexPath: IndexPath
+        }
+
+        struct ViewModel {
+            let imageData: Data
+            let indexPath: IndexPath
+        }
+    }
+
     enum SelectVideo {
         struct Request {
             let videoURL: URL

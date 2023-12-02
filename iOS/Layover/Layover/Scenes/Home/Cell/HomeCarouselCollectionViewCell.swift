@@ -14,6 +14,12 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     private let loopingPlayerView = LoopingPlayerView()
 
+    private let thumbnailImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .layoverWhite
@@ -58,7 +64,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     }
 
     private func setConstraints() {
-        contentView.addSubviews(loopingPlayerView, titleLabel, tagStackView)
+        contentView.addSubviews(loopingPlayerView, thumbnailImageView, titleLabel, tagStackView)
         contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
@@ -66,6 +72,11 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
             loopingPlayerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             tagStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -23),
             tagStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
@@ -110,11 +121,17 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         tagStackView.addArrangedSubview(UIView())
     }
 
+    func configure(thumbnailImage: UIImage) {
+        thumbnailImageView.image = thumbnailImage
+    }
+
     func playVideo() {
+        thumbnailImageView.isHidden = true
         loopingPlayerView.play()
     }
 
     func pauseVideo() {
+        thumbnailImageView.isHidden = false
         loopingPlayerView.pause()
     }
 }
