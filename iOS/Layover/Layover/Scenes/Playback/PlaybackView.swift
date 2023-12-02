@@ -183,7 +183,7 @@ private extension PlaybackView {
         let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
         descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
     }
-    
+
     // MARK: - UI Method
 
     func setDescriptionViewUI() {

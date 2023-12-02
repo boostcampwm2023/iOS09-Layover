@@ -85,4 +85,18 @@ enum PlaybackModels {
         }
     }
 
+    // MARK: - UseCase Cell Configure
+
+    enum ConfigurePlaybackCell {
+        struct Request {
+        }
+
+        struct Response {
+            let teleportIndex: Int?
+        }
+
+        struct ViewModel {
+            let teleportIndex: Int?
+        }
+    }
 }

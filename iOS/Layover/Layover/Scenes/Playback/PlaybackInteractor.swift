@@ -17,6 +17,7 @@ protocol PlaybackBusinessLogic {
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func configurePlaybackCell()
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -62,7 +63,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
         presenter?.presentVideoList(with: response)
     }
-
 
     func moveInitialPlaybackCell() {
         let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
@@ -150,4 +150,16 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         presenter?.presentLeavePlaybackView(with: response)
     }
 
+    func configurePlaybackCell() {
+        guard let videos else { return }
+        guard let parentView else { return }
+        let response: Models.ConfigurePlaybackCell.Response
+        switch parentView {
+        case .home:
+            response = Models.ConfigurePlaybackCell.Response(teleportIndex: nil)
+        case .other:
+            response = Models.ConfigurePlaybackCell.Response(teleportIndex: videos.count + 1)
+        }
+        presenter?.presentConfigureCell(with: response)
+    }
 }

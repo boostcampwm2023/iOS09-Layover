@@ -21,6 +21,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -70,7 +71,8 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureDataSource()
+//        configureDataSource()
+        interactor?.configurePlaybackCell()
         interactor?.displayVideoList()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
@@ -180,20 +182,21 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         viewModel.prevCell?.playbackView.playerSlider.isHidden = true
         viewModel.prevCell?.playbackView.stopPlayer()
     }
-}
 
-// MARK: - Playback Method
-
-private extension PlaybackViewController {
-    func configureDataSource() {
+    func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel) {
         guard let tabbarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
             return
         }
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
         dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
+            cell.setPlaybackContents(video: video.post)
+            if let teleportIndex = viewModel.teleportIndex {
+                if indexPath.row == 0 || indexPath.row == viewModel.teleportIndex {
+                    return cell
+                }
+            }
             guard let videoURL: URL = video.post.board.videoURL else { return PlaybackCell()}
-            cell.setPlaybackContents(viewModel: video)
             cell.addAVPlayer(url: videoURL)
             cell.setPlayerSlider(tabbarHeight: tabbarHeight)
             return cell
