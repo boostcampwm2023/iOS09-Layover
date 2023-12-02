@@ -79,10 +79,12 @@ final class EditTagViewController: BaseViewController, EditTagDisplayLogic {
 
 }
 
+// MARK: - UITextFieldDelegate
+
 extension EditTagViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let tagText = textField.text else { return true }
-        let tag = tagStackView.addTags(tagText)
+        tagStackView.addTag(tagText)
         textField.text = nil
         return true
     }

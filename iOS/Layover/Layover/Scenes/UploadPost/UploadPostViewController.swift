@@ -12,11 +12,15 @@ protocol UploadPostDisplayLogic: AnyObject {
 
 }
 
-class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
+final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
 
     // MARK: - UI Components
 
-    private let scrollView: UIScrollView = UIScrollView()
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
 
     private let contentView: UIView = UIView()
 
@@ -53,8 +57,9 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
         return stackView
     }()
 
-    private let addTagButton: LOCircleButton = {
-        let button = LOCircleButton(style: .add, diameter: 25)
+    private lazy var addTagButton: LOCircleButton = {
+        let button = LOCircleButton(style: .smallAdd, diameter: 25)
+        button.addTarget(self, action: #selector(addTagButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -135,7 +140,7 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            scrollView.bottomAnchor.constraint(equalTo: uploadButton.topAnchor, constant: -10),
+            scrollView.bottomAnchor.constraint(equalTo: uploadButton.topAnchor, constant: -20),
 
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -145,7 +150,7 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
 
             uploadButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             uploadButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            uploadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            uploadButton.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
             uploadButton.heightAnchor.constraint(equalToConstant: 50)
         ])
 
@@ -213,6 +218,10 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
 
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+
+    @objc private func addTagButtonDidTap() {
+        router?.routeToNext()
     }
 
 }

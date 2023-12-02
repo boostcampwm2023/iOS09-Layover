@@ -26,15 +26,13 @@ class UploadPostRouter: NSObject, UploadPostRoutingLogic, UploadPostDataPassing 
     // MARK: - Routing
 
     func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+        let nextViewController = EditTagViewController()
+        guard let source = dataStore,
+              var destination = nextViewController.router?.dataStore
+        else { return }
+
+        // Data Passing
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
-    // MARK: - Data Passing
-
-    // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: UploadPostDataStore) {
-    //     destinationDS.attribute = sourceDS.attribute
-    // }
 }

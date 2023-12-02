@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditTagRoutingLogic {
-    func routeToNext()
+    func routeToBack()
 }
 
 protocol EditTagDataPassing {
@@ -25,11 +25,12 @@ class EditTagRouter: NSObject, EditTagRoutingLogic, EditTagDataPassing {
 
     // MARK: - Routing
 
-    func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    func routeToBack() {
+        let destination = viewController?.presentingViewController as? UploadPostViewController
+        var destinationDataStore = destination?.router?.dataStore
+
+        // data passing
+        viewController?.navigationController?.popViewController(animated: true)
     }
 
 }

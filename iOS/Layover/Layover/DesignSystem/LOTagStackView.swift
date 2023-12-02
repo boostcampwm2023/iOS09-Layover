@@ -36,33 +36,30 @@ final class LOTagStackView: UIStackView {
     // MARK: - Methods
 
     // TODO: Component 추가 시 변경
-    func addTags(_ content: String...) {
-        content.forEach { text in
-            let button: UIButton = UIButton()
-            var config = UIButton.Configuration.plain()
-            config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-                var outgoing = incoming
-                outgoing.font = UIFont.loFont(type: .body2Bold)
-                return outgoing
-            }
-
-            button.backgroundColor = UIColor.primaryPurple
-            button.setTitleColor(UIColor.layoverWhite, for: .normal)
-            button.setTitle(text, for: .normal)
-            button.configuration = config
-            button.layer.cornerRadius = 12
-
-            switch style {
-            case .basic:
-                button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 8.0)
-            case .edit:
-                let editButton: UIButton = makeEditButton(in: button)
-                button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 25)
-                button.addSubview(editButton)
-            }
-            
-            addArrangedSubview(button)
+    func addTag(_ content: String) {
+        let button: UIButton = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.loFont(type: .body2Bold)
+            return outgoing
         }
+
+        button.backgroundColor = UIColor.primaryPurple
+        button.setTitleColor(UIColor.layoverWhite, for: .normal)
+        button.setTitle(content, for: .normal)
+        button.configuration = config
+        button.layer.cornerRadius = 12
+
+        switch style {
+        case .basic:
+            button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 8.0)
+        case .edit:
+            addEditButton(in: button)
+            button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 8.0, bottom: 5.0, trailing: 25)
+        }
+
+        addArrangedSubview(button)
     }
 
     private func setUI() {
@@ -72,8 +69,9 @@ final class LOTagStackView: UIStackView {
         self.spacing = 8
     }
 
-    private func makeEditButton(in button: UIButton) -> UIButton {
+    private func addEditButton(in button: UIButton) {
         let editButton: UIButton = UIButton()
+        button.addSubview(editButton)
         editButton.setBackgroundImage(UIImage(resource: .close), for: .normal)
         editButton.addTarget(self, action: #selector(tagDeleteButtonDidTap), for: .touchUpInside)
         editButton.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +81,6 @@ final class LOTagStackView: UIStackView {
             editButton.heightAnchor.constraint(equalToConstant: 12),
             editButton.centerYAnchor.constraint(equalTo: button.centerYAnchor)
         ])
-        return editButton
     }
 
     @objc private func tagDeleteButtonDidTap(_ sender: UIButton) {
