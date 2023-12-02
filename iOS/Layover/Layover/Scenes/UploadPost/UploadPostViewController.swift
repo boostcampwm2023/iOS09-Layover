@@ -17,6 +17,7 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
     // MARK: - UI Components
 
     private let scrollView: UIScrollView = UIScrollView()
+
     private let contentView: UIView = UIView()
 
     private let thumnailImageView: UIImageView = {
@@ -111,17 +112,7 @@ class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
     // MARK: - Setup
 
     private func setup() {
-        let viewController = self
-        let interactor = UploadPostInteractor()
-        let presenter = UploadPostPresenter()
-        let router = UploadPostRouter()
-
-        viewController.router = router
-        viewController.interactor = interactor
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+        UploadPostConfigurator.shared.configure(self)
     }
 
     // MARK: - View Lifecycle
