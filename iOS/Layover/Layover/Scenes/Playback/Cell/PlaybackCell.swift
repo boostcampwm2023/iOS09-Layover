@@ -31,11 +31,6 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.addAVPlayer(url: url)
     }
 
-    func setPlayerSlider(tabbarHeight: CGFloat) {
-        playbackView.setPlayerSlider()
-        playbackView.setPlayerSliderUI(tabbarHeight: tabbarHeight)
-    }
-
     private func configure() {
         playbackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(playbackView)
@@ -45,6 +40,5 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
-        playbackView.playerSlider.isHidden = true
     }
 }

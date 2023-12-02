@@ -9,6 +9,7 @@ import UIKit
 
 final class LOSlider: UISlider {
     static let loSliderHeight: CGFloat = 10
+    var playerView: PlayerView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,5 +35,9 @@ final class LOSlider: UISlider {
         setThumbImage(UIImage.loNormalThumb, for: .normal)
         self.minimumValue = 0
         self.maximumValue = 1
+    }
+
+    func setPlayerView(_ newPlayerView: PlayerView) {
+        playerView = newPlayerView
     }
 }

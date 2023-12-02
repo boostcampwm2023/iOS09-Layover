@@ -11,7 +11,6 @@ import UIKit
 protocol PlaybackBusinessLogic {
     func displayVideoList()
     func moveInitialPlaybackCell()
-    func hidePlayerSlider()
     func setInitialPlaybackCell()
     func leavePlaybackView()
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
@@ -92,11 +91,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         prevCell = request.curCell
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: request.curCell)
         presenter?.presentPlayInitialPlaybackCell(with: response)
-    }
-
-    func hidePlayerSlider() {
-        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
-        presenter?.presentHidePlayerSlider(with: response)
     }
 
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
