@@ -114,14 +114,10 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        let navigationBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithTransparentBackground()
-        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        addWindowPlayerSlider()
+    }
 
-        let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithTransparentBackground()
-        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
-
+    private func addWindowPlayerSlider() {
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         let window = windowScene?.windows.first
