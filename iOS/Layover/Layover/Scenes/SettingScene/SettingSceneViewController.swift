@@ -75,18 +75,21 @@ final class SettingSceneViewController: BaseViewController {
         ])
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        restoreNavigationBar()
+    }
+
     override func setUI() {
         setNavigationBar()
     }
 
     private func setNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = .layoverWhite
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationController?.navigationBar.topItem?.title = ""
     }
 
-    @objc func popViewController() {
-        self.navigationController?.popViewController(animated: true)
+    private func restoreNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }
 
