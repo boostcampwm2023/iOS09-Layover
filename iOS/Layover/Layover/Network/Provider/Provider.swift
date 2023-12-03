@@ -55,7 +55,9 @@ class Provider: ProviderType {
                 urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             } else {
                 guard await refreshTokenIfNeeded(), let newToken = authManager.accessToken else {
-                    NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
+                    await MainActor.run {
+                        NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
+                    }
                     throw NetworkError.urlRequest
                 }
                 urlRequest.setValue("Bearer \(newToken)", forHTTPHeaderField: "Authorization")
@@ -70,7 +72,9 @@ class Provider: ProviderType {
             if case .unauthorized = error, authenticationIfNeeded {
                 guard retryCount > 0, await refreshTokenIfNeeded() else {
                     authManager.logout()
-                    NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
+                    await MainActor.run {
+                        NotificationCenter.default.post(name: .refreshTokenDidExpired, object: nil)
+                    }
                     throw NetworkError.server(error)
                 }
 

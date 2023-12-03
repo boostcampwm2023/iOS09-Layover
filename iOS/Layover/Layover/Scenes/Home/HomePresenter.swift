@@ -9,8 +9,9 @@
 import UIKit
 
 protocol HomePresentationLogic {
-    func presentVideoURL(with response: HomeModels.CarouselVideos.Response)
-    func presentPlaybackScene()
+    func presentPosts(with response: HomeModels.FetchPosts.Response)
+    func presentThumbnailImage(with response: HomeModels.FetchThumbnailImageData.Response)
+    func presentPlaybackScene(with response: HomeModels.PlayPosts.Response)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -22,14 +23,33 @@ final class HomePresenter: HomePresentationLogic {
 
     // MARK: - Use Case - Home
 
-    func presentVideoURL(with response: HomeModels.CarouselVideos.Response) {
-        let viewModel = HomeModels.CarouselVideos.ViewModel(videoURLs: response.videoURLs)
-        viewController?.displayVideoURLs(with: viewModel)
+    func presentPosts(with response: Models.FetchPosts.Response) {
+        var displayedPosts = [Models.DisplayedPost]()
+
+        for post in response.posts {
+            guard let thumbnailURL = post.board.thumbnailImageURL,
+                  let videoURL = post.board.videoURL else { continue }
+
+            let displayedPost = Models.DisplayedPost(thumbnailImageURL: thumbnailURL,
+                                                     videoURL: videoURL,
+                                                     title: post.board.title,
+                                                     tags: post.tag)
+            displayedPosts.append(displayedPost)
+        }
+
+        let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPosts)
+        viewController?.displayPosts(with: viewModel)
+    }
+
+    func presentThumbnailImage(with response: Models.FetchThumbnailImageData.Response) {
+        let viewModel = Models.FetchThumbnailImageData.ViewModel(imageData: response.imageData,
+                                                                 indexPath: response.indexPath)
+        viewController?.displayThumbnailImage(with: viewModel)
     }
 
     // MARK: - UseCase Present PlaybackScene
 
-    func presentPlaybackScene() {
+    func presentPlaybackScene(with response: HomeModels.PlayPosts.Response) {
         viewController?.routeToPlayback()
     }
 }

@@ -10,7 +10,8 @@ import PhotosUI
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-    func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel)
+    func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel)
+    func displayThumbnailImage(with viewModel: HomeModels.FetchThumbnailImageData.ViewModel)
     func routeToPlayback()
 }
 
@@ -45,7 +46,7 @@ final class HomeViewController: BaseViewController {
                                           groupHeightDimension: 473/534,
                                           maximumZoomScale: 1,
                                           minimumZoomScale: 473/534)
-        let collectionView = UICollectionView(frame: .init(), collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(HomeCarouselCollectionViewCell.self, forCellWithReuseIdentifier: HomeCarouselCollectionViewCell.identifier)
         collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .always
@@ -53,69 +54,14 @@ final class HomeViewController: BaseViewController {
         return collectionView
     }()
 
-    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, URL>(collectionView: carouselCollectionView) { collectionView, indexPath, url in
+    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Models.DisplayedPost>(collectionView: carouselCollectionView) { collectionView, indexPath, post in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
-        cell.setVideo(url: url, loopingAt: .zero)
-        cell.configure(title: "요리왕 비룡 데뷔", tags: ["#천상의맛", "#갈갈갈", "#빨리주세요"])
-        cell.moveToPlaybackSceneCallback = {
-            self.interactor?.moveToPlaybackScene(
-                with: Models.MoveToPlaybackScene.Request(
-                    index: indexPath.row,
-                    videos: [
-                        Post(
-                            member: Member(
-                                identifier: 1,
-                                username: "찹모찌",
-                                introduce: "찹모찌데스",
-                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                            board: Board(
-                                identifier: 1,
-                                title: "찹찹찹",
-                                description: "찹모찌의 뜻은 뭘까?",
-                                thumbnailImageURL: nil,
-                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                                latitude: nil,
-                                longitude: nil),
-                            tag: ["찹", "모", "찌"]
-                            ),
-                        Post(
-                            member: Member(
-                                identifier: 2,
-                                username: "로인설",
-                                introduce: "로인설데스",
-                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                            board: Board(
-                                identifier: 2,
-                                title: "설설설",
-                                description: "로인설의 뜻은 뭘까?",
-                                thumbnailImageURL: nil,
-                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                                latitude: nil,
-                                longitude: nil),
-                            tag: ["로", "인", "설"]
-                            ),
-                        Post(
-                            member: Member(
-                                identifier: 3,
-                                username: "콩콩콩",
-                                introduce: "콩콩콩데스",
-                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                            board: Board(
-                                identifier: 1,
-                                title: "콩콩콩",
-                                description: "콩콩콩의 뜻은 뭘까?",
-                                thumbnailImageURL: nil,
-                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                                latitude: nil,
-                                longitude: nil),
-                            tag: ["콩", "콩", "콩"]
-                            )
-                    ]
-                )
-            )
-        }
-        cell.addLoopingViewGesture()
+
+        self.interactor?.fetchThumbnailImageData(with: Models.FetchThumbnailImageData.Request(imageURL: post.thumbnailImageURL,
+                                                                                              indexPath: indexPath))
+        cell.setVideo(url: post.videoURL, loopingAt: .zero)
+        cell.configure(title: post.title, tags: post.tags)
         return cell
     }
 
@@ -155,11 +101,8 @@ final class HomeViewController: BaseViewController {
     override func setConstraints() {
         super.setConstraints()
 
-        [carouselCollectionView, uploadButton].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-
         view.addSubviews(carouselCollectionView, uploadButton)
+        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
             carouselCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -175,6 +118,7 @@ final class HomeViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         carouselCollectionView.dataSource = carouselDatasource
+        carouselCollectionView.delegate = self
     }
 
     private func createCarouselLayout(groupWidthDimension: CGFloat,
@@ -206,7 +150,7 @@ final class HomeViewController: BaseViewController {
                     let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minimumZoomScale) // 최대 비율에서 거리에 따라 비율을 줄임, 최소 비율보다 작아지지 않도록 함
                     item.transform = CGAffineTransform(scaleX: 1.0, y: scale)
                     guard let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? HomeCarouselCollectionViewCell else { return }
-                    if scale >= 0.9 { // 과연 계속 호출해도 괜찮을까?
+                    if scale >= 0.9 {
                         cell.playVideo()
                     } else if scale < 0.9 {
                         cell.pauseVideo()
@@ -240,7 +184,13 @@ final class HomeViewController: BaseViewController {
     // MARK: - Use Case
 
     private func fetchCarouselVideos() {
-        interactor?.fetchVideos(with: Models.CarouselVideos.Request())
+        interactor?.fetchPosts(with: Models.FetchPosts.Request())
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
     }
 }
 
@@ -253,17 +203,24 @@ extension HomeViewController: PHPickerViewControllerDelegate {
             self.phPickerViewController.dismiss(animated: true)
             return
         }
-        result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, error in
-            if let url {
-                self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
-                DispatchQueue.main.async {
-                    self.router?.routeToEditVideo()
-                    self.phPickerViewController.dismiss(animated: true)
+
+        _ = result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, error in
+
+            if error != nil {
+                Task {
+                    await MainActor.run {
+                        Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+                    }
                 }
             }
-            if let error {
-                DispatchQueue.main.async {
-                    Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+
+            if let url {
+                self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
+                Task {
+                    await MainActor.run {
+                        self.router?.routeToEditVideo()
+                        self.phPickerViewController.dismiss(animated: true)
+                    }
                 }
             }
         }
@@ -274,13 +231,21 @@ extension HomeViewController: PHPickerViewControllerDelegate {
 // MARK: - DisplayLogic
 
 extension HomeViewController: HomeDisplayLogic {
-    func displayVideoURLs(with viewModel: HomeModels.CarouselVideos.ViewModel) {
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, URL>()
+    func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel) {
+        var snapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()
         snapshot.appendSections([UUID()])
-        snapshot.appendItems(viewModel.videoURLs)
+        snapshot.appendItems(viewModel.displayedPosts)
         carouselDatasource.apply(snapshot) {
             self.playVideoAtCenterCell()
         }
+    }
+
+    func displayThumbnailImage(with viewModel: HomeModels.FetchThumbnailImageData.ViewModel) {
+        guard let cell = carouselCollectionView.cellForItem(at: viewModel.indexPath) as? HomeCarouselCollectionViewCell,
+              let thumbnailImage = UIImage(data: viewModel.imageData)
+        else { return }
+
+        cell.configure(thumbnailImage: thumbnailImage)
     }
 
     func routeToPlayback() {

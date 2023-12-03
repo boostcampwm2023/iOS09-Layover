@@ -14,6 +14,7 @@ final class LOCircleButton: UIButton {
 
     enum Style {
         case add
+        case smallAdd
         case locate
         case photo
         case sound
@@ -71,7 +72,7 @@ final class LOCircleButton: UIButton {
 
     private func setBackgroundColor(by style: Style) {
         switch style {
-        case .add:
+        case .add, .smallAdd:
             backgroundColor = .primaryPurple
         default:
             backgroundColor = .darkGrey
@@ -82,8 +83,10 @@ final class LOCircleButton: UIButton {
         switch style {
         case .add:
             setImage(.plus, for: .normal)
+        case .smallAdd:
+            setImage(.smallPlus, for: .normal)
         case .locate:
-            setImage(.location, for: .normal)
+            setImage(.myLocation, for: .normal)
         case .photo:
             setImage(.photo, for: .normal)
         case .sound:

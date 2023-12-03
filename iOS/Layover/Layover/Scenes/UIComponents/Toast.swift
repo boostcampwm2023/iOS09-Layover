@@ -8,6 +8,28 @@
 
 import UIKit
 
+final class ToastLabel: UILabel {
+    private let topInset: CGFloat = 14
+    private let bottomInset: CGFloat = 14
+    private let leftInset: CGFloat = 25
+    private let rightInset: CGFloat = 25
+
+    override func drawText(in rect: CGRect) {
+        let insets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        super.drawText(in: rect.inset(by: insets))
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: size.width + leftInset + rightInset, height: size.height + topInset + bottomInset)
+    }
+
+    override var bounds: CGRect {
+        didSet { preferredMaxLayoutWidth = bounds.width - (leftInset + rightInset) }
+    }
+
+}
+
 final class Toast {
     static let shared = Toast()
 
@@ -17,7 +39,7 @@ final class Toast {
         let scenes: Set<UIScene> = UIApplication.shared.connectedScenes
         let windowScene: UIWindowScene? = scenes.first as? UIWindowScene
         guard let window: UIWindow = windowScene?.windows.first else { return }
-        let toastLabel: UILabel = UILabel()
+        let toastLabel: ToastLabel = ToastLabel()
         toastLabel.backgroundColor = .background
         toastLabel.textColor = .layoverWhite
         toastLabel.textAlignment = .center
