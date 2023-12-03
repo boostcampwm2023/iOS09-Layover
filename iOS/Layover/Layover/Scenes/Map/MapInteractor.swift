@@ -16,7 +16,7 @@ protocol MapBusinessLogic {
 }
 
 protocol MapDataStore { 
-    var videos: [Post]? { get set }
+    var posts: [Post]? { get set }
     var index: Int? { get set }
 }
 
@@ -34,8 +34,8 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
     var index: Int?
 
-    var videos: [Post]?
-    
+    var posts: [Post]?
+
     var presenter: MapPresentationLogic?
 
     override init() {
@@ -60,7 +60,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     }
 
     func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
-        videos = request.videos
+        posts = request.videos
         index = request.index
         presenter?.presentPlaybackScene()
     }

@@ -21,9 +21,13 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
-    func setPlaybackContents(video: Post) {
-        playbackView.descriptionView.titleLabel.text = video.board.title
-        playbackView.descriptionView.setText(video.board.description ?? "")
+    func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
+        playbackView.descriptionView.titleLabel.text = info.title
+        playbackView.descriptionView.setText(info.content)
+        playbackView.profileLabel.text = info.profileName
+        info.tag.forEach { tag in
+            playbackView.tagStackView.addTag(tag)
+        }
     }
 
     func addAVPlayer(url: URL) {

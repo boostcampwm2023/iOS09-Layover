@@ -32,14 +32,7 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
         else { return }
         destination.parentView = .other
         destination.index = source.index
-        destination.videos = transData(videos: source.videos ?? [])
+        destination.posts = source.posts
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
-
-    private func transData(videos: [Post]) -> [PlaybackModels.PlaybackVideo] {
-        videos.map { video in
-            return PlaybackModels.PlaybackVideo(post: video)
-        }
-    }
-
 }

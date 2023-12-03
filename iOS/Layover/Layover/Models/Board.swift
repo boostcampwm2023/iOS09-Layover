@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Board: Hashable {
+struct Board {
     let identifier: Int
     let title: String
     let description: String?

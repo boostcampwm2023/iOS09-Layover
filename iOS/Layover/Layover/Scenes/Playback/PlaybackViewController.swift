@@ -126,7 +126,7 @@ final class PlaybackViewController: BaseViewController {
         guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
             return
         }
-        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
         window?.addSubview(playerSlider)
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
@@ -209,16 +209,15 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel) {
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
-        dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, playbackVideo) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
-            cell.setPlaybackContents(video: video.post)
+            cell.setPlaybackContents(info: playbackVideo.playbackInfo)
             if let teleportIndex = viewModel.teleportIndex {
                 if indexPath.row == 0 || indexPath.row == teleportIndex {
                     return cell
                 }
             }
-            guard let videoURL: URL = video.post.board.videoURL else { return PlaybackCell()}
-            cell.addAVPlayer(url: videoURL)
+            cell.addAVPlayer(url: playbackVideo.playbackInfo.videoURL)
             self.setPlayerSlider(at: cell.playbackView)
             return cell
         }

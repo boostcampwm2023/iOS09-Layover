@@ -29,10 +29,24 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     typealias Models = PlaybackModels
     weak var viewController: PlaybackDisplayLogic?
 
+    private func transPostToVideo(_ posts: [Post]) -> [Models.PlaybackVideo] {
+        posts.compactMap { post in
+            guard let videoURL: URL = post.board.videoURL else {
+                return nil
+            }
+            return Models.PlaybackVideo(playbackInfo: PlaybackModels.PlaybackInfo(
+                title: post.board.title,
+                content: post.board.description ?? "",
+                profileImageURL: post.member.profileImageURL,
+                profileName: post.member.username,
+                tag: post.tag,
+                videoURL: videoURL))
+        }
+    }
     // MARK: - UseCase Load Video List
 
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
-        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
+        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: transPostToVideo(response.posts))
         viewController?.displayVideoList(viewModel: viewModel)
     }
 

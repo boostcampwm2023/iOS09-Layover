@@ -39,7 +39,7 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         else { return }
         destination.parentView = .home
         destination.index = source.postPlayStartIndex
-        destination.videos = transData(videos: source.posts ?? [])
+        destination.posts = source.posts
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
     func routeToEditVideo() {
@@ -55,11 +55,6 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
-    private func transData(videos: [Post]) -> [PlaybackModels.PlaybackVideo] {
-        videos.map { video in
-            return PlaybackModels.PlaybackVideo(post: video)
-        }
-    }
     // MARK: - Data Passing
 
     // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: HomeDataStore) {

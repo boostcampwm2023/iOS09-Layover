@@ -31,7 +31,7 @@ final class PlaybackView: UIView {
         return gradientLayer
     }()
 
-    private let tagStackView: LOTagStackView = {
+    let tagStackView: LOTagStackView = {
         let tagStackView: LOTagStackView = LOTagStackView(style: .basic)
         return tagStackView
     }()
@@ -45,7 +45,7 @@ final class PlaybackView: UIView {
         return button
     }()
 
-    private let profileLabel: UILabel = {
+    let profileLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2Bold)
         label.textColor = UIColor.layoverWhite
