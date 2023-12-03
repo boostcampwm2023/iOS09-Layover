@@ -16,16 +16,16 @@ enum ProfileModels {
         }
 
         struct Response {
-            var nickname: String?
+            var nickname: String
             var introduce: String?
-            var profileImage: UIImage?
+            var profileImageURL: URL?
             // video data
         }
 
         struct ViewModel {
-            var nickname: String?
+            var nickname: String
             var introduce: String?
-            var profileImage: UIImage?
+            var profileImageURL: URL?
             // video data
         }
     }

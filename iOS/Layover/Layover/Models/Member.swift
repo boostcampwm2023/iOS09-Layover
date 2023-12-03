@@ -13,4 +13,5 @@ struct Member: Hashable {
     let username: String
     let introduce: String
     let profileImageURL: URL?
+    // board
 }

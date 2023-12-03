@@ -37,14 +37,11 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     var presenter: ProfilePresentationLogic?
 
     func fetchProfile() {
-        if let data = try? Data(contentsOf: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!) {
-            profileImage = UIImage(data: data)
-        }
         nickname = "kong"
         introduce = "콩이라고해"
-        let response = ProfileModels.FetchProfile.Response(nickname: nickname,
-                                                           introduce: introduce,
-                                                           profileImage: profileImage)
+        let response = ProfileModels.FetchProfile.Response(nickname: "kong",
+                                                           introduce: "콩이라고해",
+                                                           profileImageURL: nil)
         presenter?.present(with: response)
     }
 
