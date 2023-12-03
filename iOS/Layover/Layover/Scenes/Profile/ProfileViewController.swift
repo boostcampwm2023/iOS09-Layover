@@ -66,7 +66,7 @@ final class ProfileViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-        setThumnailCollectionView()
+        setThumbnailCollectionView()
         interactor?.fetchProfile()
     }
 
@@ -117,7 +117,7 @@ final class ProfileViewController: BaseViewController {
         }
     }
 
-    private func setThumnailCollectionView() {
+    private func setThumbnailCollectionView() {
         thumbnailCollectionView.dataSource = videoDatasource
         var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
         snapshot.appendSections([UUID()])
