@@ -32,7 +32,7 @@ final class PlaybackView: UIView {
     }()
 
     private let tagStackView: LOTagStackView = {
-        let tagStackView: LOTagStackView = LOTagStackView()
+        let tagStackView: LOTagStackView = LOTagStackView(style: .basic)
         return tagStackView
     }()
 
