@@ -138,7 +138,5 @@ export class BoardController {
     this.logger.log(' ');
     this.logger.log(request.body);
     this.logger.log('[out] request');
-
-    throw new CustomResponse(ECustomCode.SUCCESS);
   }
 }
