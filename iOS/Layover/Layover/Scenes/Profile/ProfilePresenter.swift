@@ -22,7 +22,7 @@ final class ProfilePresenter: ProfilePresentationLogic {
     func present(with response: Models.FetchProfile.Response) {
         viewController?.fetchProfile(viewModel: Models.FetchProfile.ViewModel(nickname: response.nickname,
                                                                               introduce: response.introduce,
-                                                                              profileImage: response.profileImage))
+                                                                              profileImageURL: response.profileImageURL))
     }
 
 }

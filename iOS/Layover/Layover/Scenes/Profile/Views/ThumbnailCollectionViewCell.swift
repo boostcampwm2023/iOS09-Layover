@@ -12,7 +12,7 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Components
 
-    private let thumnailImageView: UIImageView = {
+    private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -35,7 +35,7 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
     // MARK: - Methods
 
     func configure(url: URL) {
-        thumnailImageView.image = UIImage.loLogo
+        thumbnailImageView.image = UIImage.loLogo
     }
 
     private func setUI() {
@@ -45,13 +45,13 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
     }
 
     private func setConstraints() {
-        contentView.addSubview(thumnailImageView)
-        thumnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(thumbnailImageView)
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            thumnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            thumnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            thumnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
