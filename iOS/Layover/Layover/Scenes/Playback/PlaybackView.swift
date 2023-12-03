@@ -124,6 +124,14 @@ final class PlaybackView: UIView {
     func resetPlayer() {
         playerView.resetPlayer()
     }
+
+    func seekPlayer(seekTime: CMTime) {
+        playerView.seek(to: seekTime)
+    }
+
+    func getDuration() -> Float64 {
+        CMTimeGetSeconds(playerView.player?.currentItem?.duration ?? CMTime(value: 0, timescale: 1))
+    }
 }
 
 // MARK: PlaybackView 내부에서만 쓰이는 Method

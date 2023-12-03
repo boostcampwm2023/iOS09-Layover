@@ -21,6 +21,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
+    func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -139,7 +140,6 @@ final class PlaybackViewController: BaseViewController {
         playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
             self?.updateSlider(currentTime: currentTime, playerView: playbackView.playerView)
         })
-        playerSlider.playerView = playbackView.playerView
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
     }
 
@@ -151,11 +151,8 @@ final class PlaybackViewController: BaseViewController {
     }
 
     @objc private func didChangedSliderValue(_ sender: LOSlider) {
-        guard let duration: CMTime = sender.playerView?.player?.currentItem?.duration else { return }
-        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
-        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
-        sender.playerView?.seek(to: seekTime)
-        sender.playerView?.play()
+        let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
+        interactor?.controlPlaybackMovie(with: request)
     }
 }
 
@@ -229,6 +226,12 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             self.setPlayerSlider(at: cell.playbackView)
             return cell
         }
+    }
+
+    func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel) {
+        let seekTime: CMTime = CMTime(value: CMTimeValue(viewModel.willMoveLocation), timescale: 1)
+        viewModel.curCell.playbackView.seekPlayer(seekTime: seekTime)
+        viewModel.curCell.playbackView.playPlayer()
     }
 }
 

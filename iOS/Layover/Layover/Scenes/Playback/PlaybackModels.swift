@@ -99,4 +99,22 @@ enum PlaybackModels {
             let teleportIndex: Int?
         }
     }
+
+    // MARK: - UseCase Seek Video
+
+    enum SeekVideo {
+        struct Request {
+            let currentLocation: Float64
+        }
+
+        struct Response {
+            let willMoveLocation: Float64
+            let curCell: PlaybackCell
+        }
+
+        struct ViewModel {
+            let willMoveLocation: Float64
+            let curCell: PlaybackCell
+        }
+    }
 }

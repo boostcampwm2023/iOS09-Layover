@@ -17,6 +17,7 @@ protocol PlaybackBusinessLogic {
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func configurePlaybackCell()
+    func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -155,5 +156,12 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             response = Models.ConfigurePlaybackCell.Response(teleportIndex: videos.count + 1)
         }
         presenter?.presentConfigureCell(with: response)
+    }
+
+    func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request) {
+        guard let prevCell else { return }
+        let willMoveLocation: Float64 = request.currentLocation * prevCell.playbackView.getDuration()
+        let response: Models.SeekVideo.Response = Models.SeekVideo.Response(willMoveLocation: willMoveLocation, curCell: prevCell)
+        presenter?.presentSeekVideo(with: response)
     }
 }

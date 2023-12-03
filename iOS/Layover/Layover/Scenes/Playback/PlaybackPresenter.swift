@@ -19,6 +19,7 @@ protocol PlaybackPresentationLogic {
     func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response)
+    func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -81,5 +82,10 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response) {
         let viewModel: Models.ConfigurePlaybackCell.ViewModel = Models.ConfigurePlaybackCell.ViewModel(teleportIndex: response.teleportIndex)
         viewController?.configureDataSource(viewModel: viewModel)
+    }
+
+    func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
+        let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, curCell: response.curCell)
+        viewController?.seekVideo(viewModel: viewModel)
     }
 }
