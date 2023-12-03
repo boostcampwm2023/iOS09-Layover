@@ -216,9 +216,11 @@ extension HomeViewController: PHPickerViewControllerDelegate {
 
             if let url {
                 self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
-                DispatchQueue.main.async {
-                    self.router?.routeToEditVideo()
-                    self.phPickerViewController.dismiss(animated: true)
+                Task {
+                    await MainActor.run {
+                        self.router?.routeToEditVideo()
+                        self.phPickerViewController.dismiss(animated: true)
+                    }
                 }
             }
         }
