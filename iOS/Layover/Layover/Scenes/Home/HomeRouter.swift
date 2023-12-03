@@ -12,6 +12,7 @@ protocol HomeRoutingLogic {
     func routeToNext()
     func routeToEditVideo()
     func routeToPlayback()
+    func routeToTagPlay()
 }
 
 protocol HomeDataPassing {
@@ -42,6 +43,7 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         destination.videos = transData(videos: source.posts ?? [])
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
+
     func routeToEditVideo() {
         let nextViewController = EditVideoViewController()
         guard let source = dataStore,
@@ -60,9 +62,19 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
             return PlaybackModels.PlaybackVideo(post: video)
         }
     }
+
+    func routeToTagPlay() {
+        let nextViewController = TagPlayListViewController()
+
+        guard let dataStore,
+              var destination = nextViewController.router?.dataStore else { return }
+        passDataToTagPlayList(source: dataStore, destination: &destination)
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+
     // MARK: - Data Passing
 
-    // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: HomeDataStore) {
-    //     destinationDS.attribute = sourceDS.attribute
-    // }
+    private func passDataToTagPlayList(source: HomeDataStore, destination: inout TagPlayListDataStore) {
+        destination.titleTag = source.selectedTag
+    }
 }

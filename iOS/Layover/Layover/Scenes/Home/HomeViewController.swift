@@ -13,6 +13,7 @@ protocol HomeDisplayLogic: AnyObject {
     func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel)
     func displayThumbnailImage(with viewModel: HomeModels.FetchThumbnailImageData.ViewModel)
     func routeToPlayback()
+    func routeToTagPlayList()
 }
 
 final class HomeViewController: BaseViewController {
@@ -62,6 +63,7 @@ final class HomeViewController: BaseViewController {
                                                                                               indexPath: indexPath))
         cell.setVideo(url: post.videoURL, loopingAt: .zero)
         cell.configure(title: post.title, tags: post.tags)
+        cell.delegate = self
         return cell
     }
 
@@ -121,6 +123,8 @@ final class HomeViewController: BaseViewController {
         carouselCollectionView.delegate = self
     }
 
+    // MARK: - Methods
+
     private func createCarouselLayout(groupWidthDimension: CGFloat,
                                       groupHeightDimension: CGFloat,
                                       maximumZoomScale: CGFloat,
@@ -177,8 +181,15 @@ final class HomeViewController: BaseViewController {
         centerCell.playVideo()
     }
 
+    // MARK: - Actions
+
     @objc private func uploadButtonDidTap() {
-        self.present(phPickerViewController, animated: true)
+        present(phPickerViewController, animated: true)
+    }
+
+    @objc private func tagButtonDidTap(_ sender: UIButton) {
+        guard let tag = sender.titleLabel?.text else { return }
+        interactor?.showTagPlayList(with: Models.ShowTagPlayList.Request(tag: tag))
     }
 
     // MARK: - Use Case
@@ -188,9 +199,19 @@ final class HomeViewController: BaseViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+
 extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+    }
+}
+
+// MARK: - HomeCarouselCollectionViewDelegate
+
+extension HomeViewController: HomeCarouselCollectionViewDelegate {
+    func homeCarouselCollectionViewDidTouchedTagButton(_ cell: HomeCarouselCollectionViewCell, tag: String) {
+        interactor?.showTagPlayList(with: Models.ShowTagPlayList.Request(tag: tag))
     }
 }
 
@@ -250,5 +271,9 @@ extension HomeViewController: HomeDisplayLogic {
 
     func routeToPlayback() {
         router?.routeToPlayback()
+    }
+
+    func routeToTagPlayList() {
+        router?.routeToTagPlay()
     }
 }

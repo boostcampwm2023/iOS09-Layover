@@ -13,7 +13,7 @@ final class MockTagPlayListWorker: TagPlayListWorkerProtocol {
 
     // MARK: - Properties
 
-    private let provider: ProviderType = Provider(session: .initMockSession())
+    private let provider: ProviderType = Provider(session: .initMockSession(), authManager: StubAuthManager())
     private let headers: [String: String] = ["Content-Type": "application/json",
                                              "Authorization": "mock token"]
 
