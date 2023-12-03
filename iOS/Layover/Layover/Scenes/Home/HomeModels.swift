@@ -12,16 +12,52 @@ enum HomeModels {
 
     // MARK: - Use Cases
 
-    enum CarouselVideos {
+    struct DisplayedPost: Hashable {
+        let thumbnailImageURL: URL
+        let videoURL: URL
+        let title: String
+        let tags: [String]
+    }
+
+    enum FetchPosts {
         struct Request {
         }
 
         struct Response {
-            let videoURLs: [URL]
+            let posts: [Post]
         }
 
         struct ViewModel {
-            let videoURLs: [URL]
+            let displayedPosts: [DisplayedPost]
+        }
+    }
+
+    enum FetchThumbnailImageData {
+        struct Request {
+            let imageURL: URL
+            let indexPath: IndexPath
+        }
+
+        struct Response {
+            let imageData: Data
+            let indexPath: IndexPath
+        }
+
+        struct ViewModel {
+            let imageData: Data
+            let indexPath: IndexPath
+        }
+    }
+
+    enum PlayPosts {
+        struct Request {
+            let selectedIndex: Int
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
         }
     }
 
