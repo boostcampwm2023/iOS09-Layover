@@ -263,7 +263,7 @@ extension PlaybackViewController: UICollectionViewDelegate {
         interactor?.playVideo(with: request)
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         playerSlider.isHidden = true
     }
 
