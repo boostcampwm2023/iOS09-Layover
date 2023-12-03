@@ -134,8 +134,6 @@ export class BoardController {
     this.logger.log('[in] request');
     this.logger.log(request.headers);
     this.logger.log(' ');
-    this.logger.log(await request.text());
-    this.logger.log(' ');
     this.logger.log(request.body);
     this.logger.log('[out] request');
   }
