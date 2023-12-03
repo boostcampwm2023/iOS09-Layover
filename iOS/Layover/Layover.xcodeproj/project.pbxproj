@@ -792,9 +792,9 @@
 		FC7E457B2AFF6F9D004F155A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				1945520E2B03AEA400299768 /* Configurator.swift */,
 				836C33922B18436A00ECAFB0 /* SettingScene */,
 				19BB8A572B07BEE30070B922 /* UIComponents */,
-				1945520E2B03AEA400299768 /* Configurator.swift */,
 				835A61962B0680FC002F22A5 /* Playback */,
 				FC2511A72B04DA9C004717BC /* Map */,
 				FCEE0FFB2B03AFAA00195BBE /* SignUpScene */,
