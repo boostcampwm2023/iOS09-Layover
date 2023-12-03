@@ -66,6 +66,7 @@ final class SettingSceneViewController: BaseViewController {
     }
 
     override func setConstraints() {
+        super.setConstraints()
         view.addSubview(settingSceneTableView)
         NSLayoutConstraint.activate([
             settingSceneTableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -81,11 +82,12 @@ final class SettingSceneViewController: BaseViewController {
     }
 
     override func setUI() {
+        super.setUI()
         setNavigationBar()
     }
 
     private func setNavigationBar() {
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 
     private func restoreNavigationBar() {
