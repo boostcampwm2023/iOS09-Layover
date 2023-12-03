@@ -62,64 +62,6 @@ final class MapViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.configure(url: item.videoURL)
-        cell.moveToPlaybackSceneCallback = {
-            self.interactor?.moveToPlaybackScene(
-                with: Models.MoveToPlaybackScene.Request(
-                    index: indexPath.row,
-                    videos: [
-                        Post(
-                            member: Member(
-                                identifier: 1,
-                                username: "찹모찌",
-                                introduce: "찹모찌데스",
-                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                            board: Board(
-                                identifier: 1,
-                                title: "찹찹찹",
-                                description: "찹모찌의 뜻은 뭘까?",
-                                thumbnailImageURL: nil,
-                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                                latitude: nil,
-                                longitude: nil),
-                            tag: ["찹", "모", "찌"]
-                            ),
-                        Post(
-                            member: Member(
-                                identifier: 2,
-                                username: "로인설",
-                                introduce: "로인설데스",
-                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                            board: Board(
-                                identifier: 2,
-                                title: "설설설",
-                                description: "로인설의 뜻은 뭘까?",
-                                thumbnailImageURL: nil,
-                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                                latitude: nil,
-                                longitude: nil),
-                            tag: ["로", "인", "설"]
-                            ),
-                        Post(
-                            member: Member(
-                                identifier: 3,
-                                username: "콩콩콩",
-                                introduce: "콩콩콩데스",
-                                profileImageURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!),
-                            board: Board(
-                                identifier: 1,
-                                title: "콩콩콩",
-                                description: "콩콩콩의 뜻은 뭘까?",
-                                thumbnailImageURL: nil,
-                                videoURL: URL(string: "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8")!,
-                                latitude: nil,
-                                longitude: nil),
-                            tag: ["콩", "콩", "콩"]
-                            )
-                    ]
-                )
-            )
-        }
-        cell.addLoopingViewGesture()
         return cell
     }
 
@@ -149,6 +91,7 @@ final class MapViewController: BaseViewController {
         interactor?.checkLocationAuthorizationStatus()
         setCollectionViewDataSource()
         createMapAnnotation()
+        carouselCollectionView.delegate = self
     }
 
     // MARK: - UI + Layout
@@ -281,4 +224,10 @@ extension MapViewController: MapDisplayLogic {
         router?.routeToPlayback()
     }
 
+}
+
+extension MapViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+    }
 }
