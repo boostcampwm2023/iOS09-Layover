@@ -131,7 +131,8 @@ export class BoardController {
   // }
   @Post('/encoding-callback')
   async encodingCallback(@Req() request: Request) {
-    this.logger.log(request);
+    this.logger.log(request.text());
+
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
 }
