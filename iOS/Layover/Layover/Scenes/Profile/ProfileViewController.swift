@@ -40,7 +40,7 @@ final class ProfileViewController: BaseViewController {
         return collectionView
     }()
 
-    private var videoDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>!
+    private var videoDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
 
     // MARK: - Properties
 
@@ -86,8 +86,8 @@ final class ProfileViewController: BaseViewController {
     // MARK: - Methods
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
-            let section: Section = Section(rawValue: section)!
+        let layout = UICollectionViewCompositionalLayout { section, _ in
+            guard let section: Section = Section(rawValue: section) else { return nil }
             switch section {
             case .profileInfo:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -139,7 +139,7 @@ final class ProfileViewController: BaseViewController {
 
         let thumnailCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Int> { _, _, itemIdentifier in
             let item = itemIdentifier as Int
-            // TODO:
+            // TODO: Board Reponse 확정시 configure
         }
 
         videoDatasource = UICollectionViewDiffableDataSource<Section, AnyHashable>(collectionView: thumbnailCollectionView) { collectionView, indexPath, itemIdentifier in
@@ -175,11 +175,11 @@ extension ProfileViewController: ProfileDisplayLogic {
         snapshot.appendSections([.profileInfo, .thumnail])
         snapshot.appendItems([Member(identifier: 0,
                                      username: viewModel.nickname,
-                                     introduce: viewModel.introduce ?? "",
+                                     introduce: viewModel.introduce,
                                      profileImageURL: viewModel.profileImageURL)],
                              toSection: .profileInfo)
         snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], toSection: .thumnail)
-        videoDatasource.apply(snapshot)
+        videoDatasource?.apply(snapshot)
     }
 
 }

@@ -24,17 +24,12 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     var introduce: String?
     var profileImage: UIImage?
 
-    private let provider: ProviderType
-
-    init(provider: ProviderType = Provider()) {
-        self.provider = provider
-    }
-
     // MARK: - Properties
 
     typealias Models = ProfileModels
 
     var presenter: ProfilePresentationLogic?
+    var userWorker: UserWorker?
 
     func fetchProfile() {
         nickname = "kong"

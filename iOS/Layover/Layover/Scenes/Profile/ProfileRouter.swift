@@ -39,7 +39,7 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         editProfileViewController.hidesBottomBarWhenPushed = true
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
-    
+
     func routeToSettingSceneViewController() {
         let settingSceneViewController: SettingSceneViewController = SettingSceneViewController()
         viewController?.navigationController?.pushViewController(settingSceneViewController, animated: true)
