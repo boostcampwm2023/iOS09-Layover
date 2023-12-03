@@ -101,40 +101,40 @@ export class BoardController {
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
 
-  // @ApiOperation({
-  //   summary: '인코딩 완료 콜백',
-  //   description: '인코딩 상태에 따라 호출되어지며, 내부의 status에 따라 인코딩된 영상의 hls link를 db에 저장합니다.',
-  // })
-  // @Post('/encoding-callback')
-  // async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
-  //   this.logger.log(`[In] encoding-callback: ${encodingCallbackRequestDto.filePath}`);
-  //   // status 를 구분한다.
-  //   switch (encodingCallbackRequestDto.status) {
-  //     case 'WAITING':
-  //       this.logger.log(`[Out] encoding-callback: !WAITING!`);
-  //       break;
-  //     case 'RUNNING':
-  //       this.logger.log(`[Out] encoding-callback: !RUNNING!`);
-  //       break;
-  //     case 'FAILURE':
-  //       this.logger.log(`[Out] encoding-callback: !FAILURE!`);
-  //       break;
-  //     case 'COMPLETE':
-  //       this.logger.log(`[Out] encoding-callback: !COMPLETE!`);
-  //       // dto 에서 filename 을 파싱한다.
-  //       // const filename = encodingCallbackRequestDto.filePath;
-  //       // await this.boardService.setEncodedVideoUrl(filename);
-  //       break;
-  //     default:
-  //   }
-  //   throw new CustomResponse(ECustomCode.SUCCESS);
-  // }
+  @ApiOperation({
+    summary: '인코딩 완료 콜백',
+    description: '인코딩 상태에 따라 호출되어지며, 내부의 status에 따라 인코딩된 영상의 hls link를 db에 저장합니다.',
+  })
   @Post('/encoding-callback')
-  async encodingCallback(@Req() request: Request) {
-    this.logger.log('[in] request');
-    this.logger.log(request.headers);
-    this.logger.log(' ');
-    this.logger.log(request.body);
-    this.logger.log('[out] request');
+  async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
+    this.logger.log(`[In] encoding-callback: ${encodingCallbackRequestDto.filePath}`);
+    // status 를 구분한다.
+    switch (encodingCallbackRequestDto.status) {
+      case 'WAITING':
+        this.logger.log(`[Out] encoding-callback: !WAITING!`);
+        break;
+      case 'RUNNING':
+        this.logger.log(`[Out] encoding-callback: !RUNNING!`);
+        break;
+      case 'FAILURE':
+        this.logger.log(`[Out] encoding-callback: !FAILURE!`);
+        break;
+      case 'COMPLETE':
+        this.logger.log(`[Out] encoding-callback: !COMPLETE!`);
+        // dto 에서 filename 을 파싱한다.
+        // const filename = encodingCallbackRequestDto.filePath;
+        // await this.boardService.setEncodedVideoUrl(filename);
+        break;
+      default:
+    }
+    throw new CustomResponse(ECustomCode.SUCCESS);
   }
+  // @Post('/encoding-callback')
+  // async encodingCallback(@Req() request: Request) {
+  //   this.logger.log('[in] request');
+  //   this.logger.log(request.headers);
+  //   this.logger.log(' ');
+  //   this.logger.log(request.body);
+  //   this.logger.log('[out] request');
+  // }
 }

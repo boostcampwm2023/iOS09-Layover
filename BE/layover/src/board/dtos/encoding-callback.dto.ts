@@ -14,14 +14,7 @@ export class EncodingCallbackDto {
     description: '인코딩 카테고리 이름',
   })
   @IsString()
-  readonly categoryNames: string;
-
-  @ApiProperty({
-    example: 1,
-    description: '인코딩 옵션 ID',
-  })
-  @IsNumber()
-  readonly encodingOptionId: number;
+  readonly categoryName: string;
 
   @ApiProperty({
     example: 10808,
@@ -36,6 +29,13 @@ export class EncodingCallbackDto {
   })
   @IsString()
   readonly filePath: string;
+
+  @ApiProperty({
+    example: 1,
+    description: '인코딩 옵션 ID',
+  })
+  @IsNumber()
+  readonly encodingOptionId: number;
 
   @ApiProperty({
     example: 'AVC_HD_1Pass_30fps',
