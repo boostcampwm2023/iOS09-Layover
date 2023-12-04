@@ -23,6 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // kakao
         guard let KAKAO_APP_KEY = Bundle.main.object(forInfoDictionaryKey: "KAKAO_APP_KEY") as? String else { return true }
         KakaoSDK.initSDK(appKey: KAKAO_APP_KEY)
+
+        setNavigationControllerAppearance()
+        setTabBarAppearance()
+
         return true
     }
 
@@ -40,6 +44,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    private func setNavigationControllerAppearance() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        navigationBarAppearance.setBackIndicatorImage(UIImage.iconTabBack, transitionMaskImage: UIImage.iconTabBack)
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+    }
 
+    private func setTabBarAppearance() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithTransparentBackground()
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
 }
 

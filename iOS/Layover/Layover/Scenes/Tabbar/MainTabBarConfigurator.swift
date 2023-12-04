@@ -32,12 +32,6 @@ final class MainTabBarConfigurator: Configurator {
                                                         image: profileIconImage.withTintColor(.white),
                                                         selectedImage: nil)
 
-        [homeViewController, mapViewController, profileViewController].forEach {
-            $0.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(customView: UIImageView(image: .iconTabBack))
-            $0.navigationBar.backIndicatorImage = UIImage.iconTabBack
-            $0.navigationBar.backIndicatorTransitionMaskImage = UIImage.iconTabBack
-        }
-
         viewController.navigationController?.setNavigationBarHidden(true, animated: false)
         viewController.setViewControllers([
             homeViewController,

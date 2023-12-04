@@ -33,5 +33,7 @@ class BaseViewController: UIViewController {
     /// Call when ViewDidLoad After setConstraints()
     func setUI() {
         view.backgroundColor = UIColor.background
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+                title: "", style: .plain, target: nil, action: nil)
     }
 }
