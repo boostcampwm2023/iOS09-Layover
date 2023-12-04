@@ -146,6 +146,15 @@ final class PlaybackViewController: BaseViewController {
         playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
+    private func slowShowPlayerSlider() async {
+        do {
+            try await Task.sleep(nanoseconds: 1_000_000_00)
+            playerSlider.isHidden = false
+        } catch {
+            os_log("Falie Waiting show Player Slider")
+        }
+    }
+
     @objc private func didChangedSliderValue(_ sender: LOSlider) {
         let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
         interactor?.controlPlaybackMovie(with: request)
@@ -173,8 +182,11 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             curCell.playbackView.playPlayer()
             setPlayerSlider(at: curCell.playbackView)
             // Slider가 원점으로 돌아가는 시간 필요
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-                self.playerSlider.isHidden = false
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+//                self.playerSlider.isHidden = false
+//            }
+            Task {
+                await slowShowPlayerSlider()
             }
         }
     }

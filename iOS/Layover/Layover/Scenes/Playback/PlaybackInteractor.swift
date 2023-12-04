@@ -70,8 +70,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func setInitialPlaybackCell() {
-        guard let parentView else { return }
-        guard let index else { return }
+        guard let parentView,
+              let index else { return }
         let response: Models.SetInitialPlaybackCell.Response
         switch parentView {
         case .home:
@@ -124,8 +124,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        guard let isTeleport else { return }
-        guard let posts else { return }
+        guard let isTeleport,
+              let posts else { return }
         if isTeleport {
             if request.indexPathRow == 1 || request.indexPathRow == (posts.count - 2) {
                 let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
@@ -142,8 +142,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func configurePlaybackCell() {
-        guard let posts else { return }
-        guard let parentView else { return }
+        guard let posts,
+              let parentView else { return }
         let response: Models.ConfigurePlaybackCell.Response
         switch parentView {
         case .home:

@@ -10,6 +10,13 @@ import UIKit
 
 enum ProfileModels {
 
+    struct Member: Hashable {
+        let identifier: Int
+        let username: String
+        let introduce: String?
+        let profileImageURL: URL?
+    }
+
     enum FetchProfile {
         struct Request {
 

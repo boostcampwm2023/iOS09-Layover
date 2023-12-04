@@ -30,11 +30,6 @@ enum PlaybackModels {
         let videoURL: URL
     }
 
-    struct PlaybackViewInfo {
-        let parentView: ParentView
-        let videos: [PlaybackVideo]
-    }
-
     // MARK: - UseCase Load Video List
 
     enum LoadPlaybackVideoList {
