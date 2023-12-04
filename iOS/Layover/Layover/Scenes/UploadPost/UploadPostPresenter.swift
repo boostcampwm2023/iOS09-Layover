@@ -11,6 +11,7 @@ import UIKit
 protocol UploadPostPresentationLogic {
     func presentTags(with response: UploadPostModels.FetchTags.Response)
     func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response)
+    func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
 }
 
 final class UploadPostPresenter: UploadPostPresentationLogic {
@@ -27,6 +28,11 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
     func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response) {
         let image = UIImage(cgImage: response.thumnailImage)
         viewController?.displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel(thumnailImage: image))
+    }
+
+    func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response) {
+        let viewModel = UploadPostModels.CanUploadPost.ViewModel(canUpload: !response.isEmpty)
+        viewController?.displayUploadButton(viewModel: viewModel)
     }
 
 }

@@ -14,6 +14,7 @@ import OSLog
 protocol UploadPostBusinessLogic {
     func fetchTags()
     func fetchThumbnailImage()
+    func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
     func uploadPost()
 }
 
@@ -60,11 +61,17 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
         }
     }
 
+    func canUploadPost(request: UploadPostModels.CanUploadPost.Request) {
+        let response = UploadPostModels.CanUploadPost.Response(isEmpty: request.title == nil)
+        presenter?.presentUploadButton(with: response)
+    }
+
     func uploadPost() {
         guard let isMuted else { return }
         if isMuted {
             extractVideoWithoutAudio()
         }
+
     }
 
     private func extractVideoWithoutAudio() {
