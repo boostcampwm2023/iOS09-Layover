@@ -1,12 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Logger, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { BoardService } from './board.service';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { PresignedUrlDto } from './dtos/presigned-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
-import { PresignedUrlResDto } from './dtos/presigned-url-res.dto';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { UploadCallbackDto } from './dtos/upload-callback.dto';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
@@ -108,30 +107,29 @@ export class BoardController {
 
   @ApiOperation({
     summary: '인코딩 완료 콜백',
-    description: '인코딩 상태에 따라 호출되어지며, 내부의 status에 따라 인코딩된 영상의 hls link를 db에 저장합니다.',
+    description: '인코딩 상태에 따라 호출되어지며, 인코딩 상태를 갱신하며, 인코딩된 영상의 hls link를 db에 저장합니다.',
   })
   @Post('/encoding-callback')
   async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
-    this.logger.log(`[In] encoding-callback: ${encodingCallbackRequestDto.filePath}`);
+    this.logger.log(`[encoding-callback] filePath: ${encodingCallbackRequestDto.filePath}`);
     const regExp = /^\/layover-station\/(.*?)_AVC$/;
     const filename = encodingCallbackRequestDto.filePath.match(regExp)[1];
 
     //파일명으로 파일을 찾고 해당 파일의 status 를 갱신해준다.
     switch (encodingCallbackRequestDto.status) {
       case 'RUNNING':
-        this.logger.log(`[Out] encoding-callback: !RUNNING!`);
+        this.logger.log(`[encoding-callback] status: **RUNNING**`);
         await this.boardService.setStatusByFilename(filename, 'RUNNING');
         break;
       case 'FAILURE':
-        this.logger.log(`[Out] encoding-callback: !FAILURE!`);
+        this.logger.log(`[encoding-callback] status: **FAILURE**`);
         await this.boardService.setStatusByFilename(filename, 'FAILURE');
         break;
       case 'COMPLETE':
-        this.logger.log(`[Out] encoding-callback: !COMPLETE!`);
+        this.logger.log(`[encoding-callback] status: **COMPLETE**`);
         await this.boardService.setStatusByFilename(filename, 'COMPLETE');
         await this.boardService.setEncodedVideoUrl(filename);
         break;
-      default:
     }
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
