@@ -11,6 +11,7 @@ import UIKit
 protocol UploadPostDisplayLogic: AnyObject {
     func displayTags(viewModel: UploadPostModels.FetchTags.ViewModel)
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel)
+    func displayCurrentAddress(viewModel: UploadPostModels.FetchCurrentAddress.ViewModel)
     func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel)
 }
 
@@ -73,10 +74,9 @@ final class UploadPostViewController: BaseViewController {
         return imageLabel
     }()
 
-    private let locationLabel: UILabel = {
+    private let currentAddressLabel: UILabel = {
         let label = UILabel()
         label.font = .loFont(type: .body2)
-        label.text = "대구시 달서구 유천동"
         return label
     }()
 
@@ -132,6 +132,7 @@ final class UploadPostViewController: BaseViewController {
         setConstraints()
         addTarget()
         interactor?.fetchThumbnailImage()
+        interactor?.fetchCurrentAddress()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -169,7 +170,7 @@ final class UploadPostViewController: BaseViewController {
 
     private func setContentViewSubviewsConstraints() {
         contentView.addSubviews(thumbnailImageView, titleImageLabel, titleTextField, tagImageLabel, tagStackView, addTagButton,
-                               locationImageLabel, locationLabel, contentImageLabel, contentTextView)
+                               locationImageLabel, currentAddressLabel, contentImageLabel, contentTextView)
         contentView.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -205,13 +206,13 @@ final class UploadPostViewController: BaseViewController {
             locationImageLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             locationImageLabel.heightAnchor.constraint(equalToConstant: 22),
 
-            locationLabel.centerYAnchor.constraint(equalTo: locationImageLabel.centerYAnchor),
-            locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            locationLabel.leadingAnchor.constraint(equalTo: locationImageLabel.trailingAnchor),
+            currentAddressLabel.centerYAnchor.constraint(equalTo: locationImageLabel.centerYAnchor),
+            currentAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            currentAddressLabel.leadingAnchor.constraint(equalTo: locationImageLabel.trailingAnchor),
 
             contentImageLabel.topAnchor.constraint(equalTo: locationImageLabel.bottomAnchor, constant: 22),
             contentImageLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentImageLabel.trailingAnchor.constraint(equalTo: locationLabel.leadingAnchor),
+            contentImageLabel.trailingAnchor.constraint(equalTo: currentAddressLabel.leadingAnchor),
             contentImageLabel.heightAnchor.constraint(equalToConstant: 22),
 
             contentTextView.topAnchor.constraint(equalTo: contentImageLabel.bottomAnchor, constant: 10),
@@ -253,6 +254,10 @@ extension UploadPostViewController: UploadPostDisplayLogic {
 
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel) {
         thumbnailImageView.image = viewModel.thumnailImage
+    }
+
+    func displayCurrentAddress(viewModel: UploadPostModels.FetchCurrentAddress.ViewModel) {
+        currentAddressLabel.text = viewModel.fullAddress
     }
 
     func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel) {

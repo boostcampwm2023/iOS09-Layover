@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import CoreLocation
 import UIKit
 
 import OSLog
@@ -14,6 +15,7 @@ import OSLog
 protocol UploadPostBusinessLogic {
     func fetchTags()
     func fetchThumbnailImage()
+    func fetchCurrentAddress()
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
     func uploadPost()
 }
@@ -33,11 +35,17 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
     lazy var worker = UploadPostWorker()
     var presenter: UploadPostPresentationLogic?
 
+    private let locationManager: CLLocationManager
+
     // MARK: - Data Store
 
     var videoURL: URL?
     var isMuted: Bool?
     var tags: [String]? = []
+
+    init(locationManager: CLLocationManager = CLLocationManager()) {
+        self.locationManager = locationManager
+    }
 
     func fetchTags() {
         guard let tags else { return }
@@ -57,6 +65,32 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
                 }
             } catch let error {
                 os_log(.error, log: .default, "Failed to fetch ThumbnailImage with error: %@", error.localizedDescription)
+            }
+        }
+    }
+
+    func fetchCurrentAddress() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+
+        guard let space = locationManager.location?.coordinate else { return }
+        let latitude = space.latitude
+        let longitude = space.longitude
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        let locale = Locale(identifier: "ko_KR")
+
+        Task {
+            do {
+                let address = try await CLGeocoder().reverseGeocodeLocation(location, preferredLocale: locale).last
+                let administrativeArea = address?.administrativeArea
+                let locality = address?.locality
+                let subLocality = address?.subLocality
+                let response = Models.FetchCurrentAddress.Response(administrativeArea: administrativeArea,
+                                                                   locality: locality,
+                                                                   subLocality: subLocality)
+                await MainActor.run {
+                    presenter?.presentCurrentAddress(with: response)
+                }
             }
         }
     }

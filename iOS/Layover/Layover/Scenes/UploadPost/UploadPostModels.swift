@@ -47,6 +47,20 @@ enum UploadPostModels {
         }
     }
 
+    enum FetchCurrentAddress {
+        struct Request {
+
+        }
+        struct Response {
+            let administrativeArea: String?
+            let locality: String?
+            let subLocality: String?
+        }
+        struct ViewModel {
+            let fullAddress: String
+        }
+    }
+
     enum UploadPost {
         struct Request {
             let title: String
