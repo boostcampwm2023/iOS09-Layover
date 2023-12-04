@@ -13,6 +13,7 @@
 @testable import Layover
 import XCTest
 
+// View는 액션이 섞여있기에 가능한 정도 까지만 테스트 작성
 final class HomeViewControllerTests: XCTestCase {
     // MARK: Subject under test
 
@@ -38,35 +39,96 @@ final class HomeViewControllerTests: XCTestCase {
         sut = HomeViewController()
     }
 
-    func loadView() {
-        window.addSubview(sut.view)
-        RunLoop.current.run(until: Date())
-    }
-
     // MARK: - Test doubles
 
-    class HomeBusinessLogicSpy: HomeBusinessLogic {
+    final class HomeBusinessLogicSpy: HomeBusinessLogic {
+        var fetchPostsCalled = false
+        var fetchThumbnailImageDataCalled = false
+        var playPostsCalled = false
+        var selectVideoCalled = false
+        var showTagPlayListCalled = false
+
         func fetchPosts(with request: Layover.HomeModels.FetchPosts.Request) -> Task<Bool, Never> {
+            fetchPostsCalled = true
             return Task { return true }
         }
         
         func fetchThumbnailImageData(with request: Layover.HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never> {
+            fetchThumbnailImageDataCalled = true
             return Task { return true }
         }
         
         func playPosts(with request: Layover.HomeModels.PlayPosts.Request) {
-            return
+            playPostsCalled = true
         }
         
         func selectVideo(with request: Layover.HomeModels.SelectVideo.Request) {
-            return
+            selectVideoCalled = true
         }
         
         func showTagPlayList(with request: Layover.HomeModels.ShowTagPlayList.Request) {
-            return
+            showTagPlayListCalled = true
+        }
+    }
+
+    final class HomeRouterSpy: HomeRouter {
+        var routeToNextCalled = false
+        var routeToEditVideoCalled = false
+        var routeToPlaybackCalled = false
+        var routeToTagPlayCalled = false
+
+        override func routeToNext() {
+            routeToNextCalled = true
+        }
+
+        override func routeToEditVideo() {
+            routeToEditVideoCalled = true
+        }
+
+        override func routeToPlayback() {
+            routeToPlaybackCalled = true
+        }
+
+        override func routeToTagPlay() {
+            routeToTagPlayCalled = true
         }
     }
 
     // MARK: - Tests
 
+    func test_viewDidLoad_호출시_fetchPost를_호출한다() {
+        // arrange
+        let spy = HomeBusinessLogicSpy()
+        sut.interactor = spy
+
+        // act
+        sut.viewDidLoad()
+
+        // assert
+        XCTAssertTrue(spy.fetchPostsCalled, "viewDidLoad 호출 시 fetchPost가 호출되었다.")
+    }
+
+    func test_routeToPlayback_호출시_router의_routeToPlayback을_호출한다() {
+        // arrange
+        let spy = HomeRouterSpy()
+        sut.router = spy
+
+        // act
+        sut.routeToPlayback()
+
+        // assert
+        XCTAssertTrue(spy.routeToPlaybackCalled, "routeToPlayback 호출 시 router의 routeToPlayback이 호출되었다.")
+    }
+
+    func test_routeToTagPlayList_호출시_router의_routeToTagPlay를_호출한다() {
+        // arrange
+        let spy = HomeRouterSpy()
+        sut.router = spy
+
+        // act
+        sut.routeToTagPlayList()
+
+        // assert
+        XCTAssertTrue(spy.routeToTagPlayCalled, "routeToTagPlayList 호출 시 router의 routeToTagPlay가 호출되었다.")
+    }
 }
