@@ -31,8 +31,9 @@ class UploadPostRouter: NSObject, UploadPostRoutingLogic, UploadPostDataPassing 
               var destination = nextViewController.router?.dataStore
         else { return }
 
-        // Data Passing
-        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
+        destination.tags = source.tags
+        nextViewController.modalPresentationStyle = .fullScreen
+        viewController?.present(nextViewController, animated: true)
     }
 
 }

@@ -9,14 +9,18 @@
 import UIKit
 
 protocol EditTagPresentationLogic {
-
+    func presentTags(with response: EditTagModels.FetchTags.Response)
 }
 
-class EditTagPresenter: EditTagPresentationLogic {
+final class EditTagPresenter: EditTagPresentationLogic {
 
     // MARK: - Properties
 
     typealias Models = EditTagModels
     weak var viewController: EditTagDisplayLogic?
+
+    func presentTags(with response: EditTagModels.FetchTags.Response) {
+        viewController?.displayTags(viewModel: EditTagModels.FetchTags.ViewModel(tags: response.tags))
+    }
 
 }

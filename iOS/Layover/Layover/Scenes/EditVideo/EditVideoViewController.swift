@@ -80,7 +80,6 @@ final class EditVideoViewController: BaseViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
 //        interactor?.deleteVideo()
-        print("viewWillDisappear")
     }
 
     override func setConstraints() {
