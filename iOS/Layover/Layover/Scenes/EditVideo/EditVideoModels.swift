@@ -29,4 +29,10 @@ enum EditVideoModels {
         }
     }
 
+    enum DidFinishViedoEditing {
+        struct Request {
+            let isMuted: Bool
+        }
+    }
+
 }

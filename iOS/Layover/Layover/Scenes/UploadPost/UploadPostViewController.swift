@@ -9,10 +9,10 @@
 import UIKit
 
 protocol UploadPostDisplayLogic: AnyObject {
-
+    func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel)
 }
 
-final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic {
+final class UploadPostViewController: BaseViewController {
 
     // MARK: - UI Components
 
@@ -24,7 +24,7 @@ final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic
 
     private let contentView: UIView = UIView()
 
-    private let thumnailImageView: UIImageView = {
+    private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -93,6 +93,7 @@ final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic
     private let uploadButton: LOButton = {
         let button = LOButton(style: .basic)
         button.setTitle("업로드", for: .normal)
+        button.addTarget(self, action: #selector(uploadButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -126,6 +127,7 @@ final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic
         super.viewDidLoad()
         setConstraints()
         addTarget()
+        interactor?.fetchThumbnailImage()
     }
 
     override func setConstraints() {
@@ -158,18 +160,18 @@ final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic
     }
 
     private func setContentViewSubviewsConstraints() {
-        contentView.addSubviews(thumnailImageView, titleImageLabel, titleTextField, tagImageLabel, tagStackView, addTagButton,
+        contentView.addSubviews(thumbnailImageView, titleImageLabel, titleTextField, tagImageLabel, tagStackView, addTagButton,
                                locationImageLabel, locationLabel, contentImageLabel, contentTextView)
         contentView.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            thumnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            thumnailImageView.widthAnchor.constraint(equalToConstant: 156),
-            thumnailImageView.heightAnchor.constraint(equalToConstant: 251),
-            thumnailImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: 156),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 251),
+            thumbnailImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
-            titleImageLabel.topAnchor.constraint(equalTo: thumnailImageView.bottomAnchor, constant: 22),
+            titleImageLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: 22),
             titleImageLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleImageLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             titleImageLabel.heightAnchor.constraint(equalToConstant: 22),
@@ -224,8 +226,16 @@ final class UploadPostViewController: BaseViewController, UploadPostDisplayLogic
         router?.routeToNext()
     }
 
+    @objc private func uploadButtonDidTap() {
+        interactor?.uploadPost()
+    }
+
 }
 
-#Preview {
-    UploadPostViewController()
+extension UploadPostViewController: UploadPostDisplayLogic {
+
+    func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel) {
+        thumbnailImageView.image = viewModel.thumnailImage
+    }
+
 }
