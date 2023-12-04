@@ -122,6 +122,17 @@ export class BoardService {
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
+  async getBoardProfile(id: number) {
+    const boards: Board[] = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
+      .where("board.status = 'COMPLETE'")
+      .andWhere('member.id = :id', { id })
+      .getMany();
+    return Promise.all(boards.map((board) => this.createBoardResDto(board)));
+  }
+
   async setEncodedVideoUrl(filename: string) {
     const board: Board = await this.boardRepository.findOne({ where: { filename } });
     board.encoded_video_url = this.generateEncodedVideoHLS(filename);

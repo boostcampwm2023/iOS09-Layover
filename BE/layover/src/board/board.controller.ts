@@ -79,7 +79,7 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('map')
-  async getBoardMap(@Query('latitude') latitude: string, @Query('longitude') longitude: string) {
+  async getBoardMap(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('latitude') latitude: string, @Query('longitude') longitude: string) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardMap(latitude, longitude);
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
@@ -91,8 +91,30 @@ export class BoardController {
     summary: '태그별 게시글 조회',
     description: '태그에 따라 게시물들을 조회합니다.',
   })
-  async getBoardTag(@Query('tag') tag: string) {
+  async getBoardTag(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('tag') tag: string) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardTag(tag);
+    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+  }
+
+  @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @Get('profile')
+  @ApiOperation({
+    summary: '프로필 게시글 조회',
+    description: '나 또는 타인의 게시물을 조회합니다.',
+  })
+  async getBoardProfile(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('memberId') memberId: string) {
+    let id = -1;
+
+    if (memberId !== undefined) {
+      // memberId가 존재하면 타인의 프로필을 조회하는 것이다.
+      id = parseInt(memberId);
+    } else {
+      // memberId가 존재하지 않으면 내 프로필을 조회하는 것이다.
+      id = payload.memberId;
+    }
+
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardProfile(id);
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
@@ -102,7 +124,7 @@ export class BoardController {
     summary: '게시물 삭제',
     description: '사용자가 원하는 게시물을 삭제합니다.',
   })
-  async deleteBoard(@Query('boardId') boardId: string) {
+  async deleteBoard(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('boardId') boardId: string) {
     await this.boardService.deleteBoard(boardId);
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
