@@ -13,9 +13,8 @@ final class MockTagPlayListWorker: TagPlayListWorkerProtocol {
 
     // MARK: - Properties
 
-    private let provider: ProviderType = Provider(session: .initMockSession(), authManager: StubAuthManager())
-    private let headers: [String: String] = ["Content-Type": "application/json",
-                                             "Authorization": "mock token"]
+    private let provider: ProviderType = Provider(session: .initMockSession(), 
+                                                  authManager: StubAuthManager())
 
     // MARK: - Methods
 
@@ -36,8 +35,7 @@ final class MockTagPlayListWorker: TagPlayListWorkerProtocol {
 
             let endPoint = EndPoint<Response<[PostDTO]>>(path: "/board/tag",
                                                          method: .GET,
-                                                         queryParameters: ["tag": tag],
-                                                         headers: headers)
+                                                         queryParameters: ["tag": tag])
 
             let response = try await provider.request(with: endPoint)
             return response.data?.map { $0.toDomain() }
