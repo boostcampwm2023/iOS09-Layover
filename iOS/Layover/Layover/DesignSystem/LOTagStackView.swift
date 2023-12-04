@@ -62,7 +62,7 @@ final class LOTagStackView: UIStackView {
         addArrangedSubview(button)
     }
 
-    func resetTag() {
+    func resetTagStackView() {
         arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 
