@@ -75,6 +75,18 @@ enum HomeModels {
         }
     }
 
+    enum ShowTagPlayList {
+        struct Request {
+            let tag: String
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
+        }
+    }
+
     enum MoveToPlaybackScene {
         struct Request {
             let index: Int

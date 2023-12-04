@@ -13,18 +13,13 @@ final class MockSignUpWorker {
 
     // MARK: - Properties
 
-    private let signUpEndPointFactory: SignUpEndPointFactory
     private let provider: ProviderType
-    private let authManager: AuthManager
 
     // MARK: - Initializer
 
-    init(signUpEndPointFactory: SignUpEndPointFactory = DefaultSignUpEndPointFactory(),
-         provider: ProviderType = Provider(session: .initMockSession()),
-         authManager: AuthManager = .shared) {
-        self.signUpEndPointFactory = signUpEndPointFactory
+    init(provider: ProviderType = Provider(session: .initMockSession(), 
+                                           authManager: StubAuthManager())) {
         self.provider = provider
-        self.authManager = authManager
     }
 }
 
@@ -47,7 +42,13 @@ extension MockSignUpWorker: SignUpWorkerProtocol {
         }
 
         do {
-            let endPoint = signUpEndPointFactory.makeKakaoSignUpEndPoint(socialToken: socialToken, username: username)
+            var bodyParameters = [String: String]()
+            bodyParameters.updateValue(socialToken, forKey: "accessToken")
+            bodyParameters.updateValue(username, forKey: "username")
+
+            let endPoint = EndPoint<Response<LoginDTO>>(path: "/oauth/signup/kakao",
+                                                        method: .POST,
+                                                        bodyParameters: bodyParameters)
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
             return true
         } catch {
@@ -71,7 +72,13 @@ extension MockSignUpWorker: SignUpWorkerProtocol {
             return (response, mockData, nil)
         }
         do {
-            let endPoint: EndPoint = signUpEndPointFactory.makeAppleSignUpEndPoint(identityToken: identityToken, username: username)
+            var bodyParameters: [String: String] = [:]
+            bodyParameters.updateValue(identityToken, forKey: "identityToken")
+            bodyParameters.updateValue(username, forKey: "username")
+
+            let endPoint = EndPoint<Response<LoginDTO>>(path: "/oauth/signup/apple",
+                                                        method: .POST,
+                                                        bodyParameters: bodyParameters)
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
             return true
         } catch {

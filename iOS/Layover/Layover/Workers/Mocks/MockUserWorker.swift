@@ -13,7 +13,8 @@ final class MockUserWorker: UserWorkerProtocol {
 
     // MARK: - Properties
 
-    private let provider: ProviderType = Provider(session: .initMockSession())
+    private let provider: ProviderType = Provider(session: .initMockSession(), 
+                                                  authManager: StubAuthManager())
 
     // MARK: - Methods
 

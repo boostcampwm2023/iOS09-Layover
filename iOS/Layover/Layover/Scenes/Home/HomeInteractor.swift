@@ -13,12 +13,15 @@ protocol HomeBusinessLogic {
     func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request)
     func playPosts(with request: HomeModels.PlayPosts.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
+    func showTagPlayList(with request: HomeModels.ShowTagPlayList.Request)
 }
 
 protocol HomeDataStore {
     var posts: [Post]? { get set }
     var postPlayStartIndex: Int? { get set }
     var selectedVideoURL: URL? { get set }
+
+    var selectedTag: String? { get set }
 }
 
 final class HomeInteractor: HomeDataStore {
@@ -36,10 +39,7 @@ final class HomeInteractor: HomeDataStore {
     var posts: [Post]?
     var postPlayStartIndex: Int?
     var selectedVideoURL: URL?
-
-    func selectVideo(with request: Models.SelectVideo.Request) {
-        selectedVideoURL = videoFileWorker?.copyToNewURL(at: request.videoURL)
-    }
+    var selectedTag: String?
 }
 
 // MARK: - Use Case
@@ -72,5 +72,14 @@ extension HomeInteractor: HomeBusinessLogic {
     func playPosts(with request: HomeModels.PlayPosts.Request) {
         postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene(with: Models.PlayPosts.Response())
+    }
+
+    func selectVideo(with request: Models.SelectVideo.Request) {
+        selectedVideoURL = videoFileWorker?.copyToNewURL(at: request.videoURL)
+    }
+
+    func showTagPlayList(with request: HomeModels.ShowTagPlayList.Request) {
+        selectedTag = request.tag
+        presenter?.presentTagPlayList(with: Models.ShowTagPlayList.Response())
     }
 }

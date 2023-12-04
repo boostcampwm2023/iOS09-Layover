@@ -20,8 +20,6 @@ final class MockLoginWorker: LoginWorkerProtocol {
         self.provider = provider
     }
 
-    private let headers: [String: String] = ["Content-Type": "application/json", "Authorization": "mock token"]
-
     // MARK: - Methods
 
     func fetchKakaoLoginToken() async -> String? {
