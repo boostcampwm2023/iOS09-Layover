@@ -41,6 +41,16 @@ final class PlaybackViewController: BaseViewController {
         return collectionView
     }()
 
+    private let reportButton: UIBarButtonItem = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        let barButtonItem: UIBarButtonItem = UIBarButtonItem(customView: button)
+        barButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
+        barButtonItem.target = PlaybackViewController.self
+        barButtonItem.action = #selector(reportButtonDidTap)
+        return barButtonItem
+    }()
+
     // MARK: - Properties
     private var playerSlider: LOSlider = LOSlider()
 
@@ -115,6 +125,10 @@ final class PlaybackViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         addWindowPlayerSlider()
+        guard let button = reportButton.customView as? UIButton else { return }
+        button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = reportButton
+        self.navigationController?.navigationBar.tintColor = .layoverWhite
     }
 
     private func addWindowPlayerSlider() {
@@ -158,6 +172,20 @@ final class PlaybackViewController: BaseViewController {
     @objc private func didChangedSliderValue(_ sender: LOSlider) {
         let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
         interactor?.controlPlaybackMovie(with: request)
+    }
+
+    @objc private func reportButtonDidTap() {
+        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
+            action in
+//            self.reportPlaybackVideo()
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(reportAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: {
+            self.interactor?.leavePlaybackView()
+        })
     }
 }
 
