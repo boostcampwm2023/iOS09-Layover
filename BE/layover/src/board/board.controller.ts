@@ -113,6 +113,7 @@ export class BoardController {
   @Post('/encoding-callback')
   async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
     this.logger.log(`[encoding-callback] filePath: ${encodingCallbackRequestDto.filePath}`);
+    this.logger.log(`[encoding-callback] status: ${encodingCallbackRequestDto.status}`);
     const regExp = /^\/layover-station\/(.*?)_AVC$/;
     const filename = encodingCallbackRequestDto.filePath.match(regExp)[1];
 
