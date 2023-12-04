@@ -898,6 +898,7 @@
 				FC7E45322AFEB623004F155A /* Sources */,
 				FC7E45332AFEB623004F155A /* Frameworks */,
 				FC7E45342AFEB623004F155A /* Resources */,
+				FC182BD22B1D90C700051CBC /* SwiftLint Script */,
 			);
 			buildRules = (
 			);
@@ -960,7 +961,6 @@
 			);
 			mainGroup = FC7E452D2AFEB623004F155A;
 			packageReferences = (
-				FC7E456D2AFF6E44004F155A /* XCRemoteSwiftPackageReference "SwiftLint" */,
 				194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			productRefGroup = FC7E45372AFEB623004F155A /* Products */;
@@ -1004,6 +1004,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FC182BD22B1D90C700051CBC /* SwiftLint Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FC7E45322AFEB623004F155A /* Sources */ = {
