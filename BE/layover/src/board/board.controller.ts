@@ -53,6 +53,9 @@ export class BoardController {
     const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
     const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
 
+    // 파일명 저장
+    await this.boardService.saveFilenameById(presignedUrlDto.boardId, filename);
+
     const { preSignedUrl } = this.boardService.makePreSignedUrl(bucketname, filename, 'video', filetype);
     throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
   }
@@ -84,6 +87,10 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('tag')
+  @ApiOperation({
+    summary: '태그별 게시글 조회',
+    description: '태그에 따라 게시물들을 조회합니다.',
+  })
   async getBoardTag(@Query('tag') tag: string) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardTag(tag);
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
@@ -91,13 +98,11 @@ export class BoardController {
 
   @ApiOperation({
     summary: '원본 영상 업로드 완료 콜백',
-    description: '클라이언트를 통해 원본 영상이 업로드 되면 호출되고, 원본 hls link 를 db에 저장합니다.',
+    description: '클라이언트를 통해 원본 영상이 업로드 되면 호출됩니다.',
   })
   @Post('/upload-callback')
   async uploadCallback(@Body() uploadCallbackRequestDto: UploadCallbackDto) {
-    this.logger.log(`[In] upload-callback: ${uploadCallbackRequestDto.filename}`);
-    // await this.boardService.setOriginalVideoUrl(uploadCallbackRequestDto.filename);
-    this.logger.log(`[Out] upload-callback: ${uploadCallbackRequestDto.filename}`);
+    this.logger.log(`[upload-callback] filename: ${uploadCallbackRequestDto.filename}`);
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
 
@@ -108,33 +113,26 @@ export class BoardController {
   @Post('/encoding-callback')
   async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
     this.logger.log(`[In] encoding-callback: ${encodingCallbackRequestDto.filePath}`);
-    // status 를 구분한다.
+    const regExp = /^\/layover-station\/(.*?)_AVC$/;
+    const filename = encodingCallbackRequestDto.filePath.match(regExp)[1];
+
+    //파일명으로 파일을 찾고 해당 파일의 status 를 갱신해준다.
     switch (encodingCallbackRequestDto.status) {
-      case 'WAITING':
-        this.logger.log(`[Out] encoding-callback: !WAITING!`);
-        break;
       case 'RUNNING':
         this.logger.log(`[Out] encoding-callback: !RUNNING!`);
+        await this.boardService.setStatusByFilename(filename, 'RUNNING');
         break;
       case 'FAILURE':
         this.logger.log(`[Out] encoding-callback: !FAILURE!`);
+        await this.boardService.setStatusByFilename(filename, 'FAILURE');
         break;
       case 'COMPLETE':
         this.logger.log(`[Out] encoding-callback: !COMPLETE!`);
-        // dto 에서 filename 을 파싱한다.
-        // const filename = encodingCallbackRequestDto.filePath;
-        // await this.boardService.setEncodedVideoUrl(filename);
+        await this.boardService.setStatusByFilename(filename, 'COMPLETE');
+        await this.boardService.setEncodedVideoUrl(filename);
         break;
       default:
     }
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
-  // @Post('/encoding-callback')
-  // async encodingCallback(@Req() request: Request) {
-  //   this.logger.log('[in] request');
-  //   this.logger.log(request.headers);
-  //   this.logger.log(' ');
-  //   this.logger.log(request.body);
-  //   this.logger.log('[out] request');
-  // }
 }

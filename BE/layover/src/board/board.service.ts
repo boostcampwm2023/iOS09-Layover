@@ -34,7 +34,7 @@ export class BoardService {
       latitude: latitude,
       longitude: longitude,
       filename: '',
-      status: 'RUNNING',
+      status: 'WAITING',
     });
     tag.map(async (tagname) => {
       await this.tagService.saveTag(savedBoard, tagname);
@@ -93,7 +93,7 @@ export class BoardService {
       .where(`ST_Distance_Sphere(point(:longitude, :latitude), point(board.longitude, board.latitude)) < :distance`, {
         longitude,
         latitude,
-        distance: 1000, // 1km
+        distance: 500000, // 100km
       })
       .getMany();
 
@@ -137,15 +137,19 @@ export class BoardService {
     await this.boardRepository.save(board);
   }
 
-  generateEncodedVideoHLS(filename: string) {
-    //prefix, suffix 파싱해야함
-
-    return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
-    /${filename}.smil/master.m3u8`;
+  async saveFilenameById(id: number, filename: string) {
+    const board: Board = await this.boardRepository.findOne({ where: { id } });
+    board.filename = filename;
+    await this.boardRepository.save(board);
   }
 
-  async findByBoardId(boardId: number): Promise<Board> {
-    return await this.boardRepository.findOne({ where: { id: boardId } });
+  generateEncodedVideoHLS(filename: string) {
+    return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
+    /${filename}_AVC_,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8`;
+  }
+
+  async setStatusByFilename(filename: string, status: string) {
+    await this.boardRepository.update({ filename }, { status });
   }
 
   async findBoardById(id: number): Promise<Board> {
