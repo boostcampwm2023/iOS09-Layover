@@ -103,7 +103,7 @@ class Provider: ProviderType {
     // 이미지 업로드용
     func upload(data: Data, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
 
         let (data, response) = try await session.upload(for: request, from: data)
@@ -118,7 +118,7 @@ class Provider: ProviderType {
                           sessionTaskDelegate: URLSessionTaskDelegate? = nil,
                           delegateQueue: OperationQueue? = nil) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
         let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString),
                                            delegate: sessionTaskDelegate,
