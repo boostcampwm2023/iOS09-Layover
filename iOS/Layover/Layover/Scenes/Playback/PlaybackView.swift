@@ -31,7 +31,7 @@ final class PlaybackView: UIView {
         return gradientLayer
     }()
 
-    private let tagStackView: LOTagStackView = {
+    let tagStackView: LOTagStackView = {
         let tagStackView: LOTagStackView = LOTagStackView(style: .basic)
         return tagStackView
     }()
@@ -41,12 +41,11 @@ final class PlaybackView: UIView {
         button.layer.cornerRadius = 19
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.layoverWhite.cgColor
-//        button.setImage(UIImage(systemName: "cancel"), for: .normal)
         button.backgroundColor = .layoverWhite
         return button
     }()
 
-    private let profileLabel: UILabel = {
+    let profileLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2Bold)
         label.textColor = UIColor.layoverWhite
@@ -78,8 +77,6 @@ final class PlaybackView: UIView {
         return imageView
     }()
 
-    let playerSlider: LOSlider = LOSlider()
-
     let playerView: PlayerView = PlayerView()
 
     // MARK: - View Life Cycle
@@ -90,7 +87,6 @@ final class PlaybackView: UIView {
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
         setPlayerView()
-        setPlayerSlider()
     }
 
     required init?(coder: NSCoder) {
@@ -99,7 +95,6 @@ final class PlaybackView: UIView {
         addDescriptionAnimateGesture()
         setSubViewsInPlayerViewConstraints()
         setPlayerView()
-        setPlayerSlider()
     }
 
     // MARK: Player Setting Method
@@ -110,32 +105,6 @@ final class PlaybackView: UIView {
 
     func getPlayerItemStatus() -> AVPlayerItem.Status? {
         playerView.player?.currentItem?.status
-    }
-
-    func setPlayerSlider() {
-        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
-        playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
-            self?.updateSlider(currentTime: currentTime)
-        })
-        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
-    }
-
-    func setPlayerSliderUI(tabbarHeight: CGFloat) {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else {
-            return
-        }
-        guard let windowHeight = (windowScene?.screen.bounds.height) else {
-            return
-        }
-        playerSlider.frame = CGRect(x: 0,
-                                    y: (windowHeight - tabbarHeight - LOSlider.loSliderHeight),
-                                    width: playerSliderWidth,
-                                    height: LOSlider.loSliderHeight)
-        window?.addSubview(playerSlider)
-        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 
     // MARK: Player Play Method
@@ -155,20 +124,20 @@ final class PlaybackView: UIView {
     func resetPlayer() {
         playerView.resetPlayer()
     }
+
+    func seekPlayer(seekTime: CMTime) {
+        playerView.seek(to: seekTime)
+    }
+
+    func getDuration() -> Float64 {
+        CMTimeGetSeconds(playerView.player?.currentItem?.duration ?? CMTime(value: 0, timescale: 1))
+    }
 }
 
 // MARK: PlaybackView 내부에서만 쓰이는 Method
 
 private extension PlaybackView {
     func updateSlider(currentTime: CMTime) {
-        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else {
-            return
-        }
-        let duration: CMTime = currentItem.duration
-        if CMTIME_IS_INVALID(duration) {
-            return
-        }
-        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
     // MARK: - Gesture Method
@@ -183,7 +152,7 @@ private extension PlaybackView {
         let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
         descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
     }
-    
+
     // MARK: - UI Method
 
     func setDescriptionViewUI() {
@@ -255,7 +224,7 @@ private extension PlaybackView {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
                 let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
                 let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
-                UIView.animate(withDuration: 0.3,animations: {
+                UIView.animate(withDuration: 0.3, animations: {
                     self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
                     self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
                     self.gradientLayer.isHidden = true
@@ -297,16 +266,6 @@ private extension PlaybackView {
 
     @objc func playerDidFinishPlaying(note: NSNotification) {
         playerView.seek(to: CMTime.zero)
-        playerView.play()
-    }
-
-    @objc func didChangedSliderValue(_ sender: LOSlider) {
-        guard let duration: CMTime = playerView.player?.currentItem?.duration else {
-            return
-        }
-        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
-        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
-        playerView.seek(to: seekTime)
         playerView.play()
     }
 }

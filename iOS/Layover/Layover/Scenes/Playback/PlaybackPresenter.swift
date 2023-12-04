@@ -15,10 +15,11 @@ protocol PlaybackPresentationLogic {
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
-    func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response)
+    func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -28,10 +29,24 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     typealias Models = PlaybackModels
     weak var viewController: PlaybackDisplayLogic?
 
+    private func transPostToVideo(_ posts: [Post]) -> [Models.PlaybackVideo] {
+        posts.compactMap { post in
+            guard let videoURL: URL = post.board.videoURL else {
+                return nil
+            }
+            return Models.PlaybackVideo(playbackInfo: PlaybackModels.PlaybackInfo(
+                title: post.board.title,
+                content: post.board.description ?? "",
+                profileImageURL: post.member.profileImageURL,
+                profileName: post.member.username,
+                tag: post.tag,
+                videoURL: videoURL))
+        }
+    }
     // MARK: - UseCase Load Video List
 
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
-        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
+        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: transPostToVideo(response.posts))
         viewController?.displayVideoList(viewModel: viewModel)
     }
 
@@ -63,11 +78,6 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
         viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
     }
 
-    func presentHidePlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: nil)
-        viewController?.hidePlayerSlider(viewModel: viewModel)
-    }
-
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
         let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
         viewController?.showPlayerSlider(viewModel: viewModel)
@@ -81,5 +91,15 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
         let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: nil)
         viewController?.leavePlaybackView(viewModel: viewModel)
+    }
+
+    func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response) {
+        let viewModel: Models.ConfigurePlaybackCell.ViewModel = Models.ConfigurePlaybackCell.ViewModel(teleportIndex: response.teleportIndex)
+        viewController?.configureDataSource(viewModel: viewModel)
+    }
+
+    func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
+        let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, curCell: response.curCell)
+        viewController?.seekVideo(viewModel: viewModel)
     }
 }

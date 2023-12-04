@@ -9,16 +9,19 @@
 import UIKit
 import AVFoundation
 
+import OSLog
+
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func displayMoveCellIfinfinite()
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
-    func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
+    func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -39,6 +42,7 @@ final class PlaybackViewController: BaseViewController {
     }()
 
     // MARK: - Properties
+    private var playerSlider: LOSlider = LOSlider()
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
 
@@ -68,14 +72,14 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureDataSource()
+        interactor?.configurePlaybackCell()
         interactor?.displayVideoList()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
         } catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+            os_log("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
     }
 
@@ -97,6 +101,7 @@ final class PlaybackViewController: BaseViewController {
     // MARK: - UI + Layout
 
     override func setConstraints() {
+        super.setConstraints()
         playbackCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(playbackCollectionView)
         NSLayoutConstraint.activate([
@@ -107,6 +112,53 @@ final class PlaybackViewController: BaseViewController {
         ])
     }
 
+    override func setUI() {
+        super.setUI()
+        addWindowPlayerSlider()
+    }
+
+    private func addWindowPlayerSlider() {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else { return }
+        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
+        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
+            return
+        }
+        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+        window?.addSubview(playerSlider)
+        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
+    }
+
+    private func setPlayerSlider(at playbackView: PlaybackView) {
+        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+        playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
+            self?.updateSlider(currentTime: currentTime, playerView: playbackView.playerView)
+        })
+        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+    }
+
+    private func updateSlider(currentTime: CMTime, playerView: PlayerView) {
+        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else { return }
+        let duration: CMTime = currentItem.duration
+        if CMTIME_IS_INVALID(duration) { return }
+        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+    }
+
+    private func slowShowPlayerSlider() async {
+        do {
+            try await Task.sleep(nanoseconds: 1_000_000_00)
+            playerSlider.isHidden = false
+        } catch {
+            os_log("Falie Waiting show Player Slider")
+        }
+    }
+
+    @objc private func didChangedSliderValue(_ sender: LOSlider) {
+        let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
+        interactor?.controlPlaybackMovie(with: request)
+    }
 }
 
 extension PlaybackViewController: PlaybackDisplayLogic {
@@ -128,7 +180,14 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         }
         if let curCell = viewModel.curCell {
             curCell.playbackView.playPlayer()
-            curCell.playbackView.playerSlider.isHidden = false
+            setPlayerSlider(at: curCell.playbackView)
+            // Slider가 원점으로 돌아가는 시간 필요
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+//                self.playerSlider.isHidden = false
+//            }
+            Task {
+                await slowShowPlayerSlider()
+            }
         }
     }
 
@@ -140,16 +199,8 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         interactor?.playInitialPlaybackCell(with: request)
     }
 
-    func hidePlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        if let prevCell = viewModel.prevCell {
-            prevCell.playbackView.playerSlider.isHidden = true
-        }
-    }
-
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        if let curCell = viewModel.curCell {
-            curCell.playbackView.playerSlider.isHidden = false
-        }
+        playerSlider.isHidden = false
     }
 
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
@@ -164,27 +215,30 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        viewModel.prevCell?.playbackView.playerSlider.isHidden = true
+        playerSlider.isHidden = true
         viewModel.prevCell?.playbackView.stopPlayer()
     }
-}
 
-// MARK: - Playback Method
-
-private extension PlaybackViewController {
-    func configureDataSource() {
-        guard let tabbarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
-            return
-        }
+    func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel) {
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
-        dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, video) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, playbackVideo) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
-            guard let videoURL: URL = video.post.board.videoURL else { return PlaybackCell()}
-            cell.setPlaybackContents(viewModel: video)
-            cell.addAVPlayer(url: videoURL)
-            cell.setPlayerSlider(tabbarHeight: tabbarHeight)
+            cell.setPlaybackContents(info: playbackVideo.playbackInfo)
+            if let teleportIndex = viewModel.teleportIndex {
+                if indexPath.row == 0 || indexPath.row == teleportIndex {
+                    return cell
+                }
+            }
+            cell.addAVPlayer(url: playbackVideo.playbackInfo.videoURL)
+            self.setPlayerSlider(at: cell.playbackView)
             return cell
         }
+    }
+
+    func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel) {
+        let seekTime: CMTime = CMTime(value: CMTimeValue(viewModel.willMoveLocation), timescale: 1)
+        viewModel.curCell.playbackView.seekPlayer(seekTime: seekTime)
+        viewModel.curCell.playbackView.playPlayer()
     }
 }
 
@@ -216,8 +270,8 @@ extension PlaybackViewController: UICollectionViewDelegate {
         interactor?.playVideo(with: request)
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        interactor?.hidePlayerSlider()
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        playerSlider.isHidden = true
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

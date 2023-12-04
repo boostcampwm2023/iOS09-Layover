@@ -50,4 +50,15 @@ enum MapModels {
         }
     }
 
+    enum PlayPosts {
+        struct Request {
+            let selectedIndex: Int
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
+        }
+    }
 }

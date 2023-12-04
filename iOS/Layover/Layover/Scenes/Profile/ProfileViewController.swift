@@ -173,7 +173,7 @@ extension ProfileViewController: ProfileDisplayLogic {
         thumbnailCollectionView.dataSource = videoDatasource
         var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections([.profileInfo, .thumnail])
-        snapshot.appendItems([Member(identifier: 0,
+        snapshot.appendItems([Models.Member(identifier: 0,
                                      username: viewModel.nickname,
                                      introduce: viewModel.introduce,
                                      profileImageURL: viewModel.profileImageURL)],

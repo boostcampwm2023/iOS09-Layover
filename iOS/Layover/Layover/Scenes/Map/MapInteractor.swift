@@ -13,10 +13,12 @@ protocol MapBusinessLogic {
     func checkLocationAuthorizationStatus()
     func fetchVideos()
     func moveToPlaybackScene(with: MapModels.MoveToPlaybackScene.Request)
+    func playPosts(with: MapModels.PlayPosts.Request)
 }
 
-protocol MapDataStore { 
-    var videos: [Post]? { get set }
+protocol MapDataStore {
+    var postPlayStartIndex: Int? { get set }
+    var posts: [Post]? { get set }
     var index: Int? { get set }
 }
 
@@ -34,8 +36,10 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
     var index: Int?
 
-    var videos: [Post]?
-    
+    var posts: [Post]?
+
+    var postPlayStartIndex: Int?
+
     var presenter: MapPresentationLogic?
 
     override init() {
@@ -60,8 +64,13 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     }
 
     func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
-        videos = request.videos
+        posts = request.videos
         index = request.index
+        presenter?.presentPlaybackScene()
+    }
+
+    func playPosts(with request: MapModels.PlayPosts.Request) {
+        postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene()
     }
 

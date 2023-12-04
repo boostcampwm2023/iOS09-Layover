@@ -21,21 +21,18 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
-    // TODO: VideoModel 받아서 처리
-    func setPlaybackContents(viewModel: PlaybackModels.PlaybackVideo) {
-        playbackView.descriptionView.titleLabel.text = viewModel.post.board.title
-        playbackView.descriptionView.setText(viewModel.post.board.description ?? "")
-
+    func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
+        playbackView.descriptionView.titleLabel.text = info.title
+        playbackView.descriptionView.setText(info.content)
+        playbackView.profileLabel.text = info.profileName
+        info.tag.forEach { tag in
+            playbackView.tagStackView.addTag(tag)
+        }
     }
 
     func addAVPlayer(url: URL) {
         playbackView.resetPlayer()
         playbackView.addAVPlayer(url: url)
-    }
-
-    func setPlayerSlider(tabbarHeight: CGFloat) {
-        playbackView.setPlayerSlider()
-        playbackView.setPlayerSliderUI(tabbarHeight: tabbarHeight)
     }
 
     private func configure() {
@@ -47,6 +44,5 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
-        playbackView.playerSlider.isHidden = true
     }
 }

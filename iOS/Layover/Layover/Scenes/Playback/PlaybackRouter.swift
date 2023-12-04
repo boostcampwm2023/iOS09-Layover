@@ -26,6 +26,6 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
     // MARK: - Routing
 
     func routeToNext() {
-        
+
     }
 }

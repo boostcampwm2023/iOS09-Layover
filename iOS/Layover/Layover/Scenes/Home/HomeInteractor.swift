@@ -51,6 +51,7 @@ extension HomeInteractor: HomeBusinessLogic {
             let response = Models.FetchPosts.Response(posts: posts)
 
             await MainActor.run {
+                self.posts = posts
                 presenter?.presentPosts(with: response)
             }
         }
