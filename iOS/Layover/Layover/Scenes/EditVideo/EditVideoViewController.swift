@@ -37,6 +37,7 @@ final class EditVideoViewController: BaseViewController {
     private let nextButton: LOButton = {
         let button = LOButton(style: .basic)
         button.setTitle("다음", for: .normal)
+        button.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -73,8 +74,13 @@ final class EditVideoViewController: BaseViewController {
         interactor?.fetchVideo(request: Models.FetchVideo.Request(editedVideoURL: nil))
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        loopingPlayerView.play()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
-        interactor?.deleteVideo()
+//        interactor?.deleteVideo()
+        print("viewWillDisappear")
     }
 
     override func setConstraints() {
@@ -119,6 +125,12 @@ final class EditVideoViewController: BaseViewController {
             editController.delegate = self
             self.present(editController, animated: true)
         }
+    }
+
+    @objc private func nextButtonDidTap() {
+        loopingPlayerView.pause()
+        interactor?.didFinishVideoEditing(request: EditVideoModels.DidFinishViedoEditing.Request(isMuted: soundButton.isSelected))
+        router?.routeToNext()
     }
 
 }

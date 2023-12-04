@@ -10,5 +10,32 @@ import UIKit
 
 enum UploadPostModels {
 
-    // MARK: - Use Cases
+    enum FetchThumbnail {
+        struct Request {
+
+        }
+        struct Response {
+            let thumnailImage: CGImage
+        }
+        struct ViewModel {
+            let thumnailImage: UIImage
+        }
+    }
+
+    enum UploadPost {
+        struct Request {
+            let title: String
+            let content: String?
+            let latitude: Double
+            let longitude: Double
+            let tags: [String]
+        }
+        struct Response {
+
+        }
+        struct VideModel {
+
+        }
+    }
+
 }
