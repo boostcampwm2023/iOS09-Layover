@@ -105,7 +105,6 @@ class Provider: ProviderType {
         guard let url = URL(string: url) else { throw NetworkError.components }
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-        request.httpBody = data
 
         let (data, response) = try await session.upload(for: request, from: data)
         try self.checkStatusCode(of: response)
@@ -117,7 +116,7 @@ class Provider: ProviderType {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString))
-        
+
         let (data, response) = try await session.upload(for: request, fromFile: fromFile)
         try self.checkStatusCode(of: response)
         return data
