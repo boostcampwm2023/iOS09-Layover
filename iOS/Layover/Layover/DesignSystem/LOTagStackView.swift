@@ -62,6 +62,10 @@ final class LOTagStackView: UIStackView {
         addArrangedSubview(button)
     }
 
+    func resetTagStackView() {
+        arrangedSubviews.forEach { $0.removeFromSuperview() }
+    }
+
     private func setUI() {
         self.alignment = .fill
         self.distribution = .fillProportionally
