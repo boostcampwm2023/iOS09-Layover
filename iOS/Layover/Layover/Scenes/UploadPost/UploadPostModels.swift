@@ -10,6 +10,18 @@ import UIKit
 
 enum UploadPostModels {
 
+    enum CanUploadPost {
+        struct Request {
+            let title: String?
+        }
+        struct Response {
+            let isEmpty: Bool
+        }
+        struct ViewModel {
+            let canUpload: Bool
+        }
+    }
+
     enum FetchTags {
         struct Request {
 

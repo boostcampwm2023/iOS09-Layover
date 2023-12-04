@@ -11,6 +11,7 @@ import UIKit
 protocol UploadPostDisplayLogic: AnyObject {
     func displayTags(viewModel: UploadPostModels.FetchTags.ViewModel)
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel)
+    func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel)
 }
 
 final class UploadPostViewController: BaseViewController {
@@ -43,6 +44,7 @@ final class UploadPostViewController: BaseViewController {
     private let titleTextField: LOTextField = {
         let textField = LOTextField()
         textField.placeholder = "제목"
+        textField.addTarget(self, action: #selector(titleTextChanged), for: .editingChanged)
         return textField
     }()
 
@@ -95,6 +97,7 @@ final class UploadPostViewController: BaseViewController {
         let button = LOButton(style: .basic)
         button.setTitle("업로드", for: .normal)
         button.addTarget(self, action: #selector(uploadButtonDidTap), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
 
@@ -223,6 +226,10 @@ final class UploadPostViewController: BaseViewController {
         scrollView.addGestureRecognizer(singleTapGestureRecognizer)
     }
 
+    @objc private func titleTextChanged() {
+        interactor?.canUploadPost(request: UploadPostModels.CanUploadPost.Request(title: titleTextField.text))
+    }
+
     @objc private func viewDidTap() {
         self.view.endEditing(true)
     }
@@ -238,6 +245,7 @@ final class UploadPostViewController: BaseViewController {
 }
 
 extension UploadPostViewController: UploadPostDisplayLogic {
+
     func displayTags(viewModel: UploadPostModels.FetchTags.ViewModel) {
         tagStackView.resetTagStackView()
         viewModel.tags.forEach { tagStackView.addTag($0) }
@@ -245,6 +253,10 @@ extension UploadPostViewController: UploadPostDisplayLogic {
 
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel) {
         thumbnailImageView.image = viewModel.thumnailImage
+    }
+
+    func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel) {
+        uploadButton.isEnabled = viewModel.canUpload
     }
 
 }
