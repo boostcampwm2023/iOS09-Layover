@@ -12,6 +12,7 @@ protocol HomePresentationLogic {
     func presentPosts(with response: HomeModels.FetchPosts.Response)
     func presentThumbnailImage(with response: HomeModels.FetchThumbnailImageData.Response)
     func presentPlaybackScene(with response: HomeModels.PlayPosts.Response)
+    func presentTagPlayList(with response: HomeModels.ShowTagPlayList.Response)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -51,5 +52,11 @@ final class HomePresenter: HomePresentationLogic {
 
     func presentPlaybackScene(with response: HomeModels.PlayPosts.Response) {
         viewController?.routeToPlayback()
+    }
+
+    // MARK: - UseCase - TagPlayList
+
+    func presentTagPlayList(with response: HomeModels.ShowTagPlayList.Response) {
+        viewController?.routeToTagPlayList()
     }
 }

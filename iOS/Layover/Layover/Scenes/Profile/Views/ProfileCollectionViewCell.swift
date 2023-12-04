@@ -1,14 +1,14 @@
 //
-//  ProfileHeaderView.swift
+//  ProfileCollectionViewCell.swift
 //  Layover
 //
-//  Created by kong on 2023/11/21.
+//  Created by kong on 2023/12/03.
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
 import UIKit
 
-final class ProfileHeaderView: UICollectionReusableView {
+final class ProfileCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Components
 
@@ -59,7 +59,7 @@ final class ProfileHeaderView: UICollectionReusableView {
     func configure(profileImage: UIImage?,
                    nickname: String?,
                    introduce: String?) {
-        profileImageView.image = profileImage
+        profileImageView.image = profileImage == nil ? UIImage.profile : profileImage
         nicknameLabel.text = nickname
         introduceLabel.text = introduce
     }

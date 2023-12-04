@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HomeCarouselCollectionViewDelegate: AnyObject {
+    func homeCarouselCollectionViewDidTouchedTagButton(_ cell: HomeCarouselCollectionViewCell, tag: String)
+}
+
 final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Components
@@ -40,6 +44,8 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     var isPlayingVideos: Bool {
         loopingPlayerView.isPlaying
     }
+
+    weak var delegate: HomeCarouselCollectionViewDelegate?
 
     // MARK: - Object lifecycle
 
@@ -116,6 +122,7 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
             let button = UIButton(configuration: configuration)
             button.clipsToBounds = true
             button.layer.cornerRadius = 12
+            button.addTarget(self, action: #selector(tagButtonDidTap(_:)), for: .touchUpInside)
             tagStackView.addArrangedSubview(button)
         }
         tagStackView.addArrangedSubview(UIView())
@@ -133,5 +140,12 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
     func pauseVideo() {
         thumbnailImageView.isHidden = false
         loopingPlayerView.pause()
+    }
+
+    // MARK: - Actions
+
+    @objc private func tagButtonDidTap(_ sender: UIButton) {
+        guard let tag = sender.titleLabel?.text else { return }
+        delegate?.homeCarouselCollectionViewDidTouchedTagButton(self, tag: tag)
     }
 }

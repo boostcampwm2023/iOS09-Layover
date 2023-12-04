@@ -220,7 +220,7 @@ final class MapViewController: BaseViewController {
     private func createMapAnnotation() {
         let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: 36.3276544,
                                                                          longitude: 127.427232),
-                                      thumnailURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
+                                      thumbnailURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
         mapView.addAnnotation(annotation)
     }
 
