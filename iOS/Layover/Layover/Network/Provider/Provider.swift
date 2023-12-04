@@ -111,13 +111,19 @@ class Provider: ProviderType {
         return data
     }
 
-    func backgroundUpload(fromFile: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+    // 동영상 업로드용
+    func backgroundUpload(fromFile: URL,
+                          to url: String,
+                          method: HTTPMethod = .PUT,
+                          sessionTaskDelegate: URLSessionTaskDelegate? = nil,
+                          delegateQueue: OperationQueue? = nil) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-        let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString))
-
-        let (data, response) = try await session.upload(for: request, fromFile: fromFile)
+        let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString),
+                                           delegate: sessionTaskDelegate,
+                                           delegateQueue: delegateQueue)
+        let (data, response) = try await backgroundSession.upload(for: request, fromFile: fromFile)
         try self.checkStatusCode(of: response)
         return data
     }
