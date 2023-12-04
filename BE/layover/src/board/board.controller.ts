@@ -113,13 +113,8 @@ export class BoardController {
   @Post('/encoding-callback')
   async encodingCallback(@Body() encodingCallbackRequestDto: EncodingCallbackDto) {
     this.logger.log(`[encoding-callback] filePath: ${encodingCallbackRequestDto.filePath}`);
-    this.logger.log(`[encoding-callback] status: ${encodingCallbackRequestDto.status}`);
-    const regExp = /^\/layover-station\/(.*?)_AVC$/;
+    const regExp = /^\/layover-station\/(.*?)(_AVC.*?)\.mp4$/;
     const filename = encodingCallbackRequestDto.filePath.match(regExp)[1];
-    const hasWhitespace = /\s/.test(encodingCallbackRequestDto.status);
-    this.logger.log(hasWhitespace); // 공백이 있다면 true를 출력
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(encodingCallbackRequestDto.status);
-    this.logger.log(hasSpecialChar); // 특수문자가 있다면 true를 출력
 
     //파일명으로 파일을 찾고 해당 파일의 status 를 갱신해준다.
     switch (encodingCallbackRequestDto.status) {
