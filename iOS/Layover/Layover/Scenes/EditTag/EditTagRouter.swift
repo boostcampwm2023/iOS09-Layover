@@ -21,16 +21,17 @@ class EditTagRouter: NSObject, EditTagRoutingLogic, EditTagDataPassing {
     // MARK: - Properties
 
     weak var viewController: EditTagViewController?
+
     var dataStore: EditTagDataStore?
 
     // MARK: - Routing
 
     func routeToBack() {
-        let destination = viewController?.presentingViewController as? UploadPostViewController
-        var destinationDataStore = destination?.router?.dataStore
-
-        // data passing
-        viewController?.navigationController?.popViewController(animated: true)
+        guard let navigationController = viewController?.presentingViewController as? UINavigationController,
+              let destination = navigationController.viewControllers.last as? UploadPostViewController,
+              var destinationDataStore = destination.router?.dataStore else { return }
+        destinationDataStore.tags = dataStore?.tags
+        viewController?.dismiss(animated: true)
     }
 
 }

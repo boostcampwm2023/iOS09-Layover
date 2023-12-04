@@ -10,6 +10,19 @@ import UIKit
 
 enum UploadPostModels {
 
+    enum FetchTags {
+        struct Request {
+
+        }
+        struct Response {
+            let tags: [String]
+        }
+
+        struct ViewModel {
+            let tags: [String]
+        }
+    }
+
     enum FetchThumbnail {
         struct Request {
 

@@ -9,6 +9,7 @@
 import UIKit
 
 protocol UploadPostDisplayLogic: AnyObject {
+    func displayTags(viewModel: UploadPostModels.FetchTags.ViewModel)
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel)
 }
 
@@ -90,7 +91,7 @@ final class UploadPostViewController: BaseViewController {
         return textView
     }()
 
-    private let uploadButton: LOButton = {
+    private lazy var uploadButton: LOButton = {
         let button = LOButton(style: .basic)
         button.setTitle("업로드", for: .normal)
         button.addTarget(self, action: #selector(uploadButtonDidTap), for: .touchUpInside)
@@ -128,6 +129,10 @@ final class UploadPostViewController: BaseViewController {
         setConstraints()
         addTarget()
         interactor?.fetchThumbnailImage()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        interactor?.fetchTags()
     }
 
     override func setConstraints() {
@@ -233,6 +238,10 @@ final class UploadPostViewController: BaseViewController {
 }
 
 extension UploadPostViewController: UploadPostDisplayLogic {
+    func displayTags(viewModel: UploadPostModels.FetchTags.ViewModel) {
+        tagStackView.resetTagStackView()
+        viewModel.tags.forEach { tagStackView.addTag($0) }
+    }
 
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel) {
         thumbnailImageView.image = viewModel.thumnailImage

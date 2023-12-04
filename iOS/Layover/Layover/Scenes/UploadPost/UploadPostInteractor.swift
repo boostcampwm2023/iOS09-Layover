@@ -12,6 +12,7 @@ import UIKit
 import OSLog
 
 protocol UploadPostBusinessLogic {
+    func fetchTags()
     func fetchThumbnailImage()
     func uploadPost()
 }
@@ -19,6 +20,7 @@ protocol UploadPostBusinessLogic {
 protocol UploadPostDataStore {
     var videoURL: URL? { get set }
     var isMuted: Bool? { get set }
+    var tags: [String]? { get set }
 }
 
 final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
@@ -34,6 +36,12 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
 
     var videoURL: URL?
     var isMuted: Bool?
+    var tags: [String]? = []
+
+    func fetchTags() {
+        guard let tags else { return }
+        presenter?.presentTags(with: UploadPostModels.FetchTags.Response(tags: tags))
+    }
 
     func fetchThumbnailImage() {
         guard let videoURL else { return }

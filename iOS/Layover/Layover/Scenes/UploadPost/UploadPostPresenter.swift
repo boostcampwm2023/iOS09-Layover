@@ -9,6 +9,7 @@
 import UIKit
 
 protocol UploadPostPresentationLogic {
+    func presentTags(with response: UploadPostModels.FetchTags.Response)
     func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response)
 }
 
@@ -18,6 +19,10 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
 
     typealias Models = UploadPostModels
     weak var viewController: UploadPostDisplayLogic?
+
+    func presentTags(with response: UploadPostModels.FetchTags.Response) {
+        viewController?.displayTags(viewModel: UploadPostModels.FetchTags.ViewModel(tags: response.tags))
+    }
 
     func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response) {
         let image = UIImage(cgImage: response.thumnailImage)

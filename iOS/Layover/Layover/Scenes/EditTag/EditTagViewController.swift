@@ -9,12 +9,19 @@
 import UIKit
 
 protocol EditTagDisplayLogic: AnyObject {
-
+    func displayTags(viewModel: EditTagModels.FetchTags.ViewModel)
 }
 
-final class EditTagViewController: BaseViewController, EditTagDisplayLogic {
+final class EditTagViewController: BaseViewController {
 
     // MARK: - UI Components
+
+    private lazy var closeButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage.down, for: .normal)
+        button.addTarget(self, action: #selector(closeButtonDidTap), for: .touchUpInside)
+        return button
+    }()
 
     private let tagTextField: LOTextField = {
         let textField: LOTextField = LOTextField()
@@ -55,18 +62,22 @@ final class EditTagViewController: BaseViewController, EditTagDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        interactor?.fetchTags()
         tagTextField.delegate = self
     }
 
     override func setConstraints() {
         super.setConstraints()
-        view.addSubviews(tagTextField, tagStackView)
+        view.addSubviews(closeButton, tagTextField, tagStackView)
         view.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
         NSLayoutConstraint.activate([
-            tagTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            closeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 21),
+
+            tagTextField.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 8),
             tagTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             tagTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             tagTextField.heightAnchor.constraint(equalToConstant: 44),
@@ -75,6 +86,15 @@ final class EditTagViewController: BaseViewController, EditTagDisplayLogic {
             tagStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             tagStackView.heightAnchor.constraint(equalToConstant: 25)
         ])
+    }
+
+    // MARK: - Methods
+
+    @objc private func closeButtonDidTap() {
+        let buttons = tagStackView.arrangedSubviews.map { $0 as? UIButton }
+        let tags = buttons.compactMap(\.?.titleLabel?.text)
+        interactor?.editTag(request: EditTagModels.EditTag.Request(tags: tags))
+        router?.routeToBack()
     }
 
 }
@@ -88,4 +108,14 @@ extension EditTagViewController: UITextFieldDelegate {
         textField.text = nil
         return true
     }
+}
+
+
+extension EditTagViewController: EditTagDisplayLogic {
+
+    func displayTags(viewModel: EditTagModels.FetchTags.ViewModel) {
+        tagStackView.resetTagStackView()
+        viewModel.tags.forEach { tagStackView.addTag($0) }
+    }
+
 }
