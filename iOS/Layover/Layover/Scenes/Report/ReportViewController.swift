@@ -14,6 +14,22 @@ protocol ReportDisplayLogic: AnyObject {
 
 final class ReportViewController: BaseViewController, ReportDisplayLogic {
 
+    // MARK: - UI Components
+
+    private let popUpView: LOPopUpView = {
+        let view: LOPopUpView = LOPopUpView()
+        view.layer.cornerRadius = 12
+        view.backgroundColor = .darkGrey
+        return view
+    }()
+
+    private let backgroundView: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0.5
+        return view
+    }()
+
     // MARK: - Properties
 
     typealias Models = ReportModels
@@ -44,4 +60,29 @@ final class ReportViewController: BaseViewController, ReportDisplayLogic {
         super.viewDidLoad()
     }
 
+    override func setUI() {
+        super.setUI()
+    }
+
+    override func setConstraints() {
+        super.setConstraints()
+        view.addSubviews(backgroundView, popUpView)
+        view.subviews.forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        NSLayoutConstraint.activate([
+            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            popUpView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            popUpView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            popUpView.widthAnchor.constraint(equalToConstant: 350),
+            popUpView.heightAnchor.constraint(equalToConstant: 450)
+        ])
+    }
+}
+
+#Preview {
+    ReportViewController()
 }

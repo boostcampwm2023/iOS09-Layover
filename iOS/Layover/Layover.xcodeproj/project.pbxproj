@@ -72,6 +72,9 @@
 		8321A2F22B1E1026000A12AF /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2EC2B1E1026000A12AF /* ReportViewController.swift */; };
 		8321A2F32B1E1026000A12AF /* ReportInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2ED2B1E1026000A12AF /* ReportInteractor.swift */; };
 		8321A2F52B1E10DF000A12AF /* ReportConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F42B1E10DF000A12AF /* ReportConfigurator.swift */; };
+		8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */; };
+		8321A2F92B1E15F3000A12AF /* LOReportStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */; };
+		8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */; };
 		834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */; };
 		835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835783C22B14A41600E7D304 /* MockLoginWorker.swift */; };
 		835783C62B14A5C800E7D304 /* LoginData.json in Resources */ = {isa = PBXBuildFile; fileRef = 835783C52B14A5C800E7D304 /* LoginData.json */; };
@@ -260,6 +263,9 @@
 		8321A2EC2B1E1026000A12AF /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		8321A2ED2B1E1026000A12AF /* ReportInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportInteractor.swift; sourceTree = "<group>"; };
 		8321A2F42B1E10DF000A12AF /* ReportConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportConfigurator.swift; sourceTree = "<group>"; };
+		8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOPopUpView.swift; sourceTree = "<group>"; };
+		8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportStackView.swift; sourceTree = "<group>"; };
+		8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportContentView.swift; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -852,6 +858,9 @@
 				835A61932B068096002F22A5 /* LODescriptionView.swift */,
 				FC0E802F2B1A15D500EF56D6 /* LOImageLabel.swift */,
 				FC0E80312B1A280300EF56D6 /* LOTextView.swift */,
+				8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */,
+				8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */,
+				8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -1118,6 +1127,7 @@
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
 				19A1692D2B17750B00DB34C0 /* Post.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
+				8321A2F92B1E15F3000A12AF /* LOReportStackView.swift in Sources */,
 				FC0E80272B1A0BBB00EF56D6 /* UploadPostModels.swift in Sources */,
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
@@ -1144,6 +1154,7 @@
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				193686742B15C489008902CD /* UserWorker.swift in Sources */,
 				19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */,
+				8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */,
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				194C21BB2B1B718B00C62645 /* MockHomeWorker.swift in Sources */,
@@ -1218,6 +1229,7 @@
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,
+				8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
