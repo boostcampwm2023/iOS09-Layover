@@ -107,7 +107,18 @@ class Provider: ProviderType {
         request.httpMethod = method.rawValue
         request.httpBody = data
 
-        let (data, response) = try await session.uploadTask(with: request, from: data)
+        let (data, response) = try await session.upload(for: request, from: data)
+        try self.checkStatusCode(of: response)
+        return data
+    }
+
+    func backgroundUpload(fromFile: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        guard let url = URL(string: url) else { throw NetworkError.components }
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString))
+        
+        let (data, response) = try await session.upload(for: request, fromFile: fromFile)
         try self.checkStatusCode(of: response)
         return data
     }
@@ -144,26 +155,6 @@ extension Data {
             return try JSONDecoder().decode(T.self, from: self)
         } catch {
             throw NetworkError.decoding(error)
-        }
-    }
-}
-
-extension URLSession {
-    func uploadTask(with request: URLRequest, from data: Data) async throws -> (Data, URLResponse) {
-        return try await withCheckedThrowingContinuation { continuation in
-            uploadTask(with: request, from: data) { data, response, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-
-                guard let data, let response = response else {
-                    continuation.resume(throwing: NetworkError.emptyData)
-                    return
-                }
-
-                continuation.resume(returning: (data, response))
-            }.resume()
         }
     }
 }
