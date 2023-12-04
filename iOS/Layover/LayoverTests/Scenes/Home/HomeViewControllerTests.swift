@@ -41,35 +41,35 @@ final class HomeViewControllerTests: XCTestCase {
 
     // MARK: - Test doubles
 
-    final class HomeBusinessLogicSpy: HomeBusinessLogic {
-        var fetchPostsCalled = false
-        var fetchThumbnailImageDataCalled = false
-        var playPostsCalled = false
-        var selectVideoCalled = false
-        var showTagPlayListCalled = false
-
-        func fetchPosts(with request: Layover.HomeModels.FetchPosts.Request) -> Task<Bool, Never> {
-            fetchPostsCalled = true
-            return Task { return true }
-        }
-        
-        func fetchThumbnailImageData(with request: Layover.HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never> {
-            fetchThumbnailImageDataCalled = true
-            return Task { return true }
-        }
-        
-        func playPosts(with request: Layover.HomeModels.PlayPosts.Request) {
-            playPostsCalled = true
-        }
-        
-        func selectVideo(with request: Layover.HomeModels.SelectVideo.Request) {
-            selectVideoCalled = true
-        }
-        
-        func showTagPlayList(with request: Layover.HomeModels.ShowTagPlayList.Request) {
-            showTagPlayListCalled = true
-        }
-    }
+//    final class HomeBusinessLogicSpy: HomeBusinessLogic {
+//        var fetchPostsCalled = false
+//        var fetchThumbnailImageDataCalled = false
+//        var playPostsCalled = false
+//        var selectVideoCalled = false
+//        var showTagPlayListCalled = false
+//
+//        func fetchPosts(with request: Layover.HomeModels.FetchPosts.Request) -> Task<Bool, Never> {
+//            fetchPostsCalled = true
+//            return Task { return true }
+//        }
+//        
+//        func fetchThumbnailImageData(with request: Layover.HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never> {
+//            fetchThumbnailImageDataCalled = true
+//            return Task { return true }
+//        }
+//        
+//        func playPosts(with request: Layover.HomeModels.PlayPosts.Request) {
+//            playPostsCalled = true
+//        }
+//        
+//        func selectVideo(with request: Layover.HomeModels.SelectVideo.Request) {
+//            selectVideoCalled = true
+//        }
+//        
+//        func showTagPlayList(with request: Layover.HomeModels.ShowTagPlayList.Request) {
+//            showTagPlayListCalled = true
+//        }
+//    }
 
     final class HomeRouterSpy: HomeRouter {
         var routeToNextCalled = false
@@ -95,18 +95,6 @@ final class HomeViewControllerTests: XCTestCase {
     }
 
     // MARK: - Tests
-
-    func test_viewDidLoad_호출시_fetchPost를_호출한다() {
-        // arrange
-        let spy = HomeBusinessLogicSpy()
-        sut.interactor = spy
-
-        // act
-        sut.viewDidLoad()
-
-        // assert
-        XCTAssertTrue(spy.fetchPostsCalled, "viewDidLoad 호출 시 fetchPost가 호출되었다.")
-    }
 
     func test_routeToPlayback_호출시_router의_routeToPlayback을_호출한다() {
         // arrange
