@@ -8,6 +8,7 @@ import { BoardResDto } from './dtos/board-res-dto';
 import { TagService } from '../tag/tag.service';
 import { BoardsResDto } from './dtos/boards-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
+import { makeDownloadPreSignedUrl } from '../utils/s3Utils';
 
 @Injectable()
 export class BoardService {
@@ -23,9 +24,7 @@ export class BoardService {
       member: member,
       title: title,
       content: content,
-      original_video_url: '',
       encoded_video_url: '',
-      video_thumbnail: '',
       latitude: latitude,
       longitude: longitude,
       filename: '',
@@ -63,10 +62,11 @@ export class BoardService {
 
   async createBoardResDto(board: Board): Promise<BoardsResDto> {
     const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
+    const videoThumbnailUrl = makeDownloadPreSignedUrl(process.env.NCLOUD_S3_THUMBNAIL_BUCKET_NAME, `${board.filename}_01.jpg`);
     const boardInfo = new BoardResDto(
       board.id,
       board.encoded_video_url,
-      board.video_thumbnail,
+      videoThumbnailUrl,
       board.latitude,
       board.longitude,
       board.title,
