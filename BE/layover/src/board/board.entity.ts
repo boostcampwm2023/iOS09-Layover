@@ -20,9 +20,6 @@ export class Board {
   @Column({ nullable: false })
   encoded_video_url: string;
 
-  @Column({ nullable: false })
-  video_thumbnail: string;
-
   @Column({ nullable: false, type: 'double' })
   latitude: number;
 
