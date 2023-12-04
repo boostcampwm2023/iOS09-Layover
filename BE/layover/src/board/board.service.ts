@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { MemberService } from '../member/member.service';
 import { Member } from '../member/member.entity';
-import { makeUploadPreSignedUrl } from 'src/utils/s3Utils';
 import { MemberInfosResDto } from '../member/dtos/member-infos-res.dto';
 import { BoardResDto } from './dtos/board-res-dto';
 import { TagService } from '../tag/tag.service';
@@ -17,10 +16,6 @@ export class BoardService {
     private memberService: MemberService,
     private tagService: TagService,
   ) {}
-
-  makePreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
-    return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
-  }
 
   async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
@@ -118,17 +113,6 @@ export class BoardService {
       .getMany();
 
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
-  }
-
-  async setOriginalVideoUrl(filename: string) {
-    const board: Board = await this.boardRepository.findOne({ where: { filename } });
-    board.original_video_url = this.generateOriginalVideoHLS(filename);
-    await this.boardRepository.save(board);
-  }
-
-  generateOriginalVideoHLS(filename: string) {
-    return `${process.env.HLS_SCHEME}${process.env.HLS_ORIGIN_CDN}/hls/${process.env.HLS_ORIGIN_BUCKET_ENCRYPTED_NAME}
-    /${filename}/index.m3u8`;
   }
 
   async setEncodedVideoUrl(filename: string) {

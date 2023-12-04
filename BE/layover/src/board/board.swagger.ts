@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { getSchemaPath } from '@nestjs/swagger';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
-import { PresignedUrlResDto } from './dtos/presigned-url-res.dto';
+import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 import { BoardsResDto } from './dtos/boards-res.dto';
 
 export const BOARD_SWAGGER = {
@@ -28,7 +28,7 @@ export const BOARD_SWAGGER = {
         customCode: { type: 'string', example: 'SUCCESS' },
         message: { type: 'string', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(PresignedUrlResDto) },
+        data: { $ref: getSchemaPath(PreSignedUrlResDto) },
       },
     },
   },

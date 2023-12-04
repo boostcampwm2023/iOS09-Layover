@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { BoardService } from './board.service';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
-import { PresignedUrlDto } from './dtos/presigned-url.dto';
+import { BoardPreSignedUrlDto } from './dtos/board-pre-signed-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
@@ -14,6 +14,8 @@ import { JwtValidationPipe } from '../pipes/jwt.validation.pipe';
 import { BoardsResDto } from './dtos/boards-res.dto';
 import { SWAGGER } from '../utils/swaggerUtils';
 import { BOARD_SWAGGER } from './board.swagger';
+import { makeUploadPreSignedUrl } from '../utils/s3Utils';
+import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
@@ -48,15 +50,14 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_PRESIGNED_URL_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('presigned-url')
-  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: PresignedUrlDto) {
+  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: BoardPreSignedUrlDto) {
     const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
     const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
 
     // 파일명 저장
     await this.boardService.saveFilenameById(presignedUrlDto.boardId, filename);
-
-    const { preSignedUrl } = this.boardService.makePreSignedUrl(bucketname, filename, 'video', filetype);
-    throw new CustomResponse(ECustomCode.SUCCESS, { preSignedUrl });
+    const preSignedUrl = makeUploadPreSignedUrl(bucketname, filename, 'video', filetype);
+    throw new CustomResponse(ECustomCode.SUCCESS, new PreSignedUrlResDto(preSignedUrl));
   }
 
   @ApiOperation({

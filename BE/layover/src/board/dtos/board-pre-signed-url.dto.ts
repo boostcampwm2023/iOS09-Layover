@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class PresignedUrlDto {
+export class BoardPreSignedUrlDto {
   @ApiProperty({
     example: 1,
     description: '업로드할 동영상의 게시글 id',
