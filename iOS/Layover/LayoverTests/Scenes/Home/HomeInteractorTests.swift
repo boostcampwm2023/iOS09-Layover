@@ -62,7 +62,7 @@ final class HomeInteractorTests: XCTestCase {
 
     // MARK: - Tests
 
-    func testFetchPost는_presenter의_presentPosts를_호출한다() async throws {
+    func test_fetchPost는_presenter의_presentPosts를_호출한다() async throws {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy
@@ -75,11 +75,17 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출했다.")
     }
 
-    func testFetchThumbnailImageData는_presenter의_presentThumbnailImage를_호출한다() async throws {
+    func test_fetchThumbnailImageData는_presenter의_presentThumbnailImage를_호출한다() async throws {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy
-        let request = Models.FetchThumbnailImageData.Request(imageURL: URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize")!, indexPath: IndexPath())
+
+        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
+            XCTFail("URL 생성 실패")
+            return
+        }
+
+        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
 
         // Act
         _ = await sut.fetchThumbnailImageData(with: request).value
@@ -88,7 +94,7 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentThumbnailImageCalled, "fetchThumbnailImageData()가 presenter의 presentThumbnailImage()를 호출했다.")
     }
 
-    func testPlayPosts는_자신의_selectedIndex값을_변경한다() async throws {
+    func test_playPosts는_자신의_selectedIndex값을_변경한다() async throws {
         // Arrange
         let request = Models.PlayPosts.Request(selectedIndex: 7)
 
@@ -99,7 +105,7 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(sut.postPlayStartIndex, 7, "playPosts()가 자신의 selectedIndex를 변경했다.")
     }
 
-    func testPlayPosts는_presenter의_presentPlaybackScene를_호출한다() async throws {
+    func test_playPosts는_presenter의_presentPlaybackScene를_호출한다() async throws {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy
@@ -134,7 +140,7 @@ final class HomeInteractorTests: XCTestCase {
 //        XCTAssertEqual(selectedVideoURL, dummyVideoURL)
 //    }
 
-    func testShowTagPlayList는_자신의_selectedTag값을_변경한다() {
+    func test_showTagPlayList는_자신의_selectedTag값을_변경한다() {
         // Arrange
         let request = Models.ShowTagPlayList.Request(tag: "DummyTag")
 
@@ -145,7 +151,7 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(sut.selectedTag, "DummyTag", "showTagPlayList()가 자신의 selectedTag를 변경했다.")
     }
 
-    func testShowTagPlayList는_presenter의_presentTagPlayList를_호출한다() {
+    func test_showTagPlayList는_presenter의_presentTagPlayList를_호출한다() {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy
