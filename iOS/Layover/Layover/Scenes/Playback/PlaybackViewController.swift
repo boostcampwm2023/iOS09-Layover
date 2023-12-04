@@ -123,9 +123,7 @@ final class PlaybackViewController: BaseViewController {
         let window = windowScene?.windows.first
         guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else { return }
         guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
-        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else {
-            return
-        }
+        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
         playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
         window?.addSubview(playerSlider)
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
@@ -151,7 +149,7 @@ final class PlaybackViewController: BaseViewController {
             try await Task.sleep(nanoseconds: 1_000_000_00)
             playerSlider.isHidden = false
         } catch {
-            os_log("Falie Waiting show Player Slider")
+            os_log("Fail Waiting show Player Slider")
         }
     }
 

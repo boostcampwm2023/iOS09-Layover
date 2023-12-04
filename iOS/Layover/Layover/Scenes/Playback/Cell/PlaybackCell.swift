@@ -25,6 +25,7 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.descriptionView.titleLabel.text = info.title
         playbackView.descriptionView.setText(info.content)
         playbackView.profileLabel.text = info.profileName
+        playbackView.tagStackView.resetTag()
         info.tag.forEach { tag in
             playbackView.tagStackView.addTag(tag)
         }
