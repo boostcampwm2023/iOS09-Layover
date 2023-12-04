@@ -19,8 +19,8 @@ extension ProviderType {
                                                       authenticationIfNeeded: Bool = true,
                                                       retryCount: Int = 2) async throws -> R where E.Response == R {
         return try await request(with: endPoint,
-                authenticationIfNeeded: authenticationIfNeeded,
-                retryCount: retryCount)
+                                 authenticationIfNeeded: authenticationIfNeeded,
+                                 retryCount: retryCount)
     }
 }
 
@@ -100,6 +100,18 @@ class Provider: ProviderType {
         return data
     }
 
+    // 이미지 업로드용
+    func upload(data: Data, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        guard let url = URL(string: url) else { throw NetworkError.components }
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.httpBody = data
+
+        let (data, response) = try await session.uploadTask(with: request, from: data)
+        try self.checkStatusCode(of: response)
+        return data
+    }
+
     private func checkStatusCode(of response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
             throw NetworkError.unknown
@@ -132,6 +144,26 @@ extension Data {
             return try JSONDecoder().decode(T.self, from: self)
         } catch {
             throw NetworkError.decoding(error)
+        }
+    }
+}
+
+extension URLSession {
+    func uploadTask(with request: URLRequest, from data: Data) async throws -> (Data, URLResponse) {
+        return try await withCheckedThrowingContinuation { continuation in
+            uploadTask(with: request, from: data) { data, response, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let data, let response = response else {
+                    continuation.resume(throwing: NetworkError.emptyData)
+                    return
+                }
+
+                continuation.resume(returning: (data, response))
+            }.resume()
         }
     }
 }
