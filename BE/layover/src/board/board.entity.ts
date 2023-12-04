@@ -18,9 +18,6 @@ export class Board {
   content: string;
 
   @Column({ nullable: false })
-  original_video_url: string;
-
-  @Column({ nullable: false })
   encoded_video_url: string;
 
   @Column({ nullable: false })

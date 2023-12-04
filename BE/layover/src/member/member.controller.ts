@@ -12,12 +12,13 @@ import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { IntroduceDto } from './dtos/introduce.dto';
 import { IntroduceResDto } from './dtos/introduce-res.dto';
 import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
-import { ProfilePresignedUrlDto } from './dtos/profile-presigned-url.dto';
-import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
+import { ProfilePreSignedUrlDto } from './dtos/profile-pre-signed-url.dto';
 import { MemberInfosResDto } from './dtos/member-infos-res.dto';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { MEMBER_SWAGGER } from './member.swagger';
+import { makeDownloadPreSignedUrl, makeUploadPreSignedUrl } from '../utils/s3Utils';
+import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -109,7 +110,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('profile-image/presigned-url')
-  async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ProfilePresignedUrlDto) {
+  async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ProfilePreSignedUrlDto) {
     const id = payload.memberId;
 
     // 프로필 사진 업로드할 presigned url 생성하기
@@ -117,14 +118,14 @@ export class MemberController {
     const filename = member.username;
     const filetype = body.filetype;
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    const { preSignedUrl } = this.memberService.makeUploadPreSignedUrl(bucketname, filename, 'image', filetype);
+    const preSignedUrl = makeUploadPreSignedUrl(bucketname, filename, 'image', filetype);
 
     // db에 반영
     const key = `${filename}.${filetype}`;
     await this.memberService.updateProfileImage(id, key);
 
     // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, new ProfilePresignedUrlResDto(preSignedUrl));
+    throw new CustomResponse(ECustomCode.SUCCESS, new PreSignedUrlResDto(preSignedUrl));
   }
 
   @ApiOperation({
@@ -146,9 +147,9 @@ export class MemberController {
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
     let preSignedUrl: string;
     if (profileImageKey !== 'default') {
-      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, member.profile_image_key));
+      preSignedUrl = makeDownloadPreSignedUrl(bucketname, member.profile_image_key);
     } else {
-      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, 'default.jpeg')); // 기본 이미지 사용!
+      preSignedUrl = makeDownloadPreSignedUrl(bucketname, 'default.jpeg'); // 기본 이미지 사용!
     }
 
     // 응답
@@ -174,9 +175,9 @@ export class MemberController {
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
     let preSignedUrl: string;
     if (profileImageKey !== 'default') {
-      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, member.profile_image_key));
+      preSignedUrl = makeDownloadPreSignedUrl(bucketname, member.profile_image_key);
     } else {
-      ({ preSignedUrl } = this.memberService.makeDownloadPresignedUrl(bucketname, 'default.jpeg')); // 기본 이미지 사용!
+      preSignedUrl = makeDownloadPreSignedUrl(bucketname, 'default.jpeg'); // 기본 이미지 사용!
     }
 
     // 응답

@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { MemberService } from '../member/member.service';
 import { Member } from '../member/member.entity';
-import { makeUploadPreSignedUrl } from 'src/utils/s3Utils';
 import { MemberInfosResDto } from '../member/dtos/member-infos-res.dto';
 import { BoardResDto } from './dtos/board-res-dto';
 import { TagService } from '../tag/tag.service';
@@ -18,10 +17,6 @@ export class BoardService {
     private tagService: TagService,
   ) {}
 
-  makePreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
-    return makeUploadPreSignedUrl(bucketname, filename, fileCategory, filetype);
-  }
-
   async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
     const savedBoard: Board = await this.boardRepository.save({
@@ -34,7 +29,7 @@ export class BoardService {
       latitude: latitude,
       longitude: longitude,
       filename: '',
-      status: 'RUNNING',
+      status: 'WAITING',
     });
     tag.map(async (tagname) => {
       await this.tagService.saveTag(savedBoard, tagname);
@@ -93,7 +88,7 @@ export class BoardService {
       .where(`ST_Distance_Sphere(point(:longitude, :latitude), point(board.longitude, board.latitude)) < :distance`, {
         longitude,
         latitude,
-        distance: 1000, // 1km
+        distance: 500000, // 100km
       })
       .getMany();
 
@@ -120,32 +115,25 @@ export class BoardService {
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
-  async setOriginalVideoUrl(filename: string) {
-    const board: Board = await this.boardRepository.findOne({ where: { filename } });
-    board.original_video_url = this.generateOriginalVideoHLS(filename);
-    await this.boardRepository.save(board);
-  }
-
-  generateOriginalVideoHLS(filename: string) {
-    return `${process.env.HLS_SCHEME}${process.env.HLS_ORIGIN_CDN}/hls/${process.env.HLS_ORIGIN_BUCKET_ENCRYPTED_NAME}
-    /${filename}/index.m3u8`;
-  }
-
   async setEncodedVideoUrl(filename: string) {
     const board: Board = await this.boardRepository.findOne({ where: { filename } });
     board.encoded_video_url = this.generateEncodedVideoHLS(filename);
     await this.boardRepository.save(board);
   }
 
-  generateEncodedVideoHLS(filename: string) {
-    //prefix, suffix 파싱해야함
-
-    return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
-    /${filename}.smil/master.m3u8`;
+  async saveFilenameById(id: number, filename: string) {
+    const board: Board = await this.boardRepository.findOne({ where: { id } });
+    board.filename = filename;
+    await this.boardRepository.save(board);
   }
 
-  async findByBoardId(boardId: number): Promise<Board> {
-    return await this.boardRepository.findOne({ where: { id: boardId } });
+  generateEncodedVideoHLS(filename: string) {
+    return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
+    /${filename}_AVC_,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8`;
+  }
+
+  async setStatusByFilename(filename: string, status: string) {
+    await this.boardRepository.update({ filename }, { status });
   }
 
   async findBoardById(id: number): Promise<Board> {

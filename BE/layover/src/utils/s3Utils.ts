@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 
-export function makeUploadPreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string): { preSignedUrl: string } {
+export function makeUploadPreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string) {
   const s3 = new AWS.S3({
     endpoint: process.env.NCLOUD_S3_ENDPOINT,
     credentials: {
@@ -10,16 +10,15 @@ export function makeUploadPreSignedUrl(bucketname: string, filename: string, fil
     region: process.env.NCLOUD_S3_REGION,
   });
 
-  const preSignedUrl: string = s3.getSignedUrl('putObject', {
+  return s3.getSignedUrl('putObject', {
     Bucket: bucketname,
     Key: `${filename}.${filetype}`,
     Expires: 60 * 60, // URL 만료되는 시간(초 단위)
     ContentType: `${fileCategory}/${filetype}`,
   });
-  return { preSignedUrl };
 }
 
-export function makeDownloadPreSignedUrl(bucketname: string, key: string): { preSignedUrl: string } {
+export function makeDownloadPreSignedUrl(bucketname: string, key: string) {
   const s3 = new AWS.S3({
     endpoint: process.env.NCLOUD_S3_ENDPOINT,
     credentials: {
@@ -29,10 +28,9 @@ export function makeDownloadPreSignedUrl(bucketname: string, key: string): { pre
     region: process.env.NCLOUD_S3_REGION,
   });
 
-  const preSignedUrl: string = s3.getSignedUrl('getObject', {
+  return s3.getSignedUrl('getObject', {
     Bucket: bucketname,
     Key: key,
     Expires: 60 * 60, // URL 만료되는 시간(초 단위)
   });
-  return { preSignedUrl };
 }

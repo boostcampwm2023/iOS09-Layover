@@ -4,8 +4,8 @@ import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { UsernameResDto } from './dtos/username-res.dto';
 import { IntroduceResDto } from './dtos/introduce-res.dto';
 import { DeleteMemberResDto } from './dtos/delete-member-res.dto';
-import { ProfilePresignedUrlResDto } from './dtos/profile-presigned-url-res.dto';
 import { MemberInfosResDto } from './dtos/member-infos-res.dto';
+import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 
 export const MEMBER_SWAGGER = {
   CHECK_USER_NAME_SUCCESS: {
@@ -73,7 +73,7 @@ export const MEMBER_SWAGGER = {
         customCode: { type: 'string', example: 'SUCCESS' },
         message: { type: 'boolean', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(ProfilePresignedUrlResDto) },
+        data: { $ref: getSchemaPath(PreSignedUrlResDto) },
       },
     },
   },
