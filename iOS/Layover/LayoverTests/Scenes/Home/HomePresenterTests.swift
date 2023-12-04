@@ -13,10 +13,11 @@
 @testable import Layover
 import XCTest
 
-class HomePresenterTests: XCTestCase {
-    // MARK: Subject under test
-    typealias Models = HomeModels
+final class HomePresenterTests: XCTestCase {
+    // MARK: - Subject under test
     var sut: HomePresenter!
+
+    typealias Models = HomeModels
 
     // MARK: - Test lifecycle
 
@@ -37,24 +38,108 @@ class HomePresenterTests: XCTestCase {
 
     // MARK: - Test doubles
 
-    class HomeDisplayLogicSpy: HomeDisplayLogic {
+    final class HomeDisplayLogicSpy: HomeDisplayLogic {
+        var displayPostsCalled = false
+        var displayThumbnailImageCalled = false
+        var routeToPlaybackCalled = false
+        var routeToTagPlayListCalled = false
+
         func displayPosts(with viewModel: Layover.HomeModels.FetchPosts.ViewModel) {
-            return
+            displayPostsCalled = true
         }
         
         func displayThumbnailImage(with viewModel: Layover.HomeModels.FetchThumbnailImageData.ViewModel) {
-            return
+            displayThumbnailImageCalled = true
         }
         
         func routeToPlayback() {
-            return
+            routeToPlaybackCalled = true
         }
         
         func routeToTagPlayList() {
-            return
+            routeToTagPlayListCalled = true
         }
     }
 
     // MARK: - Tests
+
+    func test_presentPosts는_데이터를_받아오면_뷰의_displayPosts를_실행한다() {
+        // arrange
+        let spy = HomeDisplayLogicSpy()
+        sut.viewController = spy
+
+        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
+            XCTFail("이미지 URL 생성 오류.")
+            return
+        }
+
+        guard let dummyVideoURL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8") else {
+            XCTFail("비디오 URL 생성 실패")
+            return
+        }
+
+        let post = Post(member: Member(identifier: 1,
+                                       username: "안유진",
+                                       introduce: "난 아이브의 리더~",
+                                       profileImageURL: imageURL),
+                        board: Board(identifier: 1,
+                                     title: "IZONE",
+                                     description: "아이즈원",
+                                     thumbnailImageURL: imageURL,
+                                     videoURL: dummyVideoURL,
+                                     latitude: 0.1203931,
+                                     longitude: 0.1029382),
+                        tag: ["유진", "아이브", "IVE",])
+        let response = Models.FetchPosts.Response(posts: [post])
+
+        // act
+        sut.presentPosts(with: response)
+
+        // assert
+        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행해서 뷰에게 데이터를 전달했다.")
+    }
+
+    func test_presentThumbnailImage는_데이터를_받아오면_뷰의_displayThumbnailImage를_실행한다() {
+        // arrange
+        let spy = HomeDisplayLogicSpy()
+        sut.viewController = spy
+
+        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
+            XCTFail("이미지 URL 생성 오류.")
+            return
+        }
+
+        let response = Models.FetchThumbnailImageData.Response(imageData: Data(), indexPath: IndexPath())
+
+        // act
+        sut.presentThumbnailImage(with: response)
+
+        // assert
+        XCTAssertTrue(spy.displayThumbnailImageCalled, "presentThumbnailImage는 displayThumbnailImage를 실행해서 뷰에게 데이터를 전달했다.")
+    }
+
+    func test_presentPlaybackScene은_뷰의_routeToPlayback을_실행한다() {
+        // arrange
+        let spy = HomeDisplayLogicSpy()
+        sut.viewController = spy
+
+        // act
+        sut.presentPlaybackScene(with: Models.PlayPosts.Response())
+
+        // assert
+        XCTAssertTrue(spy.routeToPlaybackCalled, "presentPlaybackScene은 routeToPlayback을 실행했다.")
+    }
+
+    func test_presentTagPlayList는_뷰의_routeToTagPlayList를_실행한다() {
+        // arrange
+        let spy = HomeDisplayLogicSpy()
+        sut.viewController = spy
+
+        // act
+        sut.presentTagPlayList(with: Models.ShowTagPlayList.Response())
+
+        // assert
+        XCTAssertTrue(spy.routeToTagPlayListCalled, "presentTagPlayListScene은 routeToTagPlayList를 실행했다.")
+    }
 
 }

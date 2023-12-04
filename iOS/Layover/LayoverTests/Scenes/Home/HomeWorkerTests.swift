@@ -13,8 +13,7 @@
 @testable import Layover
 import XCTest
 
-class HomeWorkerTests: XCTestCase
-{
+final class HomeWorkerTests: XCTestCase {
     // MARK: Subject under test
   
     var sut: HomeWorker!
