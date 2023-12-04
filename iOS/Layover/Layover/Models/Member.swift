@@ -11,6 +11,7 @@ import Foundation
 struct Member {
     let identifier: Int
     let username: String
-    let introduce: String
+    let introduce: String?
     let profileImageURL: URL?
+    // board
 }

@@ -16,7 +16,7 @@ final class LOAnnotationView: MKAnnotationView {
     enum Constants {
         static let markerWidth: CGFloat = 43
         static let markerHeight: CGFloat = 53
-        static let thumnailImageViewSize: CGFloat = markerWidth - inset * 2
+        static let thumbnailImageViewSize: CGFloat = markerWidth - inset * 2
         static let inset: CGFloat = 4
     }
 
@@ -28,7 +28,7 @@ final class LOAnnotationView: MKAnnotationView {
         return imageView
     }()
 
-    private let thumnailImageView: UIImageView = {
+    private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -51,7 +51,7 @@ final class LOAnnotationView: MKAnnotationView {
     // MARK: - View Lifecycle
     override func prepareForDisplay() {
         super.prepareForDisplay()
-        setThumnailImage()
+        setThumbnailImage()
     }
 
     override func layoutSubviews() {
@@ -61,19 +61,19 @@ final class LOAnnotationView: MKAnnotationView {
 
     // MARK: - Methods
 
-    func setThumnailImage() {
-        self.thumnailImageView.image = .checkmark
+    func setThumbnailImage() {
+        self.thumbnailImageView.image = .checkmark
     }
 
     private func render() {
-        thumnailImageView.layer.cornerRadius = Constants.thumnailImageViewSize / 2
-        thumnailImageView.clipsToBounds = true
-        thumnailImageView.layer.borderWidth = 1
-        thumnailImageView.layer.borderColor = UIColor.grey300.cgColor
+        thumbnailImageView.layer.cornerRadius = Constants.thumbnailImageViewSize / 2
+        thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.layer.borderWidth = 1
+        thumbnailImageView.layer.borderColor = UIColor.grey300.cgColor
     }
 
     private func setConstraints() {
-        addSubviews(markerImageView, thumnailImageView)
+        addSubviews(markerImageView, thumbnailImageView)
         subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -81,10 +81,10 @@ final class LOAnnotationView: MKAnnotationView {
         NSLayoutConstraint.activate([
             markerImageView.widthAnchor.constraint(equalToConstant: Constants.markerWidth),
             markerImageView.heightAnchor.constraint(equalToConstant: Constants.markerHeight),
-            thumnailImageView.topAnchor.constraint(equalTo: markerImageView.topAnchor, constant: Constants.inset),
-            thumnailImageView.widthAnchor.constraint(equalToConstant: Constants.thumnailImageViewSize),
-            thumnailImageView.heightAnchor.constraint(equalToConstant: Constants.thumnailImageViewSize),
-            thumnailImageView.centerXAnchor.constraint(equalTo: markerImageView.centerXAnchor)
+            thumbnailImageView.topAnchor.constraint(equalTo: markerImageView.topAnchor, constant: Constants.inset),
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: Constants.thumbnailImageViewSize),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: Constants.thumbnailImageViewSize),
+            thumbnailImageView.centerXAnchor.constraint(equalTo: markerImageView.centerXAnchor)
         ])
 
     }

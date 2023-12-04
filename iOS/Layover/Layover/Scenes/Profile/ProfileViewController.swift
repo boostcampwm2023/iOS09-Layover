@@ -21,24 +21,26 @@ final class ProfileViewController: BaseViewController {
         case other
     }
 
+    // MARK: - CollectionView Section
+
+    enum Section: Int {
+        case profileInfo
+        case thumnail
+    }
+
     // MARK: - UI Components
 
     private lazy var thumbnailCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
+        collectionView.register(ProfileCollectionViewCell.self,
+                                forCellWithReuseIdentifier: ProfileCollectionViewCell.identifier)
         collectionView.register(ThumbnailCollectionViewCell.self,
                                 forCellWithReuseIdentifier: ThumbnailCollectionViewCell.identifier)
-        collectionView.register(ProfileHeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: ProfileHeaderView.identifier)
         return collectionView
     }()
 
-    private lazy var videoDatasource = UICollectionViewDiffableDataSource<UUID, Int>(collectionView: thumbnailCollectionView) { collectionView, indexPath, _ in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ThumbnailCollectionViewCell.identifier,
-                                                            for: indexPath) as? ThumbnailCollectionViewCell else { return UICollectionViewCell() }
-        return cell
-    }
+    private var videoDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
 
     // MARK: - Properties
 
@@ -66,7 +68,7 @@ final class ProfileViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-        setThumnailCollectionView()
+        setDataSource()
         interactor?.fetchProfile()
     }
 
@@ -84,22 +86,31 @@ final class ProfileViewController: BaseViewController {
     // MARK: - Methods
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalWidth((1/3) * (178/117)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(198))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerFooterSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top
-        )
-        section.boundarySupplementaryItems = [header]
-        let layout = UICollectionViewCompositionalLayout(section: section)
+        let layout = UICollectionViewCompositionalLayout { section, _ in
+            guard let section: Section = Section(rawValue: section) else { return nil }
+            switch section {
+            case .profileInfo:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                      heightDimension: .estimated(196))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                       heightDimension: .estimated(196))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+
+            case .thumnail:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
+                                                      heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                       heightDimension: .fractionalWidth((1/3) * (178/117)))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+            }
+        }
         return layout
     }
 
@@ -117,12 +128,33 @@ final class ProfileViewController: BaseViewController {
         }
     }
 
-    private func setThumnailCollectionView() {
-        thumbnailCollectionView.dataSource = videoDatasource
-        var snapshot = NSDiffableDataSourceSnapshot<UUID, Int>()
-        snapshot.appendSections([UUID()])
-        snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-        videoDatasource.apply(snapshot)
+    private func setDataSource() {
+        let profileCellRegistration = UICollectionView.CellRegistration<ProfileCollectionViewCell, Member> { cell, _, itemIdentifier in
+            let item = itemIdentifier as Member
+            cell.configure(profileImage: nil,
+                           nickname: item.username,
+                           introduce: item.introduce)
+            cell.editButton.addTarget(self, action: #selector(self.editbuttonDidTap), for: .touchUpInside)
+        }
+
+        let thumnailCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Int> { _, _, itemIdentifier in
+            let item = itemIdentifier as Int
+            // TODO: Board Reponse 확정시 configure
+        }
+
+        videoDatasource = UICollectionViewDiffableDataSource<Section, AnyHashable>(collectionView: thumbnailCollectionView) { collectionView, indexPath, itemIdentifier in
+            let section: Section = Section(rawValue: indexPath.section)!
+            switch section {
+            case .profileInfo:
+                return collectionView.dequeueConfiguredReusableCell(using: profileCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: itemIdentifier as? Member)
+            case .thumnail:
+                return collectionView.dequeueConfiguredReusableCell(using: thumnailCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: itemIdentifier as? Int)
+            }
+        }
     }
 
     @objc private func editbuttonDidTap() {
@@ -138,17 +170,16 @@ final class ProfileViewController: BaseViewController {
 extension ProfileViewController: ProfileDisplayLogic {
 
     func fetchProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
-        videoDatasource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
-            guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                         withReuseIdentifier: ProfileHeaderView.identifier,
-                                                                         for: indexPath) as? ProfileHeaderView
-            header?.editButton.addTarget(self, action: #selector(self?.editbuttonDidTap), for: .touchUpInside)
-            header?.configure(profileImage: viewModel.profileImage,
-                              nickname: viewModel.nickname,
-                              introduce: viewModel.introduce)
-            return header
-        }
+        thumbnailCollectionView.dataSource = videoDatasource
+        var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
+        snapshot.appendSections([.profileInfo, .thumnail])
+        snapshot.appendItems([Member(identifier: 0,
+                                     username: viewModel.nickname,
+                                     introduce: viewModel.introduce,
+                                     profileImageURL: viewModel.profileImageURL)],
+                             toSection: .profileInfo)
+        snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], toSection: .thumnail)
+        videoDatasource?.apply(snapshot)
     }
 
 }
