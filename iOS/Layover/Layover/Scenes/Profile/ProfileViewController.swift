@@ -199,8 +199,8 @@ extension ProfileViewController: ProfileDisplayLogic {
     func displayProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections([.profile, .posts])
-        snapshot.appendItems([viewModel.userProfile],
-                             toSection: .profile)
+        snapshot.appendItems([viewModel.userProfile], toSection: .profile)
+        snapshot.appendItems(viewModel.posts, toSection: .posts)
         collectionViewDatasource?.apply(snapshot)
     }
 

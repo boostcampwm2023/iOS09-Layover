@@ -17,6 +17,7 @@ enum ProfileModels {
     }
 
     struct Post: Hashable {
+        let id: Int
         let thumbnailImageData: Data?
     }
 

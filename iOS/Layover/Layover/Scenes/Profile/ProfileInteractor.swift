@@ -102,11 +102,11 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
         for post in posts {
             guard let thumbnailURL = post.board.thumbnailImageURL,
                   let profileImageData = await userWorker?.fetchImageData(with: thumbnailURL) else {
-                responsePosts.append(.init(thumbnailImageData: nil))
+                responsePosts.append(.init(id: post.board.identifier, thumbnailImageData: nil))
                 continue
             }
 
-            responsePosts.append(Models.Post(thumbnailImageData: profileImageData))
+            responsePosts.append(Models.Post(id: post.board.identifier, thumbnailImageData: profileImageData))
         }
 
         return responsePosts
