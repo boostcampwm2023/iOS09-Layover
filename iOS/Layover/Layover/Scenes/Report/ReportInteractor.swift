@@ -9,7 +9,8 @@
 import UIKit
 
 protocol ReportBusinessLogic {
-    func reportPlaybackVideo(with request: ReportModels.ReportPlaybackVideo.Request)
+    @discardableResult
+    func reportPlaybackVideo(with request: ReportModels.ReportPlaybackVideo.Request) -> Task<Bool, Never>
 }
 
 protocol ReportDataStore {
@@ -27,16 +28,17 @@ final class ReportInteractor: ReportBusinessLogic, ReportDataStore {
 
     var boardID: Int?
 
-    func reportPlaybackVideo(with request: ReportModels.ReportPlaybackVideo.Request) {
-        guard let boardID,
-              let worker
-        else { return }
+    func reportPlaybackVideo(with request: ReportModels.ReportPlaybackVideo.Request) -> Task<Bool, Never> {
         Task {
+            guard let boardID,
+                  let worker
+            else { return false }
             let result: Bool = await worker.reportPlaybackVideo(boardId: boardID, reportContent: request.reportContent)
             let response: Models.ReportPlaybackVideo.Response = Models.ReportPlaybackVideo.Response(reportResult: result)
             await MainActor.run {
                 presenter?.presentReportPlaybackVideo(with: response)
             }
+            return true
         }
     }
 }

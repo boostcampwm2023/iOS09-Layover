@@ -22,9 +22,9 @@ final class ReportPresenter: ReportPresentationLogic {
     func presentReportPlaybackVideo(with response: ReportModels.ReportPlaybackVideo.Response) {
         let viewModel: Models.ReportPlaybackVideo.ViewModel
         if response.reportResult {
-            viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: "신고가 접수되었습니다.")
+            viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: .success)
         } else {
-            viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: "신고 접수에 실패했습니다. 다시 시도해주세요.")
+            viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: .fail)
         }
         viewController?.displayReportResult(viewModel: viewModel)
     }

@@ -21,6 +21,7 @@ final class MockReportWorker: ReportWorkerProtocol {
         guard let mockFileLocation = Bundle.main.url(forResource: "ReportPlaybackVideo", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation)
         else {
+            os_log(.error, log: .data, "Failed to generate mock with error: %@", "Generate File Error")
             return false
         }
         

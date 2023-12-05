@@ -46,8 +46,6 @@ final class PlaybackViewController: BaseViewController {
         button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         let barButtonItem: UIBarButtonItem = UIBarButtonItem(customView: button)
         barButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
-        barButtonItem.target = PlaybackViewController.self
-        barButtonItem.action = #selector(reportButtonDidTap)
         return barButtonItem
     }()
 
@@ -177,8 +175,8 @@ final class PlaybackViewController: BaseViewController {
     @objc private func reportButtonDidTap() {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
-            _ in
-            self.router?.routeToReport()
+            [weak self] _ in
+            self?.router?.routeToReport()
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
         alert.addAction(reportAction)

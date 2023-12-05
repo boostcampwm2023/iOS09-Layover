@@ -63,11 +63,11 @@ final class ReportViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        popUpView.delegate = self
     }
 
     override func setUI() {
         super.setUI()
+        popUpView.delegate = self
     }
 
     override func setConstraints() {
@@ -89,7 +89,7 @@ final class ReportViewController: BaseViewController {
     }
 
     @objc private func cancelButtonDidTap() {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
 }
 
@@ -100,14 +100,14 @@ extension ReportViewController: ReportViewControllerDelegate {
     }
 
     func dismissReportView() {
-        self.dismiss(animated: false)
+        dismiss(animated: false)
     }
 }
 
 extension ReportViewController: ReportDisplayLogic {
     func displayReportResult(viewModel: ReportModels.ReportPlaybackVideo.ViewModel) {
-        self.dismiss(animated: false, completion: {
-            Toast.shared.showToast(message: viewModel.reportMessage)
+        dismiss(animated: false, completion: {
+            Toast.shared.showToast(message: viewModel.reportMessage.description)
         })
     }
 }

@@ -33,11 +33,11 @@ final class ReportWorker: ReportWorkerProtocol {
         do {
             let responseData = try await provider.request(with: endPoint)
             guard let _ = responseData.data else {
-                os_log(.error, log: .default, "Failed to report with error: %@", responseData.message)
+                os_log(.error, log: .data, "Failed to report with error: %@", responseData.message)
                 return false
             }
         } catch {
-            os_log(.error, log: .default, "Failed to report with error: %@", error.localizedDescription)
+            os_log(.error, log: .data, "Failed to report with error: %@", error.localizedDescription)
             return false
         }
         return true
