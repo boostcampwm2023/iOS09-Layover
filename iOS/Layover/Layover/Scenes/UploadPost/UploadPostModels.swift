@@ -65,8 +65,6 @@ enum UploadPostModels {
         struct Request {
             let title: String
             let content: String?
-            let latitude: Double
-            let longitude: Double
             let tags: [String]
         }
         struct Response {

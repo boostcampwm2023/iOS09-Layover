@@ -145,7 +145,8 @@ class Provider: ProviderType {
         guard let url = URL(string: url) else { throw NetworkError.components }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
-        let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString),
+        request.setValue("video/\(fromFile.pathExtension)", forHTTPHeaderField: "Content-Type")
+        let backgroundSession = URLSession(configuration: .default,
                                            delegate: sessionTaskDelegate,
                                            delegateQueue: delegateQueue)
         let (data, response) = try await backgroundSession.upload(for: request, fromFile: fromFile)

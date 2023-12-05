@@ -13,6 +13,7 @@ protocol UploadPostPresentationLogic {
     func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response)
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response)
     func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
+//    func presentUploadProgress(with response: UploadPostModels.UploadPost.Response)
 }
 
 final class UploadPostPresenter: UploadPostPresentationLogic {
@@ -23,25 +24,35 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
     weak var viewController: UploadPostDisplayLogic?
 
     func presentTags(with response: UploadPostModels.FetchTags.Response) {
-        viewController?.displayTags(viewModel: UploadPostModels.FetchTags.ViewModel(tags: response.tags))
+        viewController?.displayTags(viewModel: Models.FetchTags.ViewModel(tags: response.tags))
     }
 
     func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response) {
         let image = UIImage(cgImage: response.thumnailImage)
-        viewController?.displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel(thumnailImage: image))
+        viewController?.displayThumbnail(viewModel: Models.FetchThumbnail.ViewModel(thumnailImage: image))
     }
 
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response) {
-        let addressSet = Set([response.administrativeArea, response.locality, response.subLocality])
-        let fullAddress: String = Array(addressSet)
+        let addresses: [String] = [
+            response.administrativeArea,
+            response.locality,
+            response.subLocality]
             .compactMap { $0 }
-            .joined(separator: " ")
-        let viewModel = UploadPostModels.FetchCurrentAddress.ViewModel(fullAddress: fullAddress)
+
+        var fullAddress: [String] = []
+
+        for address in addresses {
+            if !fullAddress.contains(address) {
+                fullAddress.append(address)
+            }
+        }
+
+        let viewModel = Models.FetchCurrentAddress.ViewModel(fullAddress: fullAddress.joined(separator: " "))
         viewController?.displayCurrentAddress(viewModel: viewModel)
     }
 
     func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response) {
-        let viewModel = UploadPostModels.CanUploadPost.ViewModel(canUpload: !response.isEmpty)
+        let viewModel = Models.CanUploadPost.ViewModel(canUpload: !response.isEmpty)
         viewController?.displayUploadButton(viewModel: viewModel)
     }
 

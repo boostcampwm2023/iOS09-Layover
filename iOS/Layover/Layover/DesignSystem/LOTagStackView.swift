@@ -17,6 +17,12 @@ final class LOTagStackView: UIStackView {
 
     // MARK: - Properties
 
+    var tags: [String] {
+        arrangedSubviews
+            .map { $0 as? UIButton }
+            .compactMap(\.?.titleLabel?.text)
+    }
+
     private let style: Style
 
     // MARK: - Initializer

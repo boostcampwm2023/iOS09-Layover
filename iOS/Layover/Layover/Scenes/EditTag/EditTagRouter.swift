@@ -16,7 +16,7 @@ protocol EditTagDataPassing {
     var dataStore: EditTagDataStore? { get }
 }
 
-class EditTagRouter: NSObject, EditTagRoutingLogic, EditTagDataPassing {
+final class EditTagRouter: NSObject, EditTagRoutingLogic, EditTagDataPassing {
 
     // MARK: - Properties
 
@@ -27,10 +27,12 @@ class EditTagRouter: NSObject, EditTagRoutingLogic, EditTagDataPassing {
     // MARK: - Routing
 
     func routeToBack() {
-        guard let navigationController = viewController?.presentingViewController as? UINavigationController,
-              let destination = navigationController.viewControllers.last as? UploadPostViewController,
-              var destinationDataStore = destination.router?.dataStore else { return }
-        destinationDataStore.tags = dataStore?.tags
+        guard let presentingViewController = viewController?.presentingViewController as? UITabBarController,
+              let selectedViewController = presentingViewController.selectedViewController as? UINavigationController,
+              let previousViewController = selectedViewController.viewControllers.last as? UploadPostViewController,
+              var destination = previousViewController.router?.dataStore
+        else { return }
+        destination.tags = dataStore?.tags
         viewController?.dismiss(animated: true)
     }
 

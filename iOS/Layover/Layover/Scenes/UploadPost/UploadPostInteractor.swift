@@ -17,7 +17,9 @@ protocol UploadPostBusinessLogic {
     func fetchThumbnailImage()
     func fetchCurrentAddress()
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
-    func uploadPost(request: UploadPostModels.UploadPost.Request)
+
+    @discardableResult
+    func uploadPost(request: UploadPostModels.UploadPost.Request) -> Task<Bool, Never>
 }
 
 protocol UploadPostDataStore {
@@ -26,13 +28,13 @@ protocol UploadPostDataStore {
     var tags: [String]? { get set }
 }
 
-final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
+final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostDataStore {
 
     // MARK: - Properties
 
     typealias Models = UploadPostModels
 
-    lazy var worker = UploadPostWorker()
+    var worker: UploadPostWorkerProtocol?
     var presenter: UploadPostPresentationLogic?
 
     private let fileManager: FileManager
@@ -56,7 +58,7 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
 
     func fetchTags() {
         guard let tags else { return }
-        presenter?.presentTags(with: UploadPostModels.FetchTags.Response(tags: tags))
+        presenter?.presentTags(with: Models.FetchTags.Response(tags: tags))
     }
 
     func fetchThumbnailImage() {
@@ -68,7 +70,7 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
             do {
                 let image = try await generator.image(at: .zero).image
                 await MainActor.run {
-                    presenter?.presentThumnailImage(with: UploadPostModels.FetchThumbnail.Response(thumnailImage: image))
+                    presenter?.presentThumnailImage(with: Models.FetchThumbnail.Response(thumnailImage: image))
                 }
             } catch let error {
                 os_log(.error, log: .default, "Failed to fetch Thumbnail Image with error: %@", error.localizedDescription)
@@ -77,12 +79,7 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
     }
 
     func fetchCurrentAddress() {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-
-        guard let space = locationManager.location?.coordinate else { return }
-        let location = CLLocation(latitude: space.latitude,
-                                  longitude: space.longitude)
+        guard let location = getCurrentLocation() else { return }
         let locale = Locale(identifier: "ko_KR")
 
         Task {
@@ -104,22 +101,42 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
     }
 
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request) {
-        let response = UploadPostModels.CanUploadPost.Response(isEmpty: request.title == nil)
+        let response = Models.CanUploadPost.Response(isEmpty: request.title == nil)
         presenter?.presentUploadButton(with: response)
     }
 
-    func uploadPost(request: UploadPostModels.UploadPost.Request) {
-        guard let videoURL, let isMuted else { return }
-        if isMuted {
-            exportVideoWithoutAudio(at: videoURL)
+    @discardableResult
+    func uploadPost(request: UploadPostModels.UploadPost.Request) -> Task<Bool, Never> {
+        Task {
+            guard let worker,
+                  let videoURL,
+                  let isMuted,
+                  let coordinate = getCurrentLocation()?.coordinate else { return false }
+            if isMuted {
+                exportVideoWithoutAudio(at: videoURL)
+            }
+            await MainActor.run {
+                NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
+            }
+            let response = await worker.uploadPost(with: UploadPost(title: request.title,
+                                                                     content: request.content,
+                                                                     latitude: coordinate.latitude,
+                                                                     longitude: coordinate.longitude,
+                                                                     tag: request.tags,
+                                                                     videoURL: videoURL))
+            return response
         }
-
-
-
-
     }
 
-    // isMuted가 true인 경우, 새로운 Composition을 만들어서 영상 재추출해서 업로드
+    private func getCurrentLocation() -> CLLocation? {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+
+        guard let space = locationManager.location?.coordinate else { return nil }
+        let location = CLLocation(latitude: space.latitude, longitude: space.longitude)
+        return location
+    }
+
     private func exportVideoWithoutAudio(at url: URL) {
         let composition = AVMutableComposition()
         let sourceAsset = AVURLAsset(url: url)
@@ -145,9 +162,32 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
                 exporter?.outputFileType = AVFileType.mov
                 await exporter?.export()
             } catch {
-                os_log(.error, log: .default, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
+                os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
             }
         }
     }
 
+}
+
+extension UploadPostInteractor: URLSessionTaskDelegate {
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didSendBodyData bytesSent: Int64,
+        totalBytesSent: Int64,
+        totalBytesExpectedToSend: Int64
+    ) {
+        let uploadProgress: Float = Float(Double(totalBytesSent) / Double(totalBytesExpectedToSend))
+        DispatchQueue.main.async {
+            NotificationQueue.default.enqueue(Notification(name: .progressChanged,
+                                                           userInfo: ["progress": uploadProgress]),
+                                              postingStyle: .now)
+        }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        // TODO: 완료 토스트
+
+    }
 }

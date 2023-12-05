@@ -10,4 +10,6 @@ import Foundation
 
 extension Notification.Name {
     static let refreshTokenDidExpired = Notification.Name("refreshTokenDidExpired")
+    static let uploadTaskStart = Notification.Name("uploadTaskStart")
+    static let progressChanged = Notification.Name("progressChanged")
 }

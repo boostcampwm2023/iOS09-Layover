@@ -11,6 +11,7 @@ import KakaoSDKUser
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+    var progressView: UIProgressView = UIProgressView(progressViewStyle: .bar)
     var window: UIWindow?
 
 
@@ -19,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
         let rootViewController = AuthManager.shared.isLoggedIn ? MainTabBarViewController() : LoginViewController()
-        window.rootViewController = UINavigationController(rootViewController: rootViewController)
+        window.rootViewController = MainTabBarViewController()
         self.window = window
         addNotificationObservers()
         window.makeKeyAndVisible()
@@ -70,12 +71,26 @@ extension SceneDelegate {
                                                selector: #selector(routeToLoginViewController),
                                                name: .refreshTokenDidExpired,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(uploadTaskStart),
+                                               name: .uploadTaskStart,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(progressChanged),
+                                               name: .progressChanged,
+                                               object: nil)
     }
 
     private func removeNotificationObservers() {
         NotificationCenter.default.removeObserver(self,
-                                                    name: .refreshTokenDidExpired,
-                                                    object: nil)
+                                                  name: .refreshTokenDidExpired,
+                                                  object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .refreshTokenDidExpired,
+                                                  object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .progressChanged,
+                                                  object: nil)
     }
 
     @objc private func routeToLoginViewController() {
@@ -83,6 +98,30 @@ extension SceneDelegate {
         // TODO: 세션이 만료되었습니다. Toast 띄우기
         rootNavigationViewController.setNavigationBarHidden(false, animated: false)
         rootNavigationViewController.setViewControllers([LoginViewController()], animated: true)
+    }
+
+    @objc private func uploadTaskStart() {
+        guard let progressViewWidth = window?.screen.bounds.width,
+              let windowHeight = window?.screen.bounds.height,
+              let tabBarViewController = window?.rootViewController as? UITabBarController else { return }
+        let tabBarHeight: CGFloat = tabBarViewController.tabBar.frame.height
+        progressView.progress = 0
+        progressView.tintColor = .primaryPurple
+        progressView.frame = CGRect(x: 0,
+                                    y: (windowHeight - tabBarHeight - 2),
+                                    width: progressViewWidth,
+                                    height: 2)
+        window?.addSubview(progressView)
+    }
+
+
+    @objc private func progressChanged(_ notification: Notification) {
+        guard let progress = notification.userInfo?["progress"] as? Float else { return }
+        progressView.setProgress(progress, animated: true)
+        if progress == 1 {
+            progressView.removeFromSuperview()
+            Toast.shared.showToast(message: "업로드가 완료되었습니다 ✨")
+        }
     }
 }
 

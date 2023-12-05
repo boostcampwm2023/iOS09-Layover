@@ -91,9 +91,8 @@ final class EditTagViewController: BaseViewController {
     // MARK: - Methods
 
     @objc private func closeButtonDidTap() {
-        let buttons = tagStackView.arrangedSubviews.map { $0 as? UIButton }
-        let tags = buttons.compactMap(\.?.titleLabel?.text)
-        interactor?.editTag(request: EditTagModels.EditTag.Request(tags: tags))
+        let request = EditTagModels.EditTag.Request(tags: tagStackView.tags)
+        interactor?.editTag(request: request)
         router?.routeToBack()
     }
 
@@ -109,7 +108,6 @@ extension EditTagViewController: UITextFieldDelegate {
         return true
     }
 }
-
 
 extension EditTagViewController: EditTagDisplayLogic {
 

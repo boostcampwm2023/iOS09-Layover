@@ -11,8 +11,7 @@ import UIKit
 import OSLog
 
 protocol UploadPostWorkerProtocol {
-    func uploadPost(with request: UploadPost,
-                    url: URL) async -> UploadPostDTO?
+    func uploadPost(with request: UploadPost) async -> Bool
 }
 
 final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
@@ -23,6 +22,8 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
     private let provider: ProviderType
     private let uploadPostEndPointFactory: UploadPostEndPointFactory
 
+    weak var sessionTaskDelegate: URLSessionTaskDelegate?
+
     // MARK: - Methods
 
     init(provider: ProviderType = Provider(),
@@ -31,8 +32,7 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
         self.uploadPostEndPointFactory = uploadPostEndPointFactory
     }
 
-    func uploadPost(with request: UploadPost,
-                    url: URL) async -> UploadPostDTO? {
+    func uploadPost(with request: UploadPost) async -> Bool {
         let endPoint = uploadPostEndPointFactory.makeUploadPostEndPoint(title: request.title,
                                                                         content: request.content,
                                                                         latitude: request.latitude,
@@ -40,38 +40,31 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
                                                                         tag: request.tag)
         do {
             let response = try await provider.request(with: endPoint)
-
-            guard let boardID = response.data?.id else { return nil }
-
+            guard let boardID = response.data?.id else { return false }
             let fileType = request.videoURL.pathExtension
-            let upload = await uploadVideo(with: UploadVideoRequestDTO(boardID: boardID,
-                                                                       filetype: fileType),
-                                           videoURL: url)
-            return response.data
+            let uploadResponse = await uploadVideo(with: UploadVideoRequestDTO(boardID: boardID, filetype: fileType),
+                                                   videoURL: request.videoURL)
+            return uploadResponse
         } catch {
-            os_log(.error, log: .default, "Failed to fetch posts: %@", error.localizedDescription)
-            return nil
-        }
-    }
-
-    private func uploadVideo(with request: UploadVideoRequestDTO,
-                             videoURL: URL) async -> Bool {
-        let endPoint = uploadPostEndPointFactory.makeUploadVideoEndPoint(boardID: request.boardID,
-                                                                         fileType: request.filetype)
-        do {
-            let response = try await provider.request(with: endPoint)
-            guard let presignedURLString = response.data?.presignedUrl else { return false }
-            let uploadResponse = try await provider.backgroundUpload(fromFile: videoURL,
-                                                                     to: presignedURLString,
-                                                                     sessionTaskDelegate: self)
-            return true
-        } catch {
+            os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return false
         }
     }
 
-}
-
-extension UploadPostWorker: URLSessionTaskDelegate {
+    private func uploadVideo(with request: UploadVideoRequestDTO, videoURL: URL) async -> Bool {
+        let endPoint = uploadPostEndPointFactory.makeUploadVideoEndPoint(boardID: request.boardID,
+                                                                         fileType: request.filetype)
+        do {
+            let response = try await provider.request(with: endPoint)
+            guard let preSignedURLString = response.data?.preSignedURL else { return false }
+            let data = try await provider.backgroundUpload(fromFile: videoURL,
+                                                           to: preSignedURLString,
+                                                           sessionTaskDelegate: sessionTaskDelegate)
+            return true
+        } catch {
+            os_log(.error, log: .data, "Failed to upload Video: %@", error.localizedDescription)
+            return false
+        }
+    }
 
 }

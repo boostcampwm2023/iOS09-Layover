@@ -9,10 +9,19 @@
 import Foundation
 
 struct UploadVideoDTO: Decodable {
-    let presignedUrl: String
+    let preSignedURL: String
+
+    enum CodingKeys: String, CodingKey {
+        case preSignedURL = "preSignedUrl"
+    }
 }
 
 struct UploadVideoRequestDTO: Encodable {
     let boardID: Int
     let filetype: String
+
+    enum CodingKeys: String, CodingKey {
+        case boardID = "boardId"
+        case filetype
+    }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 struct UploadPostDTO: Decodable {
     let id: Int
-    let title
+    let title: String
     let content: String?
     let latitude, longitude: Double
     let tag: [String]

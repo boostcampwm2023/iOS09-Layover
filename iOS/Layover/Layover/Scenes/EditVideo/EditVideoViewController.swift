@@ -34,7 +34,7 @@ final class EditVideoViewController: BaseViewController {
         return button
     }()
 
-    private let nextButton: LOButton = {
+    private lazy var nextButton: LOButton = {
         let button = LOButton(style: .basic)
         button.setTitle("다음", for: .normal)
         button.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)

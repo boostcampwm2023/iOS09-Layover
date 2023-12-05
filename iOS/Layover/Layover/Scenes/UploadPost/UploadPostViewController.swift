@@ -42,7 +42,7 @@ final class UploadPostViewController: BaseViewController {
         return imageLabel
     }()
 
-    private let titleTextField: LOTextField = {
+    private lazy var titleTextField: LOTextField = {
         let textField = LOTextField()
         textField.placeholder = "제목"
         textField.addTarget(self, action: #selector(titleTextChanged), for: .editingChanged)
@@ -228,7 +228,7 @@ final class UploadPostViewController: BaseViewController {
     }
 
     @objc private func titleTextChanged() {
-        interactor?.canUploadPost(request: UploadPostModels.CanUploadPost.Request(title: titleTextField.text))
+        interactor?.canUploadPost(request: Models.CanUploadPost.Request(title: titleTextField.text))
     }
 
     @objc private func viewDidTap() {
@@ -240,7 +240,12 @@ final class UploadPostViewController: BaseViewController {
     }
 
     @objc private func uploadButtonDidTap() {
-        interactor?.uploadPost()
+        guard let title = titleTextField.text else { return }
+        let request = Models.UploadPost.Request(title: title,
+                                                content: contentTextView.text,
+                                                tags: tagStackView.tags)
+        interactor?.uploadPost(request: request)
+        router?.routeToBack()
     }
 
 }
