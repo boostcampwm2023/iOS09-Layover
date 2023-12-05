@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -82,6 +82,43 @@ export class MemberController {
   }
 
   @ApiOperation({
+    summary: '회원 정보 요청',
+    description: '회원 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
+  })
+  @ApiResponse(MEMBER_SWAGGER.GET_MEMBER_INFOS_SUCCESS)
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @Get()
+  async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('memberId') memberId: string) {
+    let id: number;
+    if (memberId !== undefined) {
+      // memberId가 존재하면 타인의 프로필을 조회하는 것이다.
+      id = parseInt(memberId);
+    } else {
+      // memberId가 존재하지 않으면 내 프로필을 조회하는 것이다.
+      id = payload.memberId;
+    }
+
+    const member = await this.memberService.findMemberById(id);
+    if (member === null) throw new CustomResponse(ECustomCode.MEMBER02);
+
+    const username = member.username;
+    const introduce = member.introduce;
+    const profileImageKey = member.profile_image_key;
+
+    const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
+    let preSignedUrl: string;
+    if (profileImageKey !== 'default') {
+      preSignedUrl = makeDownloadPreSignedUrl(bucketname, member.profile_image_key);
+    } else {
+      preSignedUrl = makeDownloadPreSignedUrl(bucketname, 'default.jpeg'); // 기본 이미지 사용!
+    }
+
+    // 응답
+    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
+  }
+
+  @ApiOperation({
     summary: '회원 탈퇴(삭제)',
     description: '회원 삭제를 수행합니다.',
   })
@@ -126,61 +163,5 @@ export class MemberController {
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new PreSignedUrlResDto(preSignedUrl));
-  }
-
-  @ApiOperation({
-    summary: '회원(본인) 정보 요청',
-    description: '회원(본인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
-  })
-  @ApiResponse(MEMBER_SWAGGER.GET_MEMBER_INFOS_SUCCESS)
-  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
-  @Get()
-  async getMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
-    const id = payload.memberId;
-    const member = await this.memberService.findMemberById(id);
-
-    const username = member.username;
-    const introduce = member.introduce;
-    const profileImageKey = member.profile_image_key;
-
-    const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    let preSignedUrl: string;
-    if (profileImageKey !== 'default') {
-      preSignedUrl = makeDownloadPreSignedUrl(bucketname, member.profile_image_key);
-    } else {
-      preSignedUrl = makeDownloadPreSignedUrl(bucketname, 'default.jpeg'); // 기본 이미지 사용!
-    }
-
-    // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
-  }
-
-  @ApiOperation({
-    summary: '회원(타인) 정보 요청',
-    description: '회원(타인) 정보들(닉네임, 자기소개, 프로필 이미지 url)을 응답으로 줍니다.',
-  })
-  @ApiResponse(MEMBER_SWAGGER.GET_OTHER_MEMBER_INFOS_SUCCESS)
-  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
-  @Get(':id')
-  async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Param('id') id: number) {
-    const member = await this.memberService.findMemberById(id);
-    if (member === null) throw new CustomResponse(ECustomCode.MEMBER02);
-
-    const username = member.username;
-    const introduce = member.introduce;
-    const profileImageKey = member.profile_image_key;
-
-    const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    let preSignedUrl: string;
-    if (profileImageKey !== 'default') {
-      preSignedUrl = makeDownloadPreSignedUrl(bucketname, member.profile_image_key);
-    } else {
-      preSignedUrl = makeDownloadPreSignedUrl(bucketname, 'default.jpeg'); // 기본 이미지 사용!
-    }
-
-    // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
   }
 }
