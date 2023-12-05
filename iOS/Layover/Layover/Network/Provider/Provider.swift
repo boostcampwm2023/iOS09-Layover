@@ -12,6 +12,12 @@ protocol ProviderType {
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
+    func upload(data: Data, to url: String, method: HTTPMethod) async throws -> Data
+    func backgroundUpload(fromFile: URL,
+                          to url: String,
+                          method: HTTPMethod,
+                          sessionTaskDelegate: URLSessionTaskDelegate?,
+                          delegateQueue: OperationQueue?) async throws -> Data
 }
 
 extension ProviderType {
@@ -22,6 +28,25 @@ extension ProviderType {
                                  authenticationIfNeeded: authenticationIfNeeded,
                                  retryCount: retryCount)
     }
+
+    func upload(data: Data, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        return try await upload(data: data,
+                                to: url,
+                                method: method)
+    }
+
+    func backgroundUpload(fromFile: URL,
+                          to url: String,
+                          method: HTTPMethod = .PUT,
+                          sessionTaskDelegate: URLSessionTaskDelegate? = nil,
+                          delegateQueue: OperationQueue? = nil) async throws -> Data {
+        return try await backgroundUpload(fromFile: fromFile,
+                                          to: url,
+                                          method: method,
+                                          sessionTaskDelegate: sessionTaskDelegate,
+                                          delegateQueue: delegateQueue)
+    }
+
 }
 
 class Provider: ProviderType {
