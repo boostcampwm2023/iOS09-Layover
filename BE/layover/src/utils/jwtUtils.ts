@@ -64,7 +64,7 @@ export function extractSignatureJWTstr(token: string): string {
   }
 }
 
-export async function verifyJwtToken(token: string, key: string): Promise<boolean> {
+export async function verifyJwtToken(token: string, key?: string): Promise<boolean> {
   const headerStr = extractHeaderJWTstr(token);
   const payloadStr = extractPayloadJWTstr(token);
   const signatureStr = extractSignatureJWTstr(token);

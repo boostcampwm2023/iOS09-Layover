@@ -4,7 +4,7 @@ import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import { MemberService } from 'src/member/member.service';
-import { extractHeaderJWT, extractPayloadJWT, makeJwtPaylaod, verifyJwtToken } from 'src/utils/jwtUtils';
+import { extractPayloadJWT, makeJwtPaylaod, verifyJwtToken } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomResponse } from 'src/response/custom-response';
 import { AxiosError } from 'axios';
@@ -62,18 +62,7 @@ export class OauthService {
   }
 
   async verifyAppleIdentityToken(identityToken: string) {
-    const idTokenKeyType = extractHeaderJWT(identityToken).kid;
-
-    const observableRes = this.httpService.get('https://appleid.apple.com/auth/keys').pipe(
-      catchError((error: AxiosError) => {
-        console.log(`${error} occured!`);
-        throw new CustomResponse(ECustomCode.OAUTH08);
-      }),
-    );
-    const responseData = (await firstValueFrom(observableRes)).data;
-    const key = responseData.keys.find((data) => data.kid === idTokenKeyType).n;
-
-    await verifyJwtToken(identityToken, key);
+    await verifyJwtToken(identityToken);
   }
 
   isMemberExistByHash(hash: string): Promise<boolean> {
