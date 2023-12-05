@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
-import { ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
@@ -45,7 +45,7 @@ export class MemberController {
   })
   @ApiResponse(MEMBER_SWAGGER.UPDATE_USER_NAME_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Patch('username')
   async updateUsername(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() usernameDto: UsernameDto) {
     const id = payload.memberId;
@@ -68,7 +68,7 @@ export class MemberController {
   })
   @ApiResponse(MEMBER_SWAGGER.UPDATE_INTRODUCE_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Patch('introduce')
   async updateIntroduce(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() introduceDto: IntroduceDto) {
     const id = payload.memberId;
@@ -87,7 +87,7 @@ export class MemberController {
   })
   @ApiResponse(MEMBER_SWAGGER.GET_MEMBER_INFOS_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get()
   async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('memberId') memberId: string) {
@@ -120,7 +120,7 @@ export class MemberController {
   })
   @ApiResponse(MEMBER_SWAGGER.DELETE_MEMBER_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Delete()
   async deleteMember(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
     const id = payload.memberId;
@@ -141,7 +141,7 @@ export class MemberController {
   })
   @ApiResponse(MEMBER_SWAGGER.GET_UPLOAD_PROFILE_PRESIGNED_URL_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Post('profile-image/presigned-url')
   async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ProfilePreSignedUrlDto) {
     const id = payload.memberId;

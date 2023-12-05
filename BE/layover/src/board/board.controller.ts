@@ -5,7 +5,7 @@ import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { BoardPreSignedUrlDto } from './dtos/board-pre-signed-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { UploadCallbackDto } from './dtos/upload-callback.dto';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
@@ -30,7 +30,7 @@ export class BoardController {
     description: '게시글에 들어갈 내용들과 함께 업로드를 요청합니다.',
   })
   @ApiResponse(BOARD_SWAGGER.CREATE_BOARD_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Post()
   async createBoard(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() createBoardDto: CreateBoardDto) {
     const savedBoard: CreateBoardResDto = await this.boardService.createBoard(
@@ -49,7 +49,7 @@ export class BoardController {
     description: 'object storage에 영상을 업로드 하기 위한 presigned url을 요청합니다.',
   })
   @ApiResponse(BOARD_SWAGGER.GET_PRESIGNED_URL_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Post('presigned-url')
   async getPreSignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() preSignedUrlDto: BoardPreSignedUrlDto) {
     const [filename, filetype] = [uuidv4(), preSignedUrlDto.filetype];
@@ -66,7 +66,7 @@ export class BoardController {
     description: '랜덤 게시물 (최대) 10개를 조회합니다.',
   })
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Get('home')
   async getBoardRandom() {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardRandom();
@@ -78,7 +78,7 @@ export class BoardController {
     description: '거리에 따라 지도 화면에 보여질 게시물들을 조회합니다.',
   })
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Get('map')
   async getBoardMap(
     @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
@@ -90,7 +90,7 @@ export class BoardController {
   }
 
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Get('tag')
   @ApiOperation({
     summary: '태그별 게시글 조회',
@@ -102,7 +102,7 @@ export class BoardController {
   }
 
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get('profile')
   @ApiOperation({
@@ -128,7 +128,7 @@ export class BoardController {
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Delete()
   @ApiOperation({
     summary: '게시물 삭제',
