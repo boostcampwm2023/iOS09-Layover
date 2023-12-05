@@ -107,12 +107,7 @@ export class MemberController {
     const profileImageKey = member.profile_image_key;
 
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    let preSignedUrl: string;
-    if (profileImageKey !== 'default') {
-      preSignedUrl = makeDownloadPreSignedUrl(bucketname, member.profile_image_key);
-    } else {
-      preSignedUrl = makeDownloadPreSignedUrl(bucketname, 'default.jpeg'); // 기본 이미지 사용!
-    }
+    const preSignedUrl = makeDownloadPreSignedUrl(bucketname, profileImageKey);
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
