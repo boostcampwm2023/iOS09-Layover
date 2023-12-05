@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { getSchemaPath } from '@nestjs/swagger';
 import { TokenResDto } from './dtos/token-res.dto';
+import { CheckSignupResDto } from './dtos/check-signup-res-dto';
 
 export const OAUTH_SWAGGER = {
   PROCESS_KAKAO_LOGIN_SUCCESS: {
@@ -65,6 +66,19 @@ export const OAUTH_SWAGGER = {
         message: { type: 'string', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(TokenResDto) },
+      },
+    },
+  },
+  CHECK_SIGNUP_SUCCESS: {
+    status: HttpStatus.OK,
+    description: '회원가입 여부 확인 성공',
+    schema: {
+      type: 'object',
+      properties: {
+        customCode: { type: 'string', example: 'SUCCESS' },
+        message: { type: 'string', example: '성공' },
+        statusCode: { type: 'number', example: HttpStatus.OK },
+        data: { $ref: getSchemaPath(CheckSignupResDto) },
       },
     },
   },

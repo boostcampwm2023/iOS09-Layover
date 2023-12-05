@@ -13,6 +13,7 @@ import { CustomHeader } from 'src/pipes/custom-header.decorator';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { OAUTH_SWAGGER } from './oauth.swagger';
+import { CheckSignupResDto } from './dtos/check-signup-res-dto';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
@@ -56,6 +57,44 @@ export class OauthController {
 
     // return access token and refresh token
     throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
+  }
+
+  @ApiOperation({
+    summary: '카카오 회원가입 여부 확인',
+    description: '특정 카카오 계정으로 카카오 회원가입이 돼있는지 확인합니다.',
+  })
+  @ApiResponse(OAUTH_SWAGGER.CHECK_SIGNUP_SUCCESS)
+  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
+  @Post('check-signup/kakao')
+  async checkKakaoSignup(@Body() kakaoLoginDto: KakaoLoginDto) {
+    // memberHash 구하기
+    const memberHash = await this.oauthService.getKakaoMemberHash(kakaoLoginDto.accessToken);
+
+    // memberHash를 기준으로 회원가입 여부 확인
+    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
+    const isValid = !isUserExist;
+
+    // Response access token and refresh token
+    throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isValid));
+  }
+
+  @ApiOperation({
+    summary: '애플 회원가입 여부 확인',
+    description: '특정 애플 계정으로 애플 회원가입이 돼있는지 확인합니다.',
+  })
+  @ApiResponse(OAUTH_SWAGGER.CHECK_SIGNUP_SUCCESS)
+  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
+  @Post('check-signup/apple')
+  async checkAppleSignup(@Body() appleLoginDto: AppleLoginDto) {
+    // memberHash 구하기
+    const memberHash = await this.oauthService.getKakaoMemberHash(appleLoginDto.identityToken);
+
+    // memberHash를 기준으로 회원가입 여부 확인
+    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
+    const isValid = !isUserExist;
+
+    // Response access token and refresh token
+    throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isValid));
   }
 
   @ApiOperation({

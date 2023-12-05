@@ -15,6 +15,7 @@ import { MemberInfosResDto } from './member/dtos/member-infos-res.dto';
 import { BoardsResDto } from './board/dtos/boards-res.dto';
 import { BoardResDto } from './board/dtos/board-res-dto';
 import { ReportResDto } from './report/dtos/report-res.dto';
+import { CheckSignupResDto } from './oauth/dtos/check-signup-res-dto';
 const httpsOptions = {
   key: readFileSync('./private.key'),
   cert: readFileSync('./certificate.crt'),
@@ -50,6 +51,7 @@ async function bootstrap() {
       BoardsResDto,
       BoardResDto,
       ReportResDto,
+      CheckSignupResDto,
     ],
   });
   SwaggerModule.setup('api', app, document);
