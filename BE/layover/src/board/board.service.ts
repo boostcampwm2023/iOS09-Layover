@@ -20,19 +20,22 @@ export class BoardService {
 
   async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
+
     const savedBoard: Board = await this.boardRepository.save({
       member: member,
       title: title,
-      content: content,
+      content: content ?? '',
       encoded_video_url: '',
       latitude: latitude,
       longitude: longitude,
       filename: '',
       status: 'WAITING',
     });
-    tag.map(async (tagname) => {
-      await this.tagService.saveTag(savedBoard, tagname);
-    });
+    if (tag) {
+      tag.map(async (tagname) => {
+        await this.tagService.saveTag(savedBoard, tagname);
+      });
+    }
 
     return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag);
   }

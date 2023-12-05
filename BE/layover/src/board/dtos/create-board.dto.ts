@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateBoardDto {
   @ApiProperty({
@@ -11,10 +11,11 @@ export class CreateBoardDto {
   @ApiProperty({
     example: 'chilling at the beach~',
     description: '내용',
+    required: false,
   })
   @IsString()
-  @IsNotEmpty()
-  readonly content: string;
+  @IsOptional()
+  readonly content?: string;
 
   @ApiProperty({
     example: '37.0532156213',
@@ -31,6 +32,8 @@ export class CreateBoardDto {
   @ApiProperty({
     example: ['부산', '광안리', '바다'],
     description: '사용자가 작성한 태그들',
+    required: false,
   })
-  readonly tag: string[];
+  @IsOptional()
+  readonly tag?: string[];
 }
