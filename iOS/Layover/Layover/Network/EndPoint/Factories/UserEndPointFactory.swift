@@ -9,7 +9,7 @@
 import Foundation
 
 protocol UserEndPointFactory {
-    func makeUserNameIsDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>>
+    func makeUserNameIsNotDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>>
     func makeUserNameModifyEndPoint(userName: String) -> EndPoint<Response<NicknameDTO>>
     func makeIntroduceModifyEndPoint(introduce: String) -> EndPoint<Response<IntroduceDTO>>
     func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>>
@@ -18,7 +18,7 @@ protocol UserEndPointFactory {
 }
 
 final class DefaultUserEndPointFactory: UserEndPointFactory {
-    func makeUserNameIsDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>> {
+    func makeUserNameIsNotDuplicateEndPoint(of userName: String) -> EndPoint<Response<CheckUserNameDTO>> {
         var bodyParameters = [String: String]()
         bodyParameters.updateValue(userName, forKey: "username")
 

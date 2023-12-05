@@ -6,7 +6,7 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 protocol ProfileBusinessLogic {
     @discardableResult
@@ -19,7 +19,7 @@ protocol ProfileBusinessLogic {
 protocol ProfileDataStore {
     var nickname: String? { get set }
     var introduce: String? { get set }
-    var profileImage: UIImage? { get set }
+    var profileImageData: Data? { get set }
 
     var profileId: Int? { get set }
 }
@@ -39,7 +39,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
     var nickname: String?
     var introduce: String?
-    var profileImage: UIImage?
+    var profileImageData: Data?
     var profileId: Int?
 
     // MARK: - Methods
@@ -51,17 +51,21 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
                 return false
             }
 
+            nickname = userProfile.username
+            introduce = userProfile.introduce
+
             let posts = await fetchPosts()
             canFetchMorePosts = !posts.isEmpty
             fetchPostsPage += 1
 
-            var profileImageData: Data? = nil
+            var imageData: Data? = nil
             if let profileImageURL = userProfile.profileImageURL {
-                profileImageData = await userWorker?.fetchImageData(with: profileImageURL)
+                imageData = await userWorker?.fetchImageData(with: profileImageURL)
             }
+            profileImageData = imageData
             let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
                                                                                            introduce: userProfile.introduce,
-                                                                                           profileImageData: profileImageData),
+                                                                                           profileImageData: imageData),
                                                         posts: posts)
             await MainActor.run {
                 presenter?.presentProfile(with: response)

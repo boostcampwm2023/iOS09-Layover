@@ -29,7 +29,7 @@ enum NicknameState {
 protocol UserWorkerProtocol {
     func validateNickname(_ nickname: String) -> NicknameState
     func modifyNickname(to nickname: String) async -> String?
-    func checkDuplication(for userName: String) async -> Bool
+    func checkNotDuplication(for userName: String) async -> Bool?
     // func modifyProfileImage() async throws -> URL
     func modifyIntroduce(to introduce: String) async -> String?
     func withdraw() async -> String?
@@ -80,15 +80,11 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func checkDuplication(for userName: String) async -> Bool {
-        let endPoint = userEndPointFactory.makeUserNameIsDuplicateEndPoint(of: userName)
+    func checkNotDuplication(for userName: String) async -> Bool? {
+        let endPoint = userEndPointFactory.makeUserNameIsNotDuplicateEndPoint(of: userName)
         do {
             let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            guard let data = responseData.data else {
-                os_log(.error, log: .default, "Failed to check duplicate username with error: %@", responseData.message)
-                return false
-            }
-            return data.isValid
+            return responseData.data?.isValid
         } catch {
             os_log(.error, log: .default, "Failed to check duplicate username with error: %@", error.localizedDescription)
             return false

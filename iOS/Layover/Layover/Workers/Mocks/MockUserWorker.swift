@@ -10,6 +10,7 @@ import Foundation
 import OSLog
 
 final class MockUserWorker: UserWorkerProtocol {
+    
 
     // MARK: - Properties
 
@@ -52,7 +53,7 @@ final class MockUserWorker: UserWorkerProtocol {
         }
     }
 
-    func checkDuplication(for userName: String) async -> Bool {
+    func checkNotDuplication(for userName: String) async -> Bool? {
         guard let fileLocation = Bundle.main.url(forResource: "CheckUserName",
                                                  withExtension: "json") else { return false }
         do {
@@ -68,8 +69,7 @@ final class MockUserWorker: UserWorkerProtocol {
                                                                 method: .POST,
                                                                 bodyParameters: NicknameDTO(userName: userName))
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            guard let data = response.data else { throw NetworkError.emptyData }
-            return data.isValid
+            return response.data?.isValid
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return false

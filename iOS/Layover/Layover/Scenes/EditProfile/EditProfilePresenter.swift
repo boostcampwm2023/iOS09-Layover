@@ -24,7 +24,7 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     func presentProfile(with response: EditProfileModels.FetchProfile.Reponse) {
         let viewModel = Models.FetchProfile.ViewModel(nickname: response.nickname,
                                                       introduce: response.introduce,
-                                                      profileImage: response.profileImage)
+                                                      profileImageData: response.profileImageData)
         viewController?.displayProfile(viewModel: viewModel)
     }
 
@@ -35,7 +35,7 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     }
 
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response) {
-        let viewModel = Models.CheckNicknameDuplication.ViewModel(isValidNickname: !response.isDuplicate)
+        let viewModel = Models.CheckNicknameDuplication.ViewModel(isValidNickname: response.isValid)
         viewController?.displayNicknameDuplication(viewModel: viewModel)
     }
 

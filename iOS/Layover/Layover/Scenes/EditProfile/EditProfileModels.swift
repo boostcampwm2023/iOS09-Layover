@@ -6,7 +6,7 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum EditProfileModels {
 
@@ -18,13 +18,13 @@ enum EditProfileModels {
         struct Reponse {
             var nickname: String?
             var introduce: String?
-            var profileImage: UIImage?
+            var profileImageData: Data?
         }
 
         struct ViewModel {
             var nickname: String?
             var introduce: String?
-            var profileImage: UIImage?
+            var profileImageData: Data?
         }
     }
 
@@ -51,7 +51,7 @@ enum EditProfileModels {
             var nickname: String
         }
         struct Response {
-            var isDuplicate: Bool
+            var isValid: Bool
         }
         struct ViewModel {
             var isValidNickname: Bool
@@ -65,7 +65,7 @@ enum EditProfileModels {
         struct Request {
             var nickname: String
             var introduce: String?
-            var profileImage: UIImage?
+            var profileImage: Data?
         }
 
         struct Response {

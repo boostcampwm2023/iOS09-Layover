@@ -6,7 +6,8 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
+import OSLog
 
 protocol EditProfileBusinessLogic {
     func fetchProfile()
@@ -18,7 +19,7 @@ protocol EditProfileBusinessLogic {
 protocol EditProfileDataStore {
     var nickname: String? { get set }
     var introduce: String? { get set }
-    var profileImage: UIImage? { get set }
+    var profileImageData: Data? { get set }
 }
 
 final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStore {
@@ -34,14 +35,14 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
     var nickname: String?
     var introduce: String?
-    var profileImage: UIImage?
+    var profileImageData: Data?
 
     // MARK: - Use Case
 
     func fetchProfile() {
         presenter?.presentProfile(with: EditProfileModels.FetchProfile.Reponse(nickname: nickname,
                                                                                introduce: introduce,
-                                                                               profileImage: profileImage))
+                                                                               profileImageData: profileImageData))
     }
 
     func validateProfileInfo(with request: Models.ValidateProfileInfo.Request) {
@@ -56,14 +57,12 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
     func checkDuplication(with request: Models.CheckNicknameDuplication.Request) {
         Task {
-            do {
-                let response = try await userWorker?.checkDuplication(for: request.nickname)
-                await MainActor.run {
-                    presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isDuplicate: response ?? true))
-                }
-            } catch let error {
-                // TODO: present toast
-                print(error.localizedDescription)
+            guard let response = await userWorker?.checkNotDuplication(for: request.nickname) else {
+                os_log(.error, log: .data, "checkDuplication Server Error")
+                return
+            }
+            await MainActor.run {
+                presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isValid: response))
             }
         }
     }

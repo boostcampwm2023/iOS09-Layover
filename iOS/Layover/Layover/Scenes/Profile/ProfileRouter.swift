@@ -33,9 +33,7 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         else { return }
 
         // Data Passing
-        destination.nickname = source.nickname
-        destination.introduce = source.introduce
-        destination.profileImage = source.profileImage
+        passDataToEditProfile(source: source, destination: &destination)
         editProfileViewController.hidesBottomBarWhenPushed = true
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
@@ -43,5 +41,13 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
     func routeToSettingSceneViewController() {
         let settingSceneViewController: SettingSceneViewController = SettingSceneViewController()
         viewController?.navigationController?.pushViewController(settingSceneViewController, animated: true)
+    }
+
+    // MARK: - Data Passing
+
+    private func passDataToEditProfile(source: ProfileDataStore, destination: inout EditProfileDataStore) {
+        destination.nickname = source.nickname
+        destination.introduce = source.introduce
+        destination.profileImageData = source.profileImageData
     }
 }
