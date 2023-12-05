@@ -129,8 +129,8 @@ final class ProfileViewController: BaseViewController {
     }
 
     private func setDataSource() {
-        let profileCellRegistration = UICollectionView.CellRegistration<ProfileCollectionViewCell, Member> { cell, _, itemIdentifier in
-            let item = itemIdentifier as Member
+        let profileCellRegistration = UICollectionView.CellRegistration<ProfileCollectionViewCell, Models.Member> { cell, _, itemIdentifier in
+            let item = itemIdentifier as Models.Member
             cell.configure(profileImage: nil,
                            nickname: item.username,
                            introduce: item.introduce)
@@ -148,7 +148,7 @@ final class ProfileViewController: BaseViewController {
             case .profileInfo:
                 return collectionView.dequeueConfiguredReusableCell(using: profileCellRegistration,
                                                                     for: indexPath,
-                                                                    item: itemIdentifier as? Member)
+                                                                    item: itemIdentifier as? Models.Member)
             case .thumnail:
                 return collectionView.dequeueConfiguredReusableCell(using: thumnailCellRegistration,
                                                                     for: indexPath,
