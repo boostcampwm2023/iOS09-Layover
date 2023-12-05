@@ -80,21 +80,7 @@ export const MEMBER_SWAGGER = {
 
   GET_MEMBER_INFOS_SUCCESS: {
     status: HttpStatus.OK,
-    description: '회원(본인) 정보들',
-    schema: {
-      type: 'object',
-      properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'boolean', example: '성공' },
-        statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { $ref: getSchemaPath(MemberInfosResDto) },
-      },
-    },
-  },
-
-  GET_OTHER_MEMBER_INFOS_SUCCESS: {
-    status: HttpStatus.OK,
-    description: '회원(타인) 정보들',
+    description: '회원 정보들',
     schema: {
       type: 'object',
       properties: {
