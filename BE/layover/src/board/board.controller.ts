@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Post, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { BoardService } from './board.service';
 import { ECustomCode } from '../response/ecustom-code.jenum';
@@ -94,6 +94,17 @@ export class BoardController {
   async getBoardTag(@Query('tag') tag: string) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardTag(tag);
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+  }
+
+  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @Delete()
+  @ApiOperation({
+    summary: '게시물 삭제',
+    description: '사용자가 원하는 게시물을 삭제합니다.',
+  })
+  async deleteBoard(@Query('boardId') boardId: string) {
+    await this.boardService.deleteBoard(boardId);
+    throw new CustomResponse(ECustomCode.SUCCESS);
   }
 
   @ApiOperation({

@@ -38,7 +38,8 @@ export class BoardService {
   }
 
   async getBoardRandom() {
-    const limit = await this.boardRepository.count();
+    // 성공한것만 가져온다.
+    const limit = await this.boardRepository.createQueryBuilder('board').where("board.status = 'COMPLETE'").getCount();
     let random = Math.floor(Math.random() * limit);
     const n = 10; // 최대 10개 데이터를 가져온다.
 
@@ -53,6 +54,7 @@ export class BoardService {
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
+      .where("board.status = 'COMPLETE'")
       .skip(random)
       .take(n)
       .getMany();
@@ -93,6 +95,7 @@ export class BoardService {
         latitude,
         distance: 500000, // 100km
       })
+      .andWhere("board.status = 'COMPLETE'")
       .getMany();
 
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
@@ -104,6 +107,7 @@ export class BoardService {
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
+      .andWhere("board.status = 'COMPLETE'")
       .getMany();
 
     const boardIds = boards.map((board) => board.id);
@@ -141,5 +145,9 @@ export class BoardService {
 
   async findBoardById(id: number): Promise<Board> {
     return await this.boardRepository.findOne({ where: { id } });
+  }
+
+  async deleteBoard(boardId: string) {
+    await this.boardRepository.update({ id: parseInt(boardId) }, { status: 'DELETED' });
   }
 }
