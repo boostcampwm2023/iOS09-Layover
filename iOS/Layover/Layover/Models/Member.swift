@@ -13,5 +13,4 @@ struct Member {
     let username: String
     let introduce: String?
     let profileImageURL: URL?
-    // board
 }

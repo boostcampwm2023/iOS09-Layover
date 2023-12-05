@@ -9,7 +9,8 @@
 import UIKit
 
 protocol ProfilePresentationLogic {
-    func present(with response: ProfileModels.FetchProfile.Response)
+    func presentProfile(with response: ProfileModels.FetchProfile.Response)
+    func presentMorePosts(with response: ProfileModels.FetchMorePosts.Response)
 }
 
 final class ProfilePresenter: ProfilePresentationLogic {
@@ -19,10 +20,17 @@ final class ProfilePresenter: ProfilePresentationLogic {
     typealias Models = ProfileModels
     weak var viewController: ProfileDisplayLogic?
 
-    func present(with response: Models.FetchProfile.Response) {
-        viewController?.fetchProfile(viewModel: Models.FetchProfile.ViewModel(nickname: response.nickname,
-                                                                              introduce: response.introduce,
-                                                                              profileImageURL: response.profileImageURL))
+    // MARK: - Methods
+
+    func presentProfile(with response: Models.FetchProfile.Response) {
+        let viewModel = Models.FetchProfile.ViewModel(userProfile: response.userProfile,
+                                                      posts: response.posts)
+        viewController?.displayProfile(viewModel: viewModel)
+    }
+
+    func presentMorePosts(with response: ProfileModels.FetchMorePosts.Response) {
+        let viewModel = Models.FetchMorePosts.ViewModel(posts: response.posts)
+        viewController?.displayMorePosts(viewModel: viewModel)
     }
 
 }

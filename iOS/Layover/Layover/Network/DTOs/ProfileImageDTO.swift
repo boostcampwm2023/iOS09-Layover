@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ProfileImageDTO: Codable {
+struct ProfileImageDTO: Decodable {
     let profileImage: URL
 
     enum CodingKeys: String, CodingKey {

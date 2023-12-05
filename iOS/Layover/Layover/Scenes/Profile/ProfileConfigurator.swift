@@ -19,7 +19,7 @@ final class ProfileConfigurator: Configurator {
     func configure(_ viewController: ViewController) {
         let viewController = viewController
         let interactor = ProfileInteractor()
-        let userWorker = UserWorker()
+        let worker = ProfileWorker()
         let presenter = ProfilePresenter()
         let router = ProfileRouter()
 
@@ -28,7 +28,7 @@ final class ProfileConfigurator: Configurator {
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
-        interactor.userWorker = userWorker
+        interactor.profileWorker = worker
         presenter.viewController = viewController
     }
 

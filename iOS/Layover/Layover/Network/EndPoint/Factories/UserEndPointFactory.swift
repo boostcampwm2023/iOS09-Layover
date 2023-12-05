@@ -13,6 +13,8 @@ protocol UserEndPointFactory {
     func makeUserNameModifyEndPoint(userName: String) -> EndPoint<Response<NicknameDTO>>
     func makeIntroduceModifyEndPoint(introduce: String) -> EndPoint<Response<IntroduceDTO>>
     func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>>
+    func makeUserInformationEndPoint(with id: Int?) -> EndPoint<Response<MemberDTO>>
+    func makeUserPostsEndPoint(at page: Int, of id: Int?) -> EndPoint<Response<[PostDTO]>>
 }
 
 final class DefaultUserEndPointFactory: UserEndPointFactory {
@@ -53,6 +55,38 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
         return EndPoint(
             path: "/member/withdraw",
             method: .DELETE
+        )
+    }
+
+    func makeUserInformationEndPoint(with id: Int? = nil) -> EndPoint<Response<MemberDTO>> {
+        if let id {
+            let queryParameters = ["id": id]
+            return EndPoint(
+                path: "/member",
+                method: .GET,
+                queryParameters: queryParameters
+            )
+        }
+
+        return EndPoint(
+            path: "/member",
+            method: .GET
+        )
+    }
+
+    func makeUserPostsEndPoint(at page: Int, of id: Int? = nil) -> EndPoint<Response<[PostDTO]>> {
+
+        var queryParameters = [String: String]()
+        queryParameters.updateValue(String(page), forKey: "page")
+
+        if let id {
+            queryParameters.updateValue(String(id), forKey: "id")
+        }
+
+        return EndPoint(
+            path: "/board/profile",
+            method: .GET,
+            queryParameters: queryParameters
         )
     }
 }
