@@ -3,6 +3,8 @@ import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { v4 } from 'uuid';
 import { tokenPayload } from './interfaces/token.payload';
+import { hashHMACSHA256 } from './hashUtils';
+import verifyAppleToken from 'verify-apple-id-token';
 
 type tokenType = 'access' | 'refresh';
 
@@ -34,7 +36,7 @@ export function extractHeaderJWTstr(token: string): string {
   }
 }
 
-export function extractHeaderJWT(token: string): string {
+export function extractHeaderJWT(token: string) {
   const header = extractHeaderJWTstr(token);
   return JSON.parse(Buffer.from(header, 'base64url').toString('utf8'));
 }
@@ -60,4 +62,27 @@ export function extractSignatureJWTstr(token: string): string {
   } else {
     throw new CustomResponse(ECustomCode.JWT01);
   }
+}
+
+export async function verifyJwtToken(token: string, key: string): Promise<boolean> {
+  const headerStr = extractHeaderJWTstr(token);
+  const payloadStr = extractPayloadJWTstr(token);
+  const signatureStr = extractSignatureJWTstr(token);
+
+  const algType = extractHeaderJWT(token).alg;
+  switch (algType) {
+    case 'HS256':
+      if (signatureStr !== hashHMACSHA256(headerStr + '.' + payloadStr, key)) throw new CustomResponse(ECustomCode.JWT03);
+      break;
+    case 'RS256':
+      await verifyAppleToken({
+        idToken: token,
+        clientId: 'kr.codesquad.boostcamp8.Layover',
+      });
+      break;
+    default:
+      throw new CustomResponse(ECustomCode.JWT07);
+  }
+
+  return true;
 }
