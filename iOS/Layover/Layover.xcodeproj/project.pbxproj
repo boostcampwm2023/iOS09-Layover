@@ -91,7 +91,6 @@
 		835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */; };
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
-		836C338F2B160CC700ECAFB0 /* MemberDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338E2B160CC700ECAFB0 /* MemberDTO.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
 		836C33992B1843BE00ECAFB0 /* SettingScenePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33932B1843BE00ECAFB0 /* SettingScenePresenter.swift */; };
 		836C339A2B1843BE00ECAFB0 /* SettingSceneWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33942B1843BE00ECAFB0 /* SettingSceneWorker.swift */; };
@@ -282,7 +281,6 @@
 		835A61AA2B0B85FD002F22A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		836C33862B15A29600ECAFB0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
-		836C338E2B160CC700ECAFB0 /* MemberDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDTO.swift; sourceTree = "<group>"; };
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
 		836C33932B1843BE00ECAFB0 /* SettingScenePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingScenePresenter.swift; sourceTree = "<group>"; };
 		836C33942B1843BE00ECAFB0 /* SettingSceneWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSceneWorker.swift; sourceTree = "<group>"; };
@@ -567,7 +565,6 @@
 				19A169372B17BCA800DB34C0 /* PostDTO.swift */,
 				19A169392B17BCC400DB34C0 /* MemberDTO.swift */,
 				19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */,
-				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -1148,7 +1145,6 @@
 				836C33992B1843BE00ECAFB0 /* SettingScenePresenter.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
-				836C338F2B160CC700ECAFB0 /* MemberDTO.swift in Sources */,
 				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
 				19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */,
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
