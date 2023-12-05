@@ -147,7 +147,8 @@ final class MockUserWorker: UserWorkerProtocol {
     }
 
     func fetchPosts(at page: Int, of id: Int?) async -> [Post]? {
-        guard let fileLocation = Bundle.main.url(forResource: "PostList", withExtension: "json") else { return nil }
+        let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
+        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in

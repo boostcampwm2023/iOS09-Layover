@@ -42,6 +42,8 @@
 		194C21D02B1DF65200C62645 /* PostList.json in Resources */ = {isa = PBXBuildFile; fileRef = 194C21CF2B1DF65200C62645 /* PostList.json */; };
 		194C21D42B1EEE3700C62645 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 194C21D32B1EEE3700C62645 /* sample.jpeg */; };
 		194C21DC2B1F3ECA00C62645 /* GetMember.json in Resources */ = {isa = PBXBuildFile; fileRef = 194C21DB2B1F3ECA00C62645 /* GetMember.json */; };
+		194C21E62B1F7B5100C62645 /* PostListMore.json in Resources */ = {isa = PBXBuildFile; fileRef = 194C21E52B1F7B5100C62645 /* PostListMore.json */; };
+		194C21EA2B1F7C1600C62645 /* PostListEnd.json in Resources */ = {isa = PBXBuildFile; fileRef = 194C21E92B1F7C1600C62645 /* PostListEnd.json */; };
 		1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */; };
 		1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */; };
 		1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */; };
@@ -228,6 +230,8 @@
 		194C21CF2B1DF65200C62645 /* PostList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostList.json; sourceTree = "<group>"; };
 		194C21D32B1EEE3700C62645 /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
 		194C21DB2B1F3ECA00C62645 /* GetMember.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GetMember.json; sourceTree = "<group>"; };
+		194C21E52B1F7B5100C62645 /* PostListMore.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListMore.json; sourceTree = "<group>"; };
+		194C21E92B1F7C1600C62645 /* PostListEnd.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListEnd.json; sourceTree = "<group>"; };
 		1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointFactory.swift; sourceTree = "<group>"; };
 		1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultStored.swift; sourceTree = "<group>"; };
 		1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
@@ -764,6 +768,8 @@
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 				835783C52B14A5C800E7D304 /* LoginData.json */,
 				19A169352B178EA500DB34C0 /* PostList.json */,
+				194C21E52B1F7B5100C62645 /* PostListMore.json */,
+				194C21E92B1F7C1600C62645 /* PostListEnd.json */,
 				194C21DB2B1F3ECA00C62645 /* GetMember.json */,
 			);
 			path = MockData;
@@ -1039,11 +1045,13 @@
 				FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */,
 				FC767FA22B12283D0088CF9B /* PatchIntroduce.json in Resources */,
 				FC767FA32B12283D0088CF9B /* PatchProfileImage.json in Resources */,
+				194C21E62B1F7B5100C62645 /* PostListMore.json in Resources */,
 				FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */,
 				19A1694D2B18327E00DB34C0 /* sample.jpeg in Resources */,
 				FC767F9F2B12283D0088CF9B /* PatchUserName.json in Resources */,
 				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
 				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
+				194C21EA2B1F7C1600C62645 /* PostListEnd.json in Resources */,
 				835783C62B14A5C800E7D304 /* LoginData.json in Resources */,
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,

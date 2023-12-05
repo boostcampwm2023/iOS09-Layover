@@ -38,6 +38,7 @@ final class ProfileViewController: BaseViewController {
                                 forCellWithReuseIdentifier: ProfileCollectionViewCell.identifier)
         collectionView.register(ThumbnailCollectionViewCell.self,
                                 forCellWithReuseIdentifier: ThumbnailCollectionViewCell.identifier)
+        collectionView.delegate = self
         return collectionView
     }()
 
@@ -146,8 +147,7 @@ final class ProfileViewController: BaseViewController {
             cell.editButton.addTarget(self, action: #selector(self.editbuttonDidTap), for: .touchUpInside)
         }
 
-        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.Post> { [weak self] cell, indexPath, itemIdentifier in
-            guard let self else { return }
+        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.Post> { cell, indexPath, itemIdentifier in
 
             if let imageData = itemIdentifier.thumbnailImageData,
                let image = UIImage(data: imageData) {
@@ -194,6 +194,8 @@ final class ProfileViewController: BaseViewController {
 
 }
 
+// MARK: - ProfileDisplayLogic
+
 extension ProfileViewController: ProfileDisplayLogic {
 
     func displayProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
@@ -208,5 +210,19 @@ extension ProfileViewController: ProfileDisplayLogic {
         guard var snapshot = collectionViewDatasource?.snapshot(for: .posts) else { return }
         snapshot.append(viewModel.posts)
         collectionViewDatasource?.apply(snapshot, to: .posts)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension ProfileViewController: UICollectionViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let contentHeight = scrollView.contentSize.height
+        let scrollOffset = scrollView.contentOffset.y
+        let height = scrollView.bounds.height
+
+        if scrollOffset > contentHeight - height {
+            fetchPosts()
+        }
     }
 }

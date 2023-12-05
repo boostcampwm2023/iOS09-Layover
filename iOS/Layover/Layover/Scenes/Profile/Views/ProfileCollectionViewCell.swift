@@ -16,6 +16,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
         let imageView: UIImageView = UIImageView(image: UIImage.profile)
         imageView.layer.cornerRadius = 36
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
@@ -56,7 +57,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     func configure(profileImage: UIImage?,
                    nickname: String?,
                    introduce: String?) {
-        profileImageView.image = profileImage == nil ? UIImage.profile : profileImage
+        profileImageView.image = profileImage
         nicknameLabel.text = nickname
         introduceLabel.text = introduce
     }
