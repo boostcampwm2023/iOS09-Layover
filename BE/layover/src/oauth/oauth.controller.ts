@@ -4,7 +4,7 @@ import { OauthService } from './oauth.service';
 import { JwtValidationPipe } from 'src/pipes/jwt.validation.pipe';
 import { CustomResponse } from '../response/custom-response';
 import { ECustomCode } from '../response/ecustom-code.jenum';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { KakaoLoginDto } from './dtos/kakao-login.dto';
 import { AppleLoginDto } from './dtos/apple-login.dto';
 import { KakaoSignupDto } from './dtos/kakao-signup.dto';
@@ -177,7 +177,7 @@ export class OauthController {
   })
   @ApiResponse(OAUTH_SWAGGER.RENEW_TOKENS_SUCCESS)
   @ApiResponse(SWAGGER.REFRESH_TOKEN_TIMEOUT_RESPONSE)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Post('refresh-token')
   async renewTokens(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
     // 새로운 토큰을 생성하고 이를 반환함

@@ -5,7 +5,7 @@ import { ReportService } from './report.service';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { ReportResDto } from './dtos/report-res.dto';
 import { ReportDto } from './dtos/report.dto';
@@ -25,7 +25,7 @@ export class ReportController {
     description: '특정 게시글을 신고합니다.',
   })
   @ApiResponse(REPORT_SWAGGER.RECEIVE_REPORT_SUCCESS)
-  @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiBearerAuth('token')
   @Post()
   async receiveReport(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ReportDto) {
     const responseData: ReportResDto = await this.reportService.insertReport(payload.memberId, body.boardId, body.reportType);

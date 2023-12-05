@@ -37,6 +37,16 @@ async function bootstrap() {
     .setDescription('The Layover API description')
     .setVersion('0.0.0.0.1')
     .addTag('Layover')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config, {
     extraModels: [
