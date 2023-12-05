@@ -49,6 +49,9 @@ export class OauthController {
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('apple')
   async processAppleLogin(@Body() appleLoginDto: AppleLoginDto) {
+    // identity token 검증
+    await this.oauthService.verifyAppleIdentityToken(appleLoginDto.identityToken);
+
     // memberHash 구하기
     const memberHash = this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
 
@@ -86,6 +89,9 @@ export class OauthController {
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('check-signup/apple')
   async checkAppleSignup(@Body() appleLoginDto: AppleLoginDto) {
+    // identity token 검증
+    await this.oauthService.verifyAppleIdentityToken(appleLoginDto.identityToken);
+
     // memberHash 구하기
     const memberHash = await this.oauthService.getKakaoMemberHash(appleLoginDto.identityToken);
 

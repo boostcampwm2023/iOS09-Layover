@@ -9,7 +9,11 @@ export class ECustomCode extends EnumType<ECustomCode>() {
 
   static readonly OAUTH02 = new ECustomCode(HttpStatus.BAD_REQUEST, 'OAUTH02', '유효하지 않은 kakao access token입니다.');
 
-  static readonly OAUTH03 = new ECustomCode(HttpStatus.INTERNAL_SERVER_ERROR, 'OAUTH03', 'OAuth 서버에서 사용자 정보를 받아오던 도중 오류가 발생했습니다.');
+  static readonly OAUTH03 = new ECustomCode(
+    HttpStatus.INTERNAL_SERVER_ERROR,
+    'OAUTH03',
+    'OAuth 서버에서 사용자 정보를 받아오던 도중 오류가 발생했습니다.',
+  );
 
   static readonly OAUTH04 = new ECustomCode(HttpStatus.INTERNAL_SERVER_ERROR, 'OAUTH04', 'token을 생성하는 과정에서 오류가 발생했습니다.');
 
@@ -18,6 +22,8 @@ export class ECustomCode extends EnumType<ECustomCode>() {
   static readonly OAUTH06 = new ECustomCode(HttpStatus.INTERNAL_SERVER_ERROR, 'OAUTH06', '회원정보를 저장하는 과정에서 오류가 발생했습니다.');
 
   static readonly OAUTH07 = new ECustomCode(HttpStatus.BAD_REQUEST, 'OAUTH07', 'identity token을 사용한 인증이 불가능합니다.');
+
+  static readonly OAUTH08 = new ECustomCode(HttpStatus.BAD_REQUEST, 'OAUTH08', 'Apple public key를 받아오는데 실패했습니다.');
 
   static readonly JWT01 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT01', '토큰이 JWT 형식이 아닙니다.');
 
@@ -30,6 +36,8 @@ export class ECustomCode extends EnumType<ECustomCode>() {
   static readonly JWT05 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT05', '토큰 타입이 Bearer가 아닙니다.');
 
   static readonly JWT06 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT06', '토큰 데이터가 존재하지 않습니다.');
+
+  static readonly JWT07 = new ECustomCode(HttpStatus.BAD_REQUEST, 'JWT07', '지원하지 않는 알고리즘으로 서명된 토큰입니다.');
 
   static readonly MEMBER01 = new ECustomCode(HttpStatus.BAD_REQUEST, 'MEMBER01', '중복 닉네임이 존재합니다.');
 

@@ -1,13 +1,12 @@
 import { PipeTransform, Injectable } from '@nestjs/common';
 import { CustomResponse } from 'src/response/custom-response';
-import { hashHMACSHA256 } from 'src/utils/hashUtils';
-import { extractHeaderJWTstr, extractPayloadJWT, extractPayloadJWTstr, extractSignatureJWTstr } from 'src/utils/jwtUtils';
+import { extractPayloadJWT, verifyJwtToken } from 'src/utils/jwtUtils';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
-  transform(header): tokenPayload {
+  async transform(header): Promise<tokenPayload> {
     const [tokenType, token] = header['authorization']?.split(' ');
 
     // 기본적으로 헤더에 각 데이터들이 들어있는지 확인
@@ -15,10 +14,7 @@ export class JwtValidationPipe implements PipeTransform {
     if (!token) throw new CustomResponse(ECustomCode.JWT06);
 
     // 1. signature 유효한지 검사
-    const headerStr = extractHeaderJWTstr(token);
-    const payloadStr = extractPayloadJWTstr(token);
-    const signatureStr = extractSignatureJWTstr(token);
-    if (signatureStr !== hashHMACSHA256(headerStr + '.' + payloadStr, process.env.JWT_SECRET_KEY)) throw new CustomResponse(ECustomCode.JWT03);
+    await verifyJwtToken(token, process.env.JWT_SECRET_KEY);
 
     // 1-1. sign 검증됐으면.. payload 추출
     const payload = extractPayloadJWT(token);
