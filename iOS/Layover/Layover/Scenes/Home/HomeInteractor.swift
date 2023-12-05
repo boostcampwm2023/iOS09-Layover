@@ -9,8 +9,10 @@
 import UIKit
 
 protocol HomeBusinessLogic {
-    func fetchPosts(with request: HomeModels.FetchPosts.Request)
-    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request)
+    @discardableResult
+    func fetchPosts(with request: HomeModels.FetchPosts.Request) -> Task<Bool, Never>
+    @discardableResult
+    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never>
     func playPosts(with request: HomeModels.PlayPosts.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
     func showTagPlayList(with request: HomeModels.ShowTagPlayList.Request)
@@ -45,27 +47,33 @@ final class HomeInteractor: HomeDataStore {
 // MARK: - Use Case
 
 extension HomeInteractor: HomeBusinessLogic {
-    func fetchPosts(with request: Models.FetchPosts.Request) {
+    @discardableResult
+    func fetchPosts(with request: Models.FetchPosts.Request) -> Task<Bool, Never> {
         Task {
-            guard let posts = await homeWorker?.fetchPosts() else { return }
+            guard let posts = await homeWorker?.fetchPosts() else { return false }
             let response = Models.FetchPosts.Response(posts: posts)
 
             await MainActor.run {
                 self.posts = posts
                 presenter?.presentPosts(with: response)
             }
+
+            return true
         }
     }
 
-    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request) {
+    @discardableResult
+    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never> {
         Task {
-            guard let imageData = await homeWorker?.fetchImageData(of: request.imageURL) else { return }
+            guard let imageData = await homeWorker?.fetchImageData(of: request.imageURL) else { return false }
             let response = Models.FetchThumbnailImageData.Response(imageData: imageData,
                                                                    indexPath: request.indexPath)
 
             await MainActor.run {
                 presenter?.presentThumbnailImage(with: response)
             }
+
+            return true
         }
     }
 
