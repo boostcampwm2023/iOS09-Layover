@@ -71,7 +71,7 @@ extension LoginWorker: LoginWorkerProtocol {
 
     func isRegisteredKakao(with socialToken: String) async -> Bool? {
         do {
-            let endPoint = loginEndPointFactory.makeCheckKakaoIsSignedUp(with: socialToken)
+            let endPoint = loginEndPointFactory.makeCheckKakaoIsSignedUpEndPoint(with: socialToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
             return result.data?.isValid
         } catch {
@@ -99,7 +99,7 @@ extension LoginWorker: LoginWorkerProtocol {
 
     func isRegisteredApple(with identityToken: String) async -> Bool? {
         do {
-            let endPoint = loginEndPointFactory.makeCheckAppleIsSignedUp(with: identityToken)
+            let endPoint = loginEndPointFactory.makeCheckAppleIsSignedUpEndPoint(with: identityToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
             return result.data?.isValid
         } catch {

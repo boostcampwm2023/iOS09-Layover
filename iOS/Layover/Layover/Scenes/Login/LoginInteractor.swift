@@ -80,7 +80,7 @@ extension LoginInteractor: ASAuthorizationControllerDelegate {
                 async let isRegistered: Bool = worker?.isRegisteredApple(with: identityToken) ?? false
                 async let loginResult: Bool = worker?.loginApple(with: identityToken) ?? false
 
-                if await isRegistered, await loginResult {
+                if await !isRegistered, await loginResult {
                     await MainActor.run {
                         presenter?.presentPerformLogin()
                     }

@@ -12,8 +12,8 @@ protocol LoginEndPointFactory {
     func makeKakaoLoginEndPoint(with socialToken: String) -> EndPoint<Response<LoginDTO>>
     func makeTokenRefreshEndPoint(with refreshToken: String) -> EndPoint<Response<LoginDTO>>
     func makeAppleLoginEndPoint(with identityToken: String) -> EndPoint<Response<LoginDTO>>
-    func makeCheckKakaoIsSignedUp(with socialToken: String) -> EndPoint<Response<CheckSignUpDTO>>
-    func makeCheckAppleIsSignedUp(with identityToken: String) -> EndPoint<Response<CheckSignUpDTO>>
+    func makeCheckKakaoIsSignedUpEndPoint(with socialToken: String) -> EndPoint<Response<CheckSignUpDTO>>
+    func makeCheckAppleIsSignedUpEndPoint(with identityToken: String) -> EndPoint<Response<CheckSignUpDTO>>
 }
 
 struct DefaultLoginEndPointFactory: LoginEndPointFactory {
@@ -49,7 +49,7 @@ struct DefaultLoginEndPointFactory: LoginEndPointFactory {
             bodyParameters: bodyParameters)
     }
 
-    func makeCheckKakaoIsSignedUp(with socialToken: String) -> EndPoint<Response<CheckSignUpDTO>> {
+    func makeCheckKakaoIsSignedUpEndPoint(with socialToken: String) -> EndPoint<Response<CheckSignUpDTO>> {
         var bodyParameters = [String: String]()
         bodyParameters.updateValue(socialToken, forKey: "accessToken")
 
@@ -60,7 +60,7 @@ struct DefaultLoginEndPointFactory: LoginEndPointFactory {
         )
     }
 
-    func makeCheckAppleIsSignedUp(with identityToken: String) -> EndPoint<Response<CheckSignUpDTO>> {
+    func makeCheckAppleIsSignedUpEndPoint(with identityToken: String) -> EndPoint<Response<CheckSignUpDTO>> {
         var bodyParameters = [String: String]()
         bodyParameters.updateValue(identityToken, forKey: "identityToken")
 
