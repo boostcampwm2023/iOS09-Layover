@@ -32,14 +32,20 @@ final class LOPopUpView: UIView {
         return button
     }()
 
+    weak var delegate: ReportViewControllerDelegate?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setConstraints()
+        cancelButton.addTarget(self, action: #selector(cancelButtonDidTap), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setConstraints()
+        cancelButton.addTarget(self, action: #selector(cancelButtonDidTap), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
     }
 
     func getReportContent() -> String {
@@ -72,5 +78,13 @@ final class LOPopUpView: UIView {
             reportButton.topAnchor.constraint(equalTo: reportStackView.bottomAnchor)
         ])
 
+    }
+
+    @objc private func cancelButtonDidTap() {
+        delegate?.dismissReportView()
+    }
+
+    @objc private func reportButtonDidTap() {
+        delegate?.reportPlaybackVideo(reportContent: getReportContent())
     }
 }

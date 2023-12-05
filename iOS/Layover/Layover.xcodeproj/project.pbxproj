@@ -77,6 +77,8 @@
 		8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */; };
 		8321A2FD2B1E4260000A12AF /* ReportEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */; };
 		8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FE2B1E428C000A12AF /* ReportDTO.swift */; };
+		8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */; };
+		8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */; };
 		834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */; };
 		835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835783C22B14A41600E7D304 /* MockLoginWorker.swift */; };
 		835783C62B14A5C800E7D304 /* LoginData.json in Resources */ = {isa = PBXBuildFile; fileRef = 835783C52B14A5C800E7D304 /* LoginData.json */; };
@@ -270,6 +272,8 @@
 		8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportContentView.swift; sourceTree = "<group>"; };
 		8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportEndPointFactory.swift; sourceTree = "<group>"; };
 		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
+		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
+		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -515,6 +519,7 @@
 				19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */,
 				194C21BA2B1B718B00C62645 /* MockHomeWorker.swift */,
 				194C21BC2B1B728600C62645 /* StubAuthManager.swift */,
+				8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -748,6 +753,7 @@
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 				835783C52B14A5C800E7D304 /* LoginData.json */,
 				19A169352B178EA500DB34C0 /* PostList.json */,
+				8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */,
 			);
 			path = MockData;
 			sourceTree = "<group>";
@@ -1032,6 +1038,7 @@
 				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
 				835783C62B14A5C800E7D304 /* LoginData.json in Resources */,
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
+				8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
 				19A169362B178EA500DB34C0 /* PostList.json in Resources */,
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
@@ -1132,6 +1139,7 @@
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
+				8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */,
 				19A1692D2B17750B00DB34C0 /* Post.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
 				8321A2F92B1E15F3000A12AF /* LOReportStackView.swift in Sources */,

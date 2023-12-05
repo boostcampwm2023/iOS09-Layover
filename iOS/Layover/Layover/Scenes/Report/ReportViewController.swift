@@ -10,6 +10,7 @@ import UIKit
 
 protocol ReportViewControllerDelegate: AnyObject {
     func reportPlaybackVideo(reportContent: String)
+    func dismissReportView()
 }
 
 protocol ReportDisplayLogic: AnyObject {
@@ -62,6 +63,7 @@ final class ReportViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        popUpView.delegate = self
     }
 
     override func setUI() {
@@ -96,11 +98,17 @@ extension ReportViewController: ReportViewControllerDelegate {
         let request: Models.ReportPlaybackVideo.Request = Models.ReportPlaybackVideo.Request(reportContent: reportContent)
         interactor?.reportPlaybackVideo(with: request)
     }
+
+    func dismissReportView() {
+        self.dismiss(animated: false)
+    }
 }
 
 extension ReportViewController: ReportDisplayLogic {
     func displayReportResult(viewModel: ReportModels.ReportPlaybackVideo.ViewModel) {
-        Toast.shared.showToast(message: viewModel.reportMessage)
+        self.dismiss(animated: false, completion: {
+            Toast.shared.showToast(message: viewModel.reportMessage)
+        })
     }
 }
 

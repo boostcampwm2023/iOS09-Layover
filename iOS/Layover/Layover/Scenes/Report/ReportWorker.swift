@@ -31,14 +31,13 @@ final class ReportWorker: ReportWorkerProtocol {
     func reportPlaybackVideo(boardId: Int, reportContent: String) async -> Bool {
         let endPoint = reportEndPointFactory.reportPlaybackVideoEndpoint(boardId: boardId, reportType: reportContent)
         do {
-            let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            print(responseData.message)
+            let responseData = try await provider.request(with: endPoint)
             guard let _ = responseData.data else {
-                os_log(.error, log: .default, "Failed to sign up with error: %@", responseData.message)
+                os_log(.error, log: .default, "Failed to report with error: %@", responseData.message)
                 return false
             }
         } catch {
-            os_log(.error, log: .default, "Failed to sign up with error: %@", error.localizedDescription)
+            os_log(.error, log: .default, "Failed to report with error: %@", error.localizedDescription)
             return false
         }
         return true
