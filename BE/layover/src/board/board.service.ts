@@ -101,13 +101,18 @@ export class BoardService {
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardTag(tag: string) {
+  async getBoardTag(tag: string, page: number) {
+    const itemsPerPage = 15;
+    const offset = (page - 1) * itemsPerPage;
+
     const boards: Board[] = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
       .andWhere("board.status = 'COMPLETE'")
+      .skip(offset)
+      .take(itemsPerPage)
       .getMany();
 
     const boardIds = boards.map((board) => board.id);
@@ -122,13 +127,18 @@ export class BoardService {
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardProfile(id: number) {
+  async getBoardProfile(id: number, page: number) {
+    const itemsPerPage = 15;
+    const offset = (page - 1) * itemsPerPage;
+
     const boards: Board[] = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where("board.status = 'COMPLETE'")
       .andWhere('member.id = :id', { id })
+      .skip(offset)
+      .take(itemsPerPage)
       .getMany();
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }

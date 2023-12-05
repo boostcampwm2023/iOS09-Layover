@@ -5,7 +5,7 @@ import { ECustomCode } from '../response/ecustom-code.jenum';
 import { CustomResponse } from '../response/custom-response';
 import { BoardPreSignedUrlDto } from './dtos/board-pre-signed-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { UploadCallbackDto } from './dtos/upload-callback.dto';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
@@ -16,6 +16,7 @@ import { SWAGGER } from '../utils/swaggerUtils';
 import { BOARD_SWAGGER } from './board.swagger';
 import { makeUploadPreSignedUrl } from '../utils/s3Utils';
 import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
+import { tokenPayload } from '../utils/interfaces/token.payload';
 
 @ApiTags('게시물(영상 포함) API')
 @Controller('board')
@@ -31,7 +32,7 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.CREATE_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post()
-  async createBoard(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() createBoardDto: CreateBoardDto) {
+  async createBoard(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() createBoardDto: CreateBoardDto) {
     const savedBoard: CreateBoardResDto = await this.boardService.createBoard(
       payload.memberId,
       createBoardDto.title,
@@ -50,12 +51,12 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_PRESIGNED_URL_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Post('presigned-url')
-  async getPresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: any, @Body() presignedUrlDto: BoardPreSignedUrlDto) {
-    const [filename, filetype] = [uuidv4(), presignedUrlDto.filetype];
+  async getPreSignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() preSignedUrlDto: BoardPreSignedUrlDto) {
+    const [filename, filetype] = [uuidv4(), preSignedUrlDto.filetype];
     const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
 
     // 파일명 저장
-    await this.boardService.saveFilenameById(presignedUrlDto.boardId, filename);
+    await this.boardService.saveFilenameById(preSignedUrlDto.boardId, filename);
     const preSignedUrl = makeUploadPreSignedUrl(bucketname, filename, 'video', filetype);
     throw new CustomResponse(ECustomCode.SUCCESS, new PreSignedUrlResDto(preSignedUrl));
   }
@@ -79,7 +80,11 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
   @Get('map')
-  async getBoardMap(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('latitude') latitude: string, @Query('longitude') longitude: string) {
+  async getBoardMap(
+    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @Query('latitude') latitude: string,
+    @Query('longitude') longitude: string,
+  ) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardMap(latitude, longitude);
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
@@ -91,19 +96,24 @@ export class BoardController {
     summary: '태그별 게시글 조회',
     description: '태그에 따라 게시물들을 조회합니다.',
   })
-  async getBoardTag(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('tag') tag: string) {
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardTag(tag);
+  async getBoardTag(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('tag') tag: string, @Query('page') page: string) {
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardTag(tag, parseInt(page));
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get('profile')
   @ApiOperation({
     summary: '프로필 게시글 조회',
     description: '나 또는 타인의 게시물을 조회합니다.',
   })
-  async getBoardProfile(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('memberId') memberId: string) {
+  async getBoardProfile(
+    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @Query('memberId') memberId: string,
+    @Query('page') page: string,
+  ) {
     let id = -1;
 
     if (memberId !== undefined) {
@@ -114,7 +124,7 @@ export class BoardController {
       id = payload.memberId;
     }
 
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardProfile(id);
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardProfile(id, parseInt(page));
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
@@ -124,7 +134,7 @@ export class BoardController {
     summary: '게시물 삭제',
     description: '사용자가 원하는 게시물을 삭제합니다.',
   })
-  async deleteBoard(@CustomHeader(new JwtValidationPipe()) payload: any, @Query('boardId') boardId: string) {
+  async deleteBoard(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('boardId') boardId: string) {
     await this.boardService.deleteBoard(boardId);
     throw new CustomResponse(ECustomCode.SUCCESS);
   }
