@@ -4,7 +4,7 @@ import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import { MemberService } from 'src/member/member.service';
-import { extractPayloadJWT, makeJwtPaylaod } from 'src/utils/jwtUtils';
+import { extractHeaderJWT, extractPayloadJWT, makeJwtPaylaod, verifyJwtToken } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomResponse } from 'src/response/custom-response';
 import { AxiosError } from 'axios';
@@ -59,6 +59,21 @@ export class OauthService {
     if (!jwtPayload.sub) throw new CustomResponse(ECustomCode.OAUTH07);
     const memberId = jwtPayload.sub;
     return hashSHA256(memberId + 'apple'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
+  }
+
+  async verifyAppleIdentityToken(identityToken: string) {
+    const idTokenKeyType = extractHeaderJWT(identityToken).kid;
+
+    const observableRes = this.httpService.get('https://appleid.apple.com/auth/keys').pipe(
+      catchError((error: AxiosError) => {
+        console.log(`${error} occured!`);
+        throw new CustomResponse(ECustomCode.OAUTH08);
+      }),
+    );
+    const responseData = (await firstValueFrom(observableRes)).data;
+    const key = responseData.keys.find((data) => data.kid === idTokenKeyType).n;
+
+    await verifyJwtToken(identityToken, key);
   }
 
   isMemberExistByHash(hash: string): Promise<boolean> {
