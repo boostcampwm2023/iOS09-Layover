@@ -20,6 +20,8 @@ final class LOReportStackView: UIStackView {
         }
     }()
 
+    var reportContent: String = "스팸 홍보 / 도배글이에요"
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
@@ -54,6 +56,8 @@ final class LOReportStackView: UIStackView {
         self.reportViews.forEach { reportView in
             if reportView.index == tempView.index {
                 reportView.onRadio()
+                guard let reportContentStr: String = reportView.contentLabel.text else { return }
+                reportContent = reportContentStr
             } else {
                 reportView.offRadio()
             }

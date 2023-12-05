@@ -42,6 +42,10 @@ final class LOPopUpView: UIView {
         setConstraints()
     }
 
+    func getReportContent() -> String {
+        reportStackView.reportContent
+    }
+
     private func setConstraints() {
         addSubviews(titleLabel, reportStackView, cancelButton, reportButton)
         subviews.forEach { subView in

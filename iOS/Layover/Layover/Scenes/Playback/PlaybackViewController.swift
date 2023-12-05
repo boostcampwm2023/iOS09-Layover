@@ -177,8 +177,8 @@ final class PlaybackViewController: BaseViewController {
     @objc private func reportButtonDidTap() {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
-            action in
-//            self.reportPlaybackVideo()
+            _ in
+            self.router?.routeToReport()
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
         alert.addAction(reportAction)
@@ -210,9 +210,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             curCell.playbackView.playPlayer()
             setPlayerSlider(at: curCell.playbackView)
             // Slider가 원점으로 돌아가는 시간 필요
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-//                self.playerSlider.isHidden = false
-//            }
             Task {
                 await slowShowPlayerSlider()
             }

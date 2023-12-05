@@ -21,6 +21,7 @@ enum PlaybackModels {
     }
 
     struct PlaybackInfo: Hashable {
+        let boardId: Int
         let title: String
         let content: String
         let profileImageURL: URL?
@@ -125,6 +126,22 @@ enum PlaybackModels {
         struct ViewModel {
             let willMoveLocation: Float64
             let curCell: PlaybackCell
+        }
+    }
+
+    // MARK: - UseCase Report Playback Video
+
+    enum ReportPlaybackVideo {
+        struct Request {
+            
+        }
+
+        struct Response {
+            let boardId: Int
+        }
+
+        struct ViewModel {
+            let boardId: Int
         }
     }
 }

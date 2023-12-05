@@ -11,4 +11,18 @@ import UIKit
 enum ReportModels {
 
     // MARK: - Use Cases
+
+    enum ReportPlaybackVideo {
+        struct Request {
+            let reportContent: String
+        }
+
+        struct Response {
+            let reportResult: Bool
+        }
+
+        struct ViewModel {
+            let reportMessage: String
+        }
+    }
 }

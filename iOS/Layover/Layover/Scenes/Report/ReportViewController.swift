@@ -8,11 +8,15 @@
 
 import UIKit
 
-protocol ReportDisplayLogic: AnyObject {
-
+protocol ReportViewControllerDelegate: AnyObject {
+    func reportPlaybackVideo(reportContent: String)
 }
 
-final class ReportViewController: BaseViewController, ReportDisplayLogic {
+protocol ReportDisplayLogic: AnyObject {
+    func displayReportResult(viewModel: ReportModels.ReportPlaybackVideo.ViewModel)
+}
+
+final class ReportViewController: BaseViewController {
 
     // MARK: - UI Components
 
@@ -81,8 +85,25 @@ final class ReportViewController: BaseViewController, ReportDisplayLogic {
             popUpView.heightAnchor.constraint(equalToConstant: 450)
         ])
     }
+
+    @objc private func cancelButtonDidTap() {
+        self.dismiss(animated: true)
+    }
 }
 
-#Preview {
-    ReportViewController()
+extension ReportViewController: ReportViewControllerDelegate {
+    func reportPlaybackVideo(reportContent: String) {
+        let request: Models.ReportPlaybackVideo.Request = Models.ReportPlaybackVideo.Request(reportContent: reportContent)
+        interactor?.reportPlaybackVideo(with: request)
+    }
 }
+
+extension ReportViewController: ReportDisplayLogic {
+    func displayReportResult(viewModel: ReportModels.ReportPlaybackVideo.ViewModel) {
+        Toast.shared.showToast(message: viewModel.reportMessage)
+    }
+}
+
+//#Preview {
+//    ReportViewController()
+//}
