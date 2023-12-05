@@ -125,4 +125,69 @@ final class MockUserWorker: UserWorkerProtocol {
         }
     }
 
+    func fetchProfile(by id: Int?) async -> Member? {
+        guard let fileLocation = Bundle.main.url(forResource: "GetMember", withExtension: "json") else { return nil }
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint = EndPoint<Response<MemberDTO>>(path: "/member",
+                                                       method: .GET)
+            let response = try await provider.request(with: endPoint)
+            return response.data?.toDomain()
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchPosts(at page: Int, of id: Int?) async -> [Post]? {
+        guard let fileLocation = Bundle.main.url(forResource: "PostList", withExtension: "json") else { return nil }
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint = EndPoint<Response<[PostDTO]>>(path: "/member/posts",
+                                                          method: .GET,
+                                                          queryParameters: ["page": page])
+            let response = try await provider.request(with: endPoint)
+            return response.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImageData(with url: URL) async -> Data? {
+        do {
+            guard let imageURL = Bundle.main.url(forResource: "sample", withExtension: "jpeg") else {
+                return nil
+            }
+            let mockData = try? Data(contentsOf: imageURL)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+
+            let data = try await provider.request(url: url)
+            return data
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
+    }
+
 }

@@ -30,7 +30,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
     typealias Models = ProfileModels
     var presenter: ProfilePresentationLogic?
-    var profileWorker: ProfileWorker?
+    var userWorker: UserWorkerProtocol?
 
     private var fetchPostsPage = 1
     private var canFetchMorePosts = true
@@ -47,7 +47,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     @discardableResult
     func fetchProfile() -> Task<Bool, Never> {
         Task {
-            guard let userProfile = await profileWorker?.fetchProfile(by: profileId) else {
+            guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
                 return false
             }
 
@@ -57,7 +57,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
             var profileImageData: Data? = nil
             if let profileImageURL = userProfile.profileImageURL {
-                profileImageData = await profileWorker?.fetchImageData(with: profileImageURL)
+                profileImageData = await userWorker?.fetchImageData(with: profileImageURL)
             }
             let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
                                                                                            introduce: userProfile.introduce,
@@ -93,7 +93,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     }
 
     private func fetchPosts() async -> [Models.Post] {
-        guard let posts = await profileWorker?.fetchPosts(at: fetchPostsPage, of: profileId),
+        guard let posts = await userWorker?.fetchPosts(at: fetchPostsPage, of: profileId),
               posts.count > 0 else {
             return []
         }
@@ -101,7 +101,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
         var responsePosts = [Models.Post]()
         for post in posts {
             guard let thumbnailURL = post.board.thumbnailImageURL,
-                  let profileImageData = await profileWorker?.fetchImageData(with: thumbnailURL) else {
+                  let profileImageData = await userWorker?.fetchImageData(with: thumbnailURL) else {
                 responsePosts.append(.init(thumbnailImageData: nil))
                 continue
             }

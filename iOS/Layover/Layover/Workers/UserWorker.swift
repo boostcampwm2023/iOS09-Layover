@@ -30,10 +30,13 @@ protocol UserWorkerProtocol {
     func validateNickname(_ nickname: String) -> NicknameState
     func modifyNickname(to nickname: String) async -> String?
     func checkDuplication(for userName: String) async -> Bool
-    // TODO: multipart request 구현
     // func modifyProfileImage() async throws -> URL
     func modifyIntroduce(to introduce: String) async -> String?
     func withdraw() async -> String?
+
+    func fetchProfile(by id: Int?) async -> Member?
+    func fetchPosts(at page: Int, of id: Int?) async -> [Post]?
+    func fetchImageData(with url: URL) async -> Data?
 }
 
 final class UserWorker: UserWorkerProtocol {
@@ -118,6 +121,39 @@ final class UserWorker: UserWorkerProtocol {
             return data.userName
         } catch {
             os_log(.error, log: .default, "Failed to withdraw with error: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchProfile(by id: Int?) async -> Member? {
+        let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: id)
+
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.toDomain()
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchPosts(at page: Int, of id: Int?) async -> [Post]? {
+        let endPoint = userEndPointFactory.makeUserPostsEndPoint(at: page, of: id)
+
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImageData(with url: URL) async -> Data? {
+        do {
+            return try await provider.request(url: url)
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
             return nil
         }
     }
