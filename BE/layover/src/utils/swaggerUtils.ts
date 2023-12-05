@@ -82,13 +82,8 @@ export const SWAGGER = {
   AUTHORIZATION_HEADER: {
     name: 'Authorization',
     description: 'Bearer {token}',
+    required: true,
   },
+
+  MEMBER_ID_QUERY_STRING: { name: 'memberId', required: false },
 };
-/*
-@ApiHeaders([
-  {
-    name: 'Authorization',
-    description: 'Bearer {token}',
-  },
-])
-*/

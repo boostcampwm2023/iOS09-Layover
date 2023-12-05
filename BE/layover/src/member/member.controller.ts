@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common';
 import { CheckUsernameDto } from './dtos/check-username.dto';
 import { MemberService } from './member.service';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CheckUsernameResDto } from './dtos/check-username-res.dto';
 import { CustomResponse } from 'src/response/custom-response';
 import { ECustomCode } from 'src/response/ecustom-code.jenum';
@@ -88,6 +88,7 @@ export class MemberController {
   @ApiResponse(MEMBER_SWAGGER.GET_MEMBER_INFOS_SUCCESS)
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiHeader(SWAGGER.AUTHORIZATION_HEADER)
+  @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get()
   async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('memberId') memberId: string) {
     let id: number;
