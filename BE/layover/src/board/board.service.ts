@@ -81,7 +81,7 @@ export class BoardService {
       board.content,
       board.status,
     );
-    const tag = board.tags.map((tag) => tag.tagname);
+    const tag = board.tags ? board.tags.map((tag) => tag.tagname) : [];
     return new BoardsResDto(member, boardInfo, tag);
   }
 
