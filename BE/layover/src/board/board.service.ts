@@ -20,11 +20,11 @@ export class BoardService {
 
   async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
-
+    content = content ?? '';
     const savedBoard: Board = await this.boardRepository.save({
       member: member,
       title: title,
-      content: content ?? '',
+      content: content,
       encoded_video_url: '',
       latitude: latitude,
       longitude: longitude,
@@ -37,7 +37,7 @@ export class BoardService {
       });
     }
 
-    return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag);
+    return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag ?? []);
   }
 
   async getBoardRandom() {
