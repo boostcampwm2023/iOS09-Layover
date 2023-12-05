@@ -39,7 +39,8 @@
     "rxjs": "^7.8.1",
     "ts-jenum": "^2.2.2",
     "typeorm": "^0.3.17",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "verify-apple-id-token": "^3.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
