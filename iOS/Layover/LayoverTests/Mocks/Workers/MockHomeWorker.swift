@@ -21,7 +21,7 @@ final class MockHomeWorker: HomeWorkerProtocol {
     // MARK: - Methods
 
     func fetchPosts() async -> [Post]? {
-        guard let fileLocation = Bundle.main.url(forResource: "PostList",
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList",
                                                  withExtension: "json") else { return nil }
 
         do {
@@ -46,7 +46,7 @@ final class MockHomeWorker: HomeWorkerProtocol {
 
     func fetchImageData(of url: URL) async -> Data? {
         do {
-            guard let imageURL = Bundle.main.url(forResource: "sample", withExtension: "jpeg") else {
+            guard let imageURL = Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg") else {
                 return nil
             }
             let mockData = try? Data(contentsOf: imageURL)
