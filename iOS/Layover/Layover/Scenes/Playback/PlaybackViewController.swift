@@ -20,6 +20,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
 }
@@ -91,6 +92,10 @@ final class PlaybackViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         interactor?.leavePlaybackView()
+        if isMovingFromParent {
+            playerSlider.removeFromSuperview()
+            interactor?.moveToBack()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -157,6 +162,11 @@ final class PlaybackViewController: BaseViewController {
         let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
         interactor?.controlPlaybackMovie(with: request)
     }
+
+    private func moveToBackViewController() {
+        playerSlider.removeFromSuperview()
+        interactor?.moveToBack()
+    }
 }
 
 extension PlaybackViewController: PlaybackDisplayLogic {
@@ -180,9 +190,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             curCell.playbackView.playPlayer()
             setPlayerSlider(at: curCell.playbackView)
             // Slider가 원점으로 돌아가는 시간 필요
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-//                self.playerSlider.isHidden = false
-//            }
             Task {
                 await slowShowPlayerSlider()
             }
@@ -238,6 +245,13 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         viewModel.curCell.playbackView.seekPlayer(seekTime: seekTime)
         viewModel.curCell.playbackView.playPlayer()
     }
+
+    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        var curCell = viewModel.curCell
+        curCell?.playbackView.resetPlayer()
+        curCell = nil
+    }
+
 }
 
 extension PlaybackViewController: UICollectionViewDelegateFlowLayout {

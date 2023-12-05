@@ -169,7 +169,7 @@ final class HomeViewController: BaseViewController {
     private func pauseAllVisibleCellsVideo() {
         carouselCollectionView.visibleCells.forEach { cell in
             guard let cell = cell as? HomeCarouselCollectionViewCell else { return }
-            cell.pauseVideo()
+            cell.resetVideo()
         }
     }
 

@@ -16,6 +16,7 @@ protocol PlaybackBusinessLogic {
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func moveToBack()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
 }
@@ -139,6 +140,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func leavePlaybackView() {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
         presenter?.presentLeavePlaybackView(with: response)
+    }
+
+    func moveToBack() {
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
+        presenter?.presentResetPlaybackCell(with: response)
     }
 
     func configurePlaybackCell() {

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PlaybackRoutingLogic {
-    func routeToNext()
+    func routeToBack()
 }
 
 protocol PlaybackDataPassing {
@@ -25,7 +25,7 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
 
     // MARK: - Routing
 
-    func routeToNext() {
-
+    func routeToBack() {
+        viewController?.navigationController?.popViewController(animated: true)
     }
 }

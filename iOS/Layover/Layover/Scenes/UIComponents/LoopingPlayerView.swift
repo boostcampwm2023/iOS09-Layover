@@ -73,6 +73,12 @@ final class LoopingPlayerView: UIView {
             player?.pause()
         }
     }
+
+    func reset() {
+        player?.replaceCurrentItem(with: nil)
+        player = nil
+        looper = nil
+    }
 }
 
 #Preview {
