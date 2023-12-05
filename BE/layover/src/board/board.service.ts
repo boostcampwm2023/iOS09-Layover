@@ -20,6 +20,7 @@ export class BoardService {
 
   async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
+    content = content ?? '';
     const savedBoard: Board = await this.boardRepository.save({
       member: member,
       title: title,
@@ -30,11 +31,13 @@ export class BoardService {
       filename: '',
       status: 'WAITING',
     });
-    tag.map(async (tagname) => {
-      await this.tagService.saveTag(savedBoard, tagname);
-    });
+    if (tag) {
+      tag.map(async (tagname) => {
+        await this.tagService.saveTag(savedBoard, tagname);
+      });
+    }
 
-    return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag);
+    return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag ?? []);
   }
 
   async getBoardRandom() {
@@ -78,7 +81,7 @@ export class BoardService {
       board.content,
       board.status,
     );
-    const tag = board.tags.map((tag) => tag.tagname);
+    const tag = board.tags ? board.tags.map((tag) => tag.tagname) : [];
     return new BoardsResDto(member, boardInfo, tag);
   }
 
@@ -101,13 +104,18 @@ export class BoardService {
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardTag(tag: string) {
+  async getBoardTag(tag: string, page: number) {
+    const itemsPerPage = 15;
+    const offset = (page - 1) * itemsPerPage;
+
     const boards: Board[] = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
       .andWhere("board.status = 'COMPLETE'")
+      .skip(offset)
+      .take(itemsPerPage)
       .getMany();
 
     const boardIds = boards.map((board) => board.id);
@@ -122,13 +130,18 @@ export class BoardService {
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardProfile(id: number) {
+  async getBoardProfile(id: number, page: number) {
+    const itemsPerPage = 15;
+    const offset = (page - 1) * itemsPerPage;
+
     const boards: Board[] = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where("board.status = 'COMPLETE'")
       .andWhere('member.id = :id', { id })
+      .skip(offset)
+      .take(itemsPerPage)
       .getMany();
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }

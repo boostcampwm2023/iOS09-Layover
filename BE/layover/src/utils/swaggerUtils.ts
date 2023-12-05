@@ -85,5 +85,5 @@ export const SWAGGER = {
     required: true,
   },
 
-  MEMBER_ID_QUERY_STRING: { name: 'memberId', required: false },
+  MEMBER_ID_QUERY_STRING: { name: 'memberId', required: false, description: '회원 아이디 (생략하면 본인 정보 요청)' },
 };
