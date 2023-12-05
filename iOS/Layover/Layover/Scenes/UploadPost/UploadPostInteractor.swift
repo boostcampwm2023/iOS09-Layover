@@ -17,7 +17,7 @@ protocol UploadPostBusinessLogic {
     func fetchThumbnailImage()
     func fetchCurrentAddress()
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
-    func uploadPost()
+    func uploadPost(request: UploadPostModels.UploadPost.Request)
 }
 
 protocol UploadPostDataStore {
@@ -35,6 +35,7 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
     lazy var worker = UploadPostWorker()
     var presenter: UploadPostPresentationLogic?
 
+    private let fileManager: FileManager
     private let locationManager: CLLocationManager
 
     // MARK: - Data Store
@@ -43,9 +44,15 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
     var isMuted: Bool?
     var tags: [String]? = []
 
-    init(locationManager: CLLocationManager = CLLocationManager()) {
+    // MARK: - Object LifeCycle
+
+    init(fileManager: FileManager = FileManager.default,
+         locationManager: CLLocationManager = CLLocationManager()) {
+        self.fileManager = fileManager
         self.locationManager = locationManager
     }
+
+    // MARK: - Methods
 
     func fetchTags() {
         guard let tags else { return }
@@ -64,7 +71,7 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
                     presenter?.presentThumnailImage(with: UploadPostModels.FetchThumbnail.Response(thumnailImage: image))
                 }
             } catch let error {
-                os_log(.error, log: .default, "Failed to fetch ThumbnailImage with error: %@", error.localizedDescription)
+                os_log(.error, log: .default, "Failed to fetch Thumbnail Image with error: %@", error.localizedDescription)
             }
         }
     }
@@ -74,9 +81,8 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
         locationManager.startUpdatingLocation()
 
         guard let space = locationManager.location?.coordinate else { return }
-        let latitude = space.latitude
-        let longitude = space.longitude
-        let location = CLLocation(latitude: latitude, longitude: longitude)
+        let location = CLLocation(latitude: space.latitude,
+                                  longitude: space.longitude)
         let locale = Locale(identifier: "ko_KR")
 
         Task {
@@ -91,6 +97,8 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
                 await MainActor.run {
                     presenter?.presentCurrentAddress(with: response)
                 }
+            } catch {
+                os_log(.error, log: .default, "Failed to fetch Current Address with error: %@", error.localizedDescription)
             }
         }
     }
@@ -100,22 +108,23 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
         presenter?.presentUploadButton(with: response)
     }
 
-    func uploadPost() {
-        guard let isMuted else { return }
+    func uploadPost(request: UploadPostModels.UploadPost.Request) {
+        guard let videoURL, let isMuted else { return }
         if isMuted {
-            extractVideoWithoutAudio()
+            exportVideoWithoutAudio(at: videoURL)
         }
+
+
+
 
     }
 
-    private func extractVideoWithoutAudio() {
-        guard let videoURL else { return }
-
+    // isMuted가 true인 경우, 새로운 Composition을 만들어서 영상 재추출해서 업로드
+    private func exportVideoWithoutAudio(at url: URL) {
         let composition = AVMutableComposition()
-        let sourceAsset = AVURLAsset(url: videoURL)
+        let sourceAsset = AVURLAsset(url: url)
         guard let compositionVideoTrack = composition.addMutableTrack(withMediaType: AVMediaType.video,
                                                                       preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
-
         Task {
             do {
                 let sourceAssetduration = try await sourceAsset.load(.duration)
@@ -127,16 +136,16 @@ final class UploadPostInteractor: UploadPostBusinessLogic, UploadPostDataStore {
                                                            of: sourceVideoTrack,
                                                            at: .zero)
 
-                if FileManager.default.fileExists(atPath: videoURL.path()) {
-                    try FileManager.default.removeItem(at: videoURL)
+                if fileManager.fileExists(atPath: url.path()) {
+                    try fileManager.removeItem(at: url)
                 }
 
                 let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)
                 exporter?.outputURL = videoURL
                 exporter?.outputFileType = AVFileType.mov
                 await exporter?.export()
-            } catch let error {
-                os_log(.error, log: .default, "Failed to fetch extractVideoWithoutAudio with error: %@", error.localizedDescription)
+            } catch {
+                os_log(.error, log: .default, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
             }
         }
     }

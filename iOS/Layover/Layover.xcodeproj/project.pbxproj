@@ -132,6 +132,10 @@
 		FC3752352B170A620000D439 /* EditVideoInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522F2B170A620000D439 /* EditVideoInteractor.swift */; };
 		FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3752362B170B230000D439 /* EditVideoConfigurator.swift */; };
 		FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */; };
+		FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */; };
+		FC4084C62B1F1C5B00CE4727 /* UploadPostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */; };
+		FC4084CA2B1F291200CE4727 /* UploadVideoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */; };
+		FC4084CC2B1F2F5D00CE4727 /* UploadPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */; };
 		FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
@@ -321,6 +325,10 @@
 		FC37522F2B170A620000D439 /* EditVideoInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoInteractor.swift; sourceTree = "<group>"; };
 		FC3752362B170B230000D439 /* EditVideoConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoConfigurator.swift; sourceTree = "<group>"; };
 		FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
+		FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostEndPointFactory.swift; sourceTree = "<group>"; };
+		FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostDTO.swift; sourceTree = "<group>"; };
+		FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadVideoDTO.swift; sourceTree = "<group>"; };
+		FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPost.swift; sourceTree = "<group>"; };
 		FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFileWorker.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
@@ -492,6 +500,7 @@
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
 				19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */,
+				FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -525,6 +534,7 @@
 				19A1692C2B17750B00DB34C0 /* Post.swift */,
 				19A169412B17C70C00DB34C0 /* Member.swift */,
 				19A169432B17C71C00DB34C0 /* Board.swift */,
+				FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -565,6 +575,8 @@
 				19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */,
 				836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */,
 				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
+				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
+				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -1116,6 +1128,7 @@
 				FC3752342B170A620000D439 /* EditVideoViewController.swift in Sources */,
 				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
+				FC4084C62B1F1C5B00CE4727 /* UploadPostDTO.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194C21BD2B1B728600C62645 /* StubAuthManager.swift in Sources */,
 				FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */,
@@ -1193,6 +1206,7 @@
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
 				836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */,
+				FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */,
 				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
@@ -1214,6 +1228,7 @@
 				FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */,
 				835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */,
 				1945520F2B03AEA400299768 /* Configurator.swift in Sources */,
+				FC4084CC2B1F2F5D00CE4727 /* UploadPost.swift in Sources */,
 				835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */,
 				19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */,
 				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
@@ -1238,6 +1253,7 @@
 				835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */,
 				19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */,
 				FC0E803C2B1B91C900EF56D6 /* EditTagRouter.swift in Sources */,
+				FC4084CA2B1F291200CE4727 /* UploadVideoDTO.swift in Sources */,
 				835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
