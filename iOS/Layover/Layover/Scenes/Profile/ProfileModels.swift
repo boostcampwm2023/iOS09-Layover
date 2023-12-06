@@ -38,7 +38,6 @@ enum ProfileModels {
     }
 
     enum FetchMorePosts {
-
         struct Request {
         }
 
@@ -48,6 +47,18 @@ enum ProfileModels {
 
         struct ViewModel {
             let posts: [Post]
+        }
+    }
+
+    enum ShowPostDetail {
+        struct Request {
+            let startIndex: Int
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
         }
     }
 }

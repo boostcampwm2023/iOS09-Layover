@@ -11,6 +11,7 @@ import UIKit
 protocol ProfilePresentationLogic {
     func presentProfile(with response: ProfileModels.FetchProfile.Response)
     func presentMorePosts(with response: ProfileModels.FetchMorePosts.Response)
+    func presentPostDetail(with response: ProfileModels.ShowPostDetail.Response)
 }
 
 final class ProfilePresenter: ProfilePresentationLogic {
@@ -31,6 +32,10 @@ final class ProfilePresenter: ProfilePresentationLogic {
     func presentMorePosts(with response: ProfileModels.FetchMorePosts.Response) {
         let viewModel = Models.FetchMorePosts.ViewModel(posts: response.posts)
         viewController?.displayMorePosts(viewModel: viewModel)
+    }
+
+    func presentPostDetail(with response: ProfileModels.ShowPostDetail.Response) {
+        viewController?.routeToPostDetail(viewModel: Models.ShowPostDetail.ViewModel())
     }
 
 }

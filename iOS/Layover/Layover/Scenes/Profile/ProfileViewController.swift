@@ -11,6 +11,7 @@ import UIKit
 protocol ProfileDisplayLogic: AnyObject {
     func displayProfile(viewModel: ProfileModels.FetchProfile.ViewModel)
     func displayMorePosts(viewModel: ProfileModels.FetchMorePosts.ViewModel)
+    func routeToPostDetail(viewModel: ProfileModels.ShowPostDetail.ViewModel)
 }
 
 final class ProfileViewController: BaseViewController {
@@ -47,7 +48,7 @@ final class ProfileViewController: BaseViewController {
     // MARK: - Properties
 
     typealias Models = ProfileModels
-    var router: (NSObjectProtocol & ProfileRoutingLogic & ProfileDataPassing)?
+    var router: (ProfileRoutingLogic & ProfileDataPassing)?
     var interactor: ProfileBusinessLogic?
     private let profileType: ProfileType
 
@@ -175,21 +176,21 @@ final class ProfileViewController: BaseViewController {
     // MARK: - Use Case
 
     private func fetchProfile() {
-        interactor?.fetchProfile()
+        interactor?.fetchProfile(with: Models.FetchProfile.Request())
     }
 
     private func fetchPosts() {
-        interactor?.fetchMorePosts()
+        interactor?.fetchMorePosts(with: Models.FetchMorePosts.Request())
     }
 
     // MARK: - Actions
 
     @objc private func editbuttonDidTap() {
-        router?.routeToEditProfileViewController()
+        router?.routeToEditProfile()
     }
 
     @objc private func settingButtonDidTap() {
-        router?.routeToSettingSceneViewController()
+        router?.routeToSetting()
     }
 
 }
@@ -211,6 +212,10 @@ extension ProfileViewController: ProfileDisplayLogic {
         snapshot.append(viewModel.posts)
         collectionViewDatasource?.apply(snapshot, to: .posts)
     }
+
+    func routeToPostDetail(viewModel: ProfileModels.ShowPostDetail.ViewModel) {
+        router?.routeToPlayback()
+    }
 }
 
 // MARK: - UICollectionViewDelegate
@@ -223,6 +228,17 @@ extension ProfileViewController: UICollectionViewDelegate {
 
         if scrollOffset > contentHeight - height {
             fetchPosts()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        switch section {
+        case .profile:
+            return
+        case .posts:
+            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.Post else { return }
+            interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
         }
     }
 }

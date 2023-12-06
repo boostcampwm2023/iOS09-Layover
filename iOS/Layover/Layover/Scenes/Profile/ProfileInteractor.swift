@@ -10,10 +10,12 @@ import Foundation
 
 protocol ProfileBusinessLogic {
     @discardableResult
-    func fetchProfile() -> Task<Bool, Never>
+    func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never>
 
     @discardableResult
-    func fetchMorePosts() -> Task<Bool, Never>
+    func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) -> Task<Bool, Never>
+
+    func showPostDetail(with request: ProfileModels.ShowPostDetail.Request)
 }
 
 protocol ProfileDataStore {
@@ -22,6 +24,9 @@ protocol ProfileDataStore {
     var profileImageData: Data? { get set }
 
     var profileId: Int? { get set }
+
+    var playbackStartIndex: Int? { get set }
+    var posts: [Post] { get set }
 }
 
 final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
@@ -42,10 +47,13 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     var profileImageData: Data?
     var profileId: Int?
 
+    var playbackStartIndex: Int?
+    var posts: [Post] = []
+
     // MARK: - Methods
 
     @discardableResult
-    func fetchProfile() -> Task<Bool, Never> {
+    func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never> {
         Task {
             guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
                 return false
@@ -75,7 +83,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     }
 
     @discardableResult
-    func fetchMorePosts() -> Task<Bool, Never> {
+    func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) -> Task<Bool, Never> {
         Task {
             guard canFetchMorePosts else { return false }
             let fetchedPosts = await fetchPosts()
@@ -97,13 +105,14 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     }
 
     private func fetchPosts() async -> [Models.Post] {
-        guard let posts = await userWorker?.fetchPosts(at: fetchPostsPage, of: profileId),
-              posts.count > 0 else {
+        guard let fetchedPosts = await userWorker?.fetchPosts(at: fetchPostsPage, of: profileId),
+              fetchedPosts.count > 0 else {
             return []
         }
+        posts += fetchedPosts
 
         var responsePosts = [Models.Post]()
-        for post in posts {
+        for post in fetchedPosts {
             guard let thumbnailURL = post.board.thumbnailImageURL,
                   let profileImageData = await userWorker?.fetchImageData(with: thumbnailURL) else {
                 responsePosts.append(.init(id: post.board.identifier, thumbnailImageData: nil))
@@ -114,6 +123,11 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
         }
 
         return responsePosts
+    }
+
+    func showPostDetail(with request: ProfileModels.ShowPostDetail.Request) {
+        playbackStartIndex = request.startIndex
+        presenter?.presentPostDetail(with: Models.ShowPostDetail.Response())
     }
 
 }

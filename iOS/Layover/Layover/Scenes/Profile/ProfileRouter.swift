@@ -9,15 +9,16 @@
 import UIKit
 
 protocol ProfileRoutingLogic {
-    func routeToEditProfileViewController()
-    func routeToSettingSceneViewController()
+    func routeToEditProfile()
+    func routeToSetting()
+    func routeToPlayback()
 }
 
 protocol ProfileDataPassing {
     var dataStore: ProfileDataStore? { get }
 }
 
-final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
+final class ProfileRouter: ProfileRoutingLogic, ProfileDataPassing {
 
     // MARK: - Properties
 
@@ -26,7 +27,7 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
 
     // MARK: - Routing
 
-    func routeToEditProfileViewController() {
+    func routeToEditProfile() {
         let editProfileViewController = EditProfileViewController()
         guard let source = dataStore,
               var destination = editProfileViewController.router?.dataStore
@@ -38,9 +39,18 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
-    func routeToSettingSceneViewController() {
+    func routeToSetting() {
         let settingSceneViewController: SettingSceneViewController = SettingSceneViewController()
         viewController?.navigationController?.pushViewController(settingSceneViewController, animated: true)
+    }
+
+    func routeToPlayback() {
+        let playbackViewController = PlaybackViewController()
+        guard let source = dataStore,
+              var destination = playbackViewController.router?.dataStore
+        else { return }
+        passDataToPlayback(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
 
     // MARK: - Data Passing
@@ -49,5 +59,10 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         destination.nickname = source.nickname
         destination.introduce = source.introduce
         destination.profileImageData = source.profileImageData
+    }
+
+    private func passDataToPlayback(source: ProfileDataStore, destination: inout PlaybackDataStore) {
+        destination.posts = source.posts
+        destination.index = source.playbackStartIndex
     }
 }
