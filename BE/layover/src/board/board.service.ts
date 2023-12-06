@@ -160,7 +160,7 @@ export class BoardService {
 
   generateEncodedVideoHLS(filename: string) {
     return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
-    /${process.env.HLS_ENCODING_PATH}/${filename}_AVC_,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8`;
+    /${process.env.HLS_ENCODING_PATH}/${filename}_AVC_,FHD,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8`;
   }
 
   async setStatusByFilename(filename: string, status: string) {
