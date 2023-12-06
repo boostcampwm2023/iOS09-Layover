@@ -2,11 +2,12 @@ import { BoardService } from './board.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MemberService } from '../member/member.service';
 import { TagService } from '../tag/tag.service';
+import { BoardRepository } from './board.repository';
 
 describe('BoardService', () => {
   let boardService: BoardService;
   const mockBoardRepository = {
-    save: jest.fn(),
+    saveBoard: jest.fn(),
   };
   const mockMemberService = {
     findMemberById: jest.fn(),
@@ -19,7 +20,7 @@ describe('BoardService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BoardService,
-        { provide: 'BOARD_REPOSITORY', useValue: mockBoardRepository },
+        { provide: BoardRepository, useValue: mockBoardRepository },
         { provide: MemberService, useValue: mockMemberService },
         { provide: TagService, useValue: mockTagService },
       ],

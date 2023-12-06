@@ -22,8 +22,7 @@ describe('BoardController', () => {
 
   const mockBoardService = {
     createBoard: jest.fn(),
-    getBoardRandom: jest.fn(),
-    getBoardMap: jest.fn(),
+    getBoardsRandomly: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -66,7 +65,7 @@ describe('BoardController', () => {
   it('홈 화면 게시글 조회 성공', async () => {
     try {
       //given
-      mockBoardService.getBoardRandom.mockResolvedValue(boardsResDto);
+      mockBoardService.getBoardsRandomly.mockResolvedValue(boardsResDto);
 
       //when
       await boardController.getBoardRandom(testPayload);
