@@ -1,0 +1,11 @@
+{
+    "customCode": "SUCCESS",
+    "message": "성공",
+    "statusCode": 200,
+    "data": {
+        "id": 221,
+        "username": "hwani",
+        "introduce": "Hi, my name is hwani",
+        "profile_image_url": "https://qi-o.qoo10cdn.com/goods_image_big/3/3/1/6/8645113316_l.jpg"
+    }
+}

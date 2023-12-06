@@ -42,7 +42,7 @@ final class SignUpInteractor: SignUpBusinessLogic, SignUpDataStore {
 
     func checkDuplication(with request: SignUpModels.CheckDuplication.Request) {
         Task {
-            let response = await userWorker?.checkDuplication(for: request.nickname)
+            let response = await userWorker?.checkNotDuplication(for: request.nickname)
             await MainActor.run {
                 presenter?.presentNicknameDuplication(with: SignUpModels.CheckDuplication.Response(isValid: response ?? false))
             }

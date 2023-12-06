@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MemberDTO: Codable {
+struct MemberDTO: Decodable {
     let id: Int
     let username, introduce: String
     let profileImageURL: String

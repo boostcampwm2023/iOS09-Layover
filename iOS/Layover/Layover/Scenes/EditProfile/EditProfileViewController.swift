@@ -222,8 +222,8 @@ extension EditProfileViewController: EditProfileDisplayLogic {
             introduceTextfield.text = introduce
         }
 
-        if let image = viewModel.profileImage {
-            profileImageView.image = image
+        if let imageData = viewModel.profileImageData {
+            profileImageView.image = UIImage(data: imageData)
         } else {
             profileImageView.image = UIImage.profile
         }
