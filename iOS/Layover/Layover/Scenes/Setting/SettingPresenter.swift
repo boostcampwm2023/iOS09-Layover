@@ -14,6 +14,8 @@ import UIKit
 
 protocol SettingPresentationLogic {
     func presentTableView(with response: SettingModels.ConfigureTableView.Response)
+    func presentUserLogoutConfirmed(with response: SettingModels.Logout.Response)
+    func presentUserWithdrawConfirmed(with response: SettingModels.Withdraw.Response)
 }
 
 final class SettingPresenter: SettingPresentationLogic {
@@ -36,5 +38,13 @@ final class SettingPresenter: SettingPresentationLogic {
             Models.signOutSection
         ])
         viewController?.displayTableView(viewModel: viewModel)
+    }
+
+    func presentUserLogoutConfirmed(with response: Models.Logout.Response) {
+        viewController?.displayUserLogoutConfirmed(viewModel: Models.Logout.ViewModel())
+    }
+
+    func presentUserWithdrawConfirmed(with response: Models.Withdraw.Response) {
+        viewController?.displayUserWithdrawConfirmed(viewModel: Models.Withdraw.ViewModel())
     }
 }

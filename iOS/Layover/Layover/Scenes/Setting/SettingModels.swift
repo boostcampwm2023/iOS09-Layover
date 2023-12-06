@@ -44,6 +44,28 @@ enum SettingModels {
         }
     }
 
+    enum Logout {
+        struct Request {
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
+        }
+    }
+
+    enum Withdraw {
+        struct Request {
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
+        }
+    }
+
     enum SectionTitle: String, CaseIterable {
         case policy = "약관 및 정책"
         case system = "시스템"

@@ -34,6 +34,7 @@ protocol UserWorkerProtocol {
     // func modifyProfileImage() async throws -> URL
     func modifyIntroduce(to introduce: String) async -> String?
     func withdraw() async -> String?
+    func logout()
 }
 
 final class UserWorker: UserWorkerProtocol {
@@ -42,13 +43,16 @@ final class UserWorker: UserWorkerProtocol {
 
     private let userEndPointFactory: UserEndPointFactory
     private let provider: ProviderType
+    private let authManager: AuthManagerProtocol
 
     // MARK: - Intializer
 
     init(userEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(),
-         provider: ProviderType = Provider()) {
+         provider: ProviderType = Provider(),
+         authManager: AuthManagerProtocol = AuthManager.shared) {
         self.userEndPointFactory = userEndPointFactory
         self.provider = provider
+        self.authManager = authManager
     }
 
     // MARK: - Methods
@@ -120,5 +124,9 @@ final class UserWorker: UserWorkerProtocol {
             os_log(.error, log: .default, "Failed to withdraw with error: %@", error.localizedDescription)
             return nil
         }
+    }
+
+    func logout() {
+        authManager.logout()
     }
 }

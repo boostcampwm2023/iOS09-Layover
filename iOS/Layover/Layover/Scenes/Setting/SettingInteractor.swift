@@ -14,6 +14,9 @@ import UIKit
 
 protocol SettingBusinessLogic {
     func performTableViewConfigure(request: SettingModels.ConfigureTableView.Request)
+    func performUserLogout(request: SettingModels.Logout.Request)
+    @discardableResult
+    func performUserWithdraw(request: SettingModels.Withdraw.Request) -> Task<Bool, Never>
 }
 
 protocol SettingDataStore {
@@ -26,12 +29,29 @@ final class SettingInteractor: SettingBusinessLogic, SettingDataStore {
 
     typealias Models = SettingModels
     var presenter: SettingPresentationLogic?
-    var worker: SettingWorkerProtocol?
+    var settingWorker: SettingWorkerProtocol?
+    var userWorker: UserWorkerProtocol?
 
     // MARK: - Methods
 
     func performTableViewConfigure(request: Models.ConfigureTableView.Request) {
-        let response = Models.ConfigureTableView.Response(versionNumber: worker?.versionNumber() ?? "")
+        let response = Models.ConfigureTableView.Response(versionNumber: settingWorker?.versionNumber() ?? "")
         presenter?.presentTableView(with: response)
+    }
+
+    func performUserLogout(request: SettingModels.Logout.Request) {
+        userWorker?.logout()
+        presenter?.presentUserLogoutConfirmed(with: Models.Logout.Response())
+    }
+
+    @discardableResult
+    func performUserWithdraw(request: SettingModels.Withdraw.Request) -> Task<Bool, Never> {
+        Task {
+            guard (await userWorker?.withdraw()) != nil else { return false }
+            await MainActor.run {
+                presenter?.presentUserWithdrawConfirmed(with: Models.Withdraw.Response())
+            }
+            return true
+        }
     }
 }

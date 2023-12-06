@@ -125,4 +125,8 @@ final class MockUserWorker: UserWorkerProtocol {
         }
     }
 
+    func logout() {
+        return
+    }
+
 }

@@ -10,6 +10,8 @@ import UIKit
 
 protocol SettingDisplayLogic: AnyObject {
     func displayTableView(viewModel: SettingModels.ConfigureTableView.ViewModel)
+    func displayUserLogoutConfirmed(viewModel: SettingModels.Logout.ViewModel)
+    func displayUserWithdrawConfirmed(viewModel: SettingModels.Withdraw.ViewModel)
 }
 
 final class SettingViewController: BaseViewController {
@@ -22,6 +24,24 @@ final class SettingViewController: BaseViewController {
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
         return tableView
+    }()
+
+    private lazy var logoutAlertController: UIAlertController = {
+        let alertController = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "로그아웃", style: .destructive, handler: { [weak self] _ in
+            self?.interactor?.performUserLogout(request: Models.Logout.Request())
+        }))
+        alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        return alertController
+    }()
+
+    private lazy var withdrawAlertController: UIAlertController = {
+        let alertController = UIAlertController(title: "회원탈퇴", message: "회원탈퇴 하시겠습니까?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "탈퇴", style: .destructive, handler: { [weak self] _ in
+            self?.interactor?.performUserWithdraw(request: Models.Withdraw.Request())
+        }))
+        alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        return alertController
     }()
 
     // MARK: - Properties
@@ -134,7 +154,14 @@ extension SettingViewController: UITableViewDelegate {
             guard let policyURL = selectedItem.title.policyURL else { return }
             router?.showSafariViewController(url: policyURL)
         case .signOut:
-            break
+            switch selectedItem.title {
+            case .signOut:
+                showDetailViewController(logoutAlertController, sender: nil)
+            case .withdraw:
+                showDetailViewController(withdrawAlertController, sender: nil)
+            default:
+                break
+            }
         default:
             break
         }
@@ -145,9 +172,19 @@ extension SettingViewController: UITableViewDelegate {
 // MARK: - SettingDisplayLogic
 
 extension SettingViewController: SettingDisplayLogic {
-    func displayTableView(viewModel: SettingModels.ConfigureTableView.ViewModel) {
+    func displayTableView(viewModel: Models.ConfigureTableView.ViewModel) {
         tableViewSections = viewModel.tableViewSections
         tableView.reloadData()
+    }
+
+    func displayUserLogoutConfirmed(viewModel: Models.Logout.ViewModel) {
+        Toast.shared.showToast(message: "로그아웃 되었습니다.")
+        router?.routeToLogin()
+    }
+
+    func displayUserWithdrawConfirmed(viewModel: Models.Withdraw.ViewModel) {
+        Toast.shared.showToast(message: "회원탈퇴 되었습니다.")
+        router?.routeToLogin()
     }
 }
 

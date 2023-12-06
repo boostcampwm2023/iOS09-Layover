@@ -15,6 +15,7 @@ import SafariServices
 
 protocol SettingRoutingLogic {
     func showSafariViewController(url: URL)
+    func routeToLogin()
 }
 
 protocol SettingDataPassing {
@@ -33,5 +34,12 @@ final class SettingRouter: SettingRoutingLogic, SettingDataPassing {
     func showSafariViewController(url: URL) {
         let safariViewController = SFSafariViewController(url: url)
         viewController?.present(safariViewController, animated: true, completion: nil)
+    }
+
+    func routeToLogin() {
+        let viewController = LoginViewController()
+        guard let rootNavigationController = viewController.view.window?.rootViewController
+                as? UINavigationController else { return }
+        rootNavigationController.setViewControllers([viewController], animated: true)
     }
 }
