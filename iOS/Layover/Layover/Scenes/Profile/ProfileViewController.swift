@@ -9,7 +9,9 @@
 import UIKit
 
 protocol ProfileDisplayLogic: AnyObject {
-    func fetchProfile(viewModel: ProfileModels.FetchProfile.ViewModel)
+    func displayProfile(viewModel: ProfileModels.FetchProfile.ViewModel)
+    func displayMorePosts(viewModel: ProfileModels.FetchMorePosts.ViewModel)
+    func routeToPostDetail(viewModel: ProfileModels.ShowPostDetail.ViewModel)
 }
 
 final class ProfileViewController: BaseViewController {
@@ -24,28 +26,29 @@ final class ProfileViewController: BaseViewController {
     // MARK: - CollectionView Section
 
     enum Section: Int {
-        case profileInfo
-        case thumnail
+        case profile
+        case posts
     }
 
     // MARK: - UI Components
 
-    private lazy var thumbnailCollectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.register(ProfileCollectionViewCell.self,
                                 forCellWithReuseIdentifier: ProfileCollectionViewCell.identifier)
         collectionView.register(ThumbnailCollectionViewCell.self,
                                 forCellWithReuseIdentifier: ThumbnailCollectionViewCell.identifier)
+        collectionView.delegate = self
         return collectionView
     }()
 
-    private var videoDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
+    private var collectionViewDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
 
     // MARK: - Properties
 
     typealias Models = ProfileModels
-    var router: (NSObjectProtocol & ProfileRoutingLogic & ProfileDataPassing)?
+    var router: (ProfileRoutingLogic & ProfileDataPassing)?
     var interactor: ProfileBusinessLogic?
     private let profileType: ProfileType
 
@@ -69,17 +72,17 @@ final class ProfileViewController: BaseViewController {
         super.viewDidLoad()
         setNavigationBar()
         setDataSource()
-        interactor?.fetchProfile()
+        fetchProfile()
     }
 
     override func setConstraints() {
-        view.addSubview(thumbnailCollectionView)
-        thumbnailCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            thumbnailCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            thumbnailCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            thumbnailCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            thumbnailCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -89,7 +92,7 @@ final class ProfileViewController: BaseViewController {
         let layout = UICollectionViewCompositionalLayout { section, _ in
             guard let section: Section = Section(rawValue: section) else { return nil }
             switch section {
-            case .profileInfo:
+            case .profile:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                       heightDimension: .estimated(196))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -99,7 +102,7 @@ final class ProfileViewController: BaseViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 return section
 
-            case .thumnail:
+            case .posts:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
                                                       heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -129,57 +132,113 @@ final class ProfileViewController: BaseViewController {
     }
 
     private func setDataSource() {
-        let profileCellRegistration = UICollectionView.CellRegistration<ProfileCollectionViewCell, Member> { cell, _, itemIdentifier in
-            let item = itemIdentifier as Member
-            cell.configure(profileImage: nil,
-                           nickname: item.username,
-                           introduce: item.introduce)
+        let profileCellRegistration = UICollectionView.CellRegistration<ProfileCollectionViewCell, Models.Profile> { [weak self] cell, _, itemIdentifier in
+            guard let self else { return }
+
+            var profileImage = UIImage.profile
+            if let profileImageData = itemIdentifier.profileImageData,
+               let image = UIImage(data: profileImageData) {
+                profileImage = image
+            }
+
+            cell.configure(profileImage: profileImage,
+                           nickname: itemIdentifier.username,
+                           introduce: itemIdentifier.introduce)
+            cell.editButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.editButton.addTarget(self, action: #selector(self.editbuttonDidTap), for: .touchUpInside)
         }
 
-        let thumnailCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Int> { _, _, itemIdentifier in
-            let item = itemIdentifier as Int
-            // TODO: Board Reponse 확정시 configure
-        }
+        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.Post> { cell, indexPath, itemIdentifier in
 
-        videoDatasource = UICollectionViewDiffableDataSource<Section, AnyHashable>(collectionView: thumbnailCollectionView) { collectionView, indexPath, itemIdentifier in
-            let section: Section = Section(rawValue: indexPath.section)!
-            switch section {
-            case .profileInfo:
-                return collectionView.dequeueConfiguredReusableCell(using: profileCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: itemIdentifier as? Member)
-            case .thumnail:
-                return collectionView.dequeueConfiguredReusableCell(using: thumnailCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: itemIdentifier as? Int)
+            if let imageData = itemIdentifier.thumbnailImageData,
+               let image = UIImage(data: imageData) {
+                cell.configure(image: image)
             }
         }
+
+        collectionViewDatasource = UICollectionViewDiffableDataSource<Section, AnyHashable>(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+
+            guard let section = Section(rawValue: indexPath.section) else { return UICollectionViewCell() }
+            switch section {
+            case .profile:
+                return collectionView.dequeueConfiguredReusableCell(using: profileCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: itemIdentifier as? Models.Profile)
+            case .posts:
+                return collectionView.dequeueConfiguredReusableCell(using: postCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: itemIdentifier as? Models.Post)
+            }
+        }
+        collectionView.dataSource = collectionViewDatasource
     }
 
+    // MARK: - Use Case
+
+    private func fetchProfile() {
+        interactor?.fetchProfile(with: Models.FetchProfile.Request())
+    }
+
+    private func fetchPosts() {
+        interactor?.fetchMorePosts(with: Models.FetchMorePosts.Request())
+    }
+
+    // MARK: - Actions
+
     @objc private func editbuttonDidTap() {
-        router?.routeToEditProfileViewController()
+        router?.routeToEditProfile()
     }
 
     @objc private func settingButtonDidTap() {
-        router?.routeToSettingSceneViewController()
+        router?.routeToSetting()
     }
 
 }
 
+// MARK: - ProfileDisplayLogic
+
 extension ProfileViewController: ProfileDisplayLogic {
 
-    func fetchProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
-        thumbnailCollectionView.dataSource = videoDatasource
+    func displayProfile(viewModel: ProfileModels.FetchProfile.ViewModel) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
-        snapshot.appendSections([.profileInfo, .thumnail])
-        snapshot.appendItems([Models.Member(identifier: 0,
-                                     username: viewModel.nickname,
-                                     introduce: viewModel.introduce,
-                                     profileImageURL: viewModel.profileImageURL)],
-                             toSection: .profileInfo)
-        snapshot.appendItems([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], toSection: .thumnail)
-        videoDatasource?.apply(snapshot)
+        snapshot.appendSections([.profile, .posts])
+        snapshot.appendItems([viewModel.userProfile], toSection: .profile)
+        snapshot.appendItems(viewModel.posts, toSection: .posts)
+        collectionViewDatasource?.apply(snapshot)
     }
 
+    func displayMorePosts(viewModel: ProfileModels.FetchMorePosts.ViewModel) {
+        guard var snapshot = collectionViewDatasource?.snapshot(for: .posts) else { return }
+        snapshot.append(viewModel.posts)
+        collectionViewDatasource?.apply(snapshot, to: .posts)
+    }
+
+    func routeToPostDetail(viewModel: ProfileModels.ShowPostDetail.ViewModel) {
+        router?.routeToPlayback()
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension ProfileViewController: UICollectionViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let contentHeight = scrollView.contentSize.height
+        let scrollOffset = scrollView.contentOffset.y
+        let height = scrollView.bounds.height
+
+        if scrollOffset > contentHeight - height {
+            fetchPosts()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        switch section {
+        case .profile:
+            return
+        case .posts:
+            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.Post else { return }
+            interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
+        }
+    }
 }

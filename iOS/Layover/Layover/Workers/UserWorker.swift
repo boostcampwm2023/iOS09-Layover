@@ -29,11 +29,14 @@ enum NicknameState {
 protocol UserWorkerProtocol {
     func validateNickname(_ nickname: String) -> NicknameState
     func modifyNickname(to nickname: String) async -> String?
-    func checkDuplication(for userName: String) async -> Bool
-    // TODO: multipart request 구현
+    func checkNotDuplication(for userName: String) async -> Bool?
     // func modifyProfileImage() async throws -> URL
     func modifyIntroduce(to introduce: String) async -> String?
     func withdraw() async -> String?
+
+    func fetchProfile(by id: Int?) async -> Member?
+    func fetchPosts(at page: Int, of id: Int?) async -> [Post]?
+    func fetchImageData(with url: URL) async -> Data?
 }
 
 final class UserWorker: UserWorkerProtocol {
@@ -77,15 +80,11 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func checkDuplication(for userName: String) async -> Bool {
-        let endPoint = userEndPointFactory.makeUserNameIsDuplicateEndPoint(of: userName)
+    func checkNotDuplication(for userName: String) async -> Bool? {
+        let endPoint = userEndPointFactory.makeUserNameIsNotDuplicateEndPoint(of: userName)
         do {
             let responseData = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            guard let data = responseData.data else {
-                os_log(.error, log: .default, "Failed to check duplicate username with error: %@", responseData.message)
-                return false
-            }
-            return data.isValid
+            return responseData.data?.isValid
         } catch {
             os_log(.error, log: .default, "Failed to check duplicate username with error: %@", error.localizedDescription)
             return false
@@ -118,6 +117,39 @@ final class UserWorker: UserWorkerProtocol {
             return data.userName
         } catch {
             os_log(.error, log: .default, "Failed to withdraw with error: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchProfile(by id: Int?) async -> Member? {
+        let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: id)
+
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.toDomain()
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchPosts(at page: Int, of id: Int?) async -> [Post]? {
+        let endPoint = userEndPointFactory.makeUserPostsEndPoint(at: page, of: id)
+
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImageData(with url: URL) async -> Data? {
+        do {
+            return try await provider.request(url: url)
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
             return nil
         }
     }

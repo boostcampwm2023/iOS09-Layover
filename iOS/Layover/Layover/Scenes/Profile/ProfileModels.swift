@@ -10,30 +10,55 @@ import UIKit
 
 enum ProfileModels {
 
-    struct Member: Hashable {
-        let identifier: Int
+    struct Profile: Hashable {
         let username: String
         let introduce: String?
-        let profileImageURL: URL?
+        let profileImageData: Data?
+    }
+
+    struct Post: Hashable {
+        let id: Int
+        let thumbnailImageData: Data?
     }
 
     enum FetchProfile {
-        struct Request {
 
+        struct Request {
         }
 
         struct Response {
-            let nickname: String
-            let introduce: String?
-            let profileImageURL: URL?
-            // video data
+            let userProfile: Profile
+            let posts: [Post]
         }
 
         struct ViewModel {
-            let nickname: String
-            let introduce: String?
-            let profileImageURL: URL?
-            // video data
+            let userProfile: Profile
+            let posts: [Post]
+        }
+    }
+
+    enum FetchMorePosts {
+        struct Request {
+        }
+
+        struct Response {
+            let posts: [Post]
+        }
+
+        struct ViewModel {
+            let posts: [Post]
+        }
+    }
+
+    enum ShowPostDetail {
+        struct Request {
+            let startIndex: Int
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
         }
     }
 }

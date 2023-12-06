@@ -15,6 +15,7 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
     private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = UIColor.darkGrey
         return imageView
     }()
 
@@ -34,8 +35,8 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Methods
 
-    func configure(url: URL) {
-        thumbnailImageView.image = UIImage.loLogo
+    func configure(image: UIImage) {
+        thumbnailImageView.image = image
     }
 
     private func setUI() {

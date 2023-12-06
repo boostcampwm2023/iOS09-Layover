@@ -13,16 +13,15 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
 
     private let profileImageView: UIImageView = {
-        let imageView: UIImageView = UIImageView()
-        imageView.image = UIImage.profile
+        let imageView: UIImageView = UIImageView(image: UIImage.profile)
         imageView.layer.cornerRadius = 36
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
     private let nicknameLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.text = "@loinsir"
         label.textColor = .layoverWhite
         label.font = .loFont(type: .subtitle)
         return label
@@ -30,7 +29,6 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
 
     private let introduceLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.text = "안녕하세요 로인서입니다"
         label.textColor = .layoverWhite
         label.font = .loFont(type: .body3)
         return label
@@ -59,7 +57,7 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     func configure(profileImage: UIImage?,
                    nickname: String?,
                    introduce: String?) {
-        profileImageView.image = profileImage == nil ? UIImage.profile : profileImage
+        profileImageView.image = profileImage
         nicknameLabel.text = nickname
         introduceLabel.text = introduce
     }
