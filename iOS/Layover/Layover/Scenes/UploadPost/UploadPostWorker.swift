@@ -22,8 +22,6 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
     private let provider: ProviderType
     private let uploadPostEndPointFactory: UploadPostEndPointFactory
 
-    weak var sessionTaskDelegate: URLSessionTaskDelegate?
-
     // MARK: - Methods
 
     init(provider: ProviderType = Provider(),
@@ -57,13 +55,44 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
         do {
             let response = try await provider.request(with: endPoint)
             guard let preSignedURLString = response.data?.preSignedURL else { return false }
-            _ = try await provider.backgroundUpload(fromFile: videoURL,
+            _ = try await provider.upload(fromFile: videoURL,
                                                     to: preSignedURLString,
-                                                    sessionTaskDelegate: sessionTaskDelegate)
+                                                    sessionTaskDelegate: self)
+            await MainActor.run {
+                NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
+            }
             return true
         } catch {
             os_log(.error, log: .data, "Failed to upload Video: %@", error.localizedDescription)
+            await MainActor.run {
+                NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
+            }
             return false
+        }
+    }
+
+}
+
+extension UploadPostWorker: URLSessionTaskDelegate {
+
+    func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
+        }
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didSendBodyData bytesSent: Int64,
+        totalBytesSent: Int64,
+        totalBytesExpectedToSend: Int64
+    ) {
+        let uploadProgress: Float = Float(Double(totalBytesSent) / Double(totalBytesExpectedToSend))
+        DispatchQueue.main.async {
+            NotificationQueue.default.enqueue(Notification(name: .progressChanged,
+                                                           userInfo: ["progress": uploadProgress]),
+                                              postingStyle: .asap)
         }
     }
 

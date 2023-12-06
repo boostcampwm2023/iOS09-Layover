@@ -13,7 +13,7 @@ protocol ProviderType {
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
     func upload(data: Data, to url: String, method: HTTPMethod) async throws -> Data
-    func backgroundUpload(fromFile: URL,
+    func upload(fromFile: URL,
                           to url: String,
                           method: HTTPMethod,
                           sessionTaskDelegate: URLSessionTaskDelegate?,
@@ -35,12 +35,12 @@ extension ProviderType {
                                 method: method)
     }
 
-    func backgroundUpload(fromFile: URL,
+    func upload(fromFile: URL,
                           to url: String,
                           method: HTTPMethod = .PUT,
                           sessionTaskDelegate: URLSessionTaskDelegate? = nil,
                           delegateQueue: OperationQueue? = nil) async throws -> Data {
-        return try await backgroundUpload(fromFile: fromFile,
+        return try await upload(fromFile: fromFile,
                                           to: url,
                                           method: method,
                                           sessionTaskDelegate: sessionTaskDelegate,
@@ -137,19 +137,18 @@ class Provider: ProviderType {
     }
 
     // 동영상 업로드용
-    func backgroundUpload(fromFile: URL,
-                          to url: String,
-                          method: HTTPMethod = .PUT,
-                          sessionTaskDelegate: URLSessionTaskDelegate? = nil,
-                          delegateQueue: OperationQueue? = nil) async throws -> Data {
+    func upload(fromFile: URL,
+                to url: String,
+                method: HTTPMethod = .PUT,
+                sessionTaskDelegate: URLSessionTaskDelegate? = nil,
+                delegateQueue: OperationQueue? = nil) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
         request.setValue("video/\(fromFile.pathExtension)", forHTTPHeaderField: "Content-Type")
-        let backgroundSession = URLSession(configuration: .default,
-                                           delegate: sessionTaskDelegate,
-                                           delegateQueue: delegateQueue)
-        let (data, response) = try await backgroundSession.upload(for: request, fromFile: fromFile)
+        let (data, response) = try await session.upload(for: request,
+                                                        fromFile: fromFile,
+                                                        delegate: sessionTaskDelegate)
         try self.checkStatusCode(of: response)
         return data
     }

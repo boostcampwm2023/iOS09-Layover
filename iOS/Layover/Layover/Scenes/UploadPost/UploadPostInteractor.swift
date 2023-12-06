@@ -115,9 +115,6 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     @discardableResult
     func uploadPost(request: UploadPostModels.UploadPost.Request) -> Task<Bool, Never> {
         Task {
-            await MainActor.run {
-                NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
-            }
             guard let worker,
                   let videoURL,
                   let isMuted,
@@ -131,9 +128,6 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
                                                                      longitude: coordinate.longitude,
                                                                      tag: request.tags,
                                                                      videoURL: videoURL))
-            await MainActor.run {
-                NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
-            }
             return response
         }
     }
@@ -174,25 +168,6 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             } catch {
                 os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
             }
-        }
-    }
-
-}
-
-extension UploadPostInteractor: URLSessionTaskDelegate {
-
-    func urlSession(
-        _ session: URLSession,
-        task: URLSessionTask,
-        didSendBodyData bytesSent: Int64,
-        totalBytesSent: Int64,
-        totalBytesExpectedToSend: Int64
-    ) {
-        let uploadProgress: Float = Float(Double(totalBytesSent) / Double(totalBytesExpectedToSend))
-        DispatchQueue.main.async {
-            NotificationQueue.default.enqueue(Notification(name: .progressChanged,
-                                                           userInfo: ["progress": uploadProgress]),
-                                              postingStyle: .asap)
         }
     }
 
