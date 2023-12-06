@@ -190,6 +190,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         if let prevCell = viewModel.prevCell {
             prevCell.playbackView.stopPlayer()
             prevCell.playbackView.replayPlayer()
+            prevCell.removeTimeObserver()
         }
         if let curCell = viewModel.curCell {
             curCell.playbackView.playPlayer()
@@ -253,6 +254,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         var curCell = viewModel.curCell
         curCell?.playbackView.resetPlayer()
+        curCell?.removeTimeObserver()
         curCell = nil
     }
 

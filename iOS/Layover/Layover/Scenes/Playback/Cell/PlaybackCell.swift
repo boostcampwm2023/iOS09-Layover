@@ -22,7 +22,7 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
-    override func prepareForReuse() {
+    func removeTimeObserver() {
         if let timeObserverToken = timeObserverToken {
             playbackView.playerView.player?.removeTimeObserver(timeObserverToken)
         }
