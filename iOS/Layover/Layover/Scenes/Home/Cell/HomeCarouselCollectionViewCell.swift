@@ -142,10 +142,6 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.pause()
     }
 
-    func resetVideo() {
-        loopingPlayerView.reset()
-    }
-
     // MARK: - Actions
 
     @objc private func tagButtonDidTap(_ sender: UIButton) {
