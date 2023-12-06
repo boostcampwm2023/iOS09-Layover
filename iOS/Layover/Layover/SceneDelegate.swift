@@ -72,12 +72,16 @@ extension SceneDelegate {
                                                name: .refreshTokenDidExpired,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(uploadTaskStart),
+                                               selector: #selector(showProgressView),
                                                name: .uploadTaskStart,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(progressChanged),
                                                name: .progressChanged,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(removeProgressView),
+                                               name: .uploadTaskDidComplete,
                                                object: nil)
     }
 
@@ -91,16 +95,19 @@ extension SceneDelegate {
         NotificationCenter.default.removeObserver(self,
                                                   name: .progressChanged,
                                                   object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .uploadTaskDidComplete,
+                                                  object: nil)
     }
 
     @objc private func routeToLoginViewController() {
         guard let rootNavigationViewController = window?.rootViewController as? UINavigationController else { return }
-        // TODO: 세션이 만료되었습니다. Toast 띄우기
+        Toast.shared.showToast(message: "세션이 만료되었습니다.")
         rootNavigationViewController.setNavigationBarHidden(false, animated: false)
         rootNavigationViewController.setViewControllers([LoginViewController()], animated: true)
     }
 
-    @objc private func uploadTaskStart() {
+    @objc private func showProgressView() {
         guard let progressViewWidth = window?.screen.bounds.width,
               let windowHeight = window?.screen.bounds.height,
               let tabBarViewController = window?.rootViewController as? UITabBarController else { return }
@@ -119,9 +126,13 @@ extension SceneDelegate {
         guard let progress = notification.userInfo?["progress"] as? Float else { return }
         progressView.setProgress(progress, animated: true)
         if progress == 1 {
-            progressView.removeFromSuperview()
             Toast.shared.showToast(message: "업로드가 완료되었습니다 ✨")
         }
     }
+
+    @objc private func removeProgressView() {
+        progressView.removeFromSuperview()
+    }
+
 }
 

@@ -14,7 +14,10 @@ import OSLog
 
 protocol UploadPostBusinessLogic {
     func fetchTags()
-    func fetchThumbnailImage()
+
+    @discardableResult
+    func fetchThumbnailImage() -> Task<Bool, Never>
+
     func fetchCurrentAddress()
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
 
@@ -61,26 +64,30 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         presenter?.presentTags(with: Models.FetchTags.Response(tags: tags))
     }
 
-    func fetchThumbnailImage() {
-        guard let videoURL else { return }
+    @discardableResult
+    func fetchThumbnailImage() -> Task<Bool, Never> {
+        Task {
+        guard let videoURL else { return false }
         let asset = AVAsset(url: videoURL)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
-        Task {
             do {
                 let image = try await generator.image(at: .zero).image
                 await MainActor.run {
                     presenter?.presentThumnailImage(with: Models.FetchThumbnail.Response(thumnailImage: image))
                 }
+                return true
             } catch let error {
                 os_log(.error, log: .default, "Failed to fetch Thumbnail Image with error: %@", error.localizedDescription)
+                return false
             }
         }
     }
 
     func fetchCurrentAddress() {
         guard let location = getCurrentLocation() else { return }
-        let locale = Locale(identifier: "ko_KR")
+        let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
+        let locale = Locale(identifier: localeIdentifier)
 
         Task {
             do {
@@ -108,6 +115,9 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     @discardableResult
     func uploadPost(request: UploadPostModels.UploadPost.Request) -> Task<Bool, Never> {
         Task {
+            await MainActor.run {
+                NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
+            }
             guard let worker,
                   let videoURL,
                   let isMuted,
@@ -115,15 +125,15 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             if isMuted {
                 exportVideoWithoutAudio(at: videoURL)
             }
-            await MainActor.run {
-                NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
-            }
             let response = await worker.uploadPost(with: UploadPost(title: request.title,
                                                                      content: request.content,
                                                                      latitude: coordinate.latitude,
                                                                      longitude: coordinate.longitude,
                                                                      tag: request.tags,
                                                                      videoURL: videoURL))
+            await MainActor.run {
+                NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
+            }
             return response
         }
     }
@@ -182,12 +192,8 @@ extension UploadPostInteractor: URLSessionTaskDelegate {
         DispatchQueue.main.async {
             NotificationQueue.default.enqueue(Notification(name: .progressChanged,
                                                            userInfo: ["progress": uploadProgress]),
-                                              postingStyle: .now)
+                                              postingStyle: .asap)
         }
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        // TODO: 완료 토스트
-
-    }
 }

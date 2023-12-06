@@ -57,9 +57,9 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
         do {
             let response = try await provider.request(with: endPoint)
             guard let preSignedURLString = response.data?.preSignedURL else { return false }
-            let data = try await provider.backgroundUpload(fromFile: videoURL,
-                                                           to: preSignedURLString,
-                                                           sessionTaskDelegate: sessionTaskDelegate)
+            _ = try await provider.backgroundUpload(fromFile: videoURL,
+                                                    to: preSignedURLString,
+                                                    sessionTaskDelegate: sessionTaskDelegate)
             return true
         } catch {
             os_log(.error, log: .data, "Failed to upload Video: %@", error.localizedDescription)
