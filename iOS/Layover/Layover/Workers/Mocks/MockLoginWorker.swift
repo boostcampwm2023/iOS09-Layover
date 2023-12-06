@@ -26,8 +26,34 @@ final class MockLoginWorker: LoginWorkerProtocol {
         return "mock token"
     }
 
-    func isRegisteredKakao(with socialToken: String) async -> Bool {
-        return false
+    func isRegisteredKakao(with socialToken: String) async -> Bool? {
+        guard let fileLocation = Bundle.main.url(forResource: "CheckSignUp", withExtension: "json") else {
+            os_log(.error, log: .data, "CheckSignUp.json 파일이 존재하지 않습니다.")
+            return nil
+        }
+        guard let mockData = try? Data(contentsOf: fileLocation) else {
+            os_log(.error, log: .data, "CheckSignUp.json 파일을 읽어올 수 없습니다.")
+            return nil
+        }
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+        do {
+            var bodyParameters = [String: String]()
+            bodyParameters.updateValue(socialToken, forKey: "accessToken")
+            let endPoint = EndPoint<Response<CheckSignUpDTO>>(path: "/oauth/check-signup/kakao",
+                                                              method: .POST,
+                                                              bodyParameters: bodyParameters)
+            let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            return response.data?.isAlreadyExist
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
     }
 
     func loginKakao(with socialToken: String) async -> Bool {
@@ -58,9 +84,34 @@ final class MockLoginWorker: LoginWorkerProtocol {
         }
     }
 
-    func isRegisteredApple(with identityToken: String) async -> Bool {
-        // TODO: 로직 구현
-        return false
+    func isRegisteredApple(with identityToken: String) async -> Bool? {
+        guard let fileLocation = Bundle.main.url(forResource: "CheckSignUp", withExtension: "json") else {
+            os_log(.error, log: .data, "CheckSignUp.json 파일이 존재하지 않습니다.")
+            return nil
+        }
+        guard let mockData = try? Data(contentsOf: fileLocation) else {
+            os_log(.error, log: .data, "CheckSignUp.json 파일을 읽어올 수 없습니다.")
+            return nil
+        }
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+        do {
+            var bodyParameters = [String: String]()
+            bodyParameters.updateValue(identityToken, forKey: "identityToken")
+            let endPoint = EndPoint<Response<CheckSignUpDTO>>(path: "/oauth/check-signup/apple",
+                                                              method: .POST,
+                                                              bodyParameters: bodyParameters)
+            let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            return response.data?.isAlreadyExist
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
     }
 
     func loginApple(with identityToken: String) async -> Bool {

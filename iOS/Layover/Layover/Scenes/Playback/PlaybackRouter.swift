@@ -10,6 +10,7 @@ import UIKit
 
 protocol PlaybackRoutingLogic {
     func routeToBack()
+    func routeToReport()
 }
 
 protocol PlaybackDataPassing {
@@ -27,5 +28,15 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
 
     func routeToBack() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+    
+    func routeToReport() {
+        let reportViewController: ReportViewController = ReportViewController()
+        guard let source = dataStore,
+              var destination = reportViewController.router?.dataStore
+        else { return }
+        destination.boardID = source.prevCell?.boardID
+        reportViewController.modalPresentationStyle = .fullScreen
+        viewController?.present(reportViewController, animated: false)
     }
 }

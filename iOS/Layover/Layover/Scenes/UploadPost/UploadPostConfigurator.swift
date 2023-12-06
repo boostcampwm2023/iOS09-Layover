@@ -21,12 +21,14 @@ final class UploadPostConfigurator: Configurator {
         let interactor = UploadPostInteractor()
         let presenter = UploadPostPresenter()
         let router = UploadPostRouter()
+        let worker = UploadPostWorker()
 
         router.viewController = viewController
         router.dataStore = interactor
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
+        interactor.worker = worker
         presenter.viewController = viewController
     }
 

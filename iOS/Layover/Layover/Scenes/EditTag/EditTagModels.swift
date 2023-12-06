@@ -10,4 +10,22 @@ import UIKit
 
 enum EditTagModels {
 
+    enum FetchTags {
+        struct Request {
+
+        }
+        struct Response {
+            let tags: [String]
+        }
+        struct ViewModel {
+            let tags: [String]
+        }
+    }
+
+    enum EditTag {
+        struct Request {
+            let tags: [String]
+        }
+    }
+
 }

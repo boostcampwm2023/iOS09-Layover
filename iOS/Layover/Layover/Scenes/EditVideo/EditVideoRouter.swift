@@ -26,7 +26,16 @@ final class EditVideoRouter: NSObject, EditVideoRoutingLogic, EditVideoDataPassi
     // MARK: - Routing
 
     func routeToNext() {
+        let nextViewController = UploadPostViewController()
+        guard let source = dataStore,
+              var destination = nextViewController.router?.dataStore
+        else { return }
 
+        // Data Passing
+        destination.videoURL = source.videoURL
+        destination.isMuted = source.isMuted
+        nextViewController.hidesBottomBarWhenPushed = true
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 
 }
