@@ -11,7 +11,7 @@ import Foundation
 import OSLog
 
 protocol ReportWorkerProtocol {
-    func reportPlaybackVideo(boardId: Int, reportContent: String) async -> Bool
+    func reportPlaybackVideo(boardID: Int, reportContent: String) async -> Bool
 }
 
 final class ReportWorker: ReportWorkerProtocol {
@@ -28,8 +28,8 @@ final class ReportWorker: ReportWorkerProtocol {
         self.provider = provider
     }
 
-    func reportPlaybackVideo(boardId: Int, reportContent: String) async -> Bool {
-        let endPoint = reportEndPointFactory.reportPlaybackVideoEndpoint(boardId: boardId, reportType: reportContent)
+    func reportPlaybackVideo(boardID: Int, reportContent: String) async -> Bool {
+        let endPoint = reportEndPointFactory.reportPlaybackVideoEndpoint(boardID: boardID, reportType: reportContent)
         do {
             let responseData = try await provider.request(with: endPoint)
             guard let _ = responseData.data else {

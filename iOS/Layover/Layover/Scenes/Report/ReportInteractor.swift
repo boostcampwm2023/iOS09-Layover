@@ -33,7 +33,7 @@ final class ReportInteractor: ReportBusinessLogic, ReportDataStore {
             guard let boardID,
                   let worker
             else { return false }
-            let result: Bool = await worker.reportPlaybackVideo(boardId: boardID, reportContent: request.reportContent)
+            let result: Bool = await worker.reportPlaybackVideo(boardID: boardID, reportContent: request.reportContent)
             let response: Models.ReportPlaybackVideo.Response = Models.ReportPlaybackVideo.Response(reportResult: result)
             await MainActor.run {
                 presenter?.presentReportPlaybackVideo(with: response)

@@ -35,7 +35,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
                 return nil
             }
             return Models.PlaybackVideo(playbackInfo: PlaybackModels.PlaybackInfo(
-                boardId: post.board.identifier,
+                boardID: post.board.identifier,
                 title: post.board.title,
                 content: post.board.description ?? "",
                 profileImageURL: post.member.profileImageURL,

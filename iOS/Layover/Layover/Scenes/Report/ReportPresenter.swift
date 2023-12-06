@@ -21,11 +21,7 @@ final class ReportPresenter: ReportPresentationLogic {
 
     func presentReportPlaybackVideo(with response: ReportModels.ReportPlaybackVideo.Response) {
         let viewModel: Models.ReportPlaybackVideo.ViewModel
-        if response.reportResult {
-            viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: .success)
-        } else {
-            viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: .fail)
-        }
+        viewModel = Models.ReportPlaybackVideo.ViewModel(reportMessage: response.reportResult ? .success : .fail)
         viewController?.displayReportResult(viewModel: viewModel)
     }
 }

@@ -56,8 +56,8 @@ final class LOReportStackView: UIStackView {
         self.reportViews.forEach { reportView in
             if reportView.index == tempView.index {
                 reportView.onRadio()
-                guard let reportContentStr: String = reportView.contentLabel.text else { return }
-                reportContent = reportContentStr
+                guard let reportContentText: String = reportView.contentLabel.text else { return }
+                reportContent = reportContentText
             } else {
                 reportView.offRadio()
             }

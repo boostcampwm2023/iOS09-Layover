@@ -21,7 +21,7 @@ enum PlaybackModels {
     }
 
     struct PlaybackInfo: Hashable {
-        let boardId: Int
+        let boardID: Int
         let title: String
         let content: String
         let profileImageURL: URL?
@@ -137,11 +137,11 @@ enum PlaybackModels {
         }
 
         struct Response {
-            let boardId: Int
+            let boardID: Int
         }
 
         struct ViewModel {
-            let boardId: Int
+            let boardID: Int
         }
     }
 }

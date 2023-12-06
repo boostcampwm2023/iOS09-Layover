@@ -9,14 +9,14 @@
 import Foundation
 
 protocol ReportEndPointFactory {
-    func reportPlaybackVideoEndpoint(boardId: Int, reportType: String) -> EndPoint<Response<ReportDTO>>
+    func reportPlaybackVideoEndpoint(boardID: Int, reportType: String) -> EndPoint<Response<ReportDTO>>
 }
 
 struct DefaultReportEndPointFactory: ReportEndPointFactory {    
-    func reportPlaybackVideoEndpoint(boardId: Int, reportType: String) -> EndPoint<Response<ReportDTO>> {
+    func reportPlaybackVideoEndpoint(boardID: Int, reportType: String) -> EndPoint<Response<ReportDTO>> {
         var bodyParmeters: ReportDTO = ReportDTO(
             memberId: nil,
-            boardId: boardId,
+            boardID: boardID,
             reportType: reportType)
         
         return EndPoint(

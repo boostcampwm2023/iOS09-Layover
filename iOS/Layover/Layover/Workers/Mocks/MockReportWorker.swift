@@ -17,7 +17,7 @@ final class MockReportWorker: ReportWorkerProtocol {
 
     // MARK: - Methods
 
-    func reportPlaybackVideo(boardId: Int, reportContent: String) async -> Bool {
+    func reportPlaybackVideo(boardID: Int, reportContent: String) async -> Bool {
         guard let mockFileLocation = Bundle.main.url(forResource: "ReportPlaybackVideo", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation)
         else {
@@ -36,7 +36,7 @@ final class MockReportWorker: ReportWorkerProtocol {
         do {
             let bodyParameters = ReportDTO(
                 memberId: nil,
-                boardId: 1, 
+                boardID: 1, 
                 reportType: "청소년에게 유해한 내용입니다.")
             let endPoint = EndPoint<Response<ReportDTO>>(path: "/report",
                                                          method: .POST,
