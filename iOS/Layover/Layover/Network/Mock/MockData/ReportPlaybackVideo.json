@@ -1,0 +1,10 @@
+{
+  "customCode": "SUCCESS",
+  "message": "성공",
+  "statusCode": 200,
+  "data": {
+    "memberId": 221,
+    "boardId": 5,
+    "reportType": "청소년에게 유해한 내용이에요"
+  }
+}

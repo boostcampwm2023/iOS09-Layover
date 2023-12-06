@@ -73,7 +73,7 @@ extension LoginWorker: LoginWorkerProtocol {
         do {
             let endPoint = loginEndPointFactory.makeCheckKakaoIsSignedUpEndPoint(with: socialToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            return result.data?.isValid
+            return result.data?.isAlreadyExist
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
@@ -101,7 +101,7 @@ extension LoginWorker: LoginWorkerProtocol {
         do {
             let endPoint = loginEndPointFactory.makeCheckAppleIsSignedUpEndPoint(with: identityToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
-            return result.data?.isValid
+            return result.data?.isAlreadyExist
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil

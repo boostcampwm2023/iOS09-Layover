@@ -10,6 +10,7 @@ import UIKit
 
 final class PlaybackCell: UICollectionViewCell {
     let playbackView: PlaybackView = PlaybackView()
+    var boardID: Int = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,6 +23,7 @@ final class PlaybackCell: UICollectionViewCell {
     }
 
     func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
+        boardID = info.boardID
         playbackView.descriptionView.titleLabel.text = info.title
         playbackView.descriptionView.setText(info.content)
         playbackView.profileLabel.text = info.profileName

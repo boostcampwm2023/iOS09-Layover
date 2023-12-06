@@ -9,5 +9,5 @@
 import Foundation
 
 struct CheckSignUpDTO: Decodable {
-    let isValid: Bool
+    let isAlreadyExist: Bool
 }

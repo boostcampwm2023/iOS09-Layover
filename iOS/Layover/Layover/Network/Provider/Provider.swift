@@ -12,6 +12,12 @@ protocol ProviderType {
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
+    func upload(data: Data, to url: String, method: HTTPMethod) async throws -> Data
+    func upload(fromFile: URL,
+                          to url: String,
+                          method: HTTPMethod,
+                          sessionTaskDelegate: URLSessionTaskDelegate?,
+                          delegateQueue: OperationQueue?) async throws -> Data
 }
 
 extension ProviderType {
@@ -22,6 +28,25 @@ extension ProviderType {
                                  authenticationIfNeeded: authenticationIfNeeded,
                                  retryCount: retryCount)
     }
+
+    func upload(data: Data, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        return try await upload(data: data,
+                                to: url,
+                                method: method)
+    }
+
+    func upload(fromFile: URL,
+                          to url: String,
+                          method: HTTPMethod = .PUT,
+                          sessionTaskDelegate: URLSessionTaskDelegate? = nil,
+                          delegateQueue: OperationQueue? = nil) async throws -> Data {
+        return try await upload(fromFile: fromFile,
+                                          to: url,
+                                          method: method,
+                                          sessionTaskDelegate: sessionTaskDelegate,
+                                          delegateQueue: delegateQueue)
+    }
+
 }
 
 class Provider: ProviderType {
@@ -112,18 +137,18 @@ class Provider: ProviderType {
     }
 
     // 동영상 업로드용
-    func backgroundUpload(fromFile: URL,
-                          to url: String,
-                          method: HTTPMethod = .PUT,
-                          sessionTaskDelegate: URLSessionTaskDelegate? = nil,
-                          delegateQueue: OperationQueue? = nil) async throws -> Data {
+    func upload(fromFile: URL,
+                to url: String,
+                method: HTTPMethod = .PUT,
+                sessionTaskDelegate: URLSessionTaskDelegate? = nil,
+                delegateQueue: OperationQueue? = nil) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
-        let backgroundSession = URLSession(configuration: .background(withIdentifier: UUID().uuidString),
-                                           delegate: sessionTaskDelegate,
-                                           delegateQueue: delegateQueue)
-        let (data, response) = try await backgroundSession.upload(for: request, fromFile: fromFile)
+        request.setValue("video/\(fromFile.pathExtension)", forHTTPHeaderField: "Content-Type")
+        let (data, response) = try await session.upload(for: request,
+                                                        fromFile: fromFile,
+                                                        delegate: sessionTaskDelegate)
         try self.checkStatusCode(of: response)
         return data
     }

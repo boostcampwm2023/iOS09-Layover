@@ -41,6 +41,14 @@ final class PlaybackViewController: BaseViewController {
         return collectionView
     }()
 
+    private let reportButton: UIBarButtonItem = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        let barButtonItem: UIBarButtonItem = UIBarButtonItem(customView: button)
+        barButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
+        return barButtonItem
+    }()
+
     // MARK: - Properties
     private var playerSlider: LOSlider = LOSlider()
 
@@ -115,6 +123,10 @@ final class PlaybackViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         addWindowPlayerSlider()
+        guard let button = reportButton.customView as? UIButton else { return }
+        button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = reportButton
+        self.navigationController?.navigationBar.tintColor = .layoverWhite
     }
 
     private func addWindowPlayerSlider() {
@@ -157,6 +169,20 @@ final class PlaybackViewController: BaseViewController {
         let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
         interactor?.controlPlaybackMovie(with: request)
     }
+
+    @objc private func reportButtonDidTap() {
+        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
+            [weak self] _ in
+            self?.router?.routeToReport()
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(reportAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: {
+            self.interactor?.leavePlaybackView()
+        })
+    }
 }
 
 extension PlaybackViewController: PlaybackDisplayLogic {
@@ -180,9 +206,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             curCell.playbackView.playPlayer()
             setPlayerSlider(at: curCell.playbackView)
             // Slider가 원점으로 돌아가는 시간 필요
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-//                self.playerSlider.isHidden = false
-//            }
             Task {
                 await slowShowPlayerSlider()
             }
