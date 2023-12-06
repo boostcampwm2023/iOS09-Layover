@@ -9,6 +9,7 @@
 import UIKit
 
 protocol PlaybackRoutingLogic {
+    func routeToBack()
     func routeToReport()
 }
 
@@ -25,6 +26,10 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
 
     // MARK: - Routing
 
+    func routeToBack() {
+        viewController?.navigationController?.popViewController(animated: true)
+    }
+    
     func routeToReport() {
         let reportViewController: ReportViewController = ReportViewController()
         guard let source = dataStore,

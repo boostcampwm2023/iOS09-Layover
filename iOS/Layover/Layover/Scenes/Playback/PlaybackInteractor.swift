@@ -16,8 +16,10 @@ protocol PlaybackBusinessLogic {
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func moveToBack()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
+    func hidePlayerSlider()
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -141,6 +143,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         presenter?.presentLeavePlaybackView(with: response)
     }
 
+    func moveToBack() {
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
+        presenter?.presentResetPlaybackCell(with: response)
+    }
+
     func configurePlaybackCell() {
         guard let posts,
               let parentView else { return }
@@ -159,5 +166,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         let willMoveLocation: Float64 = request.currentLocation * prevCell.playbackView.getDuration()
         let response: Models.SeekVideo.Response = Models.SeekVideo.Response(willMoveLocation: willMoveLocation, curCell: prevCell)
         presenter?.presentSeekVideo(with: response)
+    }
+
+    func hidePlayerSlider() {
+        guard let prevCell else { return }
+        prevCell.playbackView.playerSlider?.isHidden = true
     }
 }

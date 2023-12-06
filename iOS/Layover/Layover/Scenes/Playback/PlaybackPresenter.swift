@@ -18,6 +18,7 @@ protocol PlaybackPresentationLogic {
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response)
+    func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response)
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
 }
@@ -94,10 +95,19 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
         viewController?.leavePlaybackView(viewModel: viewModel)
     }
 
+    func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        viewController?.routeToBack(viewModel: viewModel)
+    }
+
+    // MARK: - UseCase Configure Playback Cell
+
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response) {
         let viewModel: Models.ConfigurePlaybackCell.ViewModel = Models.ConfigurePlaybackCell.ViewModel(teleportIndex: response.teleportIndex)
         viewController?.configureDataSource(viewModel: viewModel)
     }
+
+    // MARK: - UseCase Seek Video
 
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
         let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, curCell: response.curCell)

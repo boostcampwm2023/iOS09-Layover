@@ -20,6 +20,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
 }
@@ -41,16 +42,7 @@ final class PlaybackViewController: BaseViewController {
         return collectionView
     }()
 
-    private let reportButton: UIBarButtonItem = {
-        let button: UIButton = UIButton()
-        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        let barButtonItem: UIBarButtonItem = UIBarButtonItem(customView: button)
-        barButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
-        return barButtonItem
-    }()
-
     // MARK: - Properties
-    private var playerSlider: LOSlider = LOSlider()
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
 
@@ -99,6 +91,9 @@ final class PlaybackViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         interactor?.leavePlaybackView()
+        if isMovingFromParent {
+            interactor?.moveToBack()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -122,47 +117,6 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        addWindowPlayerSlider()
-        guard let button = reportButton.customView as? UIButton else { return }
-        button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = reportButton
-        self.navigationController?.navigationBar.tintColor = .layoverWhite
-    }
-
-    private func addWindowPlayerSlider() {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else { return }
-        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
-        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
-        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
-        window?.addSubview(playerSlider)
-        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
-    }
-
-    private func setPlayerSlider(at playbackView: PlaybackView) {
-        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
-        playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
-            self?.updateSlider(currentTime: currentTime, playerView: playbackView.playerView)
-        })
-        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
-    }
-
-    private func updateSlider(currentTime: CMTime, playerView: PlayerView) {
-        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else { return }
-        let duration: CMTime = currentItem.duration
-        if CMTIME_IS_INVALID(duration) { return }
-        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
-    }
-
-    private func slowShowPlayerSlider() async {
-        do {
-            try await Task.sleep(nanoseconds: 1_000_000_00)
-            playerSlider.isHidden = false
-        } catch {
-            os_log("Fail Waiting show Player Slider")
-        }
     }
 
     @objc private func didChangedSliderValue(_ sender: LOSlider) {
@@ -170,18 +124,8 @@ final class PlaybackViewController: BaseViewController {
         interactor?.controlPlaybackMovie(with: request)
     }
 
-    @objc private func reportButtonDidTap() {
-        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
-            [weak self] _ in
-            self?.router?.routeToReport()
-        })
-        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
-        alert.addAction(reportAction)
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true, completion: {
-            self.interactor?.leavePlaybackView()
-        })
+    private func moveToBackViewController() {
+        interactor?.moveToBack()
     }
 }
 
@@ -198,17 +142,16 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
         if let prevCell = viewModel.prevCell {
+            prevCell.playbackView.removePlayerSlider()
             prevCell.playbackView.stopPlayer()
             prevCell.playbackView.replayPlayer()
         }
         if let curCell = viewModel.curCell {
+            curCell.addPlayerSlider(tabBarHeight: tabBarHeight)
+            curCell.playbackView.addTargetPlayerSlider()
             curCell.playbackView.playPlayer()
-            setPlayerSlider(at: curCell.playbackView)
-            // Slider가 원점으로 돌아가는 시간 필요
-            Task {
-                await slowShowPlayerSlider()
-            }
         }
     }
 
@@ -221,7 +164,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        playerSlider.isHidden = false
+        viewModel.curCell?.playbackView.playerSlider?.isHidden = false
     }
 
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
@@ -236,7 +179,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        playerSlider.isHidden = true
         viewModel.prevCell?.playbackView.stopPlayer()
     }
 
@@ -251,7 +193,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                 }
             }
             cell.addAVPlayer(url: playbackVideo.playbackInfo.videoURL)
-            self.setPlayerSlider(at: cell.playbackView)
             return cell
         }
     }
@@ -261,6 +202,14 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         viewModel.curCell.playbackView.seekPlayer(seekTime: seekTime)
         viewModel.curCell.playbackView.playPlayer()
     }
+
+    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        var curCell = viewModel.curCell
+        curCell?.resetObserver()
+        curCell?.playbackView.resetPlayer()
+        curCell = nil
+    }
+
 }
 
 extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
@@ -292,7 +241,7 @@ extension PlaybackViewController: UICollectionViewDelegate {
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        playerSlider.isHidden = true
+        interactor?.hidePlayerSlider()
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

@@ -85,7 +85,7 @@ enum PlaybackModels {
 
         struct ViewModel {
             let indexPathRow: Int?
-            let prevCell: PlaybackCell?
+            var prevCell: PlaybackCell?
             let curCell: PlaybackCell?
 
             init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
