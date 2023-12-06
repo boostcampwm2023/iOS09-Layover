@@ -14,9 +14,9 @@ import OSLog
 
 protocol LoginWorkerProtocol {
     @MainActor func fetchKakaoLoginToken() async -> String?
-    func isRegisteredKakao(with socialToken: String) async -> Bool
+    func isRegisteredKakao(with socialToken: String) async -> Bool?
     func loginKakao(with socialToken: String) async -> Bool
-    func isRegisteredApple(with identityToken: String) async -> Bool
+    func isRegisteredApple(with identityToken: String) async -> Bool?
     func loginApple(with identityToken: String) async -> Bool
 }
 
@@ -30,7 +30,9 @@ final class LoginWorker: NSObject {
     let loginEndPointFactory: LoginEndPointFactory
     let authManager: AuthManager
 
-    init(provider: ProviderType = Provider(), loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(), authManager: AuthManager = .shared) {
+    init(provider: ProviderType = Provider(), 
+         loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(),
+         authManager: AuthManager = .shared) {
         self.provider = provider
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
@@ -67,23 +69,21 @@ extension LoginWorker: LoginWorkerProtocol {
         }
     }
 
-    func isRegisteredKakao(with socialToken: String) async -> Bool {
-        // TODO: 회원가입 여부 판단. 추후 서버 바뀌면 구현
-        return false
-//        do {
-//            let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
-//            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-//            return true
-//        } catch {
-//            os_log(.error, log: .data, "%@", error.localizedDescription)
-//            return false
-//        }
+    func isRegisteredKakao(with socialToken: String) async -> Bool? {
+        do {
+            let endPoint = loginEndPointFactory.makeCheckKakaoIsSignedUpEndPoint(with: socialToken)
+            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
+            return result.data?.isValid
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
     }
 
     func loginKakao(with socialToken: String) async -> Bool {
         do {
             let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
-            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
 
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
@@ -97,15 +97,21 @@ extension LoginWorker: LoginWorkerProtocol {
 
     // MARK: - Apple Login
 
-    func isRegisteredApple(with identityToken: String) async -> Bool {
-        // TODO: 회원가입 여부 판단
-        return false
+    func isRegisteredApple(with identityToken: String) async -> Bool? {
+        do {
+            let endPoint = loginEndPointFactory.makeCheckAppleIsSignedUpEndPoint(with: identityToken)
+            let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
+            return result.data?.isValid
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
     }
 
     func loginApple(with identityToken: String) async -> Bool {
         do {
             let endPoint: EndPoint = loginEndPointFactory.makeAppleLoginEndPoint(with: identityToken)
-            let result: EndPoint<Response<LoginDTO>>.Response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
+            let result: EndPoint<Response<LoginDTO>>.Response = try await provider.request(with: endPoint, authenticationIfNeeded: false)
 
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1901D4A22B18F4BE00617A64 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1901D4A12B18F4BE00617A64 /* System.swift */; };
+		1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */; };
+		1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */; };
 		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
 		193686742B15C489008902CD /* UserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686732B15C489008902CD /* UserWorker.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
@@ -199,6 +201,8 @@
 
 /* Begin PBXFileReference section */
 		1901D4A12B18F4BE00617A64 /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckSignUpDTO.swift; sourceTree = "<group>"; };
+		1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CheckSignUp.json; sourceTree = "<group>"; };
 		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
 		193686732B15C489008902CD /* UserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWorker.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
@@ -577,6 +581,7 @@
 				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
 				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
 				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
+				1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -777,6 +782,7 @@
 				FC767F9A2B12283D0088CF9B /* PatchUserName.json */,
 				835783C52B14A5C800E7D304 /* LoginData.json */,
 				19A169352B178EA500DB34C0 /* PostList.json */,
+				1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */,
 			);
 			path = MockData;
 			sourceTree = "<group>";
@@ -951,8 +957,8 @@
 				1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */,
 				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
 				FC25119F2B045C0A004717BC /* SignUpInteractor.swift */,
-				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A12B045C3F004717BC /* SignUpPresenter.swift */,
+				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
 			path = SignUpScene;
@@ -1060,6 +1066,7 @@
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
 				19A169362B178EA500DB34C0 /* PostList.json in Resources */,
+				1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */,
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
@@ -1211,6 +1218,7 @@
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
+				1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */,
 				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,
