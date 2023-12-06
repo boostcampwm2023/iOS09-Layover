@@ -10,18 +10,15 @@ import UIKit
 import AVFoundation
 
 final class PlaybackCell: UICollectionViewCell {
-    let playbackView: PlaybackView = PlaybackView()
-    var timeObserverToken: Any?
-    var boardID: Int = 0
+
+    var playbackView: PlaybackView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        configure()
     }
 
     override func prepareForReuse() {
@@ -29,33 +26,36 @@ final class PlaybackCell: UICollectionViewCell {
     }
 
     func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
-        boardID = info.boardID
-        playbackView.descriptionView.titleLabel.text = info.title
-        playbackView.descriptionView.setText(info.content)
-        playbackView.profileLabel.text = info.profileName
-        playbackView.tagStackView.resetTagStackView()
+        playbackView = nil
+        playbackView = PlaybackView(frame: .zero, content: info.content)
+        playbackView?.descriptionView.titleLabel.text = info.title
+        configure()
+        playbackView?.descriptionView.setText(info.content)
+        playbackView?.profileLabel.text = info.profileName
+        playbackView?.tagStackView.resetTagStackView()
         info.tag.forEach { tag in
-            playbackView.tagStackView.addTag(tag)
+            playbackView?.tagStackView.addTag(tag)
         }
     }
 
     func addAVPlayer(url: URL) {
-        playbackView.resetPlayer()
-        playbackView.addAVPlayer(url: url)
-        playbackView.setPlayerSlider()
+        playbackView?.resetPlayer()
+        playbackView?.addAVPlayer(url: url)
+        playbackView?.setPlayerSlider()
     }
 
     func addPlayerSlider(tabBarHeight: CGFloat) {
-        playbackView.addWindowPlayerSlider(tabBarHeight)
+        playbackView?.addWindowPlayerSlider(tabBarHeight)
 
     }
 
     func resetObserver() {
-        playbackView.removeTimeObserver()
-        playbackView.removePlayerSlider()
+        playbackView?.removeTimeObserver()
+        playbackView?.removePlayerSlider()
     }
 
     private func configure() {
+        guard let playbackView else { return }
         playbackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(playbackView)
         NSLayoutConstraint.activate([
