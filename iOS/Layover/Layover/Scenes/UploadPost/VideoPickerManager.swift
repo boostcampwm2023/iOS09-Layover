@@ -16,15 +16,19 @@ final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
 
     weak var videoPickerDelegate: VideoPickerDelegate?
 
-    lazy var phPickerViewController: PHPickerViewController = {
+    let phPickerViewController: PHPickerViewController = {
         var configuration = PHPickerConfiguration()
         configuration.preferredAssetRepresentationMode = .current
         configuration.filter = .videos
         configuration.selectionLimit = 1
         let phPickerViewController = PHPickerViewController(configuration: configuration)
-        phPickerViewController.delegate = self
         return phPickerViewController
     }()
+
+    override init() {
+        super.init()
+        phPickerViewController.delegate = self
+    }
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         guard let result = results.first else {
