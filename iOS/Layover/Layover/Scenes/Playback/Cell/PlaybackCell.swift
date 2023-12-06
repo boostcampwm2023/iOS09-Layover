@@ -43,8 +43,9 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.setPlayerSlider()
     }
 
-    func setPlayerSlider(tabBarHeight: CGFloat) {
+    func addPlayerSlider(tabBarHeight: CGFloat) {
         playbackView.addWindowPlayerSlider(tabBarHeight)
+
     }
 
     func resetObserver() {

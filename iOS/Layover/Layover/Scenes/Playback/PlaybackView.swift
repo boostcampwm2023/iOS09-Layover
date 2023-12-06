@@ -84,7 +84,7 @@ final class PlaybackView: UIView {
 
     let playerView: PlayerView = PlayerView()
 
-    private let playerSlider: LOSlider = LOSlider()
+    var playerSlider: LOSlider?
 
     // MARK: - View Life Cycle
 
@@ -103,8 +103,6 @@ final class PlaybackView: UIView {
         setSubViewsInPlayerViewConstraints()
         setPlayerView()
     }
-
-    
 
     // MARK: Player Setting Method
 
@@ -143,11 +141,14 @@ final class PlaybackView: UIView {
     }
 
     func removePlayerSlider() {
+        guard let playerSlider = playerSlider else { return }
         playerSlider.removeTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
-        self.playerSlider.removeFromSuperview()
+        playerSlider.removeFromSuperview()
     }
 
     func addWindowPlayerSlider(_ tabBarHeight: CGFloat) {
+        playerSlider = LOSlider()
+        guard let playerSlider else { return }
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         let window = windowScene?.windows.first
@@ -163,7 +164,10 @@ final class PlaybackView: UIView {
         timeObserverToken =  playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
             self?.updateSlider(currentTime: currentTime)
         })
-        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+    }
+
+    func addTargetPlayerSlider() {
+        playerSlider?.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
     }
 
     func removeTimeObserver() {
@@ -177,11 +181,10 @@ final class PlaybackView: UIView {
 
 private extension PlaybackView {
     func updateSlider(currentTime: CMTime) {
-        print("chopmojji1")
         guard let currentItem: AVPlayerItem = playerView.player?.currentItem else { return }
         let duration: CMTime = currentItem.duration
         if CMTIME_IS_INVALID(duration) { return }
-        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+        playerSlider?.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
     // MARK: - Gesture Method
