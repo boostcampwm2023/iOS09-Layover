@@ -24,17 +24,9 @@ final class HomeViewController: BaseViewController {
     var router: (HomeRoutingLogic & HomeDataPassing)?
     var interactor: HomeBusinessLogic?
 
-    // MARK: - UI Components
+    private let videoPickerManager: VideoPickerManager = VideoPickerManager()
 
-    private lazy var phPickerViewController: PHPickerViewController = {
-        var configuration = PHPickerConfiguration()
-        configuration.preferredAssetRepresentationMode = .current
-        configuration.filter = .videos
-        configuration.selectionLimit = 1
-        let phPickerViewController = PHPickerViewController(configuration: configuration)
-        phPickerViewController.delegate = self
-        return phPickerViewController
-    }()
+    // MARK: - UI Components
 
     private lazy var uploadButton: LOCircleButton = {
         let button = LOCircleButton(style: .add, diameter: 52)
@@ -72,11 +64,13 @@ final class HomeViewController: BaseViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
+        setDelegation()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
+        setDelegation()
     }
 
     // MARK: - Setup
@@ -120,10 +114,14 @@ final class HomeViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         carouselCollectionView.dataSource = carouselDatasource
-        carouselCollectionView.delegate = self
     }
 
     // MARK: - Methods
+
+    private func setDelegation() {
+        carouselCollectionView.delegate = self
+        videoPickerManager.videoPickerDelegate = self
+    }
 
     private func createCarouselLayout(groupWidthDimension: CGFloat,
                                       groupHeightDimension: CGFloat,
@@ -184,7 +182,7 @@ final class HomeViewController: BaseViewController {
     // MARK: - Actions
 
     @objc private func uploadButtonDidTap() {
-        present(phPickerViewController, animated: true)
+        present(videoPickerManager.phPickerViewController, animated: true)
     }
 
     @objc private func tagButtonDidTap(_ sender: UIButton) {
@@ -215,34 +213,16 @@ extension HomeViewController: HomeCarouselCollectionViewDelegate {
     }
 }
 
-// MARK: - PHPickerViewControllerDelegate
+// MARK: - VideoPickerDelegate
 
-extension HomeViewController: PHPickerViewControllerDelegate {
+extension HomeViewController: VideoPickerDelegate {
 
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        guard let result = results.first else {
-            self.phPickerViewController.dismiss(animated: true)
-            return
-        }
-
-        _ = result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, error in
-
-            if error != nil {
-                Task {
-                    await MainActor.run {
-                        Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
-                    }
-                }
-            }
-
-            if let url {
-                self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
-                Task {
-                    await MainActor.run {
-                        self.router?.routeToEditVideo()
-                        self.phPickerViewController.dismiss(animated: true)
-                    }
-                }
+    func didFinishPickingVideo(_ url: URL) {
+        self.interactor?.selectVideo(with: HomeModels.SelectVideo.Request(videoURL: url))
+        Task {
+            await MainActor.run {
+                self.router?.routeToEditVideo()
+                self.videoPickerManager.phPickerViewController.dismiss(animated: true)
             }
         }
     }
