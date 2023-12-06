@@ -38,7 +38,7 @@ export class BoardService {
     );
     if (createBoardDto.tag) {
       createBoardDto.tag.map(async (tagname) => {
-        await this.tagService.saveTag(savedBoard, tagname);
+        await this.tagService.createTag(savedBoard, tagname);
       });
     }
 
