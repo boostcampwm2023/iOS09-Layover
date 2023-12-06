@@ -77,6 +77,20 @@
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */; };
+		8321A2EE2B1E1026000A12AF /* ReportPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2E82B1E1026000A12AF /* ReportPresenter.swift */; };
+		8321A2EF2B1E1026000A12AF /* ReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2E92B1E1026000A12AF /* ReportWorker.swift */; };
+		8321A2F02B1E1026000A12AF /* ReportRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2EA2B1E1026000A12AF /* ReportRouter.swift */; };
+		8321A2F12B1E1026000A12AF /* ReportModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2EB2B1E1026000A12AF /* ReportModels.swift */; };
+		8321A2F22B1E1026000A12AF /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2EC2B1E1026000A12AF /* ReportViewController.swift */; };
+		8321A2F32B1E1026000A12AF /* ReportInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2ED2B1E1026000A12AF /* ReportInteractor.swift */; };
+		8321A2F52B1E10DF000A12AF /* ReportConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F42B1E10DF000A12AF /* ReportConfigurator.swift */; };
+		8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */; };
+		8321A2F92B1E15F3000A12AF /* LOReportStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */; };
+		8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */; };
+		8321A2FD2B1E4260000A12AF /* ReportEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */; };
+		8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FE2B1E428C000A12AF /* ReportDTO.swift */; };
+		8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */; };
+		8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */; };
 		834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */; };
 		835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835783C22B14A41600E7D304 /* MockLoginWorker.swift */; };
 		835783C62B14A5C800E7D304 /* LoginData.json in Resources */ = {isa = PBXBuildFile; fileRef = 835783C52B14A5C800E7D304 /* LoginData.json */; };
@@ -135,6 +149,10 @@
 		FC3752352B170A620000D439 /* EditVideoInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522F2B170A620000D439 /* EditVideoInteractor.swift */; };
 		FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3752362B170B230000D439 /* EditVideoConfigurator.swift */; };
 		FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */; };
+		FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */; };
+		FC4084C62B1F1C5B00CE4727 /* UploadPostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */; };
+		FC4084CA2B1F291200CE4727 /* UploadVideoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */; };
+		FC4084CC2B1F2F5D00CE4727 /* UploadPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */; };
 		FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
@@ -267,6 +285,20 @@
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
+		8321A2E82B1E1026000A12AF /* ReportPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportPresenter.swift; sourceTree = "<group>"; };
+		8321A2E92B1E1026000A12AF /* ReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportWorker.swift; sourceTree = "<group>"; };
+		8321A2EA2B1E1026000A12AF /* ReportRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportRouter.swift; sourceTree = "<group>"; };
+		8321A2EB2B1E1026000A12AF /* ReportModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModels.swift; sourceTree = "<group>"; };
+		8321A2EC2B1E1026000A12AF /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
+		8321A2ED2B1E1026000A12AF /* ReportInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportInteractor.swift; sourceTree = "<group>"; };
+		8321A2F42B1E10DF000A12AF /* ReportConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportConfigurator.swift; sourceTree = "<group>"; };
+		8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOPopUpView.swift; sourceTree = "<group>"; };
+		8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportStackView.swift; sourceTree = "<group>"; };
+		8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportContentView.swift; sourceTree = "<group>"; };
+		8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportEndPointFactory.swift; sourceTree = "<group>"; };
+		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
+		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
+		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -327,6 +359,10 @@
 		FC37522F2B170A620000D439 /* EditVideoInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoInteractor.swift; sourceTree = "<group>"; };
 		FC3752362B170B230000D439 /* EditVideoConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoConfigurator.swift; sourceTree = "<group>"; };
 		FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
+		FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostEndPointFactory.swift; sourceTree = "<group>"; };
+		FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostDTO.swift; sourceTree = "<group>"; };
+		FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadVideoDTO.swift; sourceTree = "<group>"; };
+		FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPost.swift; sourceTree = "<group>"; };
 		FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFileWorker.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
@@ -498,6 +534,8 @@
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
 				19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */,
+				8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */,
+				FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -531,6 +569,7 @@
 				19A1692C2B17750B00DB34C0 /* Post.swift */,
 				19A169412B17C70C00DB34C0 /* Member.swift */,
 				19A169432B17C71C00DB34C0 /* Board.swift */,
+				FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -553,6 +592,7 @@
 				19A169462B17D12500DB34C0 /* MockTagPlayListWorker.swift */,
 				194C21BA2B1B718B00C62645 /* MockHomeWorker.swift */,
 				194C21BC2B1B728600C62645 /* StubAuthManager.swift */,
+				8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -571,6 +611,9 @@
 				19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */,
 				836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */,
 				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
+				8321A2FE2B1E428C000A12AF /* ReportDTO.swift */,
+				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
+				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
 				1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */,
 			);
 			path = DTOs;
@@ -620,6 +663,20 @@
 				19C7AFD52B02584D003B35F2 /* KeychainStored.swift */,
 			);
 			path = Keychain;
+			sourceTree = "<group>";
+		};
+		8321A2E72B1E1011000A12AF /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				8321A2E82B1E1026000A12AF /* ReportPresenter.swift */,
+				8321A2E92B1E1026000A12AF /* ReportWorker.swift */,
+				8321A2EA2B1E1026000A12AF /* ReportRouter.swift */,
+				8321A2EB2B1E1026000A12AF /* ReportModels.swift */,
+				8321A2EC2B1E1026000A12AF /* ReportViewController.swift */,
+				8321A2ED2B1E1026000A12AF /* ReportInteractor.swift */,
+				8321A2F42B1E10DF000A12AF /* ReportConfigurator.swift */,
+			);
+			path = Report;
 			sourceTree = "<group>";
 		};
 		835A61962B0680FC002F22A5 /* Playback */ = {
@@ -775,6 +832,7 @@
 				194C21E52B1F7B5100C62645 /* PostListMore.json */,
 				194C21E92B1F7C1600C62645 /* PostListEnd.json */,
 				194C21DB2B1F3ECA00C62645 /* GetMember.json */,
+				8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */,
 				1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */,
 			);
 			path = MockData;
@@ -861,6 +919,7 @@
 		FC7E457B2AFF6F9D004F155A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				8321A2E72B1E1011000A12AF /* Report */,
 				1945520E2B03AEA400299768 /* Configurator.swift */,
 				836C33922B18436A00ECAFB0 /* SettingScene */,
 				19BB8A572B07BEE30070B922 /* UIComponents */,
@@ -892,6 +951,9 @@
 				835A61932B068096002F22A5 /* LODescriptionView.swift */,
 				FC0E802F2B1A15D500EF56D6 /* LOImageLabel.swift */,
 				FC0E80312B1A280300EF56D6 /* LOTextView.swift */,
+				8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */,
+				8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */,
+				8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -1059,6 +1121,7 @@
 				194C21EA2B1F7C1600C62645 /* PostListEnd.json in Resources */,
 				835783C62B14A5C800E7D304 /* LoginData.json in Resources */,
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
+				8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
 				19A169362B178EA500DB34C0 /* PostList.json in Resources */,
 				1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */,
@@ -1109,6 +1172,7 @@
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
+				8321A2FD2B1E4260000A12AF /* ReportEndPointFactory.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
 				FC3752312B170A620000D439 /* EditVideoWorker.swift in Sources */,
 				19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */,
@@ -1131,9 +1195,11 @@
 				FC3752342B170A620000D439 /* EditVideoViewController.swift in Sources */,
 				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
+				FC4084C62B1F1C5B00CE4727 /* UploadPostDTO.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194C21BD2B1B728600C62645 /* StubAuthManager.swift in Sources */,
 				FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */,
+				8321A2EE2B1E1026000A12AF /* ReportPresenter.swift in Sources */,
 				194552282B0479B600299768 /* BaseViewController.swift in Sources */,
 				194552212B0478B400299768 /* HomePresenter.swift in Sources */,
 				1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */,
@@ -1152,6 +1218,7 @@
 				FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
 				836C33992B1843BE00ECAFB0 /* SettingScenePresenter.swift in Sources */,
+				8321A2F12B1E1026000A12AF /* ReportModels.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
 				FC767FAA2B126D080088CF9B /* LOAnnotation.swift in Sources */,
@@ -1159,14 +1226,17 @@
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
+				8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */,
 				19A1692D2B17750B00DB34C0 /* Post.swift in Sources */,
 				194552022B038B8300299768 /* OSLog+.swift in Sources */,
+				8321A2F92B1E15F3000A12AF /* LOReportStackView.swift in Sources */,
 				FC0E80272B1A0BBB00EF56D6 /* UploadPostModels.swift in Sources */,
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
 				FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */,
 				FC0E80302B1A15D600EF56D6 /* LOImageLabel.swift in Sources */,
 				FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */,
+				8321A2EF2B1E1026000A12AF /* ReportWorker.swift in Sources */,
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
@@ -1186,6 +1256,7 @@
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
 				193686742B15C489008902CD /* UserWorker.swift in Sources */,
 				19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */,
+				8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */,
 				FCE52FF82B0FCAF7002CDB75 /* MockURLProtocol.swift in Sources */,
 				FC930E792B0CD75C00AA48E3 /* ProfileViewController.swift in Sources */,
 				194C21BB2B1B718B00C62645 /* MockHomeWorker.swift in Sources */,
@@ -1193,7 +1264,9 @@
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
 				FC0E80282B1A0BBB00EF56D6 /* UploadPostViewController.swift in Sources */,
 				1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */,
+				8321A2F32B1E1026000A12AF /* ReportInteractor.swift in Sources */,
 				19A169262B176C5F00DB34C0 /* TagPlayListModels.swift in Sources */,
+				8321A2F22B1E1026000A12AF /* ReportViewController.swift in Sources */,
 				FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */,
 				836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */,
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
@@ -1206,6 +1279,8 @@
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
+				836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */,
+				FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */,
 				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
@@ -1217,6 +1292,7 @@
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				836C339D2B1843BE00ECAFB0 /* SettingSceneViewController.swift in Sources */,
+				8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
 				835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */,
@@ -1225,9 +1301,11 @@
 				FC0E80322B1A280300EF56D6 /* LOTextView.swift in Sources */,
 				19A169282B176C5F00DB34C0 /* TagPlayListInteractor.swift in Sources */,
 				FC930E7A2B0CD75C00AA48E3 /* ProfileInteractor.swift in Sources */,
+				8321A2F02B1E1026000A12AF /* ReportRouter.swift in Sources */,
 				FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */,
 				835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */,
 				1945520F2B03AEA400299768 /* Configurator.swift in Sources */,
+				FC4084CC2B1F2F5D00CE4727 /* UploadPost.swift in Sources */,
 				835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */,
 				19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */,
 				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
@@ -1237,6 +1315,7 @@
 				FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */,
 				194551F32B037F2D00299768 /* LoginWorker.swift in Sources */,
 				FC0E803D2B1B91C900EF56D6 /* EditTagModels.swift in Sources */,
+				8321A2F52B1E10DF000A12AF /* ReportConfigurator.swift in Sources */,
 				835A61902B067D61002F22A5 /* LOSlider.swift in Sources */,
 				19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */,
 				1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */,
@@ -1252,10 +1331,12 @@
 				835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */,
 				19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */,
 				FC0E803C2B1B91C900EF56D6 /* EditTagRouter.swift in Sources */,
+				FC4084CA2B1F291200CE4727 /* UploadVideoDTO.swift in Sources */,
 				835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,
+				8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
