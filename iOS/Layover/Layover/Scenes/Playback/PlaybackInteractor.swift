@@ -39,7 +39,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     typealias Models = PlaybackModels
 
-    lazy var worker = PlaybackWorker()
+    var worker: PlaybackWorkerProtocol?
     var presenter: PlaybackPresentationLogic?
 
     var parentView: Models.ParentView?
@@ -57,6 +57,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func displayVideoList() {
         guard let parentView: Models.ParentView else { return }
         guard var posts: [Post] else { return }
+        guard let worker else { return }
         if parentView != .home {
             posts = worker.makeInfiniteScroll(posts: posts)
             self.posts = posts
@@ -188,7 +189,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
         Task {
-            guard let prevCell else { return false}
+            guard let prevCell,
+                  let worker
+            else { return false}
             let result: Bool = await worker.deletePlaybackVideo(boardID: prevCell.boardID)
             let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
             await MainActor.run {

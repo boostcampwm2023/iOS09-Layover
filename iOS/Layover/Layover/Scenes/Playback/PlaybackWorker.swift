@@ -9,11 +9,12 @@
 import UIKit
 import OSLog
 
-protocol DeleteWorkerProtocol {
+protocol PlaybackWorkerProtocol {
     func deletePlaybackVideo(boardID: Int) async -> Bool
+    func makeInfiniteScroll(posts: [Post]) -> [Post]
 }
 
-final class PlaybackWorker {
+final class PlaybackWorker: PlaybackWorkerProtocol {
 
     // MARK: - Properties
 
