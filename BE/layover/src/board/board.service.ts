@@ -1,5 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { Board } from './board.entity';
 import { MemberService } from '../member/member.service';
 import { Member } from '../member/member.entity';
@@ -8,66 +7,76 @@ import { BoardResDto } from './dtos/board-res-dto';
 import { TagService } from '../tag/tag.service';
 import { BoardsResDto } from './dtos/boards-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
-import { makeDownloadPreSignedUrl } from '../utils/s3Utils';
+import { generateDownloadPreSignedUrl } from '../utils/s3Utils';
+import { CreateBoardDto } from './dtos/create-board.dto';
+import { BoardRepository } from './board.repository';
+import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
 
 @Injectable()
 export class BoardService {
   constructor(
-    @Inject('BOARD_REPOSITORY') private boardRepository: Repository<Board>,
+    private boardRepository: BoardRepository,
     private memberService: MemberService,
     private tagService: TagService,
   ) {}
 
-  async createBoard(userId: number, title: string, content: string, latitude: number, longitude: number, tag: string[]): Promise<CreateBoardResDto> {
+  async createBoard(userId: number, createBoardDto: CreateBoardDto): Promise<CreateBoardResDto> {
     const member: Member = await this.memberService.findMemberById(userId);
-    content = content ?? '';
-    const savedBoard: Board = await this.boardRepository.save({
-      member: member,
-      title: title,
-      content: content,
-      encoded_video_url: '',
-      latitude: latitude,
-      longitude: longitude,
-      filename: '',
-      status: 'WAITING',
-    });
-    if (tag) {
-      tag.map(async (tagname) => {
+    createBoardDto.content = createBoardDto.content ?? '';
+
+    const savedBoard: Board = await this.boardRepository.saveBoard(
+      new Board(
+        member,
+        createBoardDto.title,
+        createBoardDto.content,
+        '',
+        createBoardDto.latitude,
+        createBoardDto.longitude,
+        '',
+        'WAITING',
+      ),
+    );
+    if (createBoardDto.tag) {
+      createBoardDto.tag.map(async (tagname) => {
         await this.tagService.saveTag(savedBoard, tagname);
       });
     }
 
-    return new CreateBoardResDto(savedBoard.id, title, content, latitude, longitude, tag ?? []);
+    return new CreateBoardResDto(
+      savedBoard.id,
+      savedBoard.title,
+      savedBoard.content,
+      savedBoard.latitude,
+      savedBoard.longitude,
+      createBoardDto.tag ?? [],
+    );
   }
 
-  async getBoardRandom() {
+  async getBoardsRandomly() {
     // 성공한것만 가져온다.
-    const limit = await this.boardRepository.createQueryBuilder('board').where("board.status = 'COMPLETE'").getCount();
-    let random = Math.floor(Math.random() * limit);
-    const n = 10; // 최대 10개 데이터를 가져온다.
+    const limit: number = await this.boardRepository.countCompletedBoards();
+    let offset: number = Math.floor(Math.random() * limit);
+    const itemsPerPage = 10; // 최대 10개 데이터를 가져온다.
 
     // 데이터가 10개 이하라면 첫번째 데이터부터 가져옴.
-    if (random < 10) {
-      random = 0;
-    } else if (limit - random < 10) {
-      random = limit - 10;
+    if (offset < 10) {
+      offset = 0;
+    } else if (limit - offset < 10) {
+      offset = limit - 10;
     }
 
-    const boards: Board[] = await this.boardRepository
-      .createQueryBuilder('board')
-      .leftJoinAndSelect('board.member', 'member')
-      .leftJoinAndSelect('board.tags', 'tag')
-      .where("board.status = 'COMPLETE'")
-      .skip(random)
-      .take(n)
-      .getMany();
-
-    return Promise.all(boards.map((board) => this.createBoardResDto(board)));
+    const boards: Board[] = await this.boardRepository.findBoardsRandomly(itemsPerPage, offset);
+    return Promise.all(boards.map((board: Board) => this.createBoardResDto(board)));
   }
 
   async createBoardResDto(board: Board): Promise<BoardsResDto> {
-    const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, board.member.profile_image_key);
-    const videoThumbnailUrl = makeDownloadPreSignedUrl(
+    const member = new MemberInfosResDto(
+      board.member.id,
+      board.member.username,
+      board.member.introduce,
+      board.member.profile_image_key,
+    );
+    const videoThumbnailUrl = generateDownloadPreSignedUrl(
       process.env.NCLOUD_S3_THUMBNAIL_BUCKET_NAME,
       `${process.env.HLS_ENCODING_PATH}/${board.filename}_01.jpg`,
     );
@@ -85,93 +94,69 @@ export class BoardService {
     return new BoardsResDto(member, boardInfo, tag);
   }
 
-  async getBoardMap(lat: string, lon: string) {
-    const latitude = parseFloat(lat);
-    const longitude = parseFloat(lon);
-
-    const boards: Board[] = await this.boardRepository
-      .createQueryBuilder('board')
-      .leftJoinAndSelect('board.member', 'member')
-      .leftJoinAndSelect('board.tags', 'tag')
-      .where(`ST_Distance_Sphere(point(:longitude, :latitude), point(board.longitude, board.latitude)) < :distance`, {
-        longitude,
-        latitude,
-        distance: 500000, // 100km
-      })
-      .andWhere("board.status = 'COMPLETE'")
-      .getMany();
-
+  async getBoardsByMap(lat: string, lon: string) {
+    const latitude: number = parseFloat(lat);
+    const longitude: number = parseFloat(lon);
+    const boards: Board[] = await this.boardRepository.findBoardsByMap(latitude, longitude);
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardTag(tag: string, page: number) {
+  async getBoardsByTag(tag: string, page: number) {
     const itemsPerPage = 15;
     const offset = (page - 1) * itemsPerPage;
 
-    const boards: Board[] = await this.boardRepository
-      .createQueryBuilder('board')
-      .leftJoinAndSelect('board.member', 'member')
-      .leftJoinAndSelect('board.tags', 'tag')
-      .where('tag.tagname = :tag', { tag })
-      .andWhere("board.status = 'COMPLETE'")
-      .skip(offset)
-      .take(itemsPerPage)
-      .getMany();
-
+    const boards: Board[] = await this.boardRepository.findBoardsByTag(tag, itemsPerPage, offset);
     const boardIds = boards.map((board) => board.id);
-
-    const allBoards: Board[] = await this.boardRepository
-      .createQueryBuilder('board')
-      .leftJoinAndSelect('board.member', 'member')
-      .leftJoinAndSelect('board.tags', 'tag')
-      .whereInIds(boardIds)
-      .getMany();
-
+    const allBoards: Board[] = await this.boardRepository.findBoardsByIds(boardIds);
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardProfile(id: number, page: number) {
+  async getBoardsByProfile(id: number, page: number) {
     const itemsPerPage = 15;
     const offset = (page - 1) * itemsPerPage;
-
-    const boards: Board[] = await this.boardRepository
-      .createQueryBuilder('board')
-      .leftJoinAndSelect('board.member', 'member')
-      .leftJoinAndSelect('board.tags', 'tag')
-      .where("board.status = 'COMPLETE'")
-      .andWhere('member.id = :id', { id })
-      .skip(offset)
-      .take(itemsPerPage)
-      .getMany();
+    const boards: Board[] = await this.boardRepository.findBoardsByProfile(id, itemsPerPage, offset);
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
-  async setEncodedVideoUrl(filename: string) {
-    const board: Board = await this.boardRepository.findOne({ where: { filename } });
-    board.encoded_video_url = this.generateEncodedVideoHLS(filename);
-    await this.boardRepository.save(board);
-  }
-
-  async saveFilenameById(id: number, filename: string) {
-    const board: Board = await this.boardRepository.findOne({ where: { id } });
+  async updateFilenameById(id: number, filename: string) {
+    const board: Board = await this.boardRepository.findOneById(id);
     board.filename = filename;
-    await this.boardRepository.save(board);
+    await this.boardRepository.saveBoard(board);
   }
 
-  generateEncodedVideoHLS(filename: string) {
+  generateEncodedVideoUrl(filename: string) {
     return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
     /${process.env.HLS_ENCODING_PATH}/${filename}_AVC_,FHD,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8`;
   }
 
-  async setStatusByFilename(filename: string, status: string) {
-    await this.boardRepository.update({ filename }, { status });
+  async getBoardById(id: number): Promise<Board> {
+    return await this.boardRepository.findOneById(id);
   }
 
-  async findBoardById(id: number): Promise<Board> {
-    return await this.boardRepository.findOne({ where: { id } });
+  async deleteBoardById(boardId: number) {
+    await this.boardRepository.updateStatusById(boardId, 'DELETED');
   }
 
-  async deleteBoard(boardId: string) {
-    await this.boardRepository.update({ id: parseInt(boardId) }, { status: 'DELETED' });
+  async processByEncodingStatus(encodingCallbackRequestDto: EncodingCallbackDto) {
+    const filename = this.parsingFilenameFromFilePath(encodingCallbackRequestDto.filePath);
+
+    //파일명으로 파일을 찾고 해당 파일의 status 를 갱신해준다.
+    switch (encodingCallbackRequestDto.status) {
+      case 'RUNNING':
+        await this.boardRepository.updateStatusByFilename(filename, 'RUNNING');
+        break;
+      case 'FAILURE':
+        await this.boardRepository.updateStatusByFilename(filename, 'FAILURE');
+        break;
+      case 'COMPLETE':
+        await this.boardRepository.updateStatusByFilename(filename, 'COMPLETE');
+        await this.boardRepository.updateEncodedVideoUrlByFilename(filename, this.generateEncodedVideoUrl(filename));
+        break;
+    }
+  }
+
+  parsingFilenameFromFilePath(filePath: string) {
+    const regExp = /^\/layover-station\/(.*?)(_AVC.*?)\.mp4$/;
+    return filePath.match(regExp)[1];
   }
 }

@@ -15,7 +15,7 @@ export class CreateBoardDto {
   })
   @IsString()
   @IsOptional()
-  readonly content?: string;
+  content?: string;
 
   @ApiProperty({
     example: '37.0532156213',
@@ -35,7 +35,7 @@ export class CreateBoardDto {
     required: false,
   })
   @IsOptional()
-  readonly tag?: string[];
+  tag?: string[];
 
   constructor(title: string, content: string, latitude: number, longitude: number, tag: string[]) {
     this.title = title;

@@ -17,7 +17,7 @@ import { MemberInfosResDto } from './dtos/member-infos-res.dto';
 import { SWAGGER } from 'src/utils/swaggerUtils';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { MEMBER_SWAGGER } from './member.swagger';
-import { makeDownloadPreSignedUrl, makeUploadPreSignedUrl } from '../utils/s3Utils';
+import { generateDownloadPreSignedUrl, generateUploadPreSignedUrl } from '../utils/s3Utils';
 import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 
 @ApiTags('Member API')
@@ -70,7 +70,10 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Patch('introduce')
-  async updateIntroduce(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() introduceDto: IntroduceDto) {
+  async updateIntroduce(
+    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @Body() introduceDto: IntroduceDto,
+  ) {
     const id = payload.memberId;
     const introduce = introduceDto.introduce;
 
@@ -90,7 +93,10 @@ export class MemberController {
   @ApiBearerAuth('token')
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get()
-  async getOtherMemberInfos(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('memberId') memberId: string) {
+  async getOtherMemberInfos(
+    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @Query('memberId') memberId: string,
+  ) {
     let id: number;
     if (memberId !== undefined) {
       // memberId가 존재하면 타인의 프로필을 조회하는 것이다.
@@ -108,7 +114,7 @@ export class MemberController {
     const profileImageKey = member.profile_image_key;
 
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    const preSignedUrl = makeDownloadPreSignedUrl(bucketname, profileImageKey);
+    const preSignedUrl = generateDownloadPreSignedUrl(bucketname, profileImageKey);
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
@@ -143,7 +149,10 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Post('profile-image/presigned-url')
-  async getUploadProfilePresignedUrl(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ProfilePreSignedUrlDto) {
+  async getUploadProfilePresignedUrl(
+    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @Body() body: ProfilePreSignedUrlDto,
+  ) {
     const id = payload.memberId;
 
     // 프로필 사진 업로드할 presigned url 생성하기
@@ -151,7 +160,7 @@ export class MemberController {
     const filename = member.username;
     const filetype = body.filetype;
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    const preSignedUrl = makeUploadPreSignedUrl(bucketname, filename, 'image', filetype);
+    const preSignedUrl = generateUploadPreSignedUrl(bucketname, filename, 'image', filetype);
 
     // db에 반영
     const key = `${filename}.${filetype}`;
