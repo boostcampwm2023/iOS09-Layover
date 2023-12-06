@@ -39,4 +39,22 @@ export class Member {
     default: () => 'CURRENT_TIMESTAMP',
   })
   date_created: Date;
+
+  constructor(
+    id: number,
+    username: string,
+    profile_image_key: string,
+    introduce: string,
+    provider: string,
+    hash: string,
+    date_created: Date,
+  ) {
+    this.id = id;
+    this.username = username;
+    this.profile_image_key = profile_image_key;
+    this.introduce = introduce;
+    this.provider = provider;
+    this.hash = hash;
+    this.date_created = date_created;
+  }
 }
