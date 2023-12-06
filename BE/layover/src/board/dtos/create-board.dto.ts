@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateBoardDto {
   @ApiProperty({
@@ -36,4 +36,12 @@ export class CreateBoardDto {
   })
   @IsOptional()
   readonly tag?: string[];
+
+  constructor(title: string, content: string, latitude: number, longitude: number, tag: string[]) {
+    this.title = title;
+    this.content = content;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.tag = tag;
+  }
 }

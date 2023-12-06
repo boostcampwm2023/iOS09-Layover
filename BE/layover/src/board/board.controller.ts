@@ -68,7 +68,7 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
   @Get('home')
-  async getBoardRandom() {
+  async getBoardRandom(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardRandom();
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
