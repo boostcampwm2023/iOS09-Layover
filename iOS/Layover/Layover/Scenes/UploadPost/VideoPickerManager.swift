@@ -14,6 +14,8 @@ protocol VideoPickerDelegate: AnyObject {
 
 final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
 
+    // MARK: - Properties
+
     weak var videoPickerDelegate: VideoPickerDelegate?
 
     let phPickerViewController: PHPickerViewController = {
@@ -25,10 +27,14 @@ final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
         return phPickerViewController
     }()
 
+    // MARK: - Object LifeCycle
+
     override init() {
         super.init()
         phPickerViewController.delegate = self
     }
+
+    // MARK: - Methods
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         guard let result = results.first else {
