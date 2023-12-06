@@ -10,7 +10,7 @@ import UIKit
 
 protocol ProfileRoutingLogic {
     func routeToEditProfileViewController()
-    func routeToSettingSceneViewController()
+    func routeToSettingViewController()
 }
 
 protocol ProfileDataPassing {
@@ -40,8 +40,8 @@ final class ProfileRouter: NSObject, ProfileRoutingLogic, ProfileDataPassing {
         viewController?.navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
-    func routeToSettingSceneViewController() {
-        let settingSceneViewController: SettingSceneViewController = SettingSceneViewController()
+    func routeToSettingViewController() {
+        let settingSceneViewController = SettingViewController()
         viewController?.navigationController?.pushViewController(settingSceneViewController, animated: true)
     }
 }
