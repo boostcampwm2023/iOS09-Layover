@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
         let rootViewController = AuthManager.shared.isLoggedIn ? MainTabBarViewController() : LoginViewController()
-        window.rootViewController = MainTabBarViewController()
+        window.rootViewController = UINavigationController(rootViewController: rootViewController)
         self.window = window
         addNotificationObservers()
         window.makeKeyAndVisible()
