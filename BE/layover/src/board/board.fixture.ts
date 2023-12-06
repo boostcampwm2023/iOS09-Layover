@@ -3,9 +3,24 @@ import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsResDto } from './dtos/boards-res.dto';
 import { MemberInfosResDto } from '../member/dtos/member-infos-res.dto';
 import { BoardResDto } from './dtos/board-res-dto';
+import { Board } from './board.entity';
+import { Member } from '../member/member.entity';
 
-export const createBoardResDto: CreateBoardResDto = new CreateBoardResDto(1, '제목', '내용', 37.1231053, 127.1231053, ['부산', '광안리', '바다']);
-export const createBoardDto: CreateBoardDto = new CreateBoardDto('제목', '내용', 37.1231053, 127.1231053, ['부산', '광안리', '바다']);
+/**
+ * @description
+ * BoardController 에 사용되는 fixtures
+ */
+
+export const createBoardResDto: CreateBoardResDto = new CreateBoardResDto(1, '제목', '내용', 37.1231053, 127.1231053, [
+  '부산',
+  '광안리',
+  '바다',
+]);
+export const createBoardDto: CreateBoardDto = new CreateBoardDto('제목', '내용', 37.1231053, 127.1231053, [
+  '부산',
+  '광안리',
+  '바다',
+]);
 
 export const boardsResDto: BoardsResDto[] = [
   new BoardsResDto(
@@ -24,3 +39,19 @@ export const boardsResDto: BoardsResDto[] = [
     ['태그5', '태그6'],
   ),
 ];
+
+/**
+ * @description
+ * BoardService 에 사용되는 fixtures
+ */
+
+export const savedBoard: Board = new Board(
+  new Member(1, '이름', '프로필사진', '소개', 'provider', 'hash', new Date()),
+  '제목',
+  '내용',
+  '비디오url',
+  37.1231053,
+  127.1231053,
+  '썸네일url',
+  'WAITING',
+);
