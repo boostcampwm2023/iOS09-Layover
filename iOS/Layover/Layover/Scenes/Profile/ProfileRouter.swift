@@ -40,8 +40,8 @@ final class ProfileRouter: ProfileRoutingLogic, ProfileDataPassing {
     }
 
     func routeToSetting() {
-        let settingSceneViewController: SettingSceneViewController = SettingSceneViewController()
-        viewController?.navigationController?.pushViewController(settingSceneViewController, animated: true)
+        let settingViewController: SettingViewController = SettingViewController()
+        viewController?.navigationController?.pushViewController(settingViewController, animated: true)
     }
 
     func routeToPlayback() {
