@@ -43,10 +43,10 @@ final class MockUserWorker: UserWorkerProtocol {
             }
             let endPoint: EndPoint = EndPoint<Response<NicknameDTO>>(path: "/member/username",
                                                                      method: .PATCH,
-                                                                     bodyParameters: NicknameDTO(userName: nickname))
+                                                                     bodyParameters: NicknameDTO(username: nickname))
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
-            return data.userName
+            return data.username
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
@@ -67,7 +67,7 @@ final class MockUserWorker: UserWorkerProtocol {
             }
             let endPoint = EndPoint<Response<CheckUserNameDTO>>(path: "/member/check-username",
                                                                 method: .POST,
-                                                                bodyParameters: NicknameDTO(userName: userName))
+                                                                bodyParameters: NicknameDTO(username: userName))
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false)
             return response.data?.isValid
         } catch {
@@ -118,7 +118,7 @@ final class MockUserWorker: UserWorkerProtocol {
                                                            method: .DELETE)
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { throw NetworkError.emptyData }
-            return data.userName
+            return data.username
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil

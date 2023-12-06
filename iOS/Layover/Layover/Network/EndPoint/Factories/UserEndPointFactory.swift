@@ -53,7 +53,7 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
 
     func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>> {
         return EndPoint(
-            path: "/member/withdraw",
+            path: "/member",
             method: .DELETE
         )
     }

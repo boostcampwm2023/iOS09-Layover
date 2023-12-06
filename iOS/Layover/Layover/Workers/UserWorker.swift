@@ -77,7 +77,7 @@ final class UserWorker: UserWorkerProtocol {
                 os_log(.error, log: .default, "Failed to modify nickname with error: %@", responseData.message)
                 return nil
             }
-            return data.userName
+            return data.username
         } catch {
             os_log(.error, log: .default, "Failed to modify nickname with error: %@", error.localizedDescription)
             return nil
@@ -118,7 +118,7 @@ final class UserWorker: UserWorkerProtocol {
                 os_log(.error, log: .default, "Failed to withdraw with error: %@", responseData.message)
                 return nil
             }
-            return data.userName
+            return data.username
         } catch {
             os_log(.error, log: .default, "Failed to withdraw with error: %@", error.localizedDescription)
             return nil
