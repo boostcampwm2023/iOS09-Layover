@@ -30,7 +30,7 @@ final class SettingViewController: BaseViewController {
     var router: (SettingRoutingLogic & SettingDataPassing)?
     var interactor: SettingBusinessLogic?
 
-    private var tableViewSections = [Models.ConfigureTableView.ViewModel.TableSection]()
+    private var tableViewSections = [Models.TableSection]()
 
     // MARK: - Object lifecycle
 
@@ -67,7 +67,7 @@ final class SettingViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        self.title = "설정"
+        title = "설정"
         setNavigationBar()
         interactor?.performTableViewConfigure(request: Models.ConfigureTableView.Request())
     }
@@ -81,10 +81,12 @@ final class SettingViewController: BaseViewController {
 
     private func setNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.isTranslucent = false
     }
 
     private func restoreNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.isTranslucent = true
     }
 }
 
@@ -121,7 +123,22 @@ extension SettingViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension SettingViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedSection = tableViewSections[indexPath.section]
+        let selectedItem = selectedSection.items[indexPath.row]
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.setSelected(false, animated: true)
 
+        switch selectedSection.sectionTitle {
+        case .policy:
+            guard let policyURL = selectedItem.title.policyURL else { return }
+            router?.showSafariViewController(url: policyURL)
+        case .signOut:
+            break
+        default:
+            break
+        }
+    }
 }
 
 

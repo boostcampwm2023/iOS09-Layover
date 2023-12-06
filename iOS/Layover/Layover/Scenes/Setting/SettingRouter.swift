@@ -11,44 +11,27 @@
 //
 
 import UIKit
+import SafariServices
 
-@objc protocol SettingRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
+protocol SettingRoutingLogic {
+    func showSafariViewController(url: URL)
 }
 
 protocol SettingDataPassing {
     var dataStore: SettingDataStore? { get }
 }
 
-class SettingRouter: NSObject, SettingRoutingLogic, SettingDataPassing {
+final class SettingRouter: SettingRoutingLogic, SettingDataPassing {
+
+    // MARK: - Properties
+
     weak var viewController: SettingViewController?
     var dataStore: SettingDataStore?
 
-// MARK: Routing (navigating to other screens)
+    // MARK: - Methods
 
-//func routeToSomewhere(segue: UIStoryboardSegue?) {
-//    if let segue = segue {
-//        let destinationVC = segue.destination as! SomewhereViewController
-//        var destinationDS = destinationVC.router!.dataStore!
-//        passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-//    } else {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-//        var destinationDS = destinationVC.router!.dataStore!
-//        passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-//        navigateToSomewhere(source: viewController!, destination: destinationVC)
-//    }
-//}
-
-// MARK: Navigation to other screen
-
-//func navigateToSomewhere(source: SettingViewController, destination: SomewhereViewController) {
-//    source.show(destination, sender: nil)
-//}
-
-// MARK: Passing data to other screen
-
-//    func passDataToSomewhere(source: SettingDataStore, destination: inout SomewhereDataStore) {
-//        destination.name = source.name
-//    }
+    func showSafariViewController(url: URL) {
+        let safariViewController = SFSafariViewController(url: url)
+        viewController?.present(safariViewController, animated: true, completion: nil)
+    }
 }

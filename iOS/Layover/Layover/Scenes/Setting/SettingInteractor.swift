@@ -28,6 +28,8 @@ final class SettingInteractor: SettingBusinessLogic, SettingDataStore {
     var presenter: SettingPresentationLogic?
     var worker: SettingWorkerProtocol?
 
+    // MARK: - Methods
+
     func performTableViewConfigure(request: Models.ConfigureTableView.Request) {
         let response = Models.ConfigureTableView.Response(versionNumber: worker?.versionNumber() ?? "")
         presenter?.presentTableView(with: response)

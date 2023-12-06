@@ -26,46 +26,74 @@ enum SettingModels {
         }
 
         struct ViewModel {
-
-            enum SectionTitle: String, CaseIterable {
-                case policy = "약관 및 정책"
-                case system = "시스템"
-                case signOut = "계정 관리"
-            }
-
-            enum SectionItemTitle: String {
-                case termsOfService = "서비스 이용약관"
-                case privacyPolicy = "개인정보 처리방침"
-                case openSourceLicense = "오픈소스 라이선스"
-                case userLocationUsage = "위치 정보 이용약관"
-                case version = "버전"
-                case signOut = "로그아웃"
-                case withdraw = "탈퇴"
-            }
-
-            static let policySection = TableSection(sectionTitle: .policy, items: [
-                SectionItem(title: .termsOfService, secondaryText: nil),
-                SectionItem(title: .privacyPolicy, secondaryText: nil),
-                SectionItem(title: .openSourceLicense, secondaryText: nil),
-                SectionItem(title: .userLocationUsage, secondaryText: nil)
-            ])
-
-            static let signOutSection = TableSection(sectionTitle: .signOut, items: [
-                SectionItem(title: .signOut, secondaryText: nil),
-                SectionItem(title: .withdraw, secondaryText: nil)
-            ])
-
-            struct TableSection {
-                let sectionTitle: SectionTitle
-                let items: [SectionItem]
-            }
-
-            struct SectionItem {
-                let title: SectionItemTitle
-                let secondaryText: String?
-            }
-            
             let tableViewSections: [TableSection]
         }
+    }
+
+    enum ShowPolicyView {
+        struct Request {
+            let selectedPolicy: String
+        }
+
+        struct Response {
+            let policyURL: URL
+        }
+
+        struct ViewModel {
+            let policyURL: URL
+        }
+    }
+
+    enum SectionTitle: String, CaseIterable {
+        case policy = "약관 및 정책"
+        case system = "시스템"
+        case signOut = "계정 관리"
+    }
+
+    enum SectionItemTitle: String {
+        case termsOfService = "서비스 이용약관"
+        case privacyPolicy = "개인정보 처리방침"
+        case openSourceLicense = "오픈소스 라이선스"
+        case userLocationUsage = "위치 정보 이용약관"
+        case version = "버전"
+        case signOut = "로그아웃"
+        case withdraw = "탈퇴"
+
+        var policyURL: URL? {
+            switch self {
+            case .termsOfService:
+                return URL(string: "https://loinsir.notion.site/7692ba4a70d940e5a7c80bccb5ef6fea")
+            case .privacyPolicy:
+                return URL(string: "https://loinsir.notion.site/b7d589385bc942c6ae1f5428ed84e04c?pvs=4")
+            case .openSourceLicense:
+                return URL(string: "https://loinsir.notion.site/bc27b06d115b40b5a03c5277448e5a9f?pvs=4")
+            case .userLocationUsage:
+                return URL(string: "https://loinsir.notion.site/5c1ac096d02049cf9cf03665148276ea?pvs=4")
+            default:
+                return nil
+            }
+        }
+    }
+
+    static let policySection = TableSection(sectionTitle: .policy, items: [
+        SectionItem(title: .termsOfService, secondaryText: nil),
+        SectionItem(title: .privacyPolicy, secondaryText: nil),
+        SectionItem(title: .openSourceLicense, secondaryText: nil),
+        SectionItem(title: .userLocationUsage, secondaryText: nil)
+    ])
+
+    static let signOutSection = TableSection(sectionTitle: .signOut, items: [
+        SectionItem(title: .signOut, secondaryText: nil),
+        SectionItem(title: .withdraw, secondaryText: nil)
+    ])
+
+    struct TableSection {
+        let sectionTitle: SectionTitle
+        let items: [SectionItem]
+    }
+
+    struct SectionItem {
+        let title: SectionItemTitle
+        let secondaryText: String?
     }
 }

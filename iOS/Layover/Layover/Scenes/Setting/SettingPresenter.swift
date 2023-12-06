@@ -27,13 +27,13 @@ final class SettingPresenter: SettingPresentationLogic {
 
     func presentTableView(with response: Models.ConfigureTableView.Response) {
         let versionNumber = response.versionNumber
-        let versionSectionItem = Models.ConfigureTableView.ViewModel.SectionItem(title: .version,
-                                                                             secondaryText: versionNumber)
-        let versionSection = Models.ConfigureTableView.ViewModel.TableSection(sectionTitle: .system, items: [versionSectionItem])
+        let versionSectionItem = Models.SectionItem(title: .version,
+                                                    secondaryText: versionNumber)
+        let versionSection = Models.TableSection(sectionTitle: .system, items: [versionSectionItem])
         let viewModel = Models.ConfigureTableView.ViewModel(tableViewSections: [
-            Models.ConfigureTableView.ViewModel.policySection,
+            Models.policySection,
             versionSection,
-            Models.ConfigureTableView.ViewModel.signOutSection
+            Models.signOutSection
         ])
         viewController?.displayTableView(viewModel: viewModel)
     }
