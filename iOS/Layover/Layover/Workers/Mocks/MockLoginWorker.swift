@@ -49,7 +49,7 @@ final class MockLoginWorker: LoginWorkerProtocol {
                                                               method: .POST,
                                                               bodyParameters: bodyParameters)
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-            return response.data?.isValid
+            return response.data?.isAlreadyExist
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
@@ -107,7 +107,7 @@ final class MockLoginWorker: LoginWorkerProtocol {
                                                               method: .POST,
                                                               bodyParameters: bodyParameters)
             let response = try await provider.request(with: endPoint, authenticationIfNeeded: false, retryCount: 0)
-            return response.data?.isValid
+            return response.data?.isAlreadyExist
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
