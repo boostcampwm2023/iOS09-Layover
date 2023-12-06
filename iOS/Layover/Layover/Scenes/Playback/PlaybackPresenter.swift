@@ -99,7 +99,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
 
     func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
         let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
-        viewController?.routeToBack(viewModel: viewModel)
+        viewController?.resetVideo(viewModel: viewModel)
     }
 
     // MARK: - UseCase Configure Playback Cell

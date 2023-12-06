@@ -20,7 +20,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
-    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
     func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
@@ -239,7 +239,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         viewModel.curCell.playbackView.playPlayer()
     }
 
-    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+    func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         var curCell = viewModel.curCell
         curCell?.resetObserver()
         curCell?.playbackView.resetPlayer()
@@ -262,6 +262,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([viewModel.playbackVideo])
         dataSource.apply(snapshot, animatingDifferences: true)
+        // TODO: 영상 재생 관련 처리
     }
 }
 
