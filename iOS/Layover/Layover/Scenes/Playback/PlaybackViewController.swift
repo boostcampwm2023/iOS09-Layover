@@ -43,6 +43,9 @@ final class PlaybackViewController: BaseViewController {
     }()
 
     // MARK: - Properties
+
+    private var timeObserverToken: Any?
+
     private var playerSlider: LOSlider = LOSlider()
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
@@ -93,8 +96,8 @@ final class PlaybackViewController: BaseViewController {
         super.viewWillDisappear(animated)
         interactor?.leavePlaybackView()
         if isMovingFromParent {
-            playerSlider.removeFromSuperview()
             interactor?.moveToBack()
+            playerSlider.removeFromSuperview()
         }
     }
 
@@ -134,12 +137,14 @@ final class PlaybackViewController: BaseViewController {
         playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 
-    private func setPlayerSlider(at playbackView: PlaybackView) {
+    private func setPlayerSlider(at playbackView: PlaybackView) -> Any? {
         let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
-        playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
+        let timeObserverToken: Any? = playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main , using: { [weak self] currentTime in
             self?.updateSlider(currentTime: currentTime, playerView: playbackView.playerView)
         })
+        playerSlider.removeTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
         playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+        return timeObserverToken
     }
 
     private func updateSlider(currentTime: CMTime, playerView: PlayerView) {
@@ -188,7 +193,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         }
         if let curCell = viewModel.curCell {
             curCell.playbackView.playPlayer()
-            setPlayerSlider(at: curCell.playbackView)
             // Slider가 원점으로 돌아가는 시간 필요
             Task {
                 await slowShowPlayerSlider()
@@ -235,7 +239,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                 }
             }
             cell.addAVPlayer(url: playbackVideo.playbackInfo.videoURL)
-            self.setPlayerSlider(at: cell.playbackView)
+            cell.timeObserverToken = self.setPlayerSlider(at: cell.playbackView)
             return cell
         }
     }

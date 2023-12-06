@@ -10,6 +10,7 @@ import UIKit
 
 final class PlaybackCell: UICollectionViewCell {
     let playbackView: PlaybackView = PlaybackView()
+    var timeObserverToken: Any?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,6 +20,12 @@ final class PlaybackCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configure()
+    }
+
+    override func prepareForReuse() {
+        if let timeObserverToken = timeObserverToken {
+            playbackView.playerView.player?.removeTimeObserver(timeObserverToken)
+        }
     }
 
     func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
