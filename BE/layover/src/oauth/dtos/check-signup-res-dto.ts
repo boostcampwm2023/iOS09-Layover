@@ -3,11 +3,11 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CheckSignupResDto {
   @ApiProperty({
     example: 'true',
-    description: '회원가입 여부 확인 결과 bool 값',
+    description: '해당 계정이 이미 존재하는지 여부 boolean 값',
   })
-  isValid: boolean;
+  isAlreadyExist: boolean;
 
-  constructor(isValid: boolean) {
-    this.isValid = isValid;
+  constructor(isAlreadyExist: boolean) {
+    this.isAlreadyExist = isAlreadyExist;
   }
 }

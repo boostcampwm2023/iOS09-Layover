@@ -67,7 +67,6 @@ export class OauthController {
     description: '특정 카카오 계정으로 카카오 회원가입이 돼있는지 확인합니다.',
   })
   @ApiResponse(OAUTH_SWAGGER.CHECK_SIGNUP_SUCCESS)
-  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('check-signup/kakao')
   async checkKakaoSignup(@Body() kakaoLoginDto: KakaoLoginDto) {
     // memberHash 구하기
@@ -75,10 +74,9 @@ export class OauthController {
 
     // memberHash를 기준으로 회원가입 여부 확인
     const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
-    const isValid = !isUserExist;
 
     // Response access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isValid));
+    throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isUserExist));
   }
 
   @ApiOperation({
@@ -86,7 +84,6 @@ export class OauthController {
     description: '특정 애플 계정으로 애플 회원가입이 돼있는지 확인합니다.',
   })
   @ApiResponse(OAUTH_SWAGGER.CHECK_SIGNUP_SUCCESS)
-  @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('check-signup/apple')
   async checkAppleSignup(@Body() appleLoginDto: AppleLoginDto) {
     // identity token 검증
@@ -97,10 +94,9 @@ export class OauthController {
 
     // memberHash를 기준으로 회원가입 여부 확인
     const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
-    const isValid = !isUserExist;
 
     // Response access token and refresh token
-    throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isValid));
+    throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isUserExist));
   }
 
   @ApiOperation({
