@@ -9,19 +9,31 @@
 import UIKit
 
 protocol EditTagBusinessLogic {
-
+    func fetchTags()
+    func editTag(request: EditTagModels.EditTag.Request)
 }
 
 protocol EditTagDataStore {
-
+    var tags: [String]? { get set }
 }
 
-class EditTagInteractor: EditTagBusinessLogic, EditTagDataStore {
+final class EditTagInteractor: EditTagBusinessLogic, EditTagDataStore {
+
+    var tags: [String]?
 
     // MARK: - Properties
 
     typealias Models = EditTagModels
 
     var presenter: EditTagPresentationLogic?
+
+    func fetchTags() {
+        guard let tags else { return }
+        presenter?.presentTags(with: EditTagModels.FetchTags.Response(tags: tags))
+    }
+
+    func editTag(request: EditTagModels.EditTag.Request) {
+        tags = request.tags
+    }
 
 }

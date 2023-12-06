@@ -10,13 +10,14 @@ import UIKit
 
 protocol UploadPostRoutingLogic {
     func routeToNext()
+    func routeToBack()
 }
 
 protocol UploadPostDataPassing {
     var dataStore: UploadPostDataStore? { get }
 }
 
-class UploadPostRouter: NSObject, UploadPostRoutingLogic, UploadPostDataPassing {
+final class UploadPostRouter: NSObject, UploadPostRoutingLogic, UploadPostDataPassing {
 
     // MARK: - Properties
 
@@ -31,8 +32,13 @@ class UploadPostRouter: NSObject, UploadPostRoutingLogic, UploadPostDataPassing 
               var destination = nextViewController.router?.dataStore
         else { return }
 
-        // Data Passing
-        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
+        destination.tags = source.tags
+        nextViewController.modalPresentationStyle = .fullScreen
+        viewController?.present(nextViewController, animated: true)
+    }
+
+    func routeToBack() {
+        viewController?.navigationController?.popToRootViewController(animated: true)
     }
 
 }
