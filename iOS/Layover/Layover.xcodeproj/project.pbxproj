@@ -156,6 +156,7 @@
 		FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E2A02B023326001AABFF /* EndPoint.swift */; };
 		FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E2A22B0233BC001AABFF /* NetworkError.swift */; };
 		FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC68E2A42B0233D3001AABFF /* Provider.swift */; };
+		FC70BB2B2B20718A00B37CBE /* VideoPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC70BB2A2B20718A00B37CBE /* VideoPickerManager.swift */; };
 		FC767F842B1214A80088CF9B /* MockUserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F832B1214A70088CF9B /* MockUserWorker.swift */; };
 		FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F852B1214C10088CF9B /* CheckUserNameDTO.swift */; };
 		FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC767F922B1220CC0088CF9B /* NicknameDTO.swift */; };
@@ -351,6 +352,7 @@
 		FC68E2A02B023326001AABFF /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		FC68E2A22B0233BC001AABFF /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		FC68E2A42B0233D3001AABFF /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		FC70BB2A2B20718A00B37CBE /* VideoPickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickerManager.swift; sourceTree = "<group>"; };
 		FC767F832B1214A70088CF9B /* MockUserWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockUserWorker.swift; sourceTree = "<group>"; };
 		FC767F852B1214C10088CF9B /* CheckUserNameDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckUserNameDTO.swift; sourceTree = "<group>"; };
 		FC767F922B1220CC0088CF9B /* NicknameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameDTO.swift; sourceTree = "<group>"; };
@@ -672,6 +674,7 @@
 		FC0E801D2B1A0A4900EF56D6 /* UploadPost */ = {
 			isa = PBXGroup;
 			children = (
+				FC70BB2A2B20718A00B37CBE /* VideoPickerManager.swift */,
 				FC0E80222B1A0BBB00EF56D6 /* UploadPostViewController.swift */,
 				FC0E80232B1A0BBB00EF56D6 /* UploadPostInteractor.swift */,
 				FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */,
@@ -700,12 +703,12 @@
 			isa = PBXGroup;
 			children = (
 				FC767FA62B1269980088CF9B /* Views */,
+				FC767FA92B126D080088CF9B /* LOAnnotation.swift */,
 				FC2511A82B04DAD4004717BC /* MapViewController.swift */,
 				FC2511AC2B04EACD004717BC /* MapInteractor.swift */,
 				FC2511AE2B04EAD9004717BC /* MapPresenter.swift */,
 				FC2511AA2B04EA6B004717BC /* MapConfigurator.swift */,
 				FC2511B02B04EAEC004717BC /* MapModels.swift */,
-				FC767FA92B126D080088CF9B /* LOAnnotation.swift */,
 				836C33902B17629400ECAFB0 /* MapRouter.swift */,
 			);
 			path = Map;
@@ -1176,6 +1179,7 @@
 				194551F42B037F2D00299768 /* LoginRouter.swift in Sources */,
 				FC4975992B03439000D8627F /* UIFont+.swift in Sources */,
 				FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */,
+				FC70BB2B2B20718A00B37CBE /* VideoPickerManager.swift in Sources */,
 				FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */,
 				FC767F952B1222350088CF9B /* ProfileImageDTO.swift in Sources */,
 				FC0E803F2B1B91C900EF56D6 /* EditTagInteractor.swift in Sources */,
