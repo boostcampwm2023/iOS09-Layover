@@ -48,7 +48,11 @@ final class MapViewController: BaseViewController {
         return button
     }()
 
-    private let uploadButton: LOCircleButton = LOCircleButton(style: .add, diameter: 52)
+    private lazy var uploadButton: LOCircleButton = {
+        let button = LOCircleButton(style: .add, diameter: 52)
+        button.addTarget(self, action: #selector(uploadButtonDidTap), for: .touchUpInside)
+        return button
+    }()
 
     private lazy var carouselCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -72,6 +76,7 @@ final class MapViewController: BaseViewController {
     var interactor: MapBusinessLogic?
     var router: (MapRoutingLogic & MapDataPassing)?
 
+    private let videoPickerManager: VideoPickerManager = VideoPickerManager()
     private lazy var carouselCollectionViewHeight: NSLayoutConstraint = carouselCollectionView.heightAnchor.constraint(equalToConstant: 0)
 
     // MARK: - Life Cycle
@@ -90,8 +95,8 @@ final class MapViewController: BaseViewController {
         super.viewDidLoad()
         interactor?.checkLocationAuthorizationStatus()
         setCollectionViewDataSource()
+        setDelegation()
         createMapAnnotation()
-        carouselCollectionView.delegate = self
     }
 
     // MARK: - UI + Layout
@@ -130,6 +135,11 @@ final class MapViewController: BaseViewController {
     }
 
     // MARK: - Methods
+
+    private func setDelegation() {
+        carouselCollectionView.delegate = self
+        videoPickerManager.videoPickerDelegate = self
+    }
 
     private func createLayout() -> UICollectionViewLayout {
         let groupWidthDimension: CGFloat = 94/375
@@ -185,7 +195,13 @@ final class MapViewController: BaseViewController {
         mapView.setUserTrackingMode(.follow, animated: true)
     }
 
+    @objc private func uploadButtonDidTap() {
+        present(videoPickerManager.phPickerViewController, animated: true)
+    }
+
 }
+
+// MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate {
 
@@ -210,6 +226,24 @@ extension MapViewController: MKMapViewDelegate {
     }
 
 }
+
+// MARK: - VideoPickerDelegate
+
+extension MapViewController: VideoPickerDelegate {
+
+    func didFinishPickingVideo(_ url: URL) {
+        interactor?.selectVideo(with: Models.SelectVideo.Request(videoURL: url))
+        Task {
+            await MainActor.run {
+                videoPickerManager.phPickerViewController.dismiss(animated: true)
+                router?.routeToEditVideo()
+            }
+        }
+    }
+
+}
+
+// MARK: - MapDisplayLogic
 
 extension MapViewController: MapDisplayLogic {
 

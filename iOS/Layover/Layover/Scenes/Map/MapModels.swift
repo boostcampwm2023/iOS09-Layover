@@ -61,4 +61,18 @@ enum MapModels {
         struct ViewModel {
         }
     }
+
+    enum SelectVideo {
+        struct Request {
+            let videoURL: URL
+        }
+
+        struct Response {
+
+        }
+
+        struct ViewModel {
+
+        }
+    }
 }

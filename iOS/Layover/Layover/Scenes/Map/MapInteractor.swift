@@ -14,12 +14,14 @@ protocol MapBusinessLogic {
     func fetchVideos()
     func moveToPlaybackScene(with: MapModels.MoveToPlaybackScene.Request)
     func playPosts(with: MapModels.PlayPosts.Request)
+    func selectVideo(with request: MapModels.SelectVideo.Request)
 }
 
 protocol MapDataStore {
     var postPlayStartIndex: Int? { get set }
     var posts: [Post]? { get set }
     var index: Int? { get set }
+    var selectedVideoURL: URL? { get set }
 }
 
 final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
@@ -27,20 +29,17 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     // MARK: - Properties
 
     typealias Models = MapModels
+    var presenter: MapPresentationLogic?
+    var videoFileWorker: VideoFileWorker?
 
     private let locationManager = CLLocationManager()
-
     private var latitude: Double?
-
     private var longitude: Double?
 
-    var index: Int?
-
-    var posts: [Post]?
-
     var postPlayStartIndex: Int?
-
-    var presenter: MapPresentationLogic?
+    var posts: [Post]?
+    var index: Int?
+    var selectedVideoURL: URL?
 
     override init() {
         super.init()
@@ -72,6 +71,10 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     func playPosts(with request: MapModels.PlayPosts.Request) {
         postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene()
+    }
+
+    func selectVideo(with request: Models.SelectVideo.Request) {
+        selectedVideoURL = videoFileWorker?.copyToNewURL(at: request.videoURL)
     }
 
     private func checkCurrentLocationAuthorization(for status: CLAuthorizationStatus) {

@@ -10,6 +10,7 @@ import Foundation
 
 protocol MapRoutingLogic {
     func routeToPlayback()
+    func routeToEditVideo()
 }
 
 protocol MapDataPassing {
@@ -34,5 +35,18 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
         destination.index = source.index
         destination.posts = source.posts
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
+    }
+
+    func routeToEditVideo() {
+        let nextViewController = EditVideoViewController()
+        guard let source = dataStore,
+              var destination = nextViewController.router?.dataStore,
+              let videoURL = source.selectedVideoURL
+        else { return }
+
+        // Data Passing
+        destination.videoURL = videoURL
+        nextViewController.hidesBottomBarWhenPushed = true
+        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 }
