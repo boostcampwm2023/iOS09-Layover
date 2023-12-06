@@ -11,6 +11,8 @@ import AVFoundation
 
 final class PlaybackCell: UICollectionViewCell {
 
+    var boardID: Int?
+
     var playbackView: PlaybackView?
 
     override init(frame: CGRect) {
@@ -27,6 +29,7 @@ final class PlaybackCell: UICollectionViewCell {
 
     func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
         playbackView = nil
+        boardID = info.boardID
         playbackView = PlaybackView(frame: .zero, content: info.content)
         playbackView?.descriptionView.titleLabel.text = info.title
         configure()
