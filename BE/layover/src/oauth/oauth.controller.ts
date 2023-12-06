@@ -93,7 +93,7 @@ export class OauthController {
     await this.oauthService.verifyAppleIdentityToken(appleLoginDto.identityToken);
 
     // memberHash 구하기
-    const memberHash = await this.oauthService.getKakaoMemberHash(appleLoginDto.identityToken);
+    const memberHash = await this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
 
     // memberHash를 기준으로 회원가입 여부 확인
     const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
