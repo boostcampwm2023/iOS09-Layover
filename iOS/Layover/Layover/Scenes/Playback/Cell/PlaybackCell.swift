@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 final class PlaybackCell: UICollectionViewCell {
     let playbackView: PlaybackView = PlaybackView()
@@ -22,10 +23,8 @@ final class PlaybackCell: UICollectionViewCell {
         configure()
     }
 
-    func removeTimeObserver() {
-        if let timeObserverToken = timeObserverToken {
-            playbackView.playerView.player?.removeTimeObserver(timeObserverToken)
-        }
+    override func prepareForReuse() {
+        resetObserver()
     }
 
     func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
@@ -41,6 +40,16 @@ final class PlaybackCell: UICollectionViewCell {
     func addAVPlayer(url: URL) {
         playbackView.resetPlayer()
         playbackView.addAVPlayer(url: url)
+        playbackView.setPlayerSlider()
+    }
+
+    func setPlayerSlider(tabBarHeight: CGFloat) {
+        playbackView.addWindowPlayerSlider(tabBarHeight)
+    }
+
+    func resetObserver() {
+        playbackView.removeTimeObserver()
+        playbackView.removePlayerSlider()
     }
 
     private func configure() {

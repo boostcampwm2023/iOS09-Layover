@@ -44,9 +44,9 @@ final class PlaybackViewController: BaseViewController {
 
     // MARK: - Properties
 
-    private var timeObserverToken: Any?
+//    private var timeObserverToken: Any?
 
-    private var playerSlider: LOSlider = LOSlider()
+//    private var playerSlider: LOSlider = LOSlider()
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
 
@@ -97,7 +97,7 @@ final class PlaybackViewController: BaseViewController {
         interactor?.leavePlaybackView()
         if isMovingFromParent {
             interactor?.moveToBack()
-            playerSlider.removeFromSuperview()
+//            playerSlider.removeFromSuperview()
         }
     }
 
@@ -122,46 +122,46 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        addWindowPlayerSlider()
+//        addWindowPlayerSlider()
     }
 
     private func addWindowPlayerSlider() {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else { return }
-        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
-        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
-        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
-        window?.addSubview(playerSlider)
-        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
+//        let scenes = UIApplication.shared.connectedScenes
+//        let windowScene = scenes.first as? UIWindowScene
+//        let window = windowScene?.windows.first
+//        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else { return }
+//        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
+//        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
+//        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+//        window?.addSubview(playerSlider)
+//        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
     }
 
-    private func setPlayerSlider(at playbackView: PlaybackView) -> Any? {
-        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
-        let timeObserverToken: Any? = playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main , using: { [weak self] currentTime in
-            self?.updateSlider(currentTime: currentTime, playerView: playbackView.playerView)
-        })
-        playerSlider.removeTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
-        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
-        return timeObserverToken
-    }
+//    private func setPlayerSlider(at playbackView: PlaybackView) -> Any? {
+//        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+//        let timeObserverToken: Any? = playbackView.playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main , using: { [weak self] currentTime in
+//            self?.updateSlider(currentTime: currentTime, playerView: playbackView.playerView)
+//        })
+//        playerSlider.removeTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+//        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+//        return timeObserverToken
+//    }
 
-    private func updateSlider(currentTime: CMTime, playerView: PlayerView) {
-        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else { return }
-        let duration: CMTime = currentItem.duration
-        if CMTIME_IS_INVALID(duration) { return }
-        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
-    }
+//    private func updateSlider(currentTime: CMTime, playerView: PlayerView) {
+//        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else { return }
+//        let duration: CMTime = currentItem.duration
+//        if CMTIME_IS_INVALID(duration) { return }
+//        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+//    }
 
-    private func slowShowPlayerSlider() async {
-        do {
-            try await Task.sleep(nanoseconds: 1_000_000_00)
-            playerSlider.isHidden = false
-        } catch {
-            os_log("Fail Waiting show Player Slider")
-        }
-    }
+//    private func slowShowPlayerSlider() async {
+//        do {
+//            try await Task.sleep(nanoseconds: 1_000_000_00)
+//            playerSlider.isHidden = false
+//        } catch {
+//            os_log("Fail Waiting show Player Slider")
+//        }
+//    }
 
     @objc private func didChangedSliderValue(_ sender: LOSlider) {
         let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
@@ -169,7 +169,6 @@ final class PlaybackViewController: BaseViewController {
     }
 
     private func moveToBackViewController() {
-        playerSlider.removeFromSuperview()
         interactor?.moveToBack()
     }
 }
@@ -187,17 +186,19 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+        guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
         if let prevCell = viewModel.prevCell {
+            prevCell.playbackView.removePlayerSlider()
             prevCell.playbackView.stopPlayer()
             prevCell.playbackView.replayPlayer()
-            prevCell.removeTimeObserver()
         }
         if let curCell = viewModel.curCell {
+            curCell.playbackView.addWindowPlayerSlider(tabBarHeight)
             curCell.playbackView.playPlayer()
             // Slider가 원점으로 돌아가는 시간 필요
-            Task {
-                await slowShowPlayerSlider()
-            }
+//            Task {
+//                await slowShowPlayerSlider()
+//            }
         }
     }
 
@@ -210,7 +211,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        playerSlider.isHidden = false
+
     }
 
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
@@ -225,7 +226,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        playerSlider.isHidden = true
         viewModel.prevCell?.playbackView.stopPlayer()
     }
 
@@ -240,7 +240,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                 }
             }
             cell.addAVPlayer(url: playbackVideo.playbackInfo.videoURL)
-            cell.timeObserverToken = self.setPlayerSlider(at: cell.playbackView)
             return cell
         }
     }
@@ -253,8 +252,8 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         var curCell = viewModel.curCell
+        curCell?.resetObserver()
         curCell?.playbackView.resetPlayer()
-        curCell?.removeTimeObserver()
         curCell = nil
     }
 
@@ -289,7 +288,9 @@ extension PlaybackViewController: UICollectionViewDelegate {
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        playerSlider.isHidden = true
+//        playerSlider.isHidden = true
+//        interactor?.testHidden()
+
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

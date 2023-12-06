@@ -10,6 +10,11 @@ import UIKit
 import AVFoundation
 
 final class PlaybackView: UIView {
+
+    // MARK: - Properties
+
+    private var timeObserverToken: Any?
+
     // MARK: - UI Components
     // TODO: private 다시 붙이고 Method 처리
     let descriptionView: LODescriptionView = {
@@ -79,6 +84,8 @@ final class PlaybackView: UIView {
 
     let playerView: PlayerView = PlayerView()
 
+    private let playerSlider: LOSlider = LOSlider()
+
     // MARK: - View Life Cycle
 
     override init(frame: CGRect) {
@@ -96,6 +103,8 @@ final class PlaybackView: UIView {
         setSubViewsInPlayerViewConstraints()
         setPlayerView()
     }
+
+    
 
     // MARK: Player Setting Method
 
@@ -132,12 +141,47 @@ final class PlaybackView: UIView {
     func getDuration() -> Float64 {
         CMTimeGetSeconds(playerView.player?.currentItem?.duration ?? CMTime(value: 0, timescale: 1))
     }
+
+    func removePlayerSlider() {
+        playerSlider.removeTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+        self.playerSlider.removeFromSuperview()
+    }
+
+    func addWindowPlayerSlider(_ tabBarHeight: CGFloat) {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        guard let playerSliderWidth: CGFloat = windowScene?.screen.bounds.width else { return }
+        guard let windowHeight: CGFloat = windowScene?.screen.bounds.height else { return }
+        playerSlider.frame = CGRect(x: 0, y: (windowHeight - tabBarHeight - LOSlider.loSliderHeight / 2), width: playerSliderWidth, height: LOSlider.loSliderHeight)
+        window?.addSubview(playerSlider)
+        playerSlider.window?.windowLevel = UIWindow.Level.normal + 1
+    }
+
+    func setPlayerSlider() {
+        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+        timeObserverToken =  playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
+            self?.updateSlider(currentTime: currentTime)
+        })
+        playerSlider.addTarget(self, action: #selector(didChangedSliderValue(_:)), for: .valueChanged)
+    }
+
+    func removeTimeObserver() {
+        if let timeObserverToken = timeObserverToken {
+            playerView.player?.removeTimeObserver(timeObserverToken)
+        }
+    }
 }
 
 // MARK: PlaybackView 내부에서만 쓰이는 Method
 
 private extension PlaybackView {
     func updateSlider(currentTime: CMTime) {
+        print("chopmojji1")
+        guard let currentItem: AVPlayerItem = playerView.player?.currentItem else { return }
+        let duration: CMTime = currentItem.duration
+        if CMTIME_IS_INVALID(duration) { return }
+        playerSlider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
     }
 
     // MARK: - Gesture Method
@@ -266,6 +310,14 @@ private extension PlaybackView {
 
     @objc func playerDidFinishPlaying(note: NSNotification) {
         playerView.seek(to: CMTime.zero)
+        playerView.play()
+    }
+
+    @objc private func didChangedSliderValue(_ sender: LOSlider) {
+        guard let duration: CMTime = playerView.player?.currentItem?.duration else { return }
+        let value: Float64 = Float64(sender.value) * CMTimeGetSeconds(duration)
+        let seekTime: CMTime = CMTime(value: CMTimeValue(value), timescale: 1)
+        playerView.seek(to: seekTime)
         playerView.play()
     }
 }
