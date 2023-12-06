@@ -58,15 +58,11 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
             _ = try await provider.upload(fromFile: videoURL,
                                                     to: preSignedURLString,
                                                     sessionTaskDelegate: self)
-            await MainActor.run {
-                NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
-            }
+            NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
             return true
         } catch {
             os_log(.error, log: .data, "Failed to upload Video: %@", error.localizedDescription)
-            await MainActor.run {
-                NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
-            }
+            NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
             return false
         }
     }
@@ -76,9 +72,7 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
 extension UploadPostWorker: URLSessionTaskDelegate {
 
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
-        }
+        NotificationCenter.default.post(name: .uploadTaskStart, object: nil)
     }
 
     func urlSession(
@@ -89,11 +83,7 @@ extension UploadPostWorker: URLSessionTaskDelegate {
         totalBytesExpectedToSend: Int64
     ) {
         let uploadProgress: Float = Float(Double(totalBytesSent) / Double(totalBytesExpectedToSend))
-        DispatchQueue.main.async {
-            NotificationQueue.default.enqueue(Notification(name: .progressChanged,
-                                                           userInfo: ["progress": uploadProgress]),
-                                              postingStyle: .asap)
-        }
+        NotificationCenter.default.post(name: .progressChanged, object: nil, userInfo: ["progress": uploadProgress])
     }
 
 }
