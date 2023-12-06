@@ -21,6 +21,7 @@ protocol PlaybackPresentationLogic {
     func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response)
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
+    func presentSetSeemoreButton(with response: PlaybackModels.SetReportDeleteVideo.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -112,5 +113,11 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
         let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, curCell: response.curCell)
         viewController?.seekVideo(viewModel: viewModel)
+    }
+
+
+    func presentSetSeemoreButton(with response: PlaybackModels.SetReportDeleteVideo.Response) {
+        let buttonType: Models.SetReportDeleteVideo.ButtonType = response.parentView == .myProfile ? .delete : .report
+        viewController?.setSeemoreButton(viewModel: Models.SetReportDeleteVideo.ViewModel(buttonType: buttonType))
     }
 }

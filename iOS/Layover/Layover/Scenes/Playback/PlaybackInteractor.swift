@@ -20,6 +20,7 @@ protocol PlaybackBusinessLogic {
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
+    func setSeeMoreButton()
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -54,7 +55,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func displayVideoList() {
         guard let parentView: Models.ParentView else { return }
         guard var posts: [Post] else { return }
-        if parentView == .other {
+        if parentView != .home {
             posts = worker.makeInfiniteScroll(posts: posts)
             self.posts = posts
         }
@@ -78,7 +79,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         switch parentView {
         case .home:
             response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
-        case .other:
+        case .other, .myProfile:
             response = Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1)
         }
         presenter?.presentSetInitialPlaybackCell(with: response)
@@ -102,7 +103,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             return
         }
         // Home이 아닌 다른 뷰에서 왔을 경우(로드한 목록 무한 반복)
-        if parentView == .other {
+        if parentView == .other || parentView == .myProfile {
             if request.indexPathRow == (posts.count - 1) {
                 response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, prevCell: prevCell, curCell: nil)
             } else if request.indexPathRow == 0 {
@@ -155,7 +156,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         switch parentView {
         case .home:
             response = Models.ConfigurePlaybackCell.Response(teleportIndex: nil)
-        case .other:
+        case .other, .myProfile:
             response = Models.ConfigurePlaybackCell.Response(teleportIndex: posts.count + 1)
         }
         presenter?.presentConfigureCell(with: response)
@@ -171,5 +172,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func hidePlayerSlider() {
         guard let prevCell else { return }
         prevCell.playbackView.playerSlider?.isHidden = true
+    }
+
+    func setSeeMoreButton() {
+        guard let parentView else { return }
+        let response: Models.SetReportDeleteVideo.Response = Models.SetReportDeleteVideo.Response(parentView: parentView)
+        presenter?.presentSetSeemoreButton(with: response)
     }
 }

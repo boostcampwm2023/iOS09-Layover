@@ -17,6 +17,7 @@ enum PlaybackModels {
 
     enum ParentView {
         case home
+        case myProfile
         case other
     }
 
@@ -144,4 +145,34 @@ enum PlaybackModels {
             let boardID: Int
         }
     }
+
+    // MARK: - UseCase Report & Delete
+
+    enum SetReportDeleteVideo {
+        enum ButtonType {
+            case report
+            case delete
+
+            var description: String? {
+                switch self {
+                case .report:
+                    "신고"
+                case .delete:
+                    "삭제"
+                }
+            }
+        }
+        struct Request {
+
+        }
+
+        struct Response {
+            let parentView: ParentView
+        }
+
+        struct ViewModel {
+            let buttonType: ButtonType
+        }
+    }
+
 }

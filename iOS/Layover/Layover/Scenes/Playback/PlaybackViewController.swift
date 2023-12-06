@@ -23,6 +23,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
+    func setSeemoreButton(viewModel: PlaybackModels.SetReportDeleteVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -45,6 +46,14 @@ final class PlaybackViewController: BaseViewController {
     // MARK: - Properties
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
+
+    private let seemoreButton: UIBarButtonItem = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        let barButtonItem: UIBarButtonItem = UIBarButtonItem(customView: button)
+        barButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
+        return barButtonItem
+    }()
 
     typealias Models = PlaybackModels
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
@@ -117,15 +126,36 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
+        interactor?.setSeeMoreButton()
+        self.navigationController?.navigationBar.tintColor = .layoverWhite
     }
 
-    @objc private func didChangedSliderValue(_ sender: LOSlider) {
-        let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
-        interactor?.controlPlaybackMovie(with: request)
+    @objc private func reportButtonDidTap() {
+        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
+            [weak self] _ in
+            self?.router?.routeToReport()
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(reportAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: {
+            self.interactor?.leavePlaybackView()
+        })
     }
 
-    private func moveToBackViewController() {
-        interactor?.moveToBack()
+    @objc private func deleteButtonDidTap() {
+        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let deleteAction: UIAlertAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
+            [weak self] _ in
+
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: {
+            self.interactor?.leavePlaybackView()
+        })
     }
 }
 
@@ -210,6 +240,16 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         curCell = nil
     }
 
+    func setSeemoreButton(viewModel: Models.SetReportDeleteVideo.ViewModel) {
+        guard let button = seemoreButton.customView as? UIButton else { return }
+        switch viewModel.buttonType {
+        case .delete:
+            button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
+        case .report:
+            button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+        }
+        self.navigationItem.rightBarButtonItem = seemoreButton
+    }
 }
 
 extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
