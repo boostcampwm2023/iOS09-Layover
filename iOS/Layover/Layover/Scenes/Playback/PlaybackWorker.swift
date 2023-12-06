@@ -7,6 +7,11 @@
 //
 
 import UIKit
+import OSLog
+
+protocol DeleteWorkerProtocol {
+    func deletePlaybackVideo(boardID: Int) async -> Bool
+}
 
 final class PlaybackWorker {
 
@@ -14,7 +19,15 @@ final class PlaybackWorker {
 
     typealias Models = PlaybackModels
 
+    private let provider: ProviderType
+    private let deleteEndPointFactory: DeleteReportEndFactory
+
     // MARK: - Methods
+
+    init(provider: ProviderType = Provider(), deleteEndPointFactory: DeleteReportEndFactory = DefaultDeleteReportEndPointFactory()) {
+        self.provider = provider
+        self.deleteEndPointFactory = deleteEndPointFactory
+    }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
         var tempVideos: [Post] = posts
@@ -24,5 +37,16 @@ final class PlaybackWorker {
         tempVideos.insert(tempLastVideo, at: 0)
         tempVideos.append(tempFirstVideo)
         return tempVideos
+    }
+
+    func deletePlaybackVideo(boardID: Int) async -> Bool {
+        let endPoint = deleteEndPointFactory.deletePlaybackVideoEndpoint(boardID: boardID)
+        do {
+            _ = try await provider.request(with: endPoint)
+            return true
+        } catch {
+            os_log(.error, log: .data, "Failed to delete with error: %@", error.localizedDescription)
+            return false
+        }
     }
 }

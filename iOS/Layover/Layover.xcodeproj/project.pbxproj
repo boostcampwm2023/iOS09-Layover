@@ -93,7 +93,7 @@
 		8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */; };
 		8321A2F92B1E15F3000A12AF /* LOReportStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */; };
 		8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */; };
-		8321A2FD2B1E4260000A12AF /* ReportEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */; };
+		8321A2FD2B1E4260000A12AF /* DeleteReportEndFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FC2B1E4260000A12AF /* DeleteReportEndFactory.swift */; };
 		8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FE2B1E428C000A12AF /* ReportDTO.swift */; };
 		8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */; };
 		8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */; };
@@ -303,7 +303,7 @@
 		8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOPopUpView.swift; sourceTree = "<group>"; };
 		8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportStackView.swift; sourceTree = "<group>"; };
 		8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOReportContentView.swift; sourceTree = "<group>"; };
-		8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportEndPointFactory.swift; sourceTree = "<group>"; };
+		8321A2FC2B1E4260000A12AF /* DeleteReportEndFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReportEndFactory.swift; sourceTree = "<group>"; };
 		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
 		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
 		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
@@ -538,7 +538,7 @@
 				1972CCD72B13A2EC00C3C762 /* SignUpEndPointFactory.swift */,
 				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
 				19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */,
-				8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */,
+				8321A2FC2B1E4260000A12AF /* DeleteReportEndFactory.swift */,
 				FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */,
 			);
 			path = Factories;
@@ -613,8 +613,6 @@
 				19A169372B17BCA800DB34C0 /* PostDTO.swift */,
 				19A169392B17BCC400DB34C0 /* MemberDTO.swift */,
 				19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */,
-				836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */,
-				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
 				8321A2FE2B1E428C000A12AF /* ReportDTO.swift */,
 				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
 				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
@@ -1178,7 +1176,7 @@
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
-				8321A2FD2B1E4260000A12AF /* ReportEndPointFactory.swift in Sources */,
+				8321A2FD2B1E4260000A12AF /* DeleteReportEndFactory.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
 				FC3752312B170A620000D439 /* EditVideoWorker.swift in Sources */,
 				198167A32B20583D0032F563 /* SettingModels.swift in Sources */,
@@ -1223,7 +1221,6 @@
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
 				FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
-				836C33992B1843BE00ECAFB0 /* SettingScenePresenter.swift in Sources */,
 				8321A2F12B1E1026000A12AF /* ReportModels.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
@@ -1287,7 +1284,6 @@
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
-				836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */,
 				FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */,
 				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
@@ -1302,7 +1298,7 @@
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
-				836C339D2B1843BE00ECAFB0 /* SettingSceneViewController.swift in Sources */,
+				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
 				8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,

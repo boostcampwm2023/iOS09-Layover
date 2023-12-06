@@ -21,6 +21,8 @@ protocol PlaybackBusinessLogic {
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
     func setSeeMoreButton()
+    @discardableResult
+    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -65,10 +67,12 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func moveInitialPlaybackCell() {
         let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
-        if parentView == .other {
-            presenter?.presentSetCellIfInfinite()
-        } else {
+        guard let parentView else { return }
+        switch parentView {
+        case .home:
             presenter?.presentMoveInitialPlaybackCell(with: response)
+        case .other, .myProfile:
+            presenter?.presentSetCellIfInfinite()
         }
     }
 
@@ -176,7 +180,21 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func setSeeMoreButton() {
         guard let parentView else { return }
-        let response: Models.SetReportDeleteVideo.Response = Models.SetReportDeleteVideo.Response(parentView: parentView)
+        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(parentView: parentView)
         presenter?.presentSetSeemoreButton(with: response)
+    }
+
+    // MARK: - UseCase Delete Video
+
+    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
+        Task {
+            guard let prevCell else { return false}
+            let result: Bool = await worker.deletePlaybackVideo(boardID: prevCell.boardID)
+            let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
+            await MainActor.run {
+                presenter?.presentDeleteVideo(with: response)
+            }
+            return result
+        }
     }
 }

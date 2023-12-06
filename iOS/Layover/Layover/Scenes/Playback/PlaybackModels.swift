@@ -146,9 +146,9 @@ enum PlaybackModels {
         }
     }
 
-    // MARK: - UseCase Report & Delete
+    // MARK: - UseCase Set Seemore button
 
-    enum SetReportDeleteVideo {
+    enum SetSeemoreButton {
         enum ButtonType {
             case report
             case delete
@@ -175,4 +175,35 @@ enum PlaybackModels {
         }
     }
 
+    // MARK: - UseCase DeleteVideo
+
+    enum DeletePlaybackVideo {
+        enum DeleteMessage {
+            case success
+            case fail
+
+            var description: String {
+                switch self {
+                case .success:
+                    "영상이 삭제되었습니다."
+                case .fail:
+                    "영상 삭제에 실패했습니다."
+                }
+            }
+        }
+
+        struct Request {
+            let playbackVideo: PlaybackVideo
+        }
+
+        struct Response {
+            let result: Bool
+            let playbackVideo: PlaybackVideo
+        }
+
+        struct ViewModel {
+            let deleteMessage: DeleteMessage
+            let playbackVideo: PlaybackVideo
+        }
+    }
 }

@@ -23,7 +23,8 @@ protocol PlaybackDisplayLogic: AnyObject {
     func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
-    func setSeemoreButton(viewModel: PlaybackModels.SetReportDeleteVideo.ViewModel)
+    func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
+    func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -145,10 +146,15 @@ final class PlaybackViewController: BaseViewController {
     }
 
     @objc private func deleteButtonDidTap() {
+        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
+        if visibleIndexPaths.count > 1 { return }
+        guard let currentItemIndex = visibleIndexPaths.first else { return }
+        guard let currentItem = dataSource?.itemIdentifier(for: currentItemIndex) else { return }
+        let request: Models.DeletePlaybackVideo.Request = Models.DeletePlaybackVideo.Request(playbackVideo: currentItem)
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let deleteAction: UIAlertAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
             [weak self] _ in
-
+            self?.interactor?.deleteVideo(with: request)
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
         alert.addAction(deleteAction)
@@ -240,7 +246,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         curCell = nil
     }
 
-    func setSeemoreButton(viewModel: Models.SetReportDeleteVideo.ViewModel) {
+    func setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel) {
         guard let button = seemoreButton.customView as? UIButton else { return }
         switch viewModel.buttonType {
         case .delete:
@@ -249,6 +255,13 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
         }
         self.navigationItem.rightBarButtonItem = seemoreButton
+    }
+
+    func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel) {
+        guard let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteItems([viewModel.playbackVideo])
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
