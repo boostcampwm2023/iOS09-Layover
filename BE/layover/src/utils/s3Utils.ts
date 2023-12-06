@@ -1,6 +1,11 @@
 import * as AWS from 'aws-sdk';
 
-export function makeUploadPreSignedUrl(bucketname: string, filename: string, fileCategory: string, filetype: string) {
+export function generateUploadPreSignedUrl(
+  bucketname: string,
+  filename: string,
+  fileCategory: string,
+  filetype: string,
+) {
   const s3 = new AWS.S3({
     endpoint: process.env.NCLOUD_S3_ENDPOINT,
     credentials: {
@@ -18,7 +23,7 @@ export function makeUploadPreSignedUrl(bucketname: string, filename: string, fil
   });
 }
 
-export function makeDownloadPreSignedUrl(bucketname: string, key: string) {
+export function generateDownloadPreSignedUrl(bucketname: string, key: string) {
   const s3 = new AWS.S3({
     endpoint: process.env.NCLOUD_S3_ENDPOINT,
     credentials: {

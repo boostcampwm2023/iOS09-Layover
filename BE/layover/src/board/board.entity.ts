@@ -34,4 +34,24 @@ export class Board {
 
   @Column({ nullable: false })
   status: string;
+
+  constructor(
+    member: Member,
+    title: string,
+    content: string,
+    encoded_video_url: string,
+    latitude: number,
+    longitude: number,
+    filename: string,
+    status: string,
+  ) {
+    this.member = member;
+    this.title = title;
+    this.content = content;
+    this.encoded_video_url = encoded_video_url;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.filename = filename;
+    this.status = status;
+  }
 }
