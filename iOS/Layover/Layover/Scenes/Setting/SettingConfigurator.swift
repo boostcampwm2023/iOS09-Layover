@@ -25,7 +25,7 @@ final class SettingConfigurator: Configurator {
         let presenter = SettingPresenter()
         let router = SettingRouter()
         let settingWorker = SettingWorker()
-        let userWorker = MockUserWorker()
+        let userWorker = UserWorker()
 
         viewController.router = router
         viewController.interactor = interactor

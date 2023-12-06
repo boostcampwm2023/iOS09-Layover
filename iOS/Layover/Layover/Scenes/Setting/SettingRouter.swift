@@ -37,9 +37,9 @@ final class SettingRouter: SettingRoutingLogic, SettingDataPassing {
     }
 
     func routeToLogin() {
-        let viewController = LoginViewController()
-        guard let rootNavigationController = viewController.view.window?.rootViewController
+        let loginViewController = LoginViewController()
+        guard let rootNavigationController = viewController?.view.window?.rootViewController
                 as? UINavigationController else { return }
-        rootNavigationController.setViewControllers([viewController], animated: true)
+        rootNavigationController.setViewControllers([loginViewController], animated: true)
     }
 }
