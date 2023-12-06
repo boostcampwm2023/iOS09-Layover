@@ -53,6 +53,12 @@
 		1972CCDA2B13A4BA00C3C762 /* SignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */; };
 		1972CCDF2B14C9B000C3C762 /* Notification.Name+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */; };
 		19743C052B06940D001E405A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19743C042B06940D001E405A /* PlayerView.swift */; };
+		198167A02B20583D0032F563 /* SettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679B2B20583D0032F563 /* SettingPresenter.swift */; };
+		198167A12B20583D0032F563 /* SettingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679C2B20583D0032F563 /* SettingWorker.swift */; };
+		198167A22B20583D0032F563 /* SettingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679D2B20583D0032F563 /* SettingRouter.swift */; };
+		198167A32B20583D0032F563 /* SettingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679E2B20583D0032F563 /* SettingModels.swift */; };
+		198167A42B20583D0032F563 /* SettingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679F2B20583D0032F563 /* SettingInteractor.swift */; };
+		198167A62B20593B0032F563 /* SettingConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198167A52B20593B0032F563 /* SettingConfigurator.swift */; };
 		19A169232B176C5F00DB34C0 /* TagPlayListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */; };
 		19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */; };
 		19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */; };
@@ -108,12 +114,7 @@
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
-		836C33992B1843BE00ECAFB0 /* SettingScenePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33932B1843BE00ECAFB0 /* SettingScenePresenter.swift */; };
-		836C339A2B1843BE00ECAFB0 /* SettingSceneWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33942B1843BE00ECAFB0 /* SettingSceneWorker.swift */; };
-		836C339B2B1843BE00ECAFB0 /* SettingSceneRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33952B1843BE00ECAFB0 /* SettingSceneRouter.swift */; };
-		836C339C2B1843BE00ECAFB0 /* SettingSceneModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33962B1843BE00ECAFB0 /* SettingSceneModels.swift */; };
-		836C339D2B1843BE00ECAFB0 /* SettingSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingSceneViewController.swift */; };
-		836C339E2B1843BE00ECAFB0 /* SettingSceneInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33982B1843BE00ECAFB0 /* SettingSceneInteractor.swift */; };
+		836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingViewController.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
 		FC0E80242B1A0BBB00EF56D6 /* UploadPostPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */; };
@@ -261,6 +262,12 @@
 		1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWorker.swift; sourceTree = "<group>"; };
 		1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name+.swift"; sourceTree = "<group>"; };
 		19743C042B06940D001E405A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		1981679B2B20583D0032F563 /* SettingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPresenter.swift; sourceTree = "<group>"; };
+		1981679C2B20583D0032F563 /* SettingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWorker.swift; sourceTree = "<group>"; };
+		1981679D2B20583D0032F563 /* SettingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRouter.swift; sourceTree = "<group>"; };
+		1981679E2B20583D0032F563 /* SettingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModels.swift; sourceTree = "<group>"; };
+		1981679F2B20583D0032F563 /* SettingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractor.swift; sourceTree = "<group>"; };
+		198167A52B20593B0032F563 /* SettingConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingConfigurator.swift; sourceTree = "<group>"; };
 		19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListPresenter.swift; sourceTree = "<group>"; };
 		19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListWorker.swift; sourceTree = "<group>"; };
 		19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListRouter.swift; sourceTree = "<group>"; };
@@ -319,12 +326,7 @@
 		836C33862B15A29600ECAFB0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
-		836C33932B1843BE00ECAFB0 /* SettingScenePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingScenePresenter.swift; sourceTree = "<group>"; };
-		836C33942B1843BE00ECAFB0 /* SettingSceneWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSceneWorker.swift; sourceTree = "<group>"; };
-		836C33952B1843BE00ECAFB0 /* SettingSceneRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSceneRouter.swift; sourceTree = "<group>"; };
-		836C33962B1843BE00ECAFB0 /* SettingSceneModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSceneModels.swift; sourceTree = "<group>"; };
-		836C33972B1843BE00ECAFB0 /* SettingSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSceneViewController.swift; sourceTree = "<group>"; };
-		836C33982B1843BE00ECAFB0 /* SettingSceneInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSceneInteractor.swift; sourceTree = "<group>"; };
+		836C33972B1843BE00ECAFB0 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
 		FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenter.swift; sourceTree = "<group>"; };
@@ -697,17 +699,18 @@
 			path = Playback;
 			sourceTree = "<group>";
 		};
-		836C33922B18436A00ECAFB0 /* SettingScene */ = {
+		836C33922B18436A00ECAFB0 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				836C33932B1843BE00ECAFB0 /* SettingScenePresenter.swift */,
-				836C33942B1843BE00ECAFB0 /* SettingSceneWorker.swift */,
-				836C33952B1843BE00ECAFB0 /* SettingSceneRouter.swift */,
-				836C33962B1843BE00ECAFB0 /* SettingSceneModels.swift */,
-				836C33972B1843BE00ECAFB0 /* SettingSceneViewController.swift */,
-				836C33982B1843BE00ECAFB0 /* SettingSceneInteractor.swift */,
+				1981679E2B20583D0032F563 /* SettingModels.swift */,
+				1981679D2B20583D0032F563 /* SettingRouter.swift */,
+				836C33972B1843BE00ECAFB0 /* SettingViewController.swift */,
+				1981679F2B20583D0032F563 /* SettingInteractor.swift */,
+				1981679C2B20583D0032F563 /* SettingWorker.swift */,
+				1981679B2B20583D0032F563 /* SettingPresenter.swift */,
+				198167A52B20593B0032F563 /* SettingConfigurator.swift */,
 			);
-			path = SettingScene;
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		83C35E1C2B10923000D8DD5C /* Cell */ = {
@@ -924,7 +927,7 @@
 			children = (
 				8321A2E72B1E1011000A12AF /* Report */,
 				1945520E2B03AEA400299768 /* Configurator.swift */,
-				836C33922B18436A00ECAFB0 /* SettingScene */,
+				836C33922B18436A00ECAFB0 /* Setting */,
 				19BB8A572B07BEE30070B922 /* UIComponents */,
 				835A61962B0680FC002F22A5 /* Playback */,
 				FC2511A72B04DA9C004717BC /* Map */,
@@ -1178,6 +1181,7 @@
 				8321A2FD2B1E4260000A12AF /* ReportEndPointFactory.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
 				FC3752312B170A620000D439 /* EditVideoWorker.swift in Sources */,
+				198167A32B20583D0032F563 /* SettingModels.swift in Sources */,
 				19A169272B176C5F00DB34C0 /* TagPlayListViewController.swift in Sources */,
 				19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */,
 				FC68E2A12B023326001AABFF /* EndPoint.swift in Sources */,
@@ -1193,7 +1197,6 @@
 				1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */,
 				FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */,
 				FC68E2A32B0233BC001AABFF /* NetworkError.swift in Sources */,
-				836C339C2B1843BE00ECAFB0 /* SettingSceneModels.swift in Sources */,
 				FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */,
 				FC3752342B170A620000D439 /* EditVideoViewController.swift in Sources */,
 				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
@@ -1228,6 +1231,7 @@
 				19A169472B17D12500DB34C0 /* MockTagPlayListWorker.swift in Sources */,
 				193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */,
 				194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */,
+				198167A22B20583D0032F563 /* SettingRouter.swift in Sources */,
 				194552242B0478B400299768 /* HomeModels.swift in Sources */,
 				8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */,
 				19A1692D2B17750B00DB34C0 /* Post.swift in Sources */,
@@ -1254,10 +1258,12 @@
 				834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */,
 				19A169402B17C10300DB34C0 /* PostEndPointFactory.swift in Sources */,
 				835A619E2B068115002F22A5 /* PlaybackWorker.swift in Sources */,
+				198167A12B20583D0032F563 /* SettingWorker.swift in Sources */,
 				1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */,
 				FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */,
 				FC2511AD2B04EACD004717BC /* MapInteractor.swift in Sources */,
 				19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */,
+				198167A62B20593B0032F563 /* SettingConfigurator.swift in Sources */,
 				193686742B15C489008902CD /* UserWorker.swift in Sources */,
 				19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */,
 				8321A2FB2B1E1739000A12AF /* LOReportContentView.swift in Sources */,
@@ -1275,10 +1281,8 @@
 				836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */,
 				FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */,
 				FC68E29B2B02325D001AABFF /* Requestable.swift in Sources */,
-				836C339B2B1843BE00ECAFB0 /* SettingSceneRouter.swift in Sources */,
 				FC2511A22B045C3F004717BC /* SignUpPresenter.swift in Sources */,
 				FC767FA82B1269DB0088CF9B /* LOAnnotationView.swift in Sources */,
-				836C339E2B1843BE00ECAFB0 /* SettingSceneInteractor.swift in Sources */,
 				19A169232B176C5F00DB34C0 /* TagPlayListPresenter.swift in Sources */,
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
@@ -1290,11 +1294,14 @@
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
 				1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */,
+				198167A02B20583D0032F563 /* SettingPresenter.swift in Sources */,
+				198167A42B20583D0032F563 /* SettingInteractor.swift in Sources */,
 				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
+				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
 				836C339D2B1843BE00ECAFB0 /* SettingSceneViewController.swift in Sources */,
 				8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
@@ -1313,7 +1320,6 @@
 				835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */,
 				19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */,
 				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
-				836C339A2B1843BE00ECAFB0 /* SettingSceneWorker.swift in Sources */,
 				FC68E29F2B023315001AABFF /* HTTPMethod.swift in Sources */,
 				835A619D2B068115002F22A5 /* PlaybackPresenter.swift in Sources */,
 				FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */,

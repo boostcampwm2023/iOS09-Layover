@@ -19,4 +19,10 @@ enum System {
         }
         return false
     }
+
+    static func versionNumber() -> String? {
+        guard let info = Bundle.main.infoDictionary,
+              let currentVersion = info["CFBundleShortVersionString"] as? String else { return nil }
+        return currentVersion
+    }
 }

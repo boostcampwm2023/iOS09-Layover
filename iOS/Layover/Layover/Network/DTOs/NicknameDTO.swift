@@ -9,5 +9,5 @@
 import Foundation
 
 struct NicknameDTO: Codable {
-    let userName: String
+    let username: String
 }
