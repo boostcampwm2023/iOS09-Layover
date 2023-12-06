@@ -232,11 +232,11 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController: VideoPickerDelegate {
 
     func didFinishPickingVideo(_ url: URL) {
-        self.interactor?.selectVideo(with: Models.SelectVideo.Request(videoURL: url))
+        interactor?.selectVideo(with: Models.SelectVideo.Request(videoURL: url))
         Task {
             await MainActor.run {
-                self.router?.routeToEditVideo()
-                self.videoPickerManager.phPickerViewController.dismiss(animated: true)
+                videoPickerManager.phPickerViewController.dismiss(animated: true)
+                router?.routeToEditVideo()
             }
         }
     }
