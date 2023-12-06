@@ -20,9 +20,12 @@ final class MapConfigurator: Configurator {
         let interactor = MapInteractor()
         let presenter = MapPresenter()
         let router = MapRouter()
+        let videoFileWorker = VideoFileWorker()
+
         router.viewController = viewController
         viewController.interactor = interactor
         interactor.presenter = presenter
+        interactor.videoFileWorker = videoFileWorker
         presenter.viewController = viewController
         viewController.router = router
         router.dataStore = interactor
