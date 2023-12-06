@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1901D4A22B18F4BE00617A64 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1901D4A12B18F4BE00617A64 /* System.swift */; };
+		1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */; };
+		1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */; };
 		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
 		193686742B15C489008902CD /* UserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686732B15C489008902CD /* UserWorker.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
@@ -34,6 +36,13 @@
 		1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945523A2B05258200299768 /* HomeConfigurator.swift */; };
 		194C21BB2B1B718B00C62645 /* MockHomeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21BA2B1B718B00C62645 /* MockHomeWorker.swift */; };
 		194C21BD2B1B728600C62645 /* StubAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21BC2B1B728600C62645 /* StubAuthManager.swift */; };
+		194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21BF2B1DEE6A00C62645 /* HomeViewControllerTests.swift */; };
+		194C21C42B1DEE6B00C62645 /* HomeInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21C02B1DEE6A00C62645 /* HomeInteractorTests.swift */; };
+		194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21C12B1DEE6A00C62645 /* HomeWorkerTests.swift */; };
+		194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21C22B1DEE6A00C62645 /* HomePresenterTests.swift */; };
+		194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */; };
+		194C21D02B1DF65200C62645 /* PostList.json in Resources */ = {isa = PBXBuildFile; fileRef = 194C21CF2B1DF65200C62645 /* PostList.json */; };
+		194C21D42B1EEE3700C62645 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 194C21D32B1EEE3700C62645 /* sample.jpeg */; };
 		1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */; };
 		1972CCD22B125ED700C3C762 /* UserDefaultStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */; };
 		1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */; };
@@ -139,6 +148,10 @@
 		FC3752352B170A620000D439 /* EditVideoInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37522F2B170A620000D439 /* EditVideoInteractor.swift */; };
 		FC3752372B170B230000D439 /* EditVideoConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3752362B170B230000D439 /* EditVideoConfigurator.swift */; };
 		FC3F3BD82B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */; };
+		FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */; };
+		FC4084C62B1F1C5B00CE4727 /* UploadPostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */; };
+		FC4084CA2B1F291200CE4727 /* UploadVideoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */; };
+		FC4084CC2B1F2F5D00CE4727 /* UploadPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */; };
 		FC42E4142B17AB69005D4956 /* VideoFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */; };
 		FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */; };
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
@@ -174,7 +187,6 @@
 		FC7E453C2AFEB623004F155A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E453B2AFEB623004F155A /* SceneDelegate.swift */; };
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
-		FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7E45502AFEB62C004F155A /* LayoverTests.swift */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
@@ -203,6 +215,8 @@
 
 /* Begin PBXFileReference section */
 		1901D4A12B18F4BE00617A64 /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckSignUpDTO.swift; sourceTree = "<group>"; };
+		1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CheckSignUp.json; sourceTree = "<group>"; };
 		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
 		193686732B15C489008902CD /* UserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWorker.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
@@ -228,6 +242,13 @@
 		1945523A2B05258200299768 /* HomeConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfigurator.swift; sourceTree = "<group>"; };
 		194C21BA2B1B718B00C62645 /* MockHomeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHomeWorker.swift; sourceTree = "<group>"; };
 		194C21BC2B1B728600C62645 /* StubAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubAuthManager.swift; sourceTree = "<group>"; };
+		194C21BF2B1DEE6A00C62645 /* HomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTests.swift; sourceTree = "<group>"; };
+		194C21C02B1DEE6A00C62645 /* HomeInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeInteractorTests.swift; sourceTree = "<group>"; };
+		194C21C12B1DEE6A00C62645 /* HomeWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWorkerTests.swift; sourceTree = "<group>"; };
+		194C21C22B1DEE6A00C62645 /* HomePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenterTests.swift; sourceTree = "<group>"; };
+		194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHomeWorker.swift; sourceTree = "<group>"; };
+		194C21CF2B1DF65200C62645 /* PostList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostList.json; sourceTree = "<group>"; };
+		194C21D32B1EEE3700C62645 /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
 		1972CCCE2B12438900C3C762 /* LoginEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEndPointFactory.swift; sourceTree = "<group>"; };
 		1972CCD12B125ED700C3C762 /* UserDefaultStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultStored.swift; sourceTree = "<group>"; };
 		1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
@@ -336,6 +357,10 @@
 		FC37522F2B170A620000D439 /* EditVideoInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoInteractor.swift; sourceTree = "<group>"; };
 		FC3752362B170B230000D439 /* EditVideoConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVideoConfigurator.swift; sourceTree = "<group>"; };
 		FC3F3BD72B069EB30080E3A6 /* MapCarouselCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCarouselCollectionViewCell.swift; sourceTree = "<group>"; };
+		FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostEndPointFactory.swift; sourceTree = "<group>"; };
+		FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostDTO.swift; sourceTree = "<group>"; };
+		FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadVideoDTO.swift; sourceTree = "<group>"; };
+		FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPost.swift; sourceTree = "<group>"; };
 		FC42E4132B17AB69005D4956 /* VideoFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFileWorker.swift; sourceTree = "<group>"; };
 		FC4975862B03432700D8627F /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
@@ -374,7 +399,6 @@
 		FC7E45452AFEB62B004F155A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FC7E45472AFEB62B004F155A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC7E454C2AFEB62B004F155A /* LayoverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC7E45502AFEB62C004F155A /* LayoverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoverTests.swift; sourceTree = "<group>"; };
 		FC7E45692AFEC06E004F155A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
@@ -456,6 +480,51 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		194C21BE2B1DEE5500C62645 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				194C21BF2B1DEE6A00C62645 /* HomeViewControllerTests.swift */,
+				194C21C02B1DEE6A00C62645 /* HomeInteractorTests.swift */,
+				194C21C12B1DEE6A00C62645 /* HomeWorkerTests.swift */,
+				194C21C22B1DEE6A00C62645 /* HomePresenterTests.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		194C21C72B1DF09B00C62645 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				194C21BE2B1DEE5500C62645 /* Home */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		194C21C92B1DF36E00C62645 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				194C21CE2B1DF63D00C62645 /* MockDatas */,
+				194C21CA2B1DF37900C62645 /* Workers */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		194C21CA2B1DF37900C62645 /* Workers */ = {
+			isa = PBXGroup;
+			children = (
+				194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */,
+			);
+			path = Workers;
+			sourceTree = "<group>";
+		};
+		194C21CE2B1DF63D00C62645 /* MockDatas */ = {
+			isa = PBXGroup;
+			children = (
+				194C21D32B1EEE3700C62645 /* sample.jpeg */,
+				194C21CF2B1DF65200C62645 /* PostList.json */,
+			);
+			path = MockDatas;
+			sourceTree = "<group>";
+		};
 		1972CCCD2B12436300C3C762 /* Factories */ = {
 			isa = PBXGroup;
 			children = (
@@ -464,6 +533,7 @@
 				193686712B15BCA7008902CD /* UserEndPointFactory.swift */,
 				19A1693F2B17C10300DB34C0 /* PostEndPointFactory.swift */,
 				8321A2FC2B1E4260000A12AF /* ReportEndPointFactory.swift */,
+				FC4084C32B1F14F600CE4727 /* UploadPostEndPointFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -497,6 +567,7 @@
 				19A1692C2B17750B00DB34C0 /* Post.swift */,
 				19A169412B17C70C00DB34C0 /* Member.swift */,
 				19A169432B17C71C00DB34C0 /* Board.swift */,
+				FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -539,6 +610,9 @@
 				836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */,
 				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
 				8321A2FE2B1E428C000A12AF /* ReportDTO.swift */,
+				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
+				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
+				1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -754,6 +828,7 @@
 				835783C52B14A5C800E7D304 /* LoginData.json */,
 				19A169352B178EA500DB34C0 /* PostList.json */,
 				8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */,
+				1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */,
 			);
 			path = MockData;
 			sourceTree = "<group>";
@@ -810,7 +885,8 @@
 		FC7E454F2AFEB62C004F155A /* LayoverTests */ = {
 			isa = PBXGroup;
 			children = (
-				FC7E45502AFEB62C004F155A /* LayoverTests.swift */,
+				194C21C92B1DF36E00C62645 /* Mocks */,
+				194C21C72B1DF09B00C62645 /* Scenes */,
 			);
 			path = LayoverTests;
 			sourceTree = "<group>";
@@ -931,8 +1007,8 @@
 				1972CCD32B138E6B00C3C762 /* SignUpRouter.swift */,
 				FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */,
 				FC25119F2B045C0A004717BC /* SignUpInteractor.swift */,
-				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A12B045C3F004717BC /* SignUpPresenter.swift */,
+				1972CCD92B13A4BA00C3C762 /* SignUpWorker.swift */,
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
 			path = SignUpScene;
@@ -1041,6 +1117,7 @@
 				8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */,
 				FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */,
 				19A169362B178EA500DB34C0 /* PostList.json in Resources */,
+				1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */,
 				FC767FA02B12283D0088CF9B /* CheckUserName.json in Resources */,
 				FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */,
 				FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */,
@@ -1051,6 +1128,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				194C21D02B1DF65200C62645 /* PostList.json in Resources */,
+				194C21D42B1EEE3700C62645 /* sample.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1108,6 +1187,7 @@
 				FC3752342B170A620000D439 /* EditVideoViewController.swift in Sources */,
 				19A169442B17C71C00DB34C0 /* Board.swift in Sources */,
 				194552252B0478B400299768 /* HomeViewController.swift in Sources */,
+				FC4084C62B1F1C5B00CE4727 /* UploadPostDTO.swift in Sources */,
 				194552222B0478B400299768 /* HomeWorker.swift in Sources */,
 				194C21BD2B1B728600C62645 /* StubAuthManager.swift in Sources */,
 				FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */,
@@ -1193,10 +1273,12 @@
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
 				836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */,
+				FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */,
 				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
 				FCE52FFA2B0FCB0A002CDB75 /* URLSession+.swift in Sources */,
 				19743C052B06940D001E405A /* PlayerView.swift in Sources */,
+				1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */,
 				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,
@@ -1216,6 +1298,7 @@
 				FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */,
 				835A61A12B068115002F22A5 /* PlaybackViewController.swift in Sources */,
 				1945520F2B03AEA400299768 /* Configurator.swift in Sources */,
+				FC4084CC2B1F2F5D00CE4727 /* UploadPost.swift in Sources */,
 				835A619F2B068115002F22A5 /* PlaybackRouter.swift in Sources */,
 				19A1693C2B17BD1C00DB34C0 /* BoardDTO.swift in Sources */,
 				FC2511B12B04EAEC004717BC /* MapModels.swift in Sources */,
@@ -1241,6 +1324,7 @@
 				835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */,
 				19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */,
 				FC0E803C2B1B91C900EF56D6 /* EditTagRouter.swift in Sources */,
+				FC4084CA2B1F291200CE4727 /* UploadVideoDTO.swift in Sources */,
 				835A61942B068096002F22A5 /* LODescriptionView.swift in Sources */,
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
@@ -1253,7 +1337,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC7E45512AFEB62C004F155A /* LayoverTests.swift in Sources */,
+				194C21C42B1DEE6B00C62645 /* HomeInteractorTests.swift in Sources */,
+				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
+				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
+				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
+				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

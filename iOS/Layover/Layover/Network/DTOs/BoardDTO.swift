@@ -10,14 +10,14 @@ import Foundation
 
 struct BoardDTO: Decodable {
     let id: Int
-    let url: String
-    let videoThumbnail: String
+    let encodedVideoURL: String
+    let videoThumbnailURL: String
     let latitude, longitude, title, content: String
 
     enum CodingKeys: String, CodingKey {
         case id
-        case url = "url"
-        case videoThumbnail = "video_thumbnail"
+        case encodedVideoURL = "encoded_video_url"
+        case videoThumbnailURL = "video_thumbnail_url"
         case latitude, longitude, title, content
     }
 }
@@ -28,8 +28,8 @@ extension BoardDTO {
             identifier: id,
             title: title,
             description: content,
-            thumbnailImageURL: URL(string: videoThumbnail),
-            videoURL: URL(string: url),
+            thumbnailImageURL: URL(string: videoThumbnailURL),
+            videoURL: URL(string: encodedVideoURL),
             latitude: Double(latitude),
             longitude: Double(longitude)
         )

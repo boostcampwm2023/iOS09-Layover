@@ -9,14 +9,51 @@
 import UIKit
 
 protocol UploadPostPresentationLogic {
-
+    func presentTags(with response: UploadPostModels.FetchTags.Response)
+    func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response)
+    func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response)
+    func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
+//    func presentUploadProgress(with response: UploadPostModels.UploadPost.Response)
 }
 
-class UploadPostPresenter: UploadPostPresentationLogic {
+final class UploadPostPresenter: UploadPostPresentationLogic {
 
     // MARK: - Properties
 
     typealias Models = UploadPostModels
     weak var viewController: UploadPostDisplayLogic?
+
+    func presentTags(with response: UploadPostModels.FetchTags.Response) {
+        viewController?.displayTags(viewModel: Models.FetchTags.ViewModel(tags: response.tags))
+    }
+
+    func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response) {
+        let image = UIImage(cgImage: response.thumnailImage)
+        viewController?.displayThumbnail(viewModel: Models.FetchThumbnail.ViewModel(thumnailImage: image))
+    }
+
+    func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response) {
+        let addresses: [String] = [
+            response.administrativeArea,
+            response.locality,
+            response.subLocality]
+            .compactMap { $0 }
+
+        var fullAddress: [String] = []
+
+        for address in addresses {
+            if !fullAddress.contains(address) {
+                fullAddress.append(address)
+            }
+        }
+
+        let viewModel = Models.FetchCurrentAddress.ViewModel(fullAddress: fullAddress.joined(separator: " "))
+        viewController?.displayCurrentAddress(viewModel: viewModel)
+    }
+
+    func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response) {
+        let viewModel = Models.CanUploadPost.ViewModel(canUpload: !response.isEmpty)
+        viewController?.displayUploadButton(viewModel: viewModel)
+    }
 
 }

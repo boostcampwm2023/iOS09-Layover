@@ -17,6 +17,12 @@ final class LOTagStackView: UIStackView {
 
     // MARK: - Properties
 
+    var tags: [String] {
+        arrangedSubviews
+            .map { $0 as? UIButton }
+            .compactMap(\.?.titleLabel?.text)
+    }
+
     private let style: Style
 
     // MARK: - Initializer
@@ -60,6 +66,10 @@ final class LOTagStackView: UIStackView {
         }
 
         addArrangedSubview(button)
+    }
+
+    func resetTagStackView() {
+        arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 
     private func setUI() {

@@ -42,7 +42,8 @@ extension LoginInteractor: LoginBusinessLogic {
         Task {
             guard let token = await worker?.fetchKakaoLoginToken() else { return }
             kakaoLoginToken = token
-            if await worker?.isRegisteredKakao(with: token) == true, await worker?.loginKakao(with: token) == true {
+            if await worker?.isRegisteredKakao(with: token) == true,
+                await worker?.loginKakao(with: token) == true {
                 await MainActor.run {
                     presenter?.presentPerformLogin()
                 }
@@ -61,7 +62,6 @@ extension LoginInteractor: LoginBusinessLogic {
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = request.loginViewController
         authorizationController.performRequests()
-
     }
 }
 
@@ -80,7 +80,7 @@ extension LoginInteractor: ASAuthorizationControllerDelegate {
                 async let isRegistered: Bool = worker?.isRegisteredApple(with: identityToken) ?? false
                 async let loginResult: Bool = worker?.loginApple(with: identityToken) ?? false
 
-                if await isRegistered, await loginResult {
+                if await !isRegistered, await loginResult {
                     await MainActor.run {
                         presenter?.presentPerformLogin()
                     }
