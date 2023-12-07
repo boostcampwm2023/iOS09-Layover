@@ -28,7 +28,7 @@ protocol PlaybackBusinessLogic {
 
 protocol PlaybackDataStore: AnyObject {
     var parentView: PlaybackModels.ParentView? { get set }
-    var prevCell: PlaybackCell? { get set }
+    var previousCell: PlaybackCell? { get set }
     var index: Int? { get set }
     var isTeleport: Bool? { get set }
     var isDelete: Bool? { get set }
@@ -46,7 +46,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     var parentView: Models.ParentView?
 
-    var prevCell: PlaybackCell?
+    var previousCell: PlaybackCell?
 
     var index: Int?
 
@@ -97,16 +97,16 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     // MARK: - UseCase Playback Video
 
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        prevCell = request.curCell
-        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: request.curCell)
+        previousCell = request.currentCell
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: request.currentCell)
         presenter?.presentPlayInitialPlaybackCell(with: response)
     }
 
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
         guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
-        if prevCell == request.curCell {
-            response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
+        if previousCell == request.currentCell {
+            response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
             presenter?.presentShowPlayerSlider(with: response)
             isTeleport = false
             return
@@ -114,12 +114,12 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         // Home이 아닌 다른 뷰에서 왔을 경우(로드한 목록 무한 반복)
         if parentView == .other {
             if request.indexPathRow == (posts.count - 1) {
-                response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, prevCell: prevCell, curCell: nil)
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, previousCell: previousCell, currentCell: nil)
             } else if request.indexPathRow == 0 {
-                response = Models.DisplayPlaybackVideo.Response(indexPathRow: posts.count - 2, prevCell: prevCell, curCell: nil)
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: posts.count - 2, previousCell: previousCell, currentCell: nil)
             } else {
-                response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
-                prevCell = request.curCell
+                response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
+                previousCell = request.currentCell
                 presenter?.presentMoveCellNext(with: response)
                 isTeleport = false
                 return
@@ -130,8 +130,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
         // Home이면 다음 셀로 이동(추가적인 비디오 로드)
         isTeleport = false
-        response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
-        prevCell = request.curCell
+        response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
+        previousCell = request.currentCell
         presenter?.presentMoveCellNext(with: response)
     }
 
@@ -139,27 +139,27 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
         if let isTeleport, isTeleport == true, (request.indexPathRow == 1 || request.indexPathRow == (posts.count - 2)) {
-                response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
-                prevCell = request.curCell
+                response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
+            previousCell = request.currentCell
                 presenter?.presentMoveCellNext(with: response)
                 self.isTeleport = false
             }
 
         if let isDelete, isDelete == true {
-            response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: request.curCell)
-            prevCell = request.curCell
+            response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: request.currentCell)
+            previousCell = request.currentCell
             presenter?.presentMoveCellNext(with: response)
             self.isDelete = false
         }
     }
 
     func leavePlaybackView() {
-        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: nil)
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: nil)
         presenter?.presentLeavePlaybackView(with: response)
     }
 
     func resetVideo() {
-        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
+        let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
         presenter?.presentResetPlaybackCell(with: response)
     }
 
@@ -177,15 +177,15 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request) {
-        guard let prevCell else { return }
-        let willMoveLocation: Float64 = request.currentLocation * prevCell.playbackView.getDuration()
-        let response: Models.SeekVideo.Response = Models.SeekVideo.Response(willMoveLocation: willMoveLocation, curCell: prevCell)
+        guard let previousCell else { return }
+        let willMoveLocation: Float64 = request.currentLocation * previousCell.playbackView.getDuration()
+        let response: Models.SeekVideo.Response = Models.SeekVideo.Response(willMoveLocation: willMoveLocation, currentCell: previousCell)
         presenter?.presentSeekVideo(with: response)
     }
 
     func hidePlayerSlider() {
-        guard let prevCell else { return }
-        prevCell.playbackView.playerSlider?.isHidden = true
+        guard let previousCell else { return }
+        previousCell.playbackView.playerSlider?.isHidden = true
     }
 
     func setSeeMoreButton() {
@@ -198,10 +198,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
         isDelete = true
-        guard let prevCell,
+        guard let previousCell,
               let worker
         else { return Task { false } }
-        guard let boardID = prevCell.boardID else { return Task { false } }
+        guard let boardID = previousCell.boardID else { return Task { false } }
         return Task {
             let result: Bool = await worker.deletePlaybackVideo(boardID: boardID)
             let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
@@ -213,7 +213,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func resumeVideo() {
-        guard let prevCell else { return }
-        prevCell.playbackView.playPlayer()
+        guard let previousCell else { return }
+        previousCell.playbackView.playPlayer()
     }
 }
