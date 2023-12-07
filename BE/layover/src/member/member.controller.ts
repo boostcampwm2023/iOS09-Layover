@@ -106,7 +106,7 @@ export class MemberController {
       id = payload.memberId;
     }
 
-    const member = await this.memberService.findMemberById(id);
+    const member = await this.memberService.getMemberById(id);
     if (member === null) throw new CustomResponse(ECustomCode.MEMBER02);
 
     const username = member.username;
@@ -132,7 +132,7 @@ export class MemberController {
     const id = payload.memberId;
 
     // 삭제될 유저 정보 가져오기
-    const memberInfo = await this.memberService.selectUsername(id);
+    const memberInfo = await this.memberService.getUsernameById(id);
 
     // db에 반영
     await this.memberService.deleteMember(id);
@@ -156,7 +156,7 @@ export class MemberController {
     const id = payload.memberId;
 
     // 프로필 사진 업로드할 presigned url 생성하기
-    const member = await this.memberService.findMemberById(id);
+    const member = await this.memberService.getMemberById(id);
     const filename = member.username;
     const filetype = body.filetype;
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;

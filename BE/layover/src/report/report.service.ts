@@ -14,7 +14,7 @@ export class ReportService {
   ) {}
 
   async insertReport(memberId: number, boardId: number, reportType: string): Promise<ReportResDto> {
-    const member = await this.memberService.findMemberById(memberId);
+    const member = await this.memberService.getMemberById(memberId);
     const board = await this.boardService.getBoardById(boardId);
     await this.reportRepository.insert({
       member: member,

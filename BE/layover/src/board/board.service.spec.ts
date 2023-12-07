@@ -10,7 +10,7 @@ describe('BoardService', () => {
     saveBoard: jest.fn(),
   };
   const mockMemberService = {
-    findMemberById: jest.fn(),
+    getMemberById: jest.fn(),
   };
   const mockTagService = {
     saveTag: jest.fn(),
