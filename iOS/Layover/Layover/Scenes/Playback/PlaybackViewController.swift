@@ -139,7 +139,7 @@ final class PlaybackViewController: BaseViewController {
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
             [weak self] _ in
-            self?.interactor?.reRunVideo()
+            self?.interactor?.resumeVideo()
         })
         alert.addAction(reportAction)
         alert.addAction(cancelAction)
@@ -161,7 +161,7 @@ final class PlaybackViewController: BaseViewController {
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
             [weak self] _ in
-            self?.interactor?.reRunVideo()
+            self?.interactor?.resumeVideo()
         })
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
