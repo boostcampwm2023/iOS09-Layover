@@ -168,9 +168,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
               let parentView else { return }
         let response: Models.ConfigurePlaybackCell.Response
         switch parentView {
-        case .home:
+        case .home, .myProfile:
             response = Models.ConfigurePlaybackCell.Response(teleportIndex: nil)
-        case .other, .myProfile:
+        case .other:
             response = Models.ConfigurePlaybackCell.Response(teleportIndex: posts.count + 1)
         }
         presenter?.presentConfigureCell(with: response)
