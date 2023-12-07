@@ -12,49 +12,67 @@ enum EditProfileModels {
 
     enum FetchProfile {
         struct Request {
-
         }
 
-        struct Reponse {
-            var nickname: String?
-            var introduce: String?
-            var profileImageData: Data?
+        struct Response {
+            let nickname: String?
+            let introduce: String?
+            let profileImageData: Data?
         }
 
         struct ViewModel {
-            var nickname: String?
-            var introduce: String?
-            var profileImageData: Data?
+            let nickname: String?
+            let introduce: String?
+            let profileImageData: Data?
         }
     }
 
-    enum ValidateProfileInfo {
+    enum ChangeProfile {
+        enum IntroduceLengthState: CustomStringConvertible {
+            case overLength
+            case valid
+
+            var description: String {
+                switch self {
+                case .overLength:
+                    return "자기소개는 30자 이내로 입력해주세요."
+                case .valid:
+                    return ""
+                }
+            }
+        }
+
         struct Request {
-            var nickname: String
-            var introduce: String?
-            var profileImageChanged: Bool
+            let nickname: String?
+            let introduce: String?
+            let profileImageData: Data?
+            let validIntroduceLength: Int = 50 // default value
         }
+
         struct Response {
-            var isValid: Bool
-            var nicknameChanged: Bool
+            let newNicknameState: NicknameState
+            let newIntroduceState: IntroduceLengthState
+            let canCheckNicknameDuplication: Bool
+            let canEditProfile: Bool
         }
+
         struct ViewModel {
-            var nicknameAlertDescription: String?
-            var introduceAlertDescription: String?
-            var canCheckDuplication: Bool
-            var canEditProfile: Bool
+            let nicknameAlertDescription: String
+            let introduceAlertDescription: String
+            let canCheckNicknameDuplication: Bool
+            let canEditProfile: Bool
         }
     }
 
     enum CheckNicknameDuplication {
         struct Request {
-            var nickname: String
+            let nickname: String
         }
         struct Response {
-            var isValid: Bool
+            let isValid: Bool
         }
         struct ViewModel {
-            var isValidNickname: Bool
+            let isValidNickname: Bool
             var alertDescription: String {
                 isValidNickname ? "사용가능한 닉네임입니다." : "사용중인 닉네임입니다."
             }
@@ -63,15 +81,15 @@ enum EditProfileModels {
 
     enum EditProfile {
         struct Request {
-            var nickname: String
-            var introduce: String?
-            var profileImage: Data?
+            let nickname: String
+            let introduce: String?
+            let profileImageURL: URL?
         }
 
         struct Response {
-            var nickname: String
-            var introduce: String?
-            var profileImgaeURL: URL?
+            let nickname: String
+            let introduce: String?
+            let profileImageURL: URL?
         }
 
         struct ViewModel {

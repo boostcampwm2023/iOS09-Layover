@@ -9,15 +9,15 @@
 import Foundation
 import OSLog
 
-enum NicknameState {
+enum NicknameState: CustomStringConvertible {
     case valid
     case lessThan2GreaterThan8
     case invalidCharacter
 
-    var alertDescription: String? {
+    var description: String {
         switch self {
         case .valid:
-            return nil
+            return ""
         case .lessThan2GreaterThan8:
             return "2자 이상 8자 이하로 입력해주세요."
         case .invalidCharacter:
@@ -30,7 +30,7 @@ protocol UserWorkerProtocol {
     func validateNickname(_ nickname: String) -> NicknameState
     func modifyNickname(to nickname: String) async -> String?
     func checkNotDuplication(for userName: String) async -> Bool?
-    // func modifyProfileImage() async throws -> URL
+    func modifyProfileImage(data: Data, to url: String) async -> Bool
     func modifyIntroduce(to introduce: String) async -> String?
     func withdraw() async -> String?
     func logout()
@@ -38,6 +38,7 @@ protocol UserWorkerProtocol {
     func fetchProfile(by id: Int?) async -> Member?
     func fetchPosts(at page: Int, of id: Int?) async -> [Post]?
     func fetchImageData(with url: URL) async -> Data?
+    func fetchImagePresignedURL(with fileType: String) async -> String?
 }
 
 final class UserWorker: UserWorkerProtocol {
@@ -91,6 +92,16 @@ final class UserWorker: UserWorkerProtocol {
             return responseData.data?.isValid
         } catch {
             os_log(.error, log: .default, "Failed to check duplicate username with error: %@", error.localizedDescription)
+            return false
+        }
+    }
+
+    func modifyProfileImage(data: Data, to url: String) async -> Bool {
+        do {
+            let responseData = try await provider.upload(data: data, to: url, method: .PUT)
+            return true
+        } catch {
+            os_log(.error, log: .default, "Failed to modify profile image with error: %@", error.localizedDescription)
             return false
         }
     }
@@ -156,6 +167,16 @@ final class UserWorker: UserWorkerProtocol {
     func fetchImageData(with url: URL) async -> Data? {
         do {
             return try await provider.request(url: url)
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImagePresignedURL(with fileType: String) async -> String? {
+        do {
+            let endPoint = userEndPointFactory.makeFetchUserProfilePresignedURL(of: fileType)
+            return try await provider.request(with: endPoint).data?.preSignedURL
         } catch {
             os_log(.error, log: .data, "Error: %s", error.localizedDescription)
             return nil

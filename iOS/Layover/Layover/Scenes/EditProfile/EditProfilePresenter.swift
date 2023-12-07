@@ -9,8 +9,9 @@
 import UIKit
 
 protocol EditProfilePresentationLogic {
-    func presentProfile(with response: EditProfileModels.FetchProfile.Reponse)
-    func presentProfileInfoValidation(with response: EditProfileModels.ValidateProfileInfo.Response)
+    func presentProfile(with response: EditProfileModels.FetchProfile.Response)
+    func presentProfileState(with response: EditProfileModels.ChangeProfile.Response)
+
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response)
 }
 
@@ -21,22 +22,26 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     typealias Models = EditProfileModels
     weak var viewController: EditProfileDisplayLogic?
 
-    func presentProfile(with response: EditProfileModels.FetchProfile.Reponse) {
+    // MARK: - Methods
+
+    func presentProfile(with response: Models.FetchProfile.Response) {
         let viewModel = Models.FetchProfile.ViewModel(nickname: response.nickname,
                                                       introduce: response.introduce,
                                                       profileImageData: response.profileImageData)
-        viewController?.displayProfile(viewModel: viewModel)
+        viewController?.displayProfile(with: viewModel)
     }
 
-    func presentProfileInfoValidation(with response: EditProfileModels.ValidateProfileInfo.Response) {
-        let viewModel = Models.ValidateProfileInfo.ViewModel(canCheckDuplication: response.nicknameChanged,
-                                                             canEditProfile: response.isValid)
-        viewController?.displayProfileInfoValidation(viewModel: viewModel)
+    func presentProfileState(with response: Models.ChangeProfile.Response) {
+        let viewModel = Models.ChangeProfile.ViewModel(nicknameAlertDescription: response.newNicknameState.description,
+                                                       introduceAlertDescription: response.newIntroduceState.description,
+                                                       canCheckNicknameDuplication: response.canCheckNicknameDuplication,
+                                                       canEditProfile: response.canEditProfile)
+
+        viewController?.displayChangedProfileState(with: viewModel)
     }
 
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response) {
-        let viewModel = Models.CheckNicknameDuplication.ViewModel(isValidNickname: response.isValid)
-        viewController?.displayNicknameDuplication(viewModel: viewModel)
+        return
     }
 
 }

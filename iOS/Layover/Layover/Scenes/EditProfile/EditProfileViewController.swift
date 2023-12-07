@@ -6,13 +6,14 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import PhotosUI
+
 import UIKit
+import PhotosUI
+import OSLog
 
 protocol EditProfileDisplayLogic: AnyObject {
-    func displayProfile(viewModel: EditProfileModels.FetchProfile.ViewModel)
-    func displayProfileInfoValidation(viewModel: EditProfileModels.ValidateProfileInfo.ViewModel)
-    func displayNicknameDuplication(viewModel: EditProfileModels.CheckNicknameDuplication.ViewModel)
+    func displayProfile(with viewModel: EditProfileModels.FetchProfile.ViewModel)
+    func displayChangedProfileState(with viewModel: EditProfileModels.ChangeProfile.ViewModel)
 }
 
 final class EditProfileViewController: BaseViewController {
@@ -33,6 +34,7 @@ final class EditProfileViewController: BaseViewController {
         imageView.image = UIImage.profile
         imageView.layer.cornerRadius = 36
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
@@ -85,14 +87,31 @@ final class EditProfileViewController: BaseViewController {
         return button
     }()
 
+    private lazy var editProfileImageController: UIAlertController = {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let defaultAction = UIAlertAction(title: "기본 이미지로 변경", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.changedProfileImageData = nil
+            self.profileImageView.image = UIImage.profile
+            self.profileInfoChanged()
+        }
+        let albumAction = UIAlertAction(title: "앨범에서 선택", style: .default) { [weak self] _ in
+            guard let self else { return }
+            self.present(self.phPickerViewController, animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        [defaultAction, albumAction, cancelAction].forEach { alertController.addAction($0) }
+        return alertController
+    }()
+
     // MARK: - Properties
 
     typealias Models = EditProfileModels
-    var router: (NSObjectProtocol & EditProfileRoutingLogic & EditProfileDataPassing)?
+    var router: (EditProfileRoutingLogic & EditProfileDataPassing)?
     var interactor: EditProfileBusinessLogic?
 
-    private var changedProfileImage: UIImage?
-    private var nicknameIsValid: Bool = true
+    private var changedProfileImageData: Data?
+    private var changedProfileImageExtension: String?
 
     // MARK: - Object Lifecycle
 
@@ -106,18 +125,18 @@ final class EditProfileViewController: BaseViewController {
         setup()
     }
 
-    // MARK: - View Lifecycle
+    // MARK: - Setup
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        interactor?.fetchProfile()
+    private func setup() {
+        EditProfileConfigurator.shared.configure(self)
     }
 
-    // MARK: - Methods
+    // MARK: - UI Layout
 
     override func setUI() {
         super.setUI()
-        self.title = "프로필 수정"
+        title = "프로필 수정"
+        interactor?.fetchProfile(with: Models.FetchProfile.Request())
     }
 
     override func setConstraints() {
@@ -168,18 +187,12 @@ final class EditProfileViewController: BaseViewController {
 
     }
 
-    private func setup() {
-        EditProfileConfigurator.shared.configure(self)
-    }
+    // MARK: - Actions
 
     @objc private func profileInfoChanged() {
-        guard let nickname = nicknameTextfield.text,
-              let introduce = introduceTextfield.text else { return }
-        let profileImageChanged = changedProfileImage != nil
-        let profileInfoRequest = EditProfileModels.ValidateProfileInfo.Request(nickname: nickname,
-                                                                               introduce: introduce,
-                                                                               profileImageChanged: profileImageChanged)
-        interactor?.validateProfileInfo(with: profileInfoRequest)
+        interactor?.changeProfile(with: Models.ChangeProfile.Request(nickname: nicknameTextfield.text,
+                                                                     introduce: introduceTextfield.text,
+                                                                     profileImageData: changedProfileImageData))
     }
 
     @objc private func checkDuplicateNicknameButtonDidTap() {
@@ -193,7 +206,6 @@ final class EditProfileViewController: BaseViewController {
     @objc private func editProfileImageButtonDidTap() {
         self.present(phPickerViewController, animated: true)
     }
-
 }
 
 extension EditProfileViewController: PHPickerViewControllerDelegate {
@@ -203,21 +215,24 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
         if let item = item, item.canLoadObject(ofClass: UIImage.self) {
             item.loadObject(ofClass: UIImage.self) { [weak self] (image, _) in
                 guard let self else { return }
-                DispatchQueue.main.async {
-                    self.profileImageView.image = image as? UIImage
-                    self.changedProfileImage = image as? UIImage
-                    self.profileInfoChanged()
+                Task {
+                    await MainActor.run {
+                        self.profileImageView.image = image as? UIImage
+                        self.changedProfileImageData = (image as? UIImage)?.jpegData(compressionQuality: 1.0)
+                        self.profileInfoChanged()
+                    }
                 }
             }
         }
     }
 }
 
+// MARK: - Display Logic
+
 extension EditProfileViewController: EditProfileDisplayLogic {
 
-    func displayProfile(viewModel: Models.FetchProfile.ViewModel) {
+    func displayProfile(with viewModel: Models.FetchProfile.ViewModel) {
         nicknameTextfield.text = viewModel.nickname
-
         if let introduce = viewModel.introduce {
             introduceTextfield.text = introduce
         }
@@ -229,18 +244,14 @@ extension EditProfileViewController: EditProfileDisplayLogic {
         }
     }
 
-    func displayProfileInfoValidation(viewModel: EditProfileModels.ValidateProfileInfo.ViewModel) {
-        nicknameAlertLabel.isHidden = viewModel.canCheckDuplication
+    func displayChangedProfileState(with viewModel: EditProfileModels.ChangeProfile.ViewModel) {
         nicknameAlertLabel.text = viewModel.nicknameAlertDescription
-        nicknameAlertLabel.textColor = .error
-
-        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckDuplication
-
+        nicknameAlertLabel.isHidden = viewModel.nicknameAlertDescription.count == 0
         introduceAlertLabel.text = viewModel.introduceAlertDescription
-        introduceAlertLabel.textColor = .error
+        introduceAlertLabel.isHidden = viewModel.introduceAlertDescription.count == 0
 
-        confirmButton.isEnabled = viewModel.canEditProfile && !viewModel.canCheckDuplication
-        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckDuplication
+        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckNicknameDuplication
+        confirmButton.isEnabled = viewModel.canEditProfile
     }
 
     func displayNicknameDuplication(viewModel: Models.CheckNicknameDuplication.ViewModel) {

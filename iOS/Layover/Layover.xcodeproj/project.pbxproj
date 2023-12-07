@@ -59,6 +59,7 @@
 		198167A32B20583D0032F563 /* SettingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679E2B20583D0032F563 /* SettingModels.swift */; };
 		198167A42B20583D0032F563 /* SettingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679F2B20583D0032F563 /* SettingInteractor.swift */; };
 		198167A62B20593B0032F563 /* SettingConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198167A52B20593B0032F563 /* SettingConfigurator.swift */; };
+		198167A82B20DD670032F563 /* PresignedURLDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198167A72B20DD670032F563 /* PresignedURLDTO.swift */; };
 		19A169232B176C5F00DB34C0 /* TagPlayListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */; };
 		19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */; };
 		19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */; };
@@ -268,6 +269,7 @@
 		1981679E2B20583D0032F563 /* SettingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModels.swift; sourceTree = "<group>"; };
 		1981679F2B20583D0032F563 /* SettingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractor.swift; sourceTree = "<group>"; };
 		198167A52B20593B0032F563 /* SettingConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingConfigurator.swift; sourceTree = "<group>"; };
+		198167A72B20DD670032F563 /* PresignedURLDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresignedURLDTO.swift; sourceTree = "<group>"; };
 		19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListPresenter.swift; sourceTree = "<group>"; };
 		19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListWorker.swift; sourceTree = "<group>"; };
 		19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListRouter.swift; sourceTree = "<group>"; };
@@ -613,12 +615,11 @@
 				19A169372B17BCA800DB34C0 /* PostDTO.swift */,
 				19A169392B17BCC400DB34C0 /* MemberDTO.swift */,
 				19A1693B2B17BD1C00DB34C0 /* BoardDTO.swift */,
-				836C338C2B15D91F00ECAFB0 /* VideoDTO.swift */,
-				836C338E2B160CC700ECAFB0 /* MemberDTO.swift */,
 				8321A2FE2B1E428C000A12AF /* ReportDTO.swift */,
 				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
 				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
 				1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */,
+				198167A72B20DD670032F563 /* PresignedURLDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -1223,7 +1224,6 @@
 				FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */,
 				FC5BE1212B148D170036366D /* EditProfileInteractor.swift in Sources */,
 				FC930E7C2B0CD80800AA48E3 /* ProfileConfigurator.swift in Sources */,
-				836C33992B1843BE00ECAFB0 /* SettingScenePresenter.swift in Sources */,
 				8321A2F12B1E1026000A12AF /* ReportModels.swift in Sources */,
 				FC2511A62B049020004717BC /* SignUpConfigurator.swift in Sources */,
 				194552392B05230E00299768 /* HomeCarouselCollectionViewCell.swift in Sources */,
@@ -1287,7 +1287,6 @@
 				FC68E29D2B02326A001AABFF /* Responsable.swift in Sources */,
 				FC2511A02B045C0A004717BC /* SignUpInteractor.swift in Sources */,
 				FC767F862B1214C10088CF9B /* CheckUserNameDTO.swift in Sources */,
-				836C338D2B15D91F00ECAFB0 /* VideoDTO.swift in Sources */,
 				FC4084C42B1F14F600CE4727 /* UploadPostEndPointFactory.swift in Sources */,
 				FC5BE1232B1490660036366D /* EditProfileConfigurator.swift in Sources */,
 				1945522A2B04883800299768 /* UIView+.swift in Sources */,
@@ -1302,7 +1301,7 @@
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
 				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
-				836C339D2B1843BE00ECAFB0 /* SettingSceneViewController.swift in Sources */,
+				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
 				8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
@@ -1346,6 +1345,7 @@
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,
+				198167A82B20DD670032F563 /* PresignedURLDTO.swift in Sources */,
 				8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

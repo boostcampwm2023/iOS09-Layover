@@ -13,6 +13,7 @@ protocol ProviderType {
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
     func upload(data: Data, to url: String, method: HTTPMethod) async throws -> Data
+    func upload(from fileURL: URL, to url: String, method: HTTPMethod) async throws -> Data
     func upload(fromFile: URL,
                           to url: String,
                           method: HTTPMethod,
@@ -33,6 +34,10 @@ extension ProviderType {
         return try await upload(data: data,
                                 to: url,
                                 method: method)
+    }
+
+    func upload(from fileURL: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        return try await upload(from: fileURL, to: url, method: method)
     }
 
     func upload(fromFile: URL,
@@ -132,6 +137,16 @@ class Provider: ProviderType {
         request.httpMethod = method.rawValue
 
         let (data, response) = try await session.upload(for: request, from: data)
+        try self.checkStatusCode(of: response)
+        return data
+    }
+
+    func upload(from fileURL: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        guard let url = URL(string: url) else { throw NetworkError.components }
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
+        request.httpMethod = method.rawValue
+
+        let (data, response) = try await session.upload(for: request, fromFile: fileURL)
         try self.checkStatusCode(of: response)
         return data
     }

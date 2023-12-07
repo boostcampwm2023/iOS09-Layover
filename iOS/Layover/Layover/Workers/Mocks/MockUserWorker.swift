@@ -10,7 +10,6 @@ import Foundation
 import OSLog
 
 final class MockUserWorker: UserWorkerProtocol {
-    
 
     // MARK: - Properties
 
@@ -193,6 +192,14 @@ final class MockUserWorker: UserWorkerProtocol {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
         }
+    }
+
+    func modifyProfileImage(from fileURL: URL, to url: String) async -> Bool {
+        return true
+    }
+
+    func fetchImagePresignedURL(with fileType: String) async -> String? {
+        return nil
     }
 
 }
