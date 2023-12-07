@@ -79,7 +79,7 @@ export class OauthService {
 
   async signup(memberHash: string, username: string, provider: string): Promise<void> {
     try {
-      await this.memberService.insertMember(username, 'default.jpeg', 'default introduce', provider, memberHash);
+      await this.memberService.createMember(username, 'default.jpeg', 'default introduce', provider, memberHash);
     } catch (e) {
       throw new CustomResponse(ECustomCode.OAUTH06);
     }
@@ -98,7 +98,7 @@ export class OauthService {
 
   async generateAccessRefreshTokens(memberHash: string): Promise<TokenResDto> {
     // memberHash로부터 해당 회원이 저장된 db pk를 찾아옴.
-    const member = await this.memberService.findMemberByHash(memberHash);
+    const member = await this.memberService.getMemberByHash(memberHash);
     const memberId = member.id;
 
     // access, refresh token 생성
