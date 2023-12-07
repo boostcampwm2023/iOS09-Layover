@@ -11,7 +11,8 @@ import Foundation
 protocol MapPresentationLogic {
     func presentCurrentLocation()
     func presentDefaultLocation()
-    func presentFetchedVideos(with response: MapModels.FetchVideo.Reponse)
+    func presentFetchedVideos(with response: MapModels.FetchVideo.Response)
+    func presentFetchedPosts(with response: MapModels.FetchPosts.Response)
     func presentPlaybackScene()
 }
 
@@ -30,9 +31,26 @@ final class MapPresenter: MapPresentationLogic {
         // TODO: 위치 관련 기능 사용 불가, 디폴트 위치로 이동
     }
 
-    func presentFetchedVideos(with response: MapModels.FetchVideo.Reponse) {
+    func presentFetchedVideos(with response: MapModels.FetchVideo.Response) {
         let viewModel = MapModels.FetchVideo.ViewModel(videoDataSources: response.videoURLs.map { .init(videoURL: $0) })
         viewController?.displayFetchedVideos(viewModel: viewModel)
+    }
+
+    func presentFetchedPosts(with response: MapModels.FetchPosts.Response) {
+        let displayedPost = response.posts
+            .map { post -> Models.DisplayedPost? in
+                if let videoURL = post.board.videoURL {
+                    return .init(thumbnailImageData: post.thumnailImageData,
+                                 videoURL: videoURL,
+                                 latitude: post.board.latitude,
+                                 longitude: post.board.longitude)
+                } else {
+                    return nil
+                }
+            }.compactMap { $0 }
+
+        let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPost)
+        viewController?.dispalyFetchedPosts(viewModel: viewModel)
     }
 
     func presentPlaybackScene() {

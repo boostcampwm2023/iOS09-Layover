@@ -12,7 +12,8 @@ struct BoardDTO: Decodable {
     let id: Int
     let encodedVideoURL: String
     let videoThumbnailURL: String
-    let latitude, longitude, title, content: String
+    let latitude, longitude: Double
+    let title, content: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -30,8 +31,8 @@ extension BoardDTO {
             description: content,
             thumbnailImageURL: URL(string: videoThumbnailURL),
             videoURL: URL(string: encodedVideoURL),
-            latitude: Double(latitude),
-            longitude: Double(longitude)
+            latitude: latitude,
+            longitude: longitude
         )
     }
 }

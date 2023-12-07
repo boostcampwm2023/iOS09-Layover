@@ -10,6 +10,20 @@ import Foundation
 
 enum MapModels {
 
+    struct Post {
+        let member: Member
+        let board: Board
+        let tag: [String]
+        let thumnailImageData: Data
+    }
+
+    struct DisplayedPost: Hashable {
+        let thumbnailImageData: Data
+        let videoURL: URL
+        let latitude: Double
+        let longitude: Double
+    }
+
     // MARK: - Fetch Video Use Cases
     enum FetchVideo {
         struct Request {
@@ -17,7 +31,7 @@ enum MapModels {
             var longitude: Double
         }
 
-        struct Reponse {
+        struct Response {
             var videoURLs: [URL]
         }
 
@@ -28,6 +42,26 @@ enum MapModels {
                 var id = UUID()
                 var videoURL: URL
             }
+        }
+    }
+
+    enum FetchPosts {
+        struct Request {
+            var latitude: Double
+            var longitude: Double
+        }
+
+        struct Response {
+            var posts: [Post]
+        }
+
+        struct ViewModel {
+            var displayedPosts: [DisplayedPost]
+
+//            struct VideoDataSource: Hashable {
+//                var id = UUID()
+//                var videoURL: URL
+//            }
         }
     }
 

@@ -51,7 +51,6 @@ final class LOAnnotationView: MKAnnotationView {
     // MARK: - View Lifecycle
     override func prepareForDisplay() {
         super.prepareForDisplay()
-        setThumbnailImage()
     }
 
     override func layoutSubviews() {
@@ -61,8 +60,8 @@ final class LOAnnotationView: MKAnnotationView {
 
     // MARK: - Methods
 
-    func setThumbnailImage() {
-        self.thumbnailImageView.image = .checkmark
+    func setThumbnailImage(data: Data) {
+        self.thumbnailImageView.image = UIImage(data: data)
     }
 
     private func render() {

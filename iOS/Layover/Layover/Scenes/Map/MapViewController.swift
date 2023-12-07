@@ -11,6 +11,7 @@ import UIKit
 
 protocol MapDisplayLogic: AnyObject {
     func displayFetchedVideos(viewModel: MapModels.FetchVideo.ViewModel)
+    func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel)
     func routeToPlayback()
 }
 
@@ -27,7 +28,7 @@ final class MapViewController: BaseViewController {
         return mapView
     }()
 
-    private let searchButton: UIButton = {
+    private lazy var searchButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         var titleContainer = AttributeContainer()
         titleContainer.font = UIFont.loFont(type: .body3)
@@ -39,6 +40,7 @@ final class MapViewController: BaseViewController {
         configuration.background.strokeColor = .grey500
         configuration.background.strokeWidth = 1
         let button = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(searchButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -62,7 +64,7 @@ final class MapViewController: BaseViewController {
         return collectionView
     }()
 
-    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, ViewModel.VideoDataSource>(collectionView: carouselCollectionView) { collectionView, indexPath, item in
+    private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Models.DisplayedPost>(collectionView: carouselCollectionView) { collectionView, indexPath, item in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.configure(url: item.videoURL)
@@ -94,9 +96,11 @@ final class MapViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.checkLocationAuthorizationStatus()
+        print(mapView.centerCoordinate)
+        interactor?.fetchPosts(latitude: mapView.centerCoordinate.latitude,
+                               longitude: mapView.centerCoordinate.longitude)
         setCollectionViewDataSource()
         setDelegation()
-        createMapAnnotation()
     }
 
     // MARK: - UI + Layout
@@ -170,10 +174,10 @@ final class MapViewController: BaseViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
 
-    private func createMapAnnotation() {
-        let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: 36.3276544,
-                                                                         longitude: 127.427232),
-                                      thumbnailURL: URL(string: "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png")!)
+    private func createMapAnnotation(post: Models.DisplayedPost) {
+        let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: post.latitude,
+                                                                         longitude: post.longitude),
+                                      thumbnailImageData: post.thumbnailImageData)
         mapView.addAnnotation(annotation)
     }
 
@@ -191,8 +195,15 @@ final class MapViewController: BaseViewController {
         carouselDatasource.apply(snapshot)
     }
 
+    @objc private func searchButtonDidTap() {
+        searchButton.isHidden = true
+        interactor?.fetchPosts(latitude: mapView.centerCoordinate.latitude,
+                               longitude: mapView.centerCoordinate.longitude)
+    }
+
     @objc private func currentLocationButtonDidTap() {
         mapView.setUserTrackingMode(.follow, animated: true)
+        mapView.removeAnnotations(mapView.annotations)
     }
 
     @objc private func uploadButtonDidTap() {
@@ -207,22 +218,30 @@ extension MapViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation) else { return nil }
-        var annotationView: MKAnnotationView?
-        annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
-                                                               for: annotation)
-        return annotationView
+        if let annotaion = annotation as? LOAnnotation {
+            let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
+                                                                       for: annotation) as? LOAnnotationView
+            annotationView?.setThumbnailImage(data: annotaion.thumbnailImageData)
+            return annotationView
+        }
+        return nil
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         guard let annotation = view.annotation, !(annotation is MKUserLocation) else { return }
         mapView.setCenter(annotation.coordinate, animated: true)
         animateAnnotationSelection(for: view, isSelected: true)
-        interactor?.fetchVideos()
     }
 
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         animateAnnotationSelection(for: view, isSelected: false)
         deleteCarouselDatasource()
+    }
+
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        if mapView.userTrackingMode != .follow {
+            searchButton.isHidden = false
+        }
     }
 
 }
@@ -251,7 +270,17 @@ extension MapViewController: MapDisplayLogic {
         var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.videoDataSources)
+//        carouselDatasource.apply(snapshot)
+    }
+
+    func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel) {
+        var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()
+        snapshot.appendSections([UUID()])
+        snapshot.appendItems(viewModel.displayedPosts)
         carouselDatasource.apply(snapshot)
+
+        mapView.removeAnnotations(mapView.annotations)
+        viewModel.displayedPosts.forEach { createMapAnnotation(post: $0) }
     }
 
     func routeToPlayback() {

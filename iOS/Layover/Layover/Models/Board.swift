@@ -14,6 +14,6 @@ struct Board {
     let description: String?
     let thumbnailImageURL: URL?
     let videoURL: URL?
-    let latitude: Double?
-    let longitude: Double?
+    let latitude: Double
+    let longitude: Double
 }

@@ -14,12 +14,16 @@ protocol MapBusinessLogic {
     func fetchVideos()
     func moveToPlaybackScene(with: MapModels.MoveToPlaybackScene.Request)
     func playPosts(with: MapModels.PlayPosts.Request)
+
+    @discardableResult
+    func fetchPosts(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never>
     func selectVideo(with request: MapModels.SelectVideo.Request)
 }
 
 protocol MapDataStore {
     var postPlayStartIndex: Int? { get set }
     var posts: [Post]? { get set }
+//    var posts: [MapModels.Post]? { get set }
     var index: Int? { get set }
     var selectedVideoURL: URL? { get set }
 }
@@ -31,6 +35,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     typealias Models = MapModels
     var presenter: MapPresentationLogic?
     var videoFileWorker: VideoFileWorker?
+    var worker: MapWorkerProtocol?
 
     private let locationManager = CLLocationManager()
     private var latitude: Double?
@@ -38,6 +43,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
 
     var postPlayStartIndex: Int?
     var posts: [Post]?
+//    var posts: [Models.Post]?
     var index: Int?
     var selectedVideoURL: URL?
 
@@ -59,11 +65,11 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
                                    "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"]
             .compactMap { URL(string: $0) }
-        presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Reponse(videoURLs: dummyURLs))
+        presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Response(videoURLs: dummyURLs))
     }
 
     func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
-        posts = request.videos
+        posts = request.videos.map { .init(member: $0.member, board: $0.board, tag: $0.tag) }
         index = request.index
         presenter?.presentPlaybackScene()
     }
@@ -71,6 +77,19 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     func playPosts(with request: MapModels.PlayPosts.Request) {
         postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene()
+    }
+
+    func fetchPosts(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never> {
+        Task {
+            let posts = await worker?.fetchPosts(latitude: latitude,
+                                                 longitude: longitude)
+            guard let posts else { return [] }
+            let response = Models.FetchPosts.Response(posts: posts)
+            await MainActor.run {
+                presenter?.presentFetchedPosts(with: response)
+            }
+            return posts
+        }
     }
 
     func selectVideo(with request: Models.SelectVideo.Request) {
