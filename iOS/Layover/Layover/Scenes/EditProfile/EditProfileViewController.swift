@@ -274,7 +274,7 @@ extension EditProfileViewController: EditProfileDisplayLogic {
         introduceAlertLabel.text = viewModel.introduceAlertDescription
         introduceAlertLabel.isHidden = viewModel.introduceAlertDescription == nil
 
-        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckNicknameDuplication == true
+        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckNicknameDuplication == true ? true : checkDuplicateNicknameButton.isEnabled
         confirmButton.isEnabled = viewModel.canEditProfile
     }
 
