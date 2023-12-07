@@ -16,7 +16,10 @@ protocol MapBusinessLogic {
     func playPosts(with: MapModels.PlayPosts.Request)
 
     @discardableResult
-    func fetchPosts(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never>
+    func fetchPosts() -> Task<[MapModels.Post], Never>
+
+    @discardableResult
+    func fetchPost(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never>
     func selectVideo(with request: MapModels.SelectVideo.Request)
 }
 
@@ -38,8 +41,6 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     var worker: MapWorkerProtocol?
 
     private let locationManager = CLLocationManager()
-    private var latitude: Double?
-    private var longitude: Double?
 
     var postPlayStartIndex: Int?
     var posts: [Post]?
@@ -79,10 +80,24 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
         presenter?.presentPlaybackScene()
     }
 
-    func fetchPosts(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never> {
+    func fetchPosts() -> Task<[MapModels.Post], Never> {
         Task {
-            let posts = await worker?.fetchPosts(latitude: latitude,
-                                                 longitude: longitude)
+            locationManager.startUpdatingLocation()
+            guard let coordinate = locationManager.location?.coordinate else { return [] }
+            let posts = await worker?.fetchPosts(latitude: coordinate.latitude,
+                                                 longitude: coordinate.longitude)
+            guard let posts else { return [] }
+            let response = Models.FetchPosts.Response(posts: posts)
+            await MainActor.run {
+                presenter?.presentFetchedPosts(with: response)
+            }
+            return posts
+        }
+    }
+
+    func fetchPost(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never> {
+        Task {
+            let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
             guard let posts else { return [] }
             let response = Models.FetchPosts.Response(posts: posts)
             await MainActor.run {
@@ -114,12 +129,4 @@ extension MapInteractor: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkCurrentLocationAuthorization(for: manager.authorizationStatus)
     }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            longitude = location.coordinate.longitude
-            latitude = location.coordinate.latitude
-        }
-    }
-
 }

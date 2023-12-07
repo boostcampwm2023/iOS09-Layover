@@ -96,9 +96,7 @@ final class MapViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.checkLocationAuthorizationStatus()
-        print(mapView.centerCoordinate)
-        interactor?.fetchPosts(latitude: mapView.centerCoordinate.latitude,
-                               longitude: mapView.centerCoordinate.longitude)
+        interactor?.fetchPosts()
         setCollectionViewDataSource()
         setDelegation()
     }
@@ -197,8 +195,8 @@ final class MapViewController: BaseViewController {
 
     @objc private func searchButtonDidTap() {
         searchButton.isHidden = true
-        interactor?.fetchPosts(latitude: mapView.centerCoordinate.latitude,
-                               longitude: mapView.centerCoordinate.longitude)
+        interactor?.fetchPost(latitude: mapView.centerCoordinate.latitude,
+                              longitude: mapView.centerCoordinate.longitude)
     }
 
     @objc private func currentLocationButtonDidTap() {
