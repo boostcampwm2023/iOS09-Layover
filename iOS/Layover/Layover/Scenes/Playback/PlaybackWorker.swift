@@ -21,13 +21,13 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     typealias Models = PlaybackModels
 
     private let provider: ProviderType
-    private let deleteEndPointFactory: PostManagerEndPointFactory
+    private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), deleteEndPointFactory: PostManagerEndPointFactory = PostManagerEndPointFactory()) {
+    init(provider: ProviderType = Provider(), deleteEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory()) {
         self.provider = provider
-        self.deleteEndPointFactory = deleteEndPointFactory
+        self.defaultPostManagerEndPointFactory = deleteEndPointFactory
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
@@ -41,7 +41,7 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func deletePlaybackVideo(boardID: Int) async -> Bool {
-        let endPoint = deleteEndPointFactory.deletePlaybackVideoEndpoint(boardID: boardID)
+        let endPoint = defaultPostManagerEndPointFactory.deletePlaybackVideoEndpoint(boardID: boardID)
         do {
             _ = try await provider.request(with: endPoint)
             return true

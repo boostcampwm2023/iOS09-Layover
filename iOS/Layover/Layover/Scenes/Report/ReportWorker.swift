@@ -20,16 +20,16 @@ final class ReportWorker: ReportWorkerProtocol {
 
     typealias Models = ReportModels
 
-    private let reportEndPointFactory: PostManagerEndPointFactory
+    private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
     private let provider: ProviderType
 
-    init(reportEndPointFactory: PostManagerEndPointFactory = PostManagerEndPointFactory(), provider: ProviderType = Provider()) {
-        self.reportEndPointFactory = reportEndPointFactory
+    init(reportEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), provider: ProviderType = Provider()) {
+        self.defaultPostManagerEndPointFactory = reportEndPointFactory
         self.provider = provider
     }
 
     func reportPlaybackVideo(boardID: Int, reportContent: String) async -> Bool {
-        let endPoint = reportEndPointFactory.reportPlaybackVideoEndpoint(boardID: boardID, reportType: reportContent)
+        let endPoint = defaultPostManagerEndPointFactory.reportPlaybackVideoEndpoint(boardID: boardID, reportType: reportContent)
         do {
             let responseData = try await provider.request(with: endPoint)
             guard let _ = responseData.data else {

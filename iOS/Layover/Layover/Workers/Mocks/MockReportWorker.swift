@@ -41,7 +41,7 @@ final class MockReportWorker: ReportWorkerProtocol {
             let endPoint = EndPoint<Response<ReportDTO>>(path: "/report",
                                                          method: .POST,
                                                          bodyParameters: bodyParameters)
-            let response = try await provider.request(with: endPoint)
+            let _ = try await provider.request(with: endPoint)
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)

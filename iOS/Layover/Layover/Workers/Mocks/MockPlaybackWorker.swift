@@ -19,7 +19,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     // MARK: - Methods
 
-    init(provider: ProviderType) {
+    init(provider: ProviderType = Provider(session: .initMockSession())) {
         self.provider = provider
     }
     
