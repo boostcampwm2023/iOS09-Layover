@@ -10,7 +10,6 @@ import MapKit
 import UIKit
 
 protocol MapDisplayLogic: AnyObject {
-    func displayFetchedVideos(viewModel: MapModels.FetchVideo.ViewModel)
     func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel)
     func routeToPlayback()
 }
@@ -67,7 +66,8 @@ final class MapViewController: BaseViewController {
     private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Models.DisplayedPost>(collectionView: carouselCollectionView) { collectionView, indexPath, item in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(url: item.videoURL)
+        cell.setVideo(url: item.videoURL)
+        cell.configure(thumbnailImageData: item.thumbnailImageData)
         return cell
     }
 
@@ -164,10 +164,10 @@ final class MapViewController: BaseViewController {
                 item.transform = CGAffineTransform(scaleX: scale, y: scale)
                 let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
                 if scale >= maximumZoomScale * 0.9 {
-                    cell?.loopingPlayerView.play()
+                    cell?.play()
                     self?.selectAnnotation(at: item.indexPath)
                 } else {
-                    cell?.loopingPlayerView.pause()
+                    cell?.pause()
                 }
             }
         }
@@ -199,7 +199,6 @@ final class MapViewController: BaseViewController {
             .first
         guard let focusedAnnotaion else { return }
         mapView.setCenter(focusedAnnotaion.coordinate, animated: true)
-        mapView.selectAnnotation(focusedAnnotaion, animated: true)
     }
 
     @objc private func searchButtonDidTap() {
@@ -285,13 +284,6 @@ extension MapViewController: VideoPickerDelegate {
 // MARK: - MapDisplayLogic
 
 extension MapViewController: MapDisplayLogic {
-
-    func displayFetchedVideos(viewModel: ViewModel) {
-        var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, ViewModel.VideoDataSource>()
-        snapshot.appendSections([UUID()])
-        snapshot.appendItems(viewModel.videoDataSources)
-//        carouselDatasource.apply(snapshot)
-    }
 
     func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel) {
         displayedPost = viewModel.displayedPosts
