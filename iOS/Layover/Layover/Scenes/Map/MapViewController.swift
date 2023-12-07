@@ -80,6 +80,7 @@ final class MapViewController: BaseViewController {
 
     private let videoPickerManager: VideoPickerManager = VideoPickerManager()
     private lazy var carouselCollectionViewHeight: NSLayoutConstraint = carouselCollectionView.heightAnchor.constraint(equalToConstant: 0)
+    private var displayedPost: [Models.DisplayedPost] = []
 
     // MARK: - Life Cycle
 
@@ -157,13 +158,14 @@ final class MapViewController: BaseViewController {
                                                         trailing: inset)
         section.visibleItemsInvalidationHandler = { (items, offset, environment) in
             let containerWidth = environment.container.contentSize.width
-            items.forEach { item in
+            items.forEach { [weak self] item in
                 let distanceFromCenter = abs((item.center.x - offset.x) - environment.container.contentSize.width / 2.0)
                 let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minumumZoomScale)
                 item.transform = CGAffineTransform(scaleX: scale, y: scale)
-                let cell = self.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
+                let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
                 if scale >= maximumZoomScale * 0.9 {
                     cell?.loopingPlayerView.play()
+                    self?.selectAnnotation(at: item.indexPath)
                 } else {
                     cell?.loopingPlayerView.pause()
                 }
@@ -175,6 +177,7 @@ final class MapViewController: BaseViewController {
     private func createMapAnnotation(post: Models.DisplayedPost) {
         let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: post.latitude,
                                                                          longitude: post.longitude),
+                                      boardID: post.boardID,
                                       thumbnailImageData: post.thumbnailImageData)
         mapView.addAnnotation(annotation)
     }
@@ -187,10 +190,15 @@ final class MapViewController: BaseViewController {
         }
     }
 
-    private func deleteCarouselDatasource() {
-        var snapshot: NSDiffableDataSourceSnapshot = carouselDatasource.snapshot()
-        snapshot.deleteAllItems()
-        carouselDatasource.apply(snapshot)
+    private func selectAnnotation(at indexPath: IndexPath) {
+        let focusedPost = displayedPost[indexPath.row]
+        let focusedAnnotaion = mapView.annotations
+            .map { $0 as? LOAnnotation }
+            .compactMap { $0 }
+            .filter { $0.boardID == focusedPost.boardID }
+            .first
+        guard let focusedAnnotaion else { return }
+        mapView.selectAnnotation(focusedAnnotaion, animated: true)
     }
 
     @objc private func searchButtonDidTap() {
@@ -229,11 +237,24 @@ extension MapViewController: MKMapViewDelegate {
         guard let annotation = view.annotation, !(annotation is MKUserLocation) else { return }
         mapView.setCenter(annotation.coordinate, animated: true)
         animateAnnotationSelection(for: view, isSelected: true)
+
+        if let annotaion = annotation as? LOAnnotation {
+            // 선택된 pin 정보와 datasource를 비교해 selected item을 찾음
+            let snapshot = carouselDatasource.snapshot()
+            guard let selectedItemIdentifiers = carouselDatasource.snapshot().itemIdentifiers.filter({ post in
+                return post.boardID == annotaion.boardID
+            }).first else { return }
+            guard let section = snapshot.sectionIdentifier(containingItem: selectedItemIdentifiers),
+                  let itemIndex = snapshot.indexOfItem(selectedItemIdentifiers),
+                  let sectionIndex = snapshot.indexOfSection(section) else { return }
+            carouselCollectionView.scrollToItem(at: IndexPath(item: itemIndex, section: sectionIndex),
+                                                at: .centeredHorizontally,
+                                                animated: true)
+        }
     }
 
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         animateAnnotationSelection(for: view, isSelected: false)
-        deleteCarouselDatasource()
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -272,6 +293,8 @@ extension MapViewController: MapDisplayLogic {
     }
 
     func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel) {
+        displayedPost = viewModel.displayedPosts
+
         var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()
         snapshot.appendSections([UUID()])
         snapshot.appendItems(viewModel.displayedPosts)

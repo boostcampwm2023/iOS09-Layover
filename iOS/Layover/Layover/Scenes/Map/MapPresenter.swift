@@ -40,7 +40,8 @@ final class MapPresenter: MapPresentationLogic {
         let displayedPost = response.posts
             .map { post -> Models.DisplayedPost? in
                 if let videoURL = post.board.videoURL {
-                    return .init(thumbnailImageData: post.thumnailImageData,
+                    return .init(boardID: post.board.identifier,
+                                 thumbnailImageData: post.thumnailImageData,
                                  videoURL: videoURL,
                                  latitude: post.board.latitude,
                                  longitude: post.board.longitude)
