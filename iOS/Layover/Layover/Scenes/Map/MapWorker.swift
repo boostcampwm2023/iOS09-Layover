@@ -32,10 +32,9 @@ final class MapWorker: MapWorkerProtocol {
         let endPoint = postEndPointFactory.makeMapPostListEndPoint(latitude: latitude, longitude: longitude)
         do {
             let response = try await provider.request(with: endPoint)
-            guard var data = response.data else { return nil }
-
-            let posts = try await data.asyncMap { postDTO -> Models.Post in
-                let thumnailImageData = try await provider.request(url: postDTO.board.videoThumbnailURL)
+            guard let data = response.data else { return nil }
+            let posts = try await data.concurrentMap { postDTO -> Models.Post in
+                let thumnailImageData = try await self.provider.request(url: postDTO.board.videoThumbnailURL)
                 return .init(member: postDTO.member.toDomain(),
                              board: postDTO.board.toDomain(),
                              tag: postDTO.tag,
