@@ -177,17 +177,15 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request) {
-        guard let prevCell,
-              let playbackView = prevCell.playbackView
-        else { return }
-        let willMoveLocation: Float64 = request.currentLocation * playbackView.getDuration()
+        guard let prevCell else { return }
+        let willMoveLocation: Float64 = request.currentLocation * prevCell.playbackView.getDuration()
         let response: Models.SeekVideo.Response = Models.SeekVideo.Response(willMoveLocation: willMoveLocation, curCell: prevCell)
         presenter?.presentSeekVideo(with: response)
     }
 
     func hidePlayerSlider() {
         guard let prevCell else { return }
-        prevCell.playbackView?.playerSlider?.isHidden = true
+        prevCell.playbackView.playerSlider?.isHidden = true
     }
 
     func setSeeMoreButton() {
@@ -216,6 +214,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func resumeVideo() {
         guard let prevCell else { return }
-        prevCell.playbackView?.playPlayer()
+        prevCell.playbackView.playPlayer()
     }
 }
