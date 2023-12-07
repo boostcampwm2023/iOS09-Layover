@@ -32,7 +32,7 @@ export class BoardRepository {
       .where(`ST_Distance_Sphere(point(:longitude, :latitude), point(board.longitude, board.latitude)) < :distance`, {
         longitude,
         latitude,
-        distance: 500000, // 500km
+        distance: 10000, // 10km
       })
       .andWhere("board.status = 'COMPLETE'")
       .getMany();
