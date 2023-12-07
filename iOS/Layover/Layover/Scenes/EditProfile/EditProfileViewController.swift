@@ -86,6 +86,7 @@ final class EditProfileViewController: BaseViewController {
         let button = LOButton(style: .basic)
         button.isEnabled = false
         button.setTitle("완료", for: .normal)
+        button.addTarget(self, action: #selector(confirmButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -215,7 +216,7 @@ final class EditProfileViewController: BaseViewController {
         self.present(phPickerViewController, animated: true)
     }
 
-    @objc private func completeButtonDidTap() {
+    @objc private func confirmButtonDidTap() {
         guard let nickname = nicknameTextfield.text,
               let introduce = introduceTextfield.text
         else { return }
