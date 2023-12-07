@@ -22,10 +22,11 @@ export class OauthService {
     private readonly redisClient: ReturnType<typeof createClient>,
   ) {}
 
-  async getMemberIdByAccessToken(url: string, accessToken: string): Promise<string> {
+  async getMemberIdByKakaoAccessToken(accessToken: string): Promise<string> {
+    const kakaoUserInfoURL = 'https://kapi.kakao.com/v2/user/me';
     const observableRes = this.httpService
       .post(
-        url,
+        kakaoUserInfoURL,
         {},
         {
           headers: {
@@ -49,8 +50,7 @@ export class OauthService {
   }
 
   async getKakaoMemberHash(accessToken: string): Promise<string> {
-    const kakaoUserInfoURL = 'https://kapi.kakao.com/v2/user/me';
-    const memberId = await this.getMemberIdByAccessToken(kakaoUserInfoURL, accessToken);
+    const memberId = await this.getMemberIdByKakaoAccessToken(accessToken);
     return hashSHA256(memberId + 'kakao'); // kakao 내에선 유일하겠지만 apple과 겹칠 수 있어서 뒤에 스트링 하나 추가
   }
 
@@ -62,11 +62,15 @@ export class OauthService {
   }
 
   async verifyAppleIdentityToken(identityToken: string) {
-    await verifyJwtToken(identityToken);
+    try {
+      await verifyJwtToken(identityToken);
+    } catch (e) {
+      throw new CustomResponse(ECustomCode.OAUTH07);
+    }
   }
 
-  isMemberExistByHash(hash: string): Promise<boolean> {
-    return this.memberService.isMemberExistByHash(hash);
+  async isMemberExistByHash(hash: string): Promise<boolean> {
+    return await this.memberService.isMemberExistByHash(hash);
   }
 
   async isExistUsername(username: string) {
