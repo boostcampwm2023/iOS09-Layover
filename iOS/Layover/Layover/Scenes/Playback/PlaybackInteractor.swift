@@ -16,13 +16,14 @@ protocol PlaybackBusinessLogic {
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
-    func moveToBack()
+    func resetVideo()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
     func setSeeMoreButton()
     @discardableResult
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
+    func reRunVideo()
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -30,6 +31,7 @@ protocol PlaybackDataStore: AnyObject {
     var prevCell: PlaybackCell? { get set }
     var index: Int? { get set }
     var isTeleport: Bool? { get set }
+    var isDelete: Bool? { get set }
     var posts: [Post]? { get set }
 }
 
@@ -49,6 +51,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     var index: Int?
 
     var isTeleport: Bool?
+
+    var isDelete: Bool?
 
     var posts: [Post]?
 
@@ -132,14 +136,29 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        guard let isTeleport,
-              let posts else { return }
-        if isTeleport {
-            if request.indexPathRow == 1 || request.indexPathRow == (posts.count - 2) {
-                let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+//        guard let isTeleport,
+//              let posts,
+//              let isDelete
+//        else { return }
+        guard let posts else { return }
+        var response: Models.DisplayPlaybackVideo.Response
+        if let isTeleport {
+            if isTeleport {
+                if request.indexPathRow == 1 || request.indexPathRow == (posts.count - 2) {
+                    response = Models.DisplayPlaybackVideo.Response(prevCell: prevCell, curCell: request.curCell)
+                    prevCell = request.curCell
+                    presenter?.presentMoveCellNext(with: response)
+                    self.isTeleport = false
+                }
+            }
+        }
+
+        if let isDelete {
+            if isDelete {
+                response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: request.curCell)
                 prevCell = request.curCell
                 presenter?.presentMoveCellNext(with: response)
-                self.isTeleport = false
+                self.isDelete = false
             }
         }
     }
@@ -149,7 +168,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         presenter?.presentLeavePlaybackView(with: response)
     }
 
-    func moveToBack() {
+    func resetVideo() {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(prevCell: nil, curCell: prevCell)
         presenter?.presentResetPlaybackCell(with: response)
     }
@@ -188,10 +207,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     // MARK: - UseCase Delete Video
 
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
-        Task {
+        isDelete = true
+        return Task {
             guard let prevCell,
                   let worker
-            else { return false}
+            else { return false }
             let result: Bool = await worker.deletePlaybackVideo(boardID: prevCell.boardID)
             let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
             await MainActor.run {
@@ -199,5 +219,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             }
             return result
         }
+    }
+
+    func reRunVideo() {
+        guard let prevCell else { return }
+        prevCell.playbackView.playPlayer()
     }
 }

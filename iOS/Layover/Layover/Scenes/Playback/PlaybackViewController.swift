@@ -102,7 +102,7 @@ final class PlaybackViewController: BaseViewController {
         super.viewWillDisappear(animated)
         interactor?.leavePlaybackView()
         if isMovingFromParent {
-            interactor?.moveToBack()
+            interactor?.resetVideo()
         }
     }
 
@@ -137,7 +137,10 @@ final class PlaybackViewController: BaseViewController {
             [weak self] _ in
             self?.router?.routeToReport()
         })
-        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
+            [weak self] _ in
+            self?.interactor?.reRunVideo()
+        })
         alert.addAction(reportAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: {
@@ -156,7 +159,10 @@ final class PlaybackViewController: BaseViewController {
             [weak self] _ in
             self?.interactor?.deleteVideo(with: request)
         })
-        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
+            [weak self] _ in
+            self?.interactor?.reRunVideo()
+        })
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: {
@@ -258,6 +264,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel) {
+        interactor?.resetVideo()
         guard let dataSource else { return }
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([viewModel.playbackVideo])
