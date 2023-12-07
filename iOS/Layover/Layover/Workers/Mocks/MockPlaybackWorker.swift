@@ -1,35 +1,28 @@
 //
-//  PlaybackWorker.swift
+//  MockPlaybackWorker.swift
 //  Layover
 //
-//  Created by 황지웅 on 11/17/23.
+//  Created by 황지웅 on 12/7/23.
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import OSLog
 
-protocol PlaybackWorkerProtocol {
-    func deletePlaybackVideo(boardID: Int) async -> Bool
-    func makeInfiniteScroll(posts: [Post]) -> [Post]
-}
-
-final class PlaybackWorker: PlaybackWorkerProtocol {
+final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     // MARK: - Properties
 
     typealias Models = PlaybackModels
 
     private let provider: ProviderType
-    private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory()) {
+    init(provider: ProviderType = Provider(session: .initMockSession())) {
         self.provider = provider
-        self.defaultPostManagerEndPointFactory = defaultPostManagerEndPointFactory
     }
-
+    
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
         var tempVideos: [Post] = posts
         let tempFirstCellIndex: Int = posts.count == 1 ? 1 : 0
@@ -41,12 +34,24 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func deletePlaybackVideo(boardID: Int) async -> Bool {
-        let endPoint = defaultPostManagerEndPointFactory.deletePlaybackVideoEndpoint(boardID: boardID)
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil)
+            return (response, nil, nil)
+        }
+
         do {
+            let endPoint = EndPoint<Response<EmptyData>>(
+                path: "/board",
+                method: .DELETE,
+                queryParameters: ["boardId": boardID])
             _ = try await provider.request(with: endPoint)
             return true
         } catch {
-            os_log(.error, log: .data, "Failed to delete with error: %@", error.localizedDescription)
+            os_log(.error, log: .data, "Failed to delete with error%@", error.localizedDescription)
             return false
         }
     }

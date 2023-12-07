@@ -20,9 +20,11 @@ protocol PlaybackDisplayLogic: AnyObject {
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
-    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
+    func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
+    func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
+    func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -45,6 +47,14 @@ final class PlaybackViewController: BaseViewController {
     // MARK: - Properties
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>?
+
+    private let seemoreButton: UIBarButtonItem = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        let barButtonItem: UIBarButtonItem = UIBarButtonItem(customView: button)
+        barButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
+        return barButtonItem
+    }()
 
     typealias Models = PlaybackModels
     var router: (NSObjectProtocol & PlaybackRoutingLogic & PlaybackDataPassing)?
@@ -92,7 +102,7 @@ final class PlaybackViewController: BaseViewController {
         super.viewWillDisappear(animated)
         interactor?.leavePlaybackView()
         if isMovingFromParent {
-            interactor?.moveToBack()
+            interactor?.resetVideo()
         }
     }
 
@@ -117,15 +127,47 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
+        interactor?.setSeeMoreButton()
+        self.navigationController?.navigationBar.tintColor = .layoverWhite
     }
 
-    @objc private func didChangedSliderValue(_ sender: LOSlider) {
-        let request: Models.SeekVideo.Request = Models.SeekVideo.Request(currentLocation: Float64(sender.value))
-        interactor?.controlPlaybackMovie(with: request)
+    @objc private func reportButtonDidTap() {
+        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
+            [weak self] _ in
+            self?.router?.routeToReport()
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
+            [weak self] _ in
+            self?.interactor?.resumeVideo()
+        })
+        alert.addAction(reportAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: {
+            self.interactor?.leavePlaybackView()
+        })
     }
 
-    private func moveToBackViewController() {
-        interactor?.moveToBack()
+    @objc private func deleteButtonDidTap() {
+        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
+        if visibleIndexPaths.count > 1 { return }
+        guard let currentItemIndex = visibleIndexPaths.first else { return }
+        guard let currentItem = dataSource?.itemIdentifier(for: currentItemIndex) else { return }
+        let request: Models.DeletePlaybackVideo.Request = Models.DeletePlaybackVideo.Request(playbackVideo: currentItem)
+        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let deleteAction: UIAlertAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
+            [weak self] _ in
+            self?.interactor?.deleteVideo(with: request)
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
+            [weak self] _ in
+            self?.interactor?.resumeVideo()
+        })
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: {
+            self.interactor?.leavePlaybackView()
+        })
     }
 }
 
@@ -203,13 +245,31 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         viewModel.curCell.playbackView?.playPlayer()
     }
 
-    func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
+    func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         var curCell = viewModel.curCell
         curCell?.resetObserver()
         curCell?.playbackView?.resetPlayer()
         curCell = nil
     }
 
+    func setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel) {
+        guard let button = seemoreButton.customView as? UIButton else { return }
+        switch viewModel.buttonType {
+        case .delete:
+            button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
+        case .report:
+            button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+        }
+        self.navigationItem.rightBarButtonItem = seemoreButton
+    }
+
+    func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel) {
+        interactor?.resetVideo()
+        guard let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteItems([viewModel.playbackVideo])
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
 }
 
 extension PlaybackViewController: UICollectionViewDelegateFlowLayout {

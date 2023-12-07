@@ -21,6 +21,8 @@ protocol PlaybackPresentationLogic {
     func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response)
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
+    func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response)
+    func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -97,7 +99,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
 
     func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
         let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
-        viewController?.routeToBack(viewModel: viewModel)
+        viewController?.resetVideo(viewModel: viewModel)
     }
 
     // MARK: - UseCase Configure Playback Cell
@@ -112,5 +114,16 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
         let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, curCell: response.curCell)
         viewController?.seekVideo(viewModel: viewModel)
+    }
+
+    func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response) {
+        let buttonType: Models.SetSeemoreButton.ButtonType = response.parentView == .myProfile ? .delete : .report
+        viewController?.setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel(buttonType: buttonType))
+    }
+
+    func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response) {
+        let deleteMessage: Models.DeletePlaybackVideo.DeleteMessage = response.result ? .success : .fail
+        let viewModel: Models.DeletePlaybackVideo.ViewModel = Models.DeletePlaybackVideo.ViewModel(deleteMessage: deleteMessage, playbackVideo: response.playbackVideo)
+        viewController?.deleteVideo(viewModel: viewModel)
     }
 }

@@ -64,5 +64,6 @@ final class ProfileRouter: ProfileRoutingLogic, ProfileDataPassing {
     private func passDataToPlayback(source: ProfileDataStore, destination: inout PlaybackDataStore) {
         destination.posts = source.posts
         destination.index = source.playbackStartIndex
+        destination.parentView = .myProfile
     }
 }
