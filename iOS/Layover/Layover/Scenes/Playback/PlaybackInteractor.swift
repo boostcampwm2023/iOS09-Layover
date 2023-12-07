@@ -200,11 +200,12 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
         isDelete = true
+        guard let prevCell,
+              let worker
+        else { return Task { false } }
+        guard let boardID = prevCell.boardID else { return Task { false } }
         return Task {
-            guard let prevCell,
-                  let worker
-            else { return false }
-            let result: Bool = await worker.deletePlaybackVideo(boardID: prevCell.boardID)
+            let result: Bool = await worker.deletePlaybackVideo(boardID: boardID)
             let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
             await MainActor.run {
                 presenter?.presentDeleteVideo(with: response)
@@ -215,6 +216,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func resumeVideo() {
         guard let prevCell else { return }
-        prevCell.playbackView.playPlayer()
+        prevCell.playbackView?.playPlayer()
     }
 }
