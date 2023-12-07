@@ -20,10 +20,10 @@ final class ReportWorker: ReportWorkerProtocol {
 
     typealias Models = ReportModels
 
-    private let reportEndPointFactory: DeleteReportEndFactory
+    private let reportEndPointFactory: PostManagerEndPointFactory
     private let provider: ProviderType
 
-    init(reportEndPointFactory: DeleteReportEndFactory = DefaultDeleteReportEndPointFactory(), provider: ProviderType = Provider()) {
+    init(reportEndPointFactory: PostManagerEndPointFactory = PostManagerEndPointFactory(), provider: ProviderType = Provider()) {
         self.reportEndPointFactory = reportEndPointFactory
         self.provider = provider
     }

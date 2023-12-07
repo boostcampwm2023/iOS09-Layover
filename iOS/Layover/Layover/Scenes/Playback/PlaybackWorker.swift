@@ -21,11 +21,11 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     typealias Models = PlaybackModels
 
     private let provider: ProviderType
-    private let deleteEndPointFactory: DeleteReportEndFactory
+    private let deleteEndPointFactory: PostManagerEndPointFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), deleteEndPointFactory: DeleteReportEndFactory = DefaultDeleteReportEndPointFactory()) {
+    init(provider: ProviderType = Provider(), deleteEndPointFactory: PostManagerEndPointFactory = PostManagerEndPointFactory()) {
         self.provider = provider
         self.deleteEndPointFactory = deleteEndPointFactory
     }

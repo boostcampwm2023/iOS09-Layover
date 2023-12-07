@@ -16,15 +16,13 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     typealias Models = PlaybackModels
 
     private let provider: ProviderType
-    private let deleteendPointFactory: DeleteReportEndFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(session: .initMockSession()), deleteendPointFactory: DeleteReportEndFactory = DefaultDeleteReportEndPointFactory()) {
+    init(provider: ProviderType) {
         self.provider = provider
-        self.deleteendPointFactory = deleteendPointFactory
     }
-
+    
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
         var tempVideos: [Post] = posts
         let tempFirstCellIndex: Int = posts.count == 1 ? 1 : 0
@@ -50,7 +48,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
                 path: "/board",
                 method: .DELETE,
                 queryParameters: ["boardId": boardID])
-            let result = try await provider.request(with: endPoint)
+            _ = try await provider.request(with: endPoint)
             return true
         } catch {
             os_log(.error, log: .data, "Failed to delete with error%@", error.localizedDescription)

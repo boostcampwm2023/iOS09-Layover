@@ -1,5 +1,5 @@
 //
-//  ReportEndPointFactory.swift
+//  PostManagerEndPointFactory.swift
 //  Layover
 //
 //  Created by 황지웅 on 12/5/23.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol DeleteReportEndFactory {
+protocol PostManagerEndPointFactory {
     func reportPlaybackVideoEndpoint(boardID: Int, reportType: String) -> EndPoint<Response<ReportDTO>>
     func deletePlaybackVideoEndpoint(boardID: Int) -> EndPoint<Response<EmptyData>>
 }
 
-struct DefaultDeleteReportEndPointFactory: DeleteReportEndFactory {
+struct DefaultPostManagerEndPointFactory: PostManagerEndPointFactory {
     func reportPlaybackVideoEndpoint(boardID: Int, reportType: String) -> EndPoint<Response<ReportDTO>> {
         let bodyParmeters: ReportDTO = ReportDTO(
             memberId: nil,

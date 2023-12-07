@@ -269,7 +269,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([viewModel.playbackVideo])
         dataSource.apply(snapshot, animatingDifferences: true)
-        // TODO: 영상 재생 관련 처리
     }
 }
 
