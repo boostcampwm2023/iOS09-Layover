@@ -11,7 +11,13 @@ import AVFoundation
 
 final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
-    private(set) var loopingPlayerView = LoopingPlayerView()
+    private let loopingPlayerView = LoopingPlayerView()
+
+    private let thumbnailImageView: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,21 +31,42 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         render()
     }
 
-    func configure(url: URL) {
+    func setVideo(url: URL) {
+        loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: url,
                                        timeRange: CMTimeRange(start: .zero, duration: CMTime(value: 1800, timescale: 600)))
         loopingPlayerView.player?.isMuted = true
     }
 
+    func configure(thumbnailImageData: Data) {
+        thumbnailImageView.image = UIImage(data: thumbnailImageData)
+    }
+
+    func play() {
+        loopingPlayerView.play()
+        thumbnailImageView.isHidden = true
+    }
+
+    func pause() {
+        loopingPlayerView.pause()
+        thumbnailImageView.isHidden = false
+    }
+
+
     private func setUI() {
         backgroundColor = .background
-        contentView.addSubview(loopingPlayerView)
-        loopingPlayerView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubviews(loopingPlayerView, thumbnailImageView)
+        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             loopingPlayerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             loopingPlayerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             loopingPlayerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            loopingPlayerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 

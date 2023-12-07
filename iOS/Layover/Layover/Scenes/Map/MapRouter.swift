@@ -32,7 +32,7 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
               let destination = playbackViewController.router?.dataStore
         else { return }
         destination.parentView = .other
-        destination.index = source.index
+        destination.index = source.postPlayStartIndex
         destination.posts = source.posts
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
