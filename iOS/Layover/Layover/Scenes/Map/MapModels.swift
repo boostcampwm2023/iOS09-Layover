@@ -13,8 +13,8 @@ enum MapModels {
     struct Post {
         let member: Member
         let board: Board
-        let tag: [String]
-        let thumnailImageData: Data
+        let tags: [String]
+        let thumbnailImageData: Data
     }
 
     struct DisplayedPost: Hashable {
