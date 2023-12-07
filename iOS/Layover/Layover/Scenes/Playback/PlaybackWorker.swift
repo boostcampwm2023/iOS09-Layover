@@ -31,9 +31,10 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
+        guard let tempLastVideo: Post = posts.last,
+              let tempFirstVideo: Post = posts.first
+        else { return posts }
         var tempVideos: [Post] = posts
-        let tempLastVideo: Post = posts[posts.count - 1]
-        let tempFirstVideo: Post = posts[0]
         tempVideos.insert(tempLastVideo, at: 0)
         tempVideos.append(tempFirstVideo)
         return tempVideos
