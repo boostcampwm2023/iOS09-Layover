@@ -93,14 +93,12 @@ final class PlaybackView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
-//        addDescriptionAnimateGesture()
         setPlayerView()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setUI()
-//        addDescriptionAnimateGesture()
         setPlayerView()
     }
 
