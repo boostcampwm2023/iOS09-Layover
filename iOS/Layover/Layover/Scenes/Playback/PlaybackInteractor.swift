@@ -62,7 +62,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         guard let parentView: Models.ParentView else { return }
         guard var posts: [Post] else { return }
         guard let worker else { return }
-        if parentView != .home {
+        if parentView == .other {
             posts = worker.makeInfiniteScroll(posts: posts)
             self.posts = posts
         }
@@ -74,9 +74,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
         guard let parentView else { return }
         switch parentView {
-        case .home:
+        case .home, .myProfile:
             presenter?.presentMoveInitialPlaybackCell(with: response)
-        case .other, .myProfile:
+        case .other:
             presenter?.presentSetCellIfInfinite()
         }
     }
@@ -86,9 +86,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
               let index else { return }
         let response: Models.SetInitialPlaybackCell.Response
         switch parentView {
-        case .home:
+        case .home, .myProfile:
             response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
-        case .other, .myProfile:
+        case .other:
             response = Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1)
         }
         presenter?.presentSetInitialPlaybackCell(with: response)
@@ -112,7 +112,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             return
         }
         // Home이 아닌 다른 뷰에서 왔을 경우(로드한 목록 무한 반복)
-        if parentView == .other || parentView == .myProfile {
+        if parentView == .other {
             if request.indexPathRow == (posts.count - 1) {
                 response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, prevCell: prevCell, curCell: nil)
             } else if request.indexPathRow == 0 {
@@ -136,10 +136,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-//        guard let isTeleport,
-//              let posts,
-//              let isDelete
-//        else { return }
         guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
         if let isTeleport {
