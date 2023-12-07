@@ -90,7 +90,7 @@ export class OauthController {
     await this.oauthService.verifyAppleIdentityToken(appleLoginDto.identityToken);
 
     // memberHash 구하기
-    const memberHash = await this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
+    const memberHash = this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
 
     // memberHash를 기준으로 회원가입 여부 확인
     const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
@@ -142,6 +142,9 @@ export class OauthController {
   @Post('signup/apple')
   async processAppleSignup(@Body() appleSignupDto: AppleSignupDto) {
     const [identityToken, username] = [appleSignupDto.identityToken, appleSignupDto.username];
+
+    // identity token 검증
+    await this.oauthService.verifyAppleIdentityToken(identityToken);
 
     // memberHash 구하기
     const memberHash = this.oauthService.getAppleMemberHash(identityToken);
