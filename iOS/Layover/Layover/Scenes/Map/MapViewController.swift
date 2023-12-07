@@ -74,7 +74,6 @@ final class MapViewController: BaseViewController {
     // MARK: - Properties
 
     typealias Models = MapModels
-    typealias ViewModel = Models.FetchVideo.ViewModel
     var interactor: MapBusinessLogic?
     var router: (MapRoutingLogic & MapDataPassing)?
 

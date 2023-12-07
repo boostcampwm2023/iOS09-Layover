@@ -26,25 +26,6 @@ enum MapModels {
     }
 
     // MARK: - Fetch Video Use Cases
-    enum FetchVideo {
-        struct Request {
-            var latitude: Double
-            var longitude: Double
-        }
-
-        struct Response {
-            var videoURLs: [URL]
-        }
-
-        struct ViewModel {
-            var videoDataSources: [VideoDataSource]
-
-            struct VideoDataSource: Hashable {
-                var id = UUID()
-                var videoURL: URL
-            }
-        }
-    }
 
     enum FetchPosts {
         struct Request {
@@ -58,11 +39,6 @@ enum MapModels {
 
         struct ViewModel {
             var displayedPosts: [DisplayedPost]
-
-//            struct VideoDataSource: Hashable {
-//                var id = UUID()
-//                var videoURL: URL
-//            }
         }
     }
 
