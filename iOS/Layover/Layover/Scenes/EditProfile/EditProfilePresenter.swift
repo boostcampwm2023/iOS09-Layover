@@ -10,8 +10,8 @@ import UIKit
 
 protocol EditProfilePresentationLogic {
     func presentProfile(with response: EditProfileModels.FetchProfile.Response)
+    func presentProfile(with response: EditProfileModels.EditProfile.Response)
     func presentProfileState(with response: EditProfileModels.ChangeProfile.Response)
-
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response)
 }
 
@@ -31,9 +31,13 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
         viewController?.displayProfile(with: viewModel)
     }
 
+    func presentProfile(with response: EditProfileModels.EditProfile.Response) {
+        viewController?.displayProfileEditCompleted(with: Models.EditProfile.ViewModel())
+    }
+
     func presentProfileState(with response: Models.ChangeProfile.Response) {
-        let viewModel = Models.ChangeProfile.ViewModel(nicknameAlertDescription: response.newNicknameState.description,
-                                                       introduceAlertDescription: response.newIntroduceState.description,
+        let viewModel = Models.ChangeProfile.ViewModel(nicknameAlertDescription: response.nicknameAlertDescription,
+                                                       introduceAlertDescription: response.introduceAlertDescription,
                                                        canCheckNicknameDuplication: response.canCheckNicknameDuplication,
                                                        canEditProfile: response.canEditProfile)
 
@@ -41,7 +45,9 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     }
 
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response) {
-        return
+        let viewModel = Models.CheckNicknameDuplication.ViewModel(isValidNickname: response.isValid,
+                                                                  canEditProfile: response.canEditProfile)
+        viewController?.displayNicknameDuplication(with: viewModel)
     }
 
 }

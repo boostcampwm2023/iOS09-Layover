@@ -194,12 +194,11 @@ final class MockUserWorker: UserWorkerProtocol {
         }
     }
 
-    func modifyProfileImage(from fileURL: URL, to url: String) async -> Bool {
-        return true
+    func modifyProfileImage(data: Data, to url: String) async -> Bool {
+        true
     }
 
     func fetchImagePresignedURL(with fileType: String) async -> String? {
         return nil
     }
-
 }

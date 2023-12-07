@@ -32,7 +32,9 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
     var userWorker: UserWorkerProtocol?
     var presenter: EditProfilePresentationLogic?
 
-    private var isChangedProfileImage = false
+    private var didCheckedNicknameDuplicate = true
+    private var nicknameState: NicknameState = .valid
+    private var introduceState: Models.ChangeProfile.IntroduceLengthState = .valid
 
     // MARK: - Data Store
 
@@ -44,28 +46,46 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
     func fetchProfile(with request: EditProfileModels.FetchProfile.Request) {
         presenter?.presentProfile(with: EditProfileModels.FetchProfile.Response(nickname: nickname,
-                                                                               introduce: introduce,
-                                                                               profileImageData: profileImageData))
+                                                                                introduce: introduce,
+                                                                                profileImageData: profileImageData))
     }
 
     func changeProfile(with request: Models.ChangeProfile.Request) {
-        let changedNicknameState = userWorker?.validateNickname(request.nickname ?? "")
-        let changedIntroduceState = introduceLengthState(of: request.introduce ?? "", by: request.validIntroduceLength)
+        let response: Models.ChangeProfile.Response
 
-        // 닉네임이 변경되었는지, 변경되었다면 변경된 닉네임이 유효한지
-        let canCheckNicknameDuplication = nickname != request.nickname
-                                        && changedNicknameState == .valid
+        switch request.changedProfileComponent {
+        case .nickname(let changedNickname):
+            didCheckedNicknameDuplicate = changedNickname == nickname
+            nicknameState = userWorker?.validateNickname(changedNickname ?? "") ?? .invalidCharacter
 
-        // 이미지, 닉네임과 자기소개 중 하나라도 변경되었고, 변경된 닉네임과 자기소개가 유효한지
-        let canEditProfile = changedNicknameState == .valid && changedIntroduceState == .valid
-        && (nickname != request.nickname || introduce != request.introduce || request.profileImageData != nil)
+            response = Models.ChangeProfile.Response(nicknameAlertDescription: nicknameState != .valid ? nicknameState.description : nil,
+                                                         introduceAlertDescription: nil,
+                                                         canCheckNicknameDuplication: (nicknameState == .valid && changedNickname != nickname),
+                                                         canEditProfile: false)
 
+        case .introduce(let changedIntroduce):
+            introduceState = introduceLengthState(of: changedIntroduce ?? "", by: request.validIntroduceLength)
+            let canEditProfile = changedIntroduce != introduce
+                                && introduceState == .valid
+                                && nicknameState == .valid
+                                && didCheckedNicknameDuplicate
 
-        let response = Models.ChangeProfile.Response(newNicknameState: userWorker?.validateNickname(request.nickname ?? "") ?? .valid,
-                                                     newIntroduceState: introduceLengthState(of: request.introduce ?? "",
-                                                                                    by: request.validIntroduceLength),
-                                                     canCheckNicknameDuplication: canCheckNicknameDuplication,
+            let introduceAlertDescription = introduce == changedIntroduce || introduceState == .valid ? nil : introduceState.description
+
+            response = Models.ChangeProfile.Response(nicknameAlertDescription: nil,
+                                                     introduceAlertDescription: introduceAlertDescription,
+                                                     canCheckNicknameDuplication: nil,
                                                      canEditProfile: canEditProfile)
+
+        case .profileImage(_):
+            let canEditProfile = didCheckedNicknameDuplicate
+                                && nicknameState == .valid
+                                && introduceState == .valid
+            response = Models.ChangeProfile.Response(nicknameAlertDescription: nil,
+                                                     introduceAlertDescription: nil,
+                                                     canCheckNicknameDuplication: nil,
+                                                     canEditProfile: canEditProfile)
+        }
 
         presenter?.presentProfileState(with: response)
     }
@@ -76,8 +96,10 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
                 os_log(.error, log: .data, "checkDuplication Server Error")
                 return
             }
+            didCheckedNicknameDuplicate = response
+            let canEditProfile = didCheckedNicknameDuplicate && nicknameState == .valid && introduceState == .valid
             await MainActor.run {
-                presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isValid: response))
+                presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isValid: response, canEditProfile: canEditProfile))
             }
         }
     }
@@ -94,20 +116,20 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             }
 
             // 프로필 이미지 바꾼 경우
-            guard let modifiedProfileImageURL = request.profileImageURL, modifiedProfileImageURL.isFileURL,
-               let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: modifiedProfileImageURL.pathExtension),
-               let modifyProfileImageResponse = await userWorker?.modifyProfileImage(from: modifiedProfileImageURL,
-                                                                                     to: presignedUploadURL),
-               modifyProfileImageResponse == true else {
+            guard let modifiedProfileImageData = request.profileImageData,
+                  let modifiedProfileImageExtension = request.profileImageExtension,
+                  let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: modifiedProfileImageExtension),
+                  let modifyProfileImageResponse = await userWorker?.modifyProfileImage(data: modifiedProfileImageData,
+                                                                                        to: presignedUploadURL),
+                  modifyProfileImageResponse == true
+            else {
                 os_log(.error, log: .data, "Edit ProfileImage Error")
                 return false
             }
 
-//            await MainActor.run {
-//                presenter?.presentProfile(with: Models.EditProfile.Response(nickname: request.nickname,
-//                                                                            introduce: request.introduce ?? "",
-//                                                                            profileImageURL: URL(string: presignedUploadURL)))
-//            }
+            await MainActor.run {
+                presenter?.presentProfile(with: Models.EditProfile.Response())
+            }
             return true
         }
     }

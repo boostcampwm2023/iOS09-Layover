@@ -28,6 +28,8 @@ enum EditProfileModels {
     }
 
     enum ChangeProfile {
+        static let introduceLengthLimit = 30
+
         enum IntroduceLengthState: CustomStringConvertible {
             case overLength
             case valid
@@ -35,31 +37,35 @@ enum EditProfileModels {
             var description: String {
                 switch self {
                 case .overLength:
-                    return "자기소개는 30자 이내로 입력해주세요."
+                    return "자기소개는 \(introduceLengthLimit)자 이내로 입력해주세요."
                 case .valid:
                     return ""
                 }
             }
         }
 
+        enum ChangedProfileComponent {
+            case nickname(String?)
+            case introduce(String?)
+            case profileImage(Data?)
+        }
+
         struct Request {
-            let nickname: String?
-            let introduce: String?
-            let profileImageData: Data?
-            let validIntroduceLength: Int = 50 // default value
+            let changedProfileComponent: ChangedProfileComponent
+            let validIntroduceLength: Int = introduceLengthLimit
         }
 
         struct Response {
-            let newNicknameState: NicknameState
-            let newIntroduceState: IntroduceLengthState
-            let canCheckNicknameDuplication: Bool
+            let nicknameAlertDescription: String?
+            let introduceAlertDescription: String?
+            let canCheckNicknameDuplication: Bool?
             let canEditProfile: Bool
         }
 
         struct ViewModel {
-            let nicknameAlertDescription: String
-            let introduceAlertDescription: String
-            let canCheckNicknameDuplication: Bool
+            let nicknameAlertDescription: String?
+            let introduceAlertDescription: String?
+            let canCheckNicknameDuplication: Bool?
             let canEditProfile: Bool
         }
     }
@@ -70,9 +76,11 @@ enum EditProfileModels {
         }
         struct Response {
             let isValid: Bool
+            let canEditProfile: Bool
         }
         struct ViewModel {
             let isValidNickname: Bool
+            let canEditProfile: Bool
             var alertDescription: String {
                 isValidNickname ? "사용가능한 닉네임입니다." : "사용중인 닉네임입니다."
             }
@@ -83,17 +91,14 @@ enum EditProfileModels {
         struct Request {
             let nickname: String
             let introduce: String?
-            let profileImageURL: URL?
+            let profileImageData: Data?
+            let profileImageExtension: String?
         }
 
         struct Response {
-            let nickname: String
-            let introduce: String?
-            let profileImageURL: URL?
         }
 
         struct ViewModel {
-
         }
     }
 
