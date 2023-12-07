@@ -25,9 +25,9 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), deleteEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory()) {
+    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory()) {
         self.provider = provider
-        self.defaultPostManagerEndPointFactory = deleteEndPointFactory
+        self.defaultPostManagerEndPointFactory = defaultPostManagerEndPointFactory
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
