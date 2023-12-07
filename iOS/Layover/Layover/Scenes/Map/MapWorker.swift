@@ -34,11 +34,11 @@ final class MapWorker: MapWorkerProtocol {
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
             let posts = try await data.concurrentMap { postDTO -> Models.Post in
-                let thumnailImageData = try await self.provider.request(url: postDTO.board.videoThumbnailURL)
+                let thumbnailImageData = try await self.provider.request(url: postDTO.board.videoThumbnailURL)
                 return .init(member: postDTO.member.toDomain(),
                              board: postDTO.board.toDomain(),
-                             tag: postDTO.tag,
-                             thumnailImageData: thumnailImageData)
+                             tags: postDTO.tag,
+                             thumbnailImageData: thumbnailImageData)
             }
             return posts
         } catch {

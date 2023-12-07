@@ -74,7 +74,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             do {
                 let image = try await generator.image(at: .zero).image
                 await MainActor.run {
-                    presenter?.presentThumnailImage(with: Models.FetchThumbnail.Response(thumnailImage: image))
+                    presenter?.presentThumbnailImage(with: Models.FetchThumbnail.Response(thumbnailImage: image))
                 }
                 return true
             } catch let error {

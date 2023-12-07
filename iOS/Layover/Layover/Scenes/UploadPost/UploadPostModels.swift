@@ -40,10 +40,10 @@ enum UploadPostModels {
 
         }
         struct Response {
-            let thumnailImage: CGImage
+            let thumbnailImage: CGImage
         }
         struct ViewModel {
-            let thumnailImage: UIImage
+            let thumbnailImage: UIImage
         }
     }
 
