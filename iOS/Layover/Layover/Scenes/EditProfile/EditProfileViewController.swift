@@ -213,7 +213,7 @@ final class EditProfileViewController: BaseViewController {
     }
 
     @objc private func editProfileImageButtonDidTap() {
-        self.present(phPickerViewController, animated: true)
+        self.present(editProfileImageController, animated: true)
     }
 
     @objc private func confirmButtonDidTap() {
