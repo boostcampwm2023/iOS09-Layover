@@ -144,14 +144,14 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
         if let prevCell = viewModel.prevCell {
-            prevCell.playbackView.removePlayerSlider()
-            prevCell.playbackView.stopPlayer()
-            prevCell.playbackView.replayPlayer()
+            prevCell.playbackView?.removePlayerSlider()
+            prevCell.playbackView?.stopPlayer()
+            prevCell.playbackView?.replayPlayer()
         }
         if let curCell = viewModel.curCell {
             curCell.addPlayerSlider(tabBarHeight: tabBarHeight)
-            curCell.playbackView.addTargetPlayerSlider()
-            curCell.playbackView.playPlayer()
+            curCell.playbackView?.addTargetPlayerSlider()
+            curCell.playbackView?.playPlayer()
         }
     }
 
@@ -164,7 +164,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        viewModel.curCell?.playbackView.playerSlider?.isHidden = false
+        viewModel.curCell?.playbackView?.playerSlider?.isHidden = false
     }
 
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
@@ -179,7 +179,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        viewModel.prevCell?.playbackView.stopPlayer()
+        viewModel.prevCell?.playbackView?.stopPlayer()
     }
 
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel) {
@@ -199,14 +199,14 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel) {
         let seekTime: CMTime = CMTime(value: CMTimeValue(viewModel.willMoveLocation), timescale: 1)
-        viewModel.curCell.playbackView.seekPlayer(seekTime: seekTime)
-        viewModel.curCell.playbackView.playPlayer()
+        viewModel.curCell.playbackView?.seekPlayer(seekTime: seekTime)
+        viewModel.curCell.playbackView?.playPlayer()
     }
 
     func routeToBack(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         var curCell = viewModel.curCell
         curCell?.resetObserver()
-        curCell?.playbackView.resetPlayer()
+        curCell?.playbackView?.resetPlayer()
         curCell = nil
     }
 
