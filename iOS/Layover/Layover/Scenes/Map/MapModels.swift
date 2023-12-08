@@ -10,45 +10,32 @@ import Foundation
 
 enum MapModels {
 
+    struct DisplayedPost: Hashable {
+        let boardID: Int
+        let thumbnailImageData: Data
+        let videoURL: URL
+        let latitude: Double
+        let longitude: Double
+    }
+
     // MARK: - Fetch Video Use Cases
-    enum FetchVideo {
+
+    enum FetchPosts {
         struct Request {
             var latitude: Double
             var longitude: Double
         }
 
-        struct Reponse {
-            var videoURLs: [URL]
+        struct Response {
+            var posts: [ThumbnailLoadedPost]
         }
 
         struct ViewModel {
-            var videoDataSources: [VideoDataSource]
-
-            struct VideoDataSource: Hashable {
-                var id = UUID()
-                var videoURL: URL
-            }
+            var displayedPosts: [DisplayedPost]
         }
     }
 
     // MARK: - Move To Playback Scene
-
-    enum MoveToPlaybackScene {
-        struct Request {
-            let index: Int
-            let videos: [Post]
-        }
-
-        struct Response {
-            let index: Int
-            let videos: [Post]
-        }
-
-        struct ViewModel {
-            let index: Int
-            let videos: [Post]
-        }
-    }
 
     enum PlayPosts {
         struct Request {

@@ -31,8 +31,8 @@ extension BoardDTO {
             description: content,
             thumbnailImageURL: URL(string: videoThumbnailURL),
             videoURL: URL(string: encodedVideoURL),
-            latitude: Double(latitude),
-            longitude: Double(longitude)
+            latitude: latitude,
+            longitude: longitude
         )
     }
 }
