@@ -52,7 +52,7 @@ export class MemberController {
     const username = usernameDto.username;
     // 중복 검증
     if (await this.memberService.isExistUsername(username)) {
-      throw new CustomResponse(ECustomCode.DUPLICATED_USERNAME);
+      throw new CustomResponse(ECustomCode.MEMBER01);
     }
 
     // db에 반영
@@ -107,7 +107,7 @@ export class MemberController {
     }
 
     const member = await this.memberService.getMemberById(id);
-    if (member === null) throw new CustomResponse(ECustomCode.INVALID_MEMBER_ID);
+    if (member === null) throw new CustomResponse(ECustomCode.MEMBER02);
 
     const username = member.username;
     const introduce = member.introduce;

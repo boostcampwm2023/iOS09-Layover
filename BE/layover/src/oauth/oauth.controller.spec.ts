@@ -65,6 +65,7 @@ describe('oauthController', () => {
         expect(mockOauthService.login).toHaveBeenCalledWith(memberHash);
         expect(e).toEqual(
           expect.objectContaining({
+            customCode: 'SUCCESS',
             data: { accessToken: expect.stringMatching(jwtRegEx), refreshToken: expect.stringMatching(jwtRegEx) },
           }),
         );
@@ -74,12 +75,12 @@ describe('oauthController', () => {
     it('2 : 가입되지 않은 유저 -> OAUTH01', async () => {
       // given
       mockOauthService.login = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER);
+        throw new CustomResponse(ECustomCode.OAUTH01);
       });
 
       // when & then
       await expect(oauthController.processKakaoLogin({ accessToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER),
+        new CustomResponse(ECustomCode.OAUTH01),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.login).toHaveBeenCalledWith(memberHash);
@@ -114,6 +115,7 @@ describe('oauthController', () => {
         expect(mockOauthService.login).toHaveBeenCalledWith(memberHash);
         expect(e).toEqual(
           expect.objectContaining({
+            customCode: 'SUCCESS',
             data: { accessToken: expect.stringMatching(jwtRegEx), refreshToken: expect.stringMatching(jwtRegEx) },
           }),
         );
@@ -123,12 +125,12 @@ describe('oauthController', () => {
     it('2 : apple id token 검증 실패 -> OAUTH07', async () => {
       // given
       mockOauthService.verifyAppleIdentityToken = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH07);
       });
 
       // when & then
       await expect(oauthController.processAppleLogin({ identityToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH07),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledTimes(0);
@@ -138,12 +140,12 @@ describe('oauthController', () => {
     it('3 : apple id token에 sub 필드 없음 -> OAUTH07', async () => {
       // given
       mockOauthService.getAppleMemberHash = jest.fn(() => {
-        throw new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH07);
       });
 
       // when & then
       await expect(oauthController.processAppleLogin({ identityToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH07),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -153,12 +155,12 @@ describe('oauthController', () => {
     it('4 : 가입 안 된 유저 -> OAUTH01', async () => {
       // given
       mockOauthService.login = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER);
+        throw new CustomResponse(ECustomCode.OAUTH01);
       });
 
       // when & then
       await expect(oauthController.processAppleLogin({ identityToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER),
+        new CustomResponse(ECustomCode.OAUTH01),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -188,7 +190,7 @@ describe('oauthController', () => {
         await oauthController.checkKakaoSignup({ accessToken });
       } catch (e) {
         // then
-        expect(e).toEqual(expect.objectContaining({ data: { isAlreadyExist: true } }));
+        expect(e).toEqual(expect.objectContaining({ customCode: 'SUCCESS', data: { isAlreadyExist: true } }));
         expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
         expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledWith(memberHash);
       }
@@ -197,12 +199,12 @@ describe('oauthController', () => {
     it('2 : 카카오에서 받아온 정보에 id 필드가 없는 경우 -> OAUTH02', async () => {
       // given
       mockOauthService.getKakaoMemberHash = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.INVALID_KAKAO_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH02);
       });
 
       // when & then
       await expect(oauthController.checkKakaoSignup({ accessToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_KAKAO_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH02),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledTimes(0);
@@ -211,12 +213,12 @@ describe('oauthController', () => {
     it('3 : 카카오 서버와 통신중 네트워크 오류 발생 -> OAUTH03', async () => {
       // given
       mockOauthService.getKakaoMemberHash = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.OAUTH_SERVER_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH03);
       });
 
       // when & then
       await expect(oauthController.checkKakaoSignup({ accessToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.OAUTH_SERVER_ERR),
+        new CustomResponse(ECustomCode.OAUTH03),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledTimes(0);
@@ -246,7 +248,7 @@ describe('oauthController', () => {
         await oauthController.checkAppleSignup({ identityToken });
       } catch (e) {
         // then
-        expect(e).toEqual(expect.objectContaining({ data: { isAlreadyExist: true } }));
+        expect(e).toEqual(expect.objectContaining({ customCode: 'SUCCESS', data: { isAlreadyExist: true } }));
         expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
         expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
         expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledWith(memberHash);
@@ -256,12 +258,12 @@ describe('oauthController', () => {
     it('2 : idToken이 검증되지 않음 -> OAUTH07', async () => {
       // given
       mockOauthService.verifyAppleIdentityToken = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH07);
       });
 
       // when & then
       await expect(oauthController.checkAppleSignup({ identityToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH07),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledTimes(0);
@@ -271,12 +273,12 @@ describe('oauthController', () => {
     it('3 : idToken에 sub 필드가 존재하지 않음 -> OAUTH07', async () => {
       // given
       mockOauthService.getAppleMemberHash = jest.fn(() => {
-        throw new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH07);
       });
 
       // when & then
       await expect(oauthController.checkAppleSignup({ identityToken })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH07),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -328,6 +330,7 @@ describe('oauthController', () => {
         // then
         expect(e).toEqual(
           expect.objectContaining({
+            customCode: 'SUCCESS',
             data: { accessToken: expect.stringMatching(jwtRegEx), refreshToken: expect.stringMatching(jwtRegEx) },
           }),
         );
@@ -348,6 +351,7 @@ describe('oauthController', () => {
         // then
         expect(e).toEqual(
           expect.objectContaining({
+            customCode: 'SUCCESS',
             data: { accessToken: expect.stringMatching(jwtRegEx), refreshToken: expect.stringMatching(jwtRegEx) },
           }),
         );
@@ -363,12 +367,12 @@ describe('oauthController', () => {
     it('3 : 카카오에서 받아온 정보에 id 필드가 없는 경우 -> OAUTH02', async () => {
       // given
       mockOauthService.getKakaoMemberHash = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.INVALID_KAKAO_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH02);
       });
 
       // when & then
       await expect(oauthController.processKakaoSignup({ accessToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_KAKAO_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH02),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledTimes(0);
@@ -380,12 +384,12 @@ describe('oauthController', () => {
     it('4 : 카카오 서버와 통신중 네트워크 오류 발생 -> OAUTH03', async () => {
       // given
       mockOauthService.getKakaoMemberHash = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.OAUTH_SERVER_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH03);
       });
 
       // when & then
       await expect(oauthController.processKakaoSignup({ accessToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.OAUTH_SERVER_ERR),
+        new CustomResponse(ECustomCode.OAUTH03),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledTimes(0);
@@ -397,12 +401,12 @@ describe('oauthController', () => {
     it('5 : signAsync 오류 -> OAUTH04', async () => {
       // given
       mockOauthService.generateAccessRefreshTokens = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.TOKEN_GENERATE_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH04);
       });
 
       // when & then
       await expect(oauthController.processKakaoSignup({ accessToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.TOKEN_GENERATE_ERR),
+        new CustomResponse(ECustomCode.OAUTH04),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledWith(memberHash);
@@ -415,12 +419,12 @@ describe('oauthController', () => {
     it('6 : Redis 오류 -> OAUTH05', async () => {
       // given
       mockOauthService.generateAccessRefreshTokens = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.REFRESH_TOKEN_SAVE_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH05);
       });
 
       // when & then
       await expect(oauthController.processKakaoSignup({ accessToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.REFRESH_TOKEN_SAVE_ERR),
+        new CustomResponse(ECustomCode.OAUTH05),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledWith(memberHash);
@@ -433,7 +437,7 @@ describe('oauthController', () => {
     it('7 : 중복 닉네임 -> MEMBER01', async () => {
       // when & then
       await expect(oauthController.processKakaoSignup({ accessToken, username: existUsername })).rejects.toThrow(
-        new CustomResponse(ECustomCode.DUPLICATED_USERNAME),
+        new CustomResponse(ECustomCode.MEMBER01),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledWith(memberHash);
@@ -445,12 +449,12 @@ describe('oauthController', () => {
     it('8 : 회원 정보 DB 저장 오류 -> OAUTH06', async () => {
       // given
       mockOauthService.signup = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH06);
       });
 
       // when & then
       await expect(oauthController.processKakaoSignup({ accessToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR),
+        new CustomResponse(ECustomCode.OAUTH06),
       );
       expect(mockOauthService.getKakaoMemberHash).toHaveBeenCalledWith(accessToken);
       expect(mockOauthService.isMemberExistByHash).toHaveBeenCalledWith(memberHash);
@@ -506,6 +510,7 @@ describe('oauthController', () => {
         // then
         expect(e).toEqual(
           expect.objectContaining({
+            customCode: 'SUCCESS',
             data: { accessToken: expect.stringMatching(jwtRegEx), refreshToken: expect.stringMatching(jwtRegEx) },
           }),
         );
@@ -527,6 +532,7 @@ describe('oauthController', () => {
         // then
         expect(e).toEqual(
           expect.objectContaining({
+            customCode: 'SUCCESS',
             data: { accessToken: expect.stringMatching(jwtRegEx), refreshToken: expect.stringMatching(jwtRegEx) },
           }),
         );
@@ -543,12 +549,12 @@ describe('oauthController', () => {
     it('3-1 : identity token 검증 실패 -> OAUTH07', async () => {
       // given
       mockOauthService.verifyAppleIdentityToken = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH07);
       });
 
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH07),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledTimes(0);
@@ -561,12 +567,12 @@ describe('oauthController', () => {
     it('3-2 : identity token에 sub 필드 X -> OAUTH07', async () => {
       // given
       mockOauthService.getAppleMemberHash = jest.fn(() => {
-        throw new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN);
+        throw new CustomResponse(ECustomCode.OAUTH07);
       });
 
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+        new CustomResponse(ECustomCode.OAUTH07),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -579,12 +585,12 @@ describe('oauthController', () => {
     it('4 : identity token이 JWT 형식이 아님 -> JWT01', async () => {
       // given
       mockOauthService.getAppleMemberHash = jest.fn(() => {
-        throw new CustomResponse(ECustomCode.NOT_JWT_TYPE);
+        throw new CustomResponse(ECustomCode.JWT01);
       });
 
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.NOT_JWT_TYPE),
+        new CustomResponse(ECustomCode.JWT01),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -597,12 +603,12 @@ describe('oauthController', () => {
     it('5 : signAsync 오류 -> OAUTH04', async () => {
       // given
       mockOauthService.generateAccessRefreshTokens = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.TOKEN_GENERATE_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH04);
       });
 
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.TOKEN_GENERATE_ERR),
+        new CustomResponse(ECustomCode.OAUTH04),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -616,12 +622,12 @@ describe('oauthController', () => {
     it('6 : Redis 오류 -> OAUTH05', async () => {
       // given
       mockOauthService.generateAccessRefreshTokens = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.REFRESH_TOKEN_SAVE_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH05);
       });
 
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.REFRESH_TOKEN_SAVE_ERR),
+        new CustomResponse(ECustomCode.OAUTH05),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -635,7 +641,7 @@ describe('oauthController', () => {
     it('7 : 중복 닉네임 -> MEMBER01', async () => {
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username: existUsername })).rejects.toThrow(
-        new CustomResponse(ECustomCode.DUPLICATED_USERNAME),
+        new CustomResponse(ECustomCode.MEMBER01),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);
@@ -648,12 +654,12 @@ describe('oauthController', () => {
     it('8 : 회원 정보 DB 저장 오류 -> OAUTH06', async () => {
       // given
       mockOauthService.signup = jest.fn(async () => {
-        throw new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR);
+        throw new CustomResponse(ECustomCode.OAUTH06);
       });
 
       // when & then
       await expect(oauthController.processAppleSignup({ identityToken, username })).rejects.toThrow(
-        new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR),
+        new CustomResponse(ECustomCode.OAUTH06),
       );
       expect(mockOauthService.verifyAppleIdentityToken).toHaveBeenCalledWith(identityToken);
       expect(mockOauthService.getAppleMemberHash).toHaveBeenCalledWith(identityToken);

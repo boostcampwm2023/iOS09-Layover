@@ -32,7 +32,7 @@ export function extractHeaderJWTstr(token: string): string {
   if (match) {
     return match[1];
   } else {
-    throw new CustomResponse(ECustomCode.NOT_JWT_TYPE);
+    throw new CustomResponse(ECustomCode.JWT01);
   }
 }
 
@@ -44,7 +44,7 @@ export function extractHeaderJWT(token: string) {
 export function extractPayloadJWTstr(token: string): string {
   const regex = /\.(.*?)\./g;
   const data = token.match(regex);
-  if (!data) throw new CustomResponse(ECustomCode.NOT_JWT_TYPE);
+  if (!data) throw new CustomResponse(ECustomCode.JWT01);
   const payload = data[0].slice(1, -1);
   return payload;
 }
@@ -60,7 +60,7 @@ export function extractSignatureJWTstr(token: string): string {
   if (match) {
     return match[1];
   } else {
-    throw new CustomResponse(ECustomCode.NOT_JWT_TYPE);
+    throw new CustomResponse(ECustomCode.JWT01);
   }
 }
 
@@ -72,8 +72,7 @@ export async function verifyJwtToken(token: string, key?: string): Promise<boole
   const algType = extractHeaderJWT(token).alg;
   switch (algType) {
     case 'HS256':
-      if (signatureStr !== hashHMACSHA256(headerStr + '.' + payloadStr, key))
-        throw new CustomResponse(ECustomCode.INVALID_JWT);
+      if (signatureStr !== hashHMACSHA256(headerStr + '.' + payloadStr, key)) throw new CustomResponse(ECustomCode.JWT03);
       break;
     case 'RS256':
       await verifyAppleToken({
@@ -82,7 +81,7 @@ export async function verifyJwtToken(token: string, key?: string): Promise<boole
       });
       break;
     default:
-      throw new CustomResponse(ECustomCode.JWT_ALGORITHM_ERR);
+      throw new CustomResponse(ECustomCode.JWT07);
   }
 
   return true;

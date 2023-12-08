@@ -122,7 +122,7 @@ export class OauthController {
 
     // 닉네임 중복 확인 : MEMBER01
     if (await this.oauthService.isExistUsername(username)) {
-      throw new CustomResponse(ECustomCode.DUPLICATED_USERNAME);
+      throw new CustomResponse(ECustomCode.MEMBER01);
     }
 
     // signup
@@ -159,7 +159,7 @@ export class OauthController {
 
     // 닉네임 중복 확인 : MEMBER01
     if (await this.oauthService.isExistUsername(username)) {
-      throw new CustomResponse(ECustomCode.DUPLICATED_USERNAME);
+      throw new CustomResponse(ECustomCode.MEMBER01);
     }
 
     // signup
