@@ -113,6 +113,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             await MainActor.run {
                 presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
             }
+            profileImageData = imageData
             return false
         }
 
@@ -144,7 +145,13 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
                     return false
                 }
             } else { // 이미지 변경이 없는 경우 이미지 삭제 시도
-                _ = await userWorker?.fetchImagePresignedURL(with: "jpeg")
+                guard await userWorker?.fetchImagePresignedURL(with: "jpeg") != nil else {
+                    await MainActor.run {
+                        presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                    }
+                    return false
+                }
+                profileImageData = nil
             }
 
             await MainActor.run {
