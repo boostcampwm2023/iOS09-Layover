@@ -69,30 +69,30 @@ enum PlaybackModels {
     enum DisplayPlaybackVideo {
         struct Request {
             let indexPathRow: Int?
-            let curCell: PlaybackCell?
+            let currentCell: PlaybackCell?
         }
 
         struct Response {
             let indexPathRow: Int?
-            let prevCell: PlaybackCell?
-            let curCell: PlaybackCell?
+            let previousCell: PlaybackCell?
+            let currentCell: PlaybackCell?
 
-            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+            init(indexPathRow: Int? = nil, previousCell: PlaybackCell?, currentCell: PlaybackCell?) {
                 self.indexPathRow = indexPathRow
-                self.prevCell = prevCell
-                self.curCell = curCell
+                self.previousCell = previousCell
+                self.currentCell = currentCell
             }
         }
 
         struct ViewModel {
             let indexPathRow: Int?
-            var prevCell: PlaybackCell?
-            let curCell: PlaybackCell?
+            var previousCell: PlaybackCell?
+            let currentCell: PlaybackCell?
 
-            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+            init(indexPathRow: Int? = nil, previousCell: PlaybackCell?, currentCell: PlaybackCell?) {
                 self.indexPathRow = indexPathRow
-                self.prevCell = prevCell
-                self.curCell = curCell
+                self.previousCell = previousCell
+                self.currentCell = currentCell
             }
         }
     }
@@ -121,12 +121,12 @@ enum PlaybackModels {
 
         struct Response {
             let willMoveLocation: Float64
-            let curCell: PlaybackCell
+            let currentCell: PlaybackCell
         }
 
         struct ViewModel {
             let willMoveLocation: Float64
-            let curCell: PlaybackCell
+            let currentCell: PlaybackCell
         }
     }
 

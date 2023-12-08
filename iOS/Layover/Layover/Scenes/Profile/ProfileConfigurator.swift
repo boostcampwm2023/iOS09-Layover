@@ -19,7 +19,8 @@ final class ProfileConfigurator: Configurator {
     func configure(_ viewController: ViewController) {
         let viewController = viewController
         let interactor = ProfileInteractor()
-        let worker = MockUserWorker()
+//        let worker = MockUserWorker()
+        let worker = UserWorker()
         let presenter = ProfilePresenter()
         let router = ProfileRouter()
 

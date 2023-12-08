@@ -73,32 +73,32 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     // MARK: - UseCase Playback Video
 
     func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: response.curCell)
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(previousCell: response.previousCell, currentCell: response.currentCell)
         viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
     }
 
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(previousCell: nil, currentCell: response.currentCell)
         viewController?.stopPrevPlayerAndPlayCurPlayer(viewModel: viewModel)
     }
 
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(previousCell: nil, currentCell: response.currentCell)
         viewController?.showPlayerSlider(viewModel: viewModel)
     }
 
     func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(indexPathRow: response.indexPathRow, prevCell: nil, curCell: nil)
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(indexPathRow: response.indexPathRow, previousCell: nil, currentCell: nil)
         viewController?.teleportPlaybackCell(viewModel: viewModel)
     }
 
     func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: response.prevCell, curCell: nil)
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(previousCell: response.previousCell, currentCell: nil)
         viewController?.leavePlaybackView(viewModel: viewModel)
     }
 
     func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response) {
-        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(prevCell: nil, curCell: response.curCell)
+        let viewModel: Models.DisplayPlaybackVideo.ViewModel = Models.DisplayPlaybackVideo.ViewModel(previousCell: nil, currentCell: response.currentCell)
         viewController?.resetVideo(viewModel: viewModel)
     }
 
@@ -112,7 +112,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     // MARK: - UseCase Seek Video
 
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
-        let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, curCell: response.curCell)
+        let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, currentCell: response.currentCell)
         viewController?.seekVideo(viewModel: viewModel)
     }
 
