@@ -68,6 +68,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        sh 'cd $PROJECT_PATH'
                         def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
                         def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
                         dockerImage.run("""
