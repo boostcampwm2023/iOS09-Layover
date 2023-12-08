@@ -54,7 +54,9 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
     @discardableResult
     func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never> {
-        Task {
+        fetchPostsPage = 1
+        canFetchMorePosts = true
+        return Task {
             guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
                 return false
             }
