@@ -32,7 +32,8 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     }
 
     func presentProfile(with response: EditProfileModels.EditProfile.Response) {
-        viewController?.displayProfileEditCompleted(with: Models.EditProfile.ViewModel())
+        let toastMessage = response.isSuccess ? "프로필이 수정되었습니다." : "프로필 수정에 실패했습니다."
+        viewController?.displayProfileEditCompleted(with: Models.EditProfile.ViewModel(toastMessage: toastMessage))
     }
 
     func presentProfileState(with response: Models.ChangeProfile.Response) {

@@ -265,7 +265,7 @@ extension EditProfileViewController: EditProfileDisplayLogic {
     }
 
     func displayProfileEditCompleted(with viewModel: EditProfileModels.EditProfile.ViewModel) {
-        Toast.shared.showToast(message: "프로필 변경이 반영되었습니다.")
+        Toast.shared.showToast(message: viewModel.toastMessage)
         confirmButton.isEnabled = false
     }
 

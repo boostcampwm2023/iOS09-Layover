@@ -96,9 +96,11 @@ enum EditProfileModels {
         }
 
         struct Response {
+            let isSuccess: Bool
         }
 
         struct ViewModel {
+            let toastMessage: String
         }
     }
 

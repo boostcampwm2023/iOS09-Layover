@@ -105,15 +105,17 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             }
         }
     }
-
+    
     @discardableResult
     func editProfile(with request: Models.EditProfile.Request) -> Task<Bool, Never> {
         Task {
-            async let modifyNicknameResponse = userWorker?.modifyNickname(to: request.nickname)
-            async let modifyIntroduceResponse = userWorker?.modifyIntroduce(to: request.introduce ?? "")
+            async let isSuccessNicknameEdit =  nicknameEditRequest(into: request.nickname)
+            async let isSuccessIntroduceEdit = introduceEditRequest(into: request.introduce)
 
-            guard await modifyNicknameResponse != nil, await modifyIntroduceResponse != nil else {
-                os_log(.error, log: .data, "Edit Profile Error")
+            guard await isSuccessNicknameEdit, await isSuccessIntroduceEdit else {
+                await MainActor.run {
+                    presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                }
                 return false
             }
 
@@ -121,19 +123,41 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             if let modifiedProfileImageData = request.profileImageData,
                let modifiedProfileImageExtension = request.profileImageExtension,
                let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: modifiedProfileImageExtension) {
-                let modifyProfileImageResponse = await userWorker?.modifyProfileImage(data: modifiedProfileImageData,
-                                                                                      to: presignedUploadURL)
-                guard await modifyProfileImageResponse != nil else {
+                guard let modifyProfileImageResponse = await userWorker?.modifyProfileImage(data: modifiedProfileImageData,
+                                                                                            to: presignedUploadURL) else {
                     os_log(.error, log: .data, "Edit ProfileImage Error")
+                    await MainActor.run {
+                        presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                    }
                     return false
                 }
             }
 
             await MainActor.run {
-                presenter?.presentProfile(with: Models.EditProfile.Response())
+                presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: true))
             }
             return true
         }
+    }
+
+    private func nicknameEditRequest(into nickname: String) async -> Bool {
+        if self.nickname != nickname {
+            guard let response = await userWorker?.modifyNickname(to: nickname) else {
+                os_log(.error, log: .data, "Edit Profile Error")
+                return false
+            }
+            self.nickname = nickname
+        }
+        return true
+    }
+
+    private func introduceEditRequest(into introduce: String?) async -> Bool {
+        guard let modifyIntroduceResponse = await userWorker?.modifyIntroduce(to: introduce ?? "") else {
+            os_log(.error, log: .data, "Edit Profile Error")
+            return false
+        }
+        self.introduce = introduce
+        return true
     }
 
     private func introduceLengthState(of introduce: String, by length: Int) -> Models.ChangeProfile.IntroduceLengthState {
