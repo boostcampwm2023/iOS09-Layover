@@ -71,13 +71,14 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func moveInitialPlaybackCell() {
-        let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index ?? 0)
-        guard let parentView else { return }
+        guard let parentView,
+              let index
+        else { return }
         switch parentView {
         case .home, .myProfile:
-            presenter?.presentMoveInitialPlaybackCell(with: response)
+            presenter?.presentMoveInitialPlaybackCell(with: Models.SetInitialPlaybackCell.Response(indexPathRow: index))
         case .other:
-            presenter?.presentSetCellIfInfinite()
+            presenter?.presentSetCellIfInfinite(with: Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1))
         }
     }
 

@@ -13,7 +13,7 @@ import OSLog
 
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
-    func displayMoveCellIfinfinite()
+    func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
@@ -180,8 +180,8 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
-    func displayMoveCellIfinfinite() {
-        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height), animated: false)
+    func displayMoveCellIfinfinite(viewModel: Models.SetInitialPlaybackCell.ViewModel) {
+        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height * CGFloat(viewModel.indexPathRow)), animated: false)
     }
 
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
