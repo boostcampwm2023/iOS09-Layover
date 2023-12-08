@@ -9,7 +9,7 @@
 import Foundation
 
 protocol MapWorkerProtocol {
-    func fetchPosts(latitude: Double, longitude: Double) async -> [MapModels.Post]?
+    func fetchPosts(latitude: Double, longitude: Double) async -> [ThumbnailLoadedPost]?
 }
 
 final class MapWorker: MapWorkerProtocol {
@@ -28,12 +28,12 @@ final class MapWorker: MapWorkerProtocol {
         self.postEndPointFactory = postEndPointFactory
     }
 
-    func fetchPosts(latitude: Double, longitude: Double) async -> [Models.Post]? {
+    func fetchPosts(latitude: Double, longitude: Double) async -> [ThumbnailLoadedPost]? {
         let endPoint = postEndPointFactory.makeMapPostListEndPoint(latitude: latitude, longitude: longitude)
         do {
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
-            let posts = try await data.concurrentMap { postDTO -> Models.Post in
+            let posts = try await data.concurrentMap { postDTO -> ThumbnailLoadedPost in
                 let thumbnailImageData = try await self.provider.request(url: postDTO.board.videoThumbnailURL)
                 return .init(member: postDTO.member.toDomain(),
                              board: postDTO.board.toDomain(),

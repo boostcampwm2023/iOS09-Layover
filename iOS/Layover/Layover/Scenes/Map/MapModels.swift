@@ -10,13 +10,6 @@ import Foundation
 
 enum MapModels {
 
-    struct Post {
-        let member: Member
-        let board: Board
-        let tags: [String]
-        let thumbnailImageData: Data
-    }
-
     struct DisplayedPost: Hashable {
         let boardID: Int
         let thumbnailImageData: Data
@@ -34,7 +27,7 @@ enum MapModels {
         }
 
         struct Response {
-            var posts: [Post]
+            var posts: [ThumbnailLoadedPost]
         }
 
         struct ViewModel {

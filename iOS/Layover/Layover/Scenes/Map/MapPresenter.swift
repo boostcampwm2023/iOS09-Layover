@@ -45,7 +45,7 @@ final class MapPresenter: MapPresentationLogic {
             }.compactMap { $0 }
 
         let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPost)
-        viewController?.dispalyFetchedPosts(viewModel: viewModel)
+        viewController?.displayFetchedPosts(viewModel: viewModel)
     }
 
     func presentPlaybackScene() {

@@ -10,7 +10,7 @@ import MapKit
 import UIKit
 
 protocol MapDisplayLogic: AnyObject {
-    func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel)
+    func displayFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel)
     func routeToPlayback()
 }
 
@@ -284,7 +284,7 @@ extension MapViewController: VideoPickerDelegate {
 
 extension MapViewController: MapDisplayLogic {
 
-    func dispalyFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel) {
+    func displayFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel) {
         displayedPost = viewModel.displayedPosts
 
         var snapshot: NSDiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()

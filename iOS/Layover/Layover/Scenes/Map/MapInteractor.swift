@@ -14,10 +14,10 @@ protocol MapBusinessLogic {
     func playPosts(with: MapModels.PlayPosts.Request)
 
     @discardableResult
-    func fetchPosts() -> Task<[MapModels.Post], Never>
+    func fetchPosts() -> Task<Bool, Never>
 
     @discardableResult
-    func fetchPost(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never>
+    func fetchPost(latitude: Double, longitude: Double) -> Task<Bool, Never>
     func selectVideo(with request: MapModels.SelectVideo.Request)
 }
 
@@ -57,32 +57,32 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
         presenter?.presentPlaybackScene()
     }
 
-    func fetchPosts() -> Task<[MapModels.Post], Never> {
+    func fetchPosts() -> Task<Bool, Never> {
         Task {
             locationManager.startUpdatingLocation()
-            guard let coordinate = locationManager.location?.coordinate else { return [] }
+            guard let coordinate = locationManager.location?.coordinate else { return false }
             let posts = await worker?.fetchPosts(latitude: coordinate.latitude,
                                                  longitude: coordinate.longitude)
-            guard let posts else { return [] }
+            guard let posts else { return false }
             self.posts = posts.map { .init(member: $0.member, board: $0.board, tag: $0.tags) }
             let response = Models.FetchPosts.Response(posts: posts)
             await MainActor.run {
                 presenter?.presentFetchedPosts(with: response)
             }
-            return posts
+            return true
         }
     }
 
-    func fetchPost(latitude: Double, longitude: Double) -> Task<[MapModels.Post], Never> {
+    func fetchPost(latitude: Double, longitude: Double) -> Task<Bool, Never> {
         Task {
             let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
-            guard let posts else { return [] }
+            guard let posts else { return false }
             self.posts = posts.map { .init(member: $0.member, board: $0.board, tag: $0.tags) }
             let response = Models.FetchPosts.Response(posts: posts)
             await MainActor.run {
                 presenter?.presentFetchedPosts(with: response)
             }
-            return posts
+            return true
         }
     }
 
