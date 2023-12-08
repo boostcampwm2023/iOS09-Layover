@@ -34,17 +34,24 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func deletePlaybackVideo(boardID: Int) async -> Bool {
+        guard let mockFileLocation = Bundle.main.url(forResource: "DeleteVideo", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation)
+        else {
+            os_log(.error, log: .data, "Failed to generate mock with error: %@", "Generate File Error")
+            return false
+        }
+
         MockURLProtocol.requestHandler = { request in
             let response = HTTPURLResponse(
                 url: request.url!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: nil)
-            return (response, nil, nil)
+            return (response, mockData, nil)
         }
 
         do {
-            let endPoint = EndPoint<Response<EmptyData>>(
+            let endPoint = EndPoint<EmptyData>(
                 path: "/board",
                 method: .DELETE,
                 queryParameters: ["boardId": boardID])

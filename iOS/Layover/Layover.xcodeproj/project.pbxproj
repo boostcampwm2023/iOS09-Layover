@@ -83,6 +83,7 @@
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */; };
+		8311E8022B236E21000FA676 /* DeleteVideo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8311E8012B236E21000FA676 /* DeleteVideo.json */; };
 		8321A2EE2B1E1026000A12AF /* ReportPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2E82B1E1026000A12AF /* ReportPresenter.swift */; };
 		8321A2EF2B1E1026000A12AF /* ReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2E92B1E1026000A12AF /* ReportWorker.swift */; };
 		8321A2F02B1E1026000A12AF /* ReportRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2EA2B1E1026000A12AF /* ReportRouter.swift */; };
@@ -294,6 +295,7 @@
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
+		8311E8012B236E21000FA676 /* DeleteVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DeleteVideo.json; sourceTree = "<group>"; };
 		8321A2E82B1E1026000A12AF /* ReportPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportPresenter.swift; sourceTree = "<group>"; };
 		8321A2E92B1E1026000A12AF /* ReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportWorker.swift; sourceTree = "<group>"; };
 		8321A2EA2B1E1026000A12AF /* ReportRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportRouter.swift; sourceTree = "<group>"; };
@@ -841,6 +843,7 @@
 				194C21DB2B1F3ECA00C62645 /* GetMember.json */,
 				8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */,
 				1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */,
+				8311E8012B236E21000FA676 /* DeleteVideo.json */,
 			);
 			path = MockData;
 			sourceTree = "<group>";
@@ -1125,6 +1128,7 @@
 				FC767F9F2B12283D0088CF9B /* PatchUserName.json in Resources */,
 				FC49758F2B03432800D8627F /* Pretendard-SemiBold.ttf in Resources */,
 				835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */,
+				8311E8022B236E21000FA676 /* DeleteVideo.json in Resources */,
 				194C21EA2B1F7C1600C62645 /* PostListEnd.json in Resources */,
 				835783C62B14A5C800E7D304 /* LoginData.json in Resources */,
 				FC767FA12B12283D0088CF9B /* DeleteUser.json in Resources */,
