@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MemberService } from '../member/member.service';
 import { TagService } from '../tag/tag.service';
 import { BoardRepository } from './board.repository';
+import { createBoardDto, savedBoard } from './board.fixture';
+import { CreateBoardResDto } from './dtos/create-board-res.dto';
 
 describe('BoardService', () => {
   let boardService: BoardService;
@@ -13,7 +15,7 @@ describe('BoardService', () => {
     getMemberById: jest.fn(),
   };
   const mockTagService = {
-    saveTag: jest.fn(),
+    createTag: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -34,11 +36,23 @@ describe('BoardService', () => {
   });
 
   it('게시글 생성 성공', async () => {
-    try {
-      // given
-      // when
-    } catch (e) {
-      // then
-    }
+    // given
+    mockMemberService.findMemberById.mockResolvedValue(savedBoard.member);
+    mockBoardRepository.saveBoard.mockResolvedValue(savedBoard);
+    mockTagService.createTag.mockResolvedValue([]);
+
+    // when
+    const result: CreateBoardResDto = await boardService.createBoard(1, createBoardDto);
+
+    // then
+    expect(result).toBeInstanceOf(CreateBoardResDto);
+    expect(result).toEqual({
+      id: undefined,
+      title: createBoardDto.title,
+      content: createBoardDto.content,
+      latitude: createBoardDto.latitude,
+      longitude: createBoardDto.longitude,
+      tag: createBoardDto.tag,
+    });
   });
 });
