@@ -9,7 +9,6 @@
 import Foundation
 
 struct Response<Data: Decodable>: Decodable {
-    let customCode: String
     let statusCode: Int
     let message: String
     let data: Data?
