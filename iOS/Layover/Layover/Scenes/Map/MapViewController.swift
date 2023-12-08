@@ -197,7 +197,7 @@ final class MapViewController: BaseViewController {
             .filter { $0.boardID == focusedPost.boardID }
             .first
         guard let focusedAnnotaion else { return }
-        mapView.setCenter(focusedAnnotaion.coordinate, animated: true)
+        mapView.selectAnnotation(focusedAnnotaion, animated: true)
     }
 
     @objc private func searchButtonDidTap() {
@@ -248,7 +248,7 @@ extension MapViewController: MKMapViewDelegate {
                   let sectionIndex = snapshot.indexOfSection(section) else { return }
             carouselCollectionView.scrollToItem(at: IndexPath(item: itemIndex, section: sectionIndex),
                                                 at: .centeredHorizontally,
-                                                animated: true)
+                                                animated: false)
         }
     }
 
