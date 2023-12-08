@@ -258,7 +258,7 @@ extension UploadPostViewController: UploadPostDisplayLogic {
     }
 
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel) {
-        thumbnailImageView.image = viewModel.thumnailImage
+        thumbnailImageView.image = viewModel.thumbnailImage
     }
 
     func displayCurrentAddress(viewModel: UploadPostModels.FetchCurrentAddress.ViewModel) {

@@ -10,7 +10,7 @@ import UIKit
 
 protocol UploadPostPresentationLogic {
     func presentTags(with response: UploadPostModels.FetchTags.Response)
-    func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response)
+    func presentThumbnailImage(with response: UploadPostModels.FetchThumbnail.Response)
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response)
     func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
 //    func presentUploadProgress(with response: UploadPostModels.UploadPost.Response)
@@ -27,9 +27,9 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
         viewController?.displayTags(viewModel: Models.FetchTags.ViewModel(tags: response.tags))
     }
 
-    func presentThumnailImage(with response: UploadPostModels.FetchThumbnail.Response) {
-        let image = UIImage(cgImage: response.thumnailImage)
-        viewController?.displayThumbnail(viewModel: Models.FetchThumbnail.ViewModel(thumnailImage: image))
+    func presentThumbnailImage(with response: UploadPostModels.FetchThumbnail.Response) {
+        let image = UIImage(cgImage: response.thumbnailImage)
+        viewController?.displayThumbnail(viewModel: Models.FetchThumbnail.ViewModel(thumbnailImage: image))
     }
 
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response) {

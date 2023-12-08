@@ -11,16 +11,19 @@ import Foundation
 
 protocol MapBusinessLogic {
     func checkLocationAuthorizationStatus()
-    func fetchVideos()
-    func moveToPlaybackScene(with: MapModels.MoveToPlaybackScene.Request)
     func playPosts(with: MapModels.PlayPosts.Request)
+
+    @discardableResult
+    func fetchPosts() -> Task<Bool, Never>
+
+    @discardableResult
+    func fetchPost(latitude: Double, longitude: Double) -> Task<Bool, Never>
     func selectVideo(with request: MapModels.SelectVideo.Request)
 }
 
 protocol MapDataStore {
     var postPlayStartIndex: Int? { get set }
     var posts: [Post]? { get set }
-    var index: Int? { get set }
     var selectedVideoURL: URL? { get set }
 }
 
@@ -31,10 +34,9 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     typealias Models = MapModels
     var presenter: MapPresentationLogic?
     var videoFileWorker: VideoFileWorker?
+    var worker: MapWorkerProtocol?
 
     private let locationManager = CLLocationManager()
-    private var latitude: Double?
-    private var longitude: Double?
 
     var postPlayStartIndex: Int?
     var posts: [Post]?
@@ -50,27 +52,38 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
         checkCurrentLocationAuthorization(for: locationManager.authorizationStatus)
     }
 
-    func fetchVideos() {
-        // TODO: worker 네트워크 호출
-        let dummyURLs: [URL] = ["http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
-                                   "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
-                                   "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
-                                   "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
-                                   "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
-                                   "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"]
-            .compactMap { URL(string: $0) }
-        presenter?.presentFetchedVideos(with: MapModels.FetchVideo.Reponse(videoURLs: dummyURLs))
-    }
-
-    func moveToPlaybackScene(with request: Models.MoveToPlaybackScene.Request) {
-        posts = request.videos
-        index = request.index
-        presenter?.presentPlaybackScene()
-    }
-
     func playPosts(with request: MapModels.PlayPosts.Request) {
         postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene()
+    }
+
+    func fetchPosts() -> Task<Bool, Never> {
+        Task {
+            locationManager.startUpdatingLocation()
+            guard let coordinate = locationManager.location?.coordinate else { return false }
+            let posts = await worker?.fetchPosts(latitude: coordinate.latitude,
+                                                 longitude: coordinate.longitude)
+            guard let posts else { return false }
+            self.posts = posts.map { .init(member: $0.member, board: $0.board, tag: $0.tags) }
+            let response = Models.FetchPosts.Response(posts: posts)
+            await MainActor.run {
+                presenter?.presentFetchedPosts(with: response)
+            }
+            return true
+        }
+    }
+
+    func fetchPost(latitude: Double, longitude: Double) -> Task<Bool, Never> {
+        Task {
+            let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
+            guard let posts else { return false }
+            self.posts = posts.map { .init(member: $0.member, board: $0.board, tag: $0.tags) }
+            let response = Models.FetchPosts.Response(posts: posts)
+            await MainActor.run {
+                presenter?.presentFetchedPosts(with: response)
+            }
+            return true
+        }
     }
 
     func selectVideo(with request: Models.SelectVideo.Request) {
@@ -95,12 +108,4 @@ extension MapInteractor: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkCurrentLocationAuthorization(for: manager.authorizationStatus)
     }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            longitude = location.coordinate.longitude
-            latitude = location.coordinate.latitude
-        }
-    }
-
 }

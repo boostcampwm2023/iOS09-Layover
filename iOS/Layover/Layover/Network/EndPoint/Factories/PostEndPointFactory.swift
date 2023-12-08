@@ -10,6 +10,7 @@ import Foundation
 
 protocol PostEndPointFactory {
     func makeHomePostListEndPoint() -> EndPoint<Response<[PostDTO]>>
+    func makeMapPostListEndPoint(latitude: Double, longitude: Double) -> EndPoint<Response<[PostDTO]>>
     func makeTagSearchPostListEndPoint(by tag: String) -> EndPoint<Response<[PostDTO]>>
 }
 
@@ -18,6 +19,18 @@ final class DefaultPostEndPointFactory: PostEndPointFactory {
         return EndPoint(
             path: "/board/home",
             method: .GET
+        )
+    }
+
+    func makeMapPostListEndPoint(latitude: Double, longitude: Double) -> EndPoint<Response<[PostDTO]>> {
+        var queryParameters = [String: String]()
+        queryParameters.updateValue(String(latitude), forKey: "latitude")
+        queryParameters.updateValue(String(longitude), forKey: "longitude")
+
+        return EndPoint(
+            path: "/board/map",
+            method: .GET,
+            queryParameters: queryParameters
         )
     }
 

@@ -32,7 +32,7 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
               let destination = playbackViewController.router?.dataStore
         else { return }
         destination.parentView = .other
-        destination.index = source.index
+        destination.index = source.postPlayStartIndex
         destination.posts = source.posts
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
@@ -40,13 +40,12 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
     func routeToEditVideo() {
         let nextViewController = EditVideoViewController()
         guard let source = dataStore,
-              var destination = nextViewController.router?.dataStore,
-              let videoURL = source.selectedVideoURL
-        else { return }
-
-        // Data Passing
-        destination.videoURL = videoURL
-        nextViewController.hidesBottomBarWhenPushed = true
+              var destination = nextViewController.router?.dataStore else { return }
+        passDataToEditVideo(source: source, destination: &destination)
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+
+    private func passDataToEditVideo(source: MapDataStore, destination: inout EditVideoDataStore) {
+        destination.videoURL = source.selectedVideoURL
     }
 }
