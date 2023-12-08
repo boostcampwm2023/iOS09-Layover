@@ -95,6 +95,7 @@ final class EditProfileViewController: BaseViewController {
         let defaultAction = UIAlertAction(title: "기본 이미지로 변경", style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.changedProfileImageData = nil
+            self.changedProfileImageExtension = nil
             self.profileImageView.image = UIImage.profile
             self.profileImageDataChanged()
         }
@@ -231,18 +232,36 @@ final class EditProfileViewController: BaseViewController {
 
 extension EditProfileViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        let item = results.first?.itemProvider
-        if let item = item, item.canLoadObject(ofClass: UIImage.self) {
-            item.loadObject(ofClass: UIImage.self) { [weak self] (image, _) in
-                guard let self else { return }
-                Task {
-                    await MainActor.run {
-                        self.profileImageView.image = image as? UIImage
-                        self.changedProfileImageData = (image as? UIImage)?.jpegData(compressionQuality: 1.0)
-                        self.profileImageDataChanged()
+        picker.dismiss(animated: true) {
+            let item = results.first?.itemProvider
+            if let item = item, item.canLoadObject(ofClass: UIImage.self) {
+                item.loadFileRepresentation(for: .image) { url, Bool, error in
+                    if let error {
+                        os_log(.error, log: .ui, "%@", error.localizedDescription)
                     }
-                }
+
+                    if let url { // item.loadFileRepresentation에서 주는 url은 클로저가 끝나면 없어지는 temporary file url이므로, 복사해서 사용한다.
+                        let fileData = FileManager.default.contents(atPath: url.path())
+                        let pathExtension = url.pathExtension
+                        let temporaryCopyFileName = UUID().uuidString + ".\(pathExtension)"
+                        let temporaryCopyFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(temporaryCopyFileName)
+                        do {
+                            try FileManager.default.copyItem(atPath: url.path(),
+                                                         toPath: temporaryCopyFileURL.path())
+                            Task {
+                                await MainActor.run {
+                                    self.profileImageView.image = UIImage(contentsOfFile: temporaryCopyFileURL.path())
+                                    self.changedProfileImageExtension = pathExtension
+                                    self.changedProfileImageData = try? Data(contentsOf: temporaryCopyFileURL)
+                                    self.profileImageDataChanged()
+                                }
+                                try FileManager.default.removeItem(at: temporaryCopyFileURL)
+                            }
+                        } catch {
+                            os_log(.error, log: .data, "%@", error.localizedDescription)
+                        }
+                    }
+                }.resume()
             }
         }
     }

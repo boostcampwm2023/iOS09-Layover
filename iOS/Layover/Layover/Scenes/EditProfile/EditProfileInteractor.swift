@@ -68,9 +68,9 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
         case .introduce(let changedIntroduce):
             introduceState = introduceLengthState(of: changedIntroduce ?? "", by: request.validIntroduceLength)
             let canEditProfile = changedIntroduce != introduce
-                                && introduceState == .valid
-                                && nicknameState == .valid
-                                && didCheckedNicknameDuplicate
+            && introduceState == .valid
+            && nicknameState == .valid
+            && didCheckedNicknameDuplicate
 
             let introduceAlertDescription = introduce == changedIntroduce || introduceState == .valid ? nil : introduceState.description
 
@@ -81,8 +81,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
         case .profileImage(_):
             let canEditProfile = didCheckedNicknameDuplicate
-                                && nicknameState == .valid
-                                && introduceState == .valid
+            && nicknameState == .valid
+            && introduceState == .valid
             response = Models.ChangeProfile.Response(nicknameAlertDescription: nil,
                                                      introduceAlertDescription: nil,
                                                      canCheckNicknameDuplication: nil,
@@ -105,11 +105,27 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             }
         }
     }
-    
+
+    private func profileImageEditRequest(into imageData: Data, fileExtension: String) async -> Bool {
+        guard let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: fileExtension),
+              await userWorker?.modifyProfileImage(data: imageData, to: presignedUploadURL) != nil else {
+            os_log(.error, log: .data, "Edit ProfileImage Error")
+            await MainActor.run {
+                presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+            }
+            return false
+        }
+
+        await MainActor.run {
+            presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: true))
+        }
+        return true
+    }
+
     @discardableResult
     func editProfile(with request: Models.EditProfile.Request) -> Task<Bool, Never> {
         Task {
-            async let isSuccessNicknameEdit =  nicknameEditRequest(into: request.nickname)
+            async let isSuccessNicknameEdit = nicknameEditRequest(into: request.nickname)
             async let isSuccessIntroduceEdit = introduceEditRequest(into: request.introduce)
 
             guard await isSuccessNicknameEdit, await isSuccessIntroduceEdit else {
@@ -119,18 +135,16 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
                 return false
             }
 
-            // 프로필 이미지 바꾼 경우
-            if let modifiedProfileImageData = request.profileImageData,
-               let modifiedProfileImageExtension = request.profileImageExtension,
-               let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: modifiedProfileImageExtension) {
-                guard let modifyProfileImageResponse = await userWorker?.modifyProfileImage(data: modifiedProfileImageData,
-                                                                                            to: presignedUploadURL) else {
-                    os_log(.error, log: .data, "Edit ProfileImage Error")
+            // 이미지 변경 시도
+            if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
+                guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
                     await MainActor.run {
                         presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
                     }
                     return false
                 }
+            } else { // 이미지 변경이 없는 경우 이미지 삭제 시도
+                _ = await userWorker?.fetchImagePresignedURL(with: "jpeg")
             }
 
             await MainActor.run {
