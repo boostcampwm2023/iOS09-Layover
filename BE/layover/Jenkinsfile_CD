@@ -8,56 +8,25 @@ pipeline {
     }
 
     stages {
-
-
-        stage('Cleanup') {
-                    steps {
-                        script {
-                            try {
-                                // 컨테이너가 존재하면 삭제
-                                sh """
-                                CONTAINER_ID=\$(docker ps -a -q -f name=$CONTAINER_NAME)
-                                if [ -n "\$CONTAINER_ID" ]; then
-                                    docker rm -f \$CONTAINER_ID
-                                    echo "컨테이너 '$CONTAINER_NAME'를 삭제했습니다."
-                                fi
-                                """
-
-                                // 기존 이미지 삭제
-                                sh """
-                                IMAGE_ID=\$(docker images | grep "${DOCKER_IMG_NAME}" | awk '{print \$3}')
-                                if [ -n "\$IMAGE_ID" ]; then
-                                    docker rmi -f \$IMAGE_ID
-                                else
-                                    echo "Image does not exist. Skipping deletion."
-                                fi
-                                """
-                            } catch (Exception e) {
-                                echo 'Cleanup 실패: ' + e.getMessage()
-                                currentBuild.result = 'FAILURE'
-                            }
-                        }
-                    }
-                }
+        // ...
 
         stage('Build and Push Docker Image') {
             steps {
                 script {
                     try {
-                        sh 'pwd'
-                        sh 'cd $PROJECT_PATH'
-                        sh 'pwd'
-                        // COMMIT_HASH를 Jenkinsfile에서 얻음
-                        echo '빌드 시작'
-                        def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
-                        def dockerImage = docker.build("${DOCKER_IMG_NAME}:${commitHash}")
+                        dir("$PROJECT_PATH") {
+                            // COMMIT_HASH를 Jenkinsfile에서 얻음
+                            echo '빌드 시작'
+                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+                            def dockerImage = docker.build("${DOCKER_IMG_NAME}:${commitHash}")
 
-                        // Docker Hub에 로그인
-                        withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
-                            // Docker 이미지 push
-                            dockerImage.push("${commitHash}")
+                            // Docker Hub에 로그인
+                            withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                                // Docker 이미지 push
+                                dockerImage.push("${commitHash}")
+                            }
+                            echo '빌드 및 푸시 성공'
                         }
-                        echo '빌드 및 푸시 성공'
                     } catch (Exception e) {
                         echo '빌드 및 푸시 실패: ' + e.getMessage()
                         currentBuild.result = 'FAILURE'
@@ -70,18 +39,19 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'cd $PROJECT_PATH'
-                        def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
-                        def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
-                        dockerImage.run("""
-                        -p 3000:3000
-                        --name ${CONTAINER_NAME}
-                        -v ~/envs/.env:/usr/src/app/.env
-                        -v ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
-                        -v ~/envs/certificate.crt:/usr/src/app/certificate.crt
-                        -v ~/envs/private.key:/usr/src/app/private.key
-                        """)
-                        echo '컨테이너 실행 성공'
+                        dir("$PROJECT_PATH") {
+                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+                            def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
+                            dockerImage.run("""
+                            -p 3000:3000
+                            --name ${CONTAINER_NAME}
+                            -v ~/envs/.env:/usr/src/app/.env
+                            -v ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
+                            -v ~/envs/certificate.crt:/usr/src/app/certificate.crt
+                            -v ~/envs/private.key:/usr/src/app/private.key
+                            """)
+                            echo '컨테이너 실행 성공'
+                        }
                     } catch (Exception e) {
                         echo '컨테이너 실행 실패: ' + e.getMessage()
                         currentBuild.result = 'FAILURE'
