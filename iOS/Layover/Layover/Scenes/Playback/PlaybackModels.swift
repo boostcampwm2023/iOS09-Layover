@@ -17,6 +17,7 @@ enum PlaybackModels {
 
     enum ParentView {
         case home
+        case myProfile
         case other
     }
 
@@ -68,30 +69,30 @@ enum PlaybackModels {
     enum DisplayPlaybackVideo {
         struct Request {
             let indexPathRow: Int?
-            let curCell: PlaybackCell?
+            let currentCell: PlaybackCell?
         }
 
         struct Response {
             let indexPathRow: Int?
-            let prevCell: PlaybackCell?
-            let curCell: PlaybackCell?
+            let previousCell: PlaybackCell?
+            let currentCell: PlaybackCell?
 
-            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+            init(indexPathRow: Int? = nil, previousCell: PlaybackCell?, currentCell: PlaybackCell?) {
                 self.indexPathRow = indexPathRow
-                self.prevCell = prevCell
-                self.curCell = curCell
+                self.previousCell = previousCell
+                self.currentCell = currentCell
             }
         }
 
         struct ViewModel {
             let indexPathRow: Int?
-            var prevCell: PlaybackCell?
-            let curCell: PlaybackCell?
+            var previousCell: PlaybackCell?
+            let currentCell: PlaybackCell?
 
-            init(indexPathRow: Int? = nil, prevCell: PlaybackCell?, curCell: PlaybackCell?) {
+            init(indexPathRow: Int? = nil, previousCell: PlaybackCell?, currentCell: PlaybackCell?) {
                 self.indexPathRow = indexPathRow
-                self.prevCell = prevCell
-                self.curCell = curCell
+                self.previousCell = previousCell
+                self.currentCell = currentCell
             }
         }
     }
@@ -120,12 +121,12 @@ enum PlaybackModels {
 
         struct Response {
             let willMoveLocation: Float64
-            let curCell: PlaybackCell
+            let currentCell: PlaybackCell
         }
 
         struct ViewModel {
             let willMoveLocation: Float64
-            let curCell: PlaybackCell
+            let currentCell: PlaybackCell
         }
     }
 
@@ -142,6 +143,67 @@ enum PlaybackModels {
 
         struct ViewModel {
             let boardID: Int
+        }
+    }
+
+    // MARK: - UseCase Set Seemore button
+
+    enum SetSeemoreButton {
+        enum ButtonType {
+            case report
+            case delete
+
+            var description: String? {
+                switch self {
+                case .report:
+                    "신고"
+                case .delete:
+                    "삭제"
+                }
+            }
+        }
+        struct Request {
+
+        }
+
+        struct Response {
+            let parentView: ParentView
+        }
+
+        struct ViewModel {
+            let buttonType: ButtonType
+        }
+    }
+
+    // MARK: - UseCase DeleteVideo
+
+    enum DeletePlaybackVideo {
+        enum DeleteMessage {
+            case success
+            case fail
+
+            var description: String {
+                switch self {
+                case .success:
+                    "영상이 삭제되었습니다."
+                case .fail:
+                    "영상 삭제에 실패했습니다."
+                }
+            }
+        }
+
+        struct Request {
+            let playbackVideo: PlaybackVideo
+        }
+
+        struct Response {
+            let result: Bool
+            let playbackVideo: PlaybackVideo
+        }
+
+        struct ViewModel {
+            let deleteMessage: DeleteMessage
+            let playbackVideo: PlaybackVideo
         }
     }
 }

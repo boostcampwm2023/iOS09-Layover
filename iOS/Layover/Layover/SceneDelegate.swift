@@ -71,18 +71,15 @@ extension SceneDelegate {
                                                selector: #selector(routeToLoginViewController),
                                                name: .refreshTokenDidExpired,
                                                object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(showProgressView),
-                                               name: .uploadTaskStart,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(progressChanged),
-                                               name: .progressChanged,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(removeProgressView),
-                                               name: .uploadTaskDidComplete,
-                                               object: nil)
+        NotificationCenter.default.addObserver(forName: .uploadTaskStart, object: nil, queue: .main) { [weak self] _ in
+           self?.showProgressView()
+        }
+        NotificationCenter.default.addObserver(forName: .progressChanged, object: nil, queue: .main) { [weak self] notification in
+            self?.progressChanged(notification)
+        }
+        NotificationCenter.default.addObserver(forName: .uploadTaskDidComplete, object: nil, queue: .main) { [weak self] _ in
+            self?.removeProgressView()
+        }
     }
 
     private func removeNotificationObservers() {
@@ -107,7 +104,7 @@ extension SceneDelegate {
         rootNavigationViewController.setViewControllers([LoginViewController()], animated: true)
     }
 
-    @objc private func showProgressView() {
+    private func showProgressView() {
         guard let progressViewWidth = window?.screen.bounds.width,
               let windowHeight = window?.screen.bounds.height,
               let tabBarViewController = window?.rootViewController as? UITabBarController else { return }
@@ -122,7 +119,7 @@ extension SceneDelegate {
     }
 
 
-    @objc private func progressChanged(_ notification: Notification) {
+    private func progressChanged(_ notification: Notification) {
         guard let progress = notification.userInfo?["progress"] as? Float else { return }
         progressView.setProgress(progress, animated: true)
         if progress == 1 {
@@ -130,7 +127,7 @@ extension SceneDelegate {
         }
     }
 
-    @objc private func removeProgressView() {
+    private func removeProgressView() {
         progressView.removeFromSuperview()
     }
 

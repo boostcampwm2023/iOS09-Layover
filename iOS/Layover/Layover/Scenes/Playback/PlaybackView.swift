@@ -15,11 +15,13 @@ final class PlaybackView: UIView {
 
     private var timeObserverToken: Any?
 
+    private var playerObserverToken: Any?
+
     // MARK: - UI Components
     // TODO: private 다시 붙이고 Method 처리
-    let descriptionView: LODescriptionView = {
+    lazy var descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
-        descriptionView.setText("밤새 모니터에 튀긴 침이 마르기도 전에 대기실로 아참 교수님이 문신 땜에 긴팔 입고 오래 난 시작도 전에 눈을 감았지")
+        descriptionView.setText("임시내용임")
         descriptionView.clipsToBounds = true
         return descriptionView
     }()
@@ -91,16 +93,12 @@ final class PlaybackView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
-        addDescriptionAnimateGesture()
-        setSubViewsInPlayerViewConstraints()
         setPlayerView()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setUI()
-        addDescriptionAnimateGesture()
-        setSubViewsInPlayerViewConstraints()
         setPlayerView()
     }
 
@@ -118,9 +116,11 @@ final class PlaybackView: UIView {
 
     func stopPlayer() {
         playerView.pause()
+        NotificationCenter.default.removeObserver(self)
     }
 
     func playPlayer() {
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: playerView.player?.currentItem)
         playerView.play()
     }
 
@@ -175,6 +175,21 @@ final class PlaybackView: UIView {
             playerView.player?.removeTimeObserver(timeObserverToken)
         }
     }
+
+    func setDescriptionViewUI() {
+        if descriptionView.checkLabelOverflow() {
+            let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
+            let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
+            let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
+            descriptionView.heightAnchor.constraint(equalToConstant: totalHeight).isActive = true
+            descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight).isActive = true
+            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
+            addDescriptionAnimateGesture()
+        } else {
+            descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight).isActive = true
+            descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor).isActive = true
+        }
+    }
 }
 
 // MARK: PlaybackView 내부에서만 쓰이는 Method
@@ -192,26 +207,17 @@ private extension PlaybackView {
     func setPlayerView() {
         let playerViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerViewDidTap))
         self.addGestureRecognizer(playerViewGesture)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: playerView.player?.currentItem)
     }
 
     func addDescriptionAnimateGesture() {
         let descriptionViewGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(descriptionViewDidTap(_:)))
+        for recognizer in descriptionView.descriptionLabel.gestureRecognizers ?? [] {
+            descriptionView.descriptionLabel.removeGestureRecognizer(recognizer)
+        }
         descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
     }
 
     // MARK: - UI Method
-
-    func setDescriptionViewUI() {
-        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
-        let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
-        let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
-        descriptionView.heightAnchor.constraint(equalToConstant: totalHeight).isActive = true
-        descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight).isActive = true
-        if descriptionView.checkLabelOverflow() {
-            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
-        }
-    }
 
     func setSubViewsInPlayerViewConstraints() {
         [descriptionView, tagStackView, profileButton, profileLabel, locationLabel, pauseImage, playImage].forEach { subView in
@@ -248,7 +254,6 @@ private extension PlaybackView {
             playImage.widthAnchor.constraint(equalToConstant: 65),
             playImage.heightAnchor.constraint(equalToConstant: 65)
         ])
-        setDescriptionViewUI()
     }
 
     func setUI() {

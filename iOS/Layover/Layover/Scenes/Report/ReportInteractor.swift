@@ -38,7 +38,7 @@ final class ReportInteractor: ReportBusinessLogic, ReportDataStore {
             await MainActor.run {
                 presenter?.presentReportPlaybackVideo(with: response)
             }
-            return true
+            return result
         }
     }
 }

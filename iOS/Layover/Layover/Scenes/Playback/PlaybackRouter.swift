@@ -35,7 +35,7 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
         guard let source = dataStore,
               var destination = reportViewController.router?.dataStore
         else { return }
-        destination.boardID = source.prevCell?.boardID
+        destination.boardID = source.previousCell?.boardID
         reportViewController.modalPresentationStyle = .fullScreen
         viewController?.present(reportViewController, animated: false)
     }

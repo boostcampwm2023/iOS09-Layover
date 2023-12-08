@@ -10,9 +10,10 @@ import UIKit
 import AVFoundation
 
 final class PlaybackCell: UICollectionViewCell {
+
+    var boardID: Int?
+
     let playbackView: PlaybackView = PlaybackView()
-    var timeObserverToken: Any?
-    var boardID: Int = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,6 +33,7 @@ final class PlaybackCell: UICollectionViewCell {
         boardID = info.boardID
         playbackView.descriptionView.titleLabel.text = info.title
         playbackView.descriptionView.setText(info.content)
+        playbackView.setDescriptionViewUI()
         playbackView.profileLabel.text = info.profileName
         playbackView.tagStackView.resetTagStackView()
         info.tag.forEach { tag in
