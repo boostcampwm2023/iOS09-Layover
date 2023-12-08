@@ -174,6 +174,7 @@ final class PlaybackView: UIView {
         if let timeObserverToken = timeObserverToken {
             playerView.player?.removeTimeObserver(timeObserverToken)
         }
+        timeObserverToken = nil
     }
 
     func setDescriptionViewUI() {
