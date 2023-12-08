@@ -77,25 +77,27 @@ describe('OauthService', () => {
       expect(returnValue).toEqual('3cf9bc8398aac46ecd844cfcea66ce8e367147eaf589423b971fa1f8d62c9c20');
     });
 
-    it(`2 : idToken에 sub이 없으면 -> OAUTH07`, () => {
+    it(`2 : idToken에 sub이 없으면 -> INVALID_IDENTITY_TOKEN`, () => {
       // when & then
       const fakeJwtTokenWithNoSub =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.hqWGSaFpvbrXkOWc6lrnffhNWR19W_S1YKFBx2arWBk';
-      expect(() => service.getAppleMemberHash(fakeJwtTokenWithNoSub)).toThrow(new CustomResponse(ECustomCode.OAUTH07));
+      expect(() => service.getAppleMemberHash(fakeJwtTokenWithNoSub)).toThrow(
+        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
+      );
       expect(spyExtractPayloadJWT).toHaveBeenCalledWith(fakeJwtTokenWithNoSub);
       expect(spyHashSHA256).toHaveBeenCalledTimes(0);
     });
   });
 
   describe('verifyAppleIdentityToken() 테스트', () => {
-    it('1 : verifyJwtToken() 함수가 에러를 발생시키면 -> OAUTH07', async () => {
+    it('1 : verifyJwtToken() 함수가 에러를 발생시키면 -> INVALID_IDENTITY_TOKEN', async () => {
       // given
       const identityToken = 'aaa.bbb.ccc';
       const spyVerifyJwtToken = jest.spyOn(jwtUtils, 'verifyJwtToken').mockRejectedValue(new Error('테스트 에러'));
 
       // when & then
       await expect(service.verifyAppleIdentityToken(identityToken)).rejects.toThrow(
-        new CustomResponse(ECustomCode.OAUTH07),
+        new CustomResponse(ECustomCode.INVALID_IDENTITY_TOKEN),
       );
 
       //clear spy
@@ -163,13 +165,13 @@ describe('OauthService', () => {
       );
     });
 
-    it(`2 : memberService.createMember() 오류일 때 OAUTH06을 잘 던지는가`, async () => {
+    it(`2 : memberService.createMember() 오류일 때 SAVE_MEMBER_INFO_ERR 잘 던지는가`, async () => {
       // given
       mockMemberService.createMember = jest.fn().mockRejectedValue(new Error('Test error'));
 
       // when & then
       await expect(service.signup(memberHash, username, provider)).rejects.toThrow(
-        new CustomResponse(ECustomCode.OAUTH06),
+        new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR),
       );
       expect(mockMemberService.createMember).toHaveBeenCalledWith(
         username,
@@ -221,9 +223,11 @@ describe('OauthService', () => {
       expect(returnValue).toHaveProperty('refreshToken', expect.stringMatching(jwtRegEx));
     });
 
-    it(`2 : 회원가입 안 된 유저 -> OAUTH01`, async () => {
+    it(`2 : 회원가입 안 된 유저 -> NOT_SIGNUP_MEMBER`, async () => {
       // when & then
-      await expect(service.login(notExistMemberHash)).rejects.toThrow(new CustomResponse(ECustomCode.OAUTH01));
+      await expect(service.login(notExistMemberHash)).rejects.toThrow(
+        new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER),
+      );
       expect(spyIsMemberExistByHash).toHaveBeenCalledWith(notExistMemberHash);
       expect(spyGenerateAccessRefreshTokens).toHaveBeenCalledTimes(0);
     });
@@ -266,7 +270,7 @@ describe('OauthService', () => {
       expect(returnValue).toHaveProperty('refreshToken', expect.stringMatching(jwtRegEx));
     });
 
-    it(`2 : signAsync 오류 -> OAUTH04`, async () => {
+    it(`2 : signAsync 오류 -> TOKEN_GENERATE_ERR`, async () => {
       // given
       mockJwtService.signAsync = jest.fn(async () => {
         throw new Error('Test error');
@@ -274,7 +278,7 @@ describe('OauthService', () => {
 
       // when & then
       await expect(service.generateAccessRefreshTokens(memberHash)).rejects.toThrow(
-        new CustomResponse(ECustomCode.OAUTH04),
+        new CustomResponse(ECustomCode.TOKEN_GENERATE_ERR),
       );
       expect(mockMemberService.getMemberByHash).toHaveBeenCalledWith(memberHash);
       expect(spyMakeJwtPayload).toHaveBeenCalledWith('access', memberHash, 777);
@@ -284,7 +288,7 @@ describe('OauthService', () => {
       expect(mockRedisClient.setEx).toHaveBeenCalledTimes(0);
     });
 
-    it(`3 : Redis 오류 -> OAUTH05`, async () => {
+    it(`3 : Redis 오류 -> REFRESH_TOKEN_SAVE_ERR`, async () => {
       // given
       mockRedisClient.setEx = jest.fn(() => {
         throw new Error('Test error');
@@ -292,7 +296,7 @@ describe('OauthService', () => {
 
       // when & then
       await expect(service.generateAccessRefreshTokens(memberHash)).rejects.toThrow(
-        new CustomResponse(ECustomCode.OAUTH05),
+        new CustomResponse(ECustomCode.REFRESH_TOKEN_SAVE_ERR),
       );
       expect(mockMemberService.getMemberByHash).toHaveBeenCalledWith(memberHash);
       expect(spyMakeJwtPayload).toHaveBeenCalledWith('access', memberHash, 777);
