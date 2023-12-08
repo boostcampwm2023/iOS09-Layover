@@ -40,6 +40,7 @@ final class SettingRouter: SettingRoutingLogic, SettingDataPassing {
         let loginViewController = LoginViewController()
         guard let rootNavigationController = viewController?.view.window?.rootViewController
                 as? UINavigationController else { return }
+        rootNavigationController.setNavigationBarHidden(false, animated: true)
         rootNavigationController.setViewControllers([loginViewController], animated: true)
     }
 }
