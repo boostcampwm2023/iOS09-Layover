@@ -273,8 +273,9 @@ extension EditProfileViewController: EditProfileDisplayLogic {
         nicknameAlertLabel.isHidden = viewModel.nicknameAlertDescription == nil
         introduceAlertLabel.text = viewModel.introduceAlertDescription
         introduceAlertLabel.isHidden = viewModel.introduceAlertDescription == nil
-
-        checkDuplicateNicknameButton.isEnabled = viewModel.canCheckNicknameDuplication == true ? true : checkDuplicateNicknameButton.isEnabled
+        if let canCheckNicknameDuplication = viewModel.canCheckNicknameDuplication {
+            checkDuplicateNicknameButton.isEnabled = canCheckNicknameDuplication
+        }
         confirmButton.isEnabled = viewModel.canEditProfile
     }
 
@@ -285,8 +286,4 @@ extension EditProfileViewController: EditProfileDisplayLogic {
         confirmButton.isEnabled = viewModel.canEditProfile
         isValidNickname = viewModel.isValidNickname
     }
-}
-
-#Preview {
-    EditProfileViewController()
 }

@@ -58,10 +58,12 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             didCheckedNicknameDuplicate = changedNickname == nickname
             nicknameState = userWorker?.validateNickname(changedNickname ?? "") ?? .invalidCharacter
 
+            let canCheckNicknameDuplication = changedNickname == nickname ? false : nicknameState == .valid
+
             response = Models.ChangeProfile.Response(nicknameAlertDescription: nicknameState != .valid ? nicknameState.description : nil,
-                                                         introduceAlertDescription: nil,
-                                                         canCheckNicknameDuplication: (nicknameState == .valid && changedNickname != nickname),
-                                                         canEditProfile: false)
+                                                     introduceAlertDescription: nil,
+                                                     canCheckNicknameDuplication: canCheckNicknameDuplication,
+                                                     canEditProfile: false)
 
         case .introduce(let changedIntroduce):
             introduceState = introduceLengthState(of: changedIntroduce ?? "", by: request.validIntroduceLength)
@@ -116,15 +118,15 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             }
 
             // 프로필 이미지 바꾼 경우
-            guard let modifiedProfileImageData = request.profileImageData,
-                  let modifiedProfileImageExtension = request.profileImageExtension,
-                  let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: modifiedProfileImageExtension),
-                  let modifyProfileImageResponse = await userWorker?.modifyProfileImage(data: modifiedProfileImageData,
-                                                                                        to: presignedUploadURL),
-                  modifyProfileImageResponse == true
-            else {
-                os_log(.error, log: .data, "Edit ProfileImage Error")
-                return false
+            if let modifiedProfileImageData = request.profileImageData,
+               let modifiedProfileImageExtension = request.profileImageExtension,
+               let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: modifiedProfileImageExtension) {
+                let modifyProfileImageResponse = await userWorker?.modifyProfileImage(data: modifiedProfileImageData,
+                                                                                      to: presignedUploadURL)
+                guard await modifyProfileImageResponse != nil else {
+                    os_log(.error, log: .data, "Edit ProfileImage Error")
+                    return false
+                }
             }
 
             await MainActor.run {
