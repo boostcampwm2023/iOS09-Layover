@@ -101,6 +101,7 @@ final class PlaybackViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         interactor?.leavePlaybackView()
+        interactor?.hidePlayerSlider()
         if isMovingFromParent {
             interactor?.resetVideo()
         }
@@ -185,15 +186,15 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
-        if let prevCell = viewModel.prevCell {
-            prevCell.playbackView?.removePlayerSlider()
-            prevCell.playbackView?.stopPlayer()
-            prevCell.playbackView?.replayPlayer()
+        if let previousCell = viewModel.previousCell {
+            previousCell.playbackView.removePlayerSlider()
+            previousCell.playbackView.stopPlayer()
+            previousCell.playbackView.replayPlayer()
         }
-        if let curCell = viewModel.curCell {
-            curCell.addPlayerSlider(tabBarHeight: tabBarHeight)
-            curCell.playbackView?.addTargetPlayerSlider()
-            curCell.playbackView?.playPlayer()
+        if let currentCell = viewModel.currentCell {
+            currentCell.addPlayerSlider(tabBarHeight: tabBarHeight)
+            currentCell.playbackView.addTargetPlayerSlider()
+            currentCell.playbackView.playPlayer()
         }
     }
 
@@ -201,12 +202,12 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: viewModel.indexPathRow, section: 0)) as? PlaybackCell else {
             return
         }
-        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: nil, curCell: currentPlaybackCell)
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: nil, currentCell: currentPlaybackCell)
         interactor?.playInitialPlaybackCell(with: request)
     }
 
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        viewModel.curCell?.playbackView?.playerSlider?.isHidden = false
+        viewModel.currentCell?.playbackView.playerSlider?.isHidden = false
     }
 
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel) {
@@ -221,7 +222,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        viewModel.prevCell?.playbackView?.stopPlayer()
+        viewModel.previousCell?.playbackView.stopPlayer()
     }
 
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel) {
@@ -241,15 +242,15 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel) {
         let seekTime: CMTime = CMTime(value: CMTimeValue(viewModel.willMoveLocation), timescale: 1)
-        viewModel.curCell.playbackView?.seekPlayer(seekTime: seekTime)
-        viewModel.curCell.playbackView?.playPlayer()
+        viewModel.currentCell.playbackView.seekPlayer(seekTime: seekTime)
+        viewModel.currentCell.playbackView.playPlayer()
     }
 
     func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
-        var curCell = viewModel.curCell
-        curCell?.resetObserver()
-        curCell?.playbackView?.resetPlayer()
-        curCell = nil
+        var currentCell = viewModel.currentCell
+        currentCell?.resetObserver()
+        currentCell?.playbackView.resetPlayer()
+        currentCell = nil
     }
 
     func setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel) {
@@ -296,7 +297,7 @@ extension PlaybackViewController: UICollectionViewDelegate {
         guard let currentPlaybackCell: PlaybackCell = playbackCollectionView.cellForItem(at: IndexPath(row: indexPathRow, section: 0)) as? PlaybackCell else {
             return
         }
-        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPathRow, curCell: currentPlaybackCell)
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPathRow, currentCell: currentPlaybackCell)
         interactor?.playVideo(with: request)
     }
 
@@ -309,7 +310,7 @@ extension PlaybackViewController: UICollectionViewDelegate {
             return
         }
 
-        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, curCell: currentPlaybackCell)
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
         interactor?.playTeleportVideo(with: request)
     }
 }
