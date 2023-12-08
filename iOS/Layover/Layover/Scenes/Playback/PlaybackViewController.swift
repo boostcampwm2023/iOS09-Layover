@@ -270,6 +270,9 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([viewModel.playbackVideo])
         dataSource.apply(snapshot, animatingDifferences: true)
+        if snapshot.itemIdentifiers.count < 1 {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 }
 
