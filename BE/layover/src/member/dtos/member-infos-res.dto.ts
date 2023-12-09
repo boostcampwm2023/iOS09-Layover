@@ -23,9 +23,9 @@ export class MemberInfosResDto {
     example: 'https://layover-profile-image.kr.obj...',
     description: '요청한 회원의 프로필 이미지를 다운받을 수 있는 url',
   })
-  profile_image_url: string;
+  profile_image_url: string | null;
 
-  constructor(id: number, username: string, introduce: string, profile_image_url: string) {
+  constructor(id: number, username: string, introduce: string, profile_image_url: string | null) {
     this.id = id;
     this.username = username;
     this.introduce = introduce;

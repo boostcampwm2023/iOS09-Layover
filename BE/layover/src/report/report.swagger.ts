@@ -9,8 +9,7 @@ export const REPORT_SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'SUCCESS' },
-        message: { type: 'string', example: '성공' },
+        message: { type: 'string', example: '요청이 성공적으로 처리되었습니다.' },
         statusCode: { type: 'number', example: HttpStatus.OK },
         data: { $ref: getSchemaPath(ReportResDto) },
       },
