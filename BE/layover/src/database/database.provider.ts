@@ -13,6 +13,10 @@ export const databaseProviders = [
         database: 'layover_test',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
+        charset: 'utf8mb4_unicode_ci',
+        extra: {
+          charset: 'utf8mb4_unicode_ci',
+        },
       });
 
       return dataSource.initialize();

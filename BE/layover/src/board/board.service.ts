@@ -36,10 +36,13 @@ export class BoardService {
         'WAITING',
       ),
     );
+
     if (createBoardDto.tag) {
-      createBoardDto.tag.map(async (tagname) => {
-        await this.tagService.createTag(savedBoard, tagname);
-      });
+      await Promise.all(
+        createBoardDto.tag.map(async (tagname) => {
+          await this.tagService.createTag(savedBoard, tagname);
+        }),
+      );
     }
 
     return new CreateBoardResDto(
