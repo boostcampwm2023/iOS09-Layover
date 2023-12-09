@@ -290,6 +290,7 @@ extension EditProfileViewController: EditProfileDisplayLogic {
     func displayChangedProfileState(with viewModel: EditProfileModels.ChangeProfile.ViewModel) {
         nicknameAlertLabel.text = viewModel.nicknameAlertDescription
         nicknameAlertLabel.isHidden = viewModel.nicknameAlertDescription == nil
+        nicknameAlertLabel.textColor = viewModel.nicknameState == .valid ? .correct : .error
         introduceAlertLabel.text = viewModel.introduceAlertDescription
         introduceAlertLabel.isHidden = viewModel.introduceAlertDescription == nil
         if let canCheckNicknameDuplication = viewModel.canCheckNicknameDuplication {

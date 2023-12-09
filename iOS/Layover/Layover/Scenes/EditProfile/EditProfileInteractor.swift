@@ -60,7 +60,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
             let canCheckNicknameDuplication = changedNickname == nickname ? false : nicknameState == .valid
 
-            response = Models.ChangeProfile.Response(nicknameAlertDescription: nicknameState != .valid ? nicknameState.description : nil,
+            response = Models.ChangeProfile.Response(nicknameState: nicknameState,
+                                                     nicknameAlertDescription: nicknameState != .valid ? nicknameState.description : nil,
                                                      introduceAlertDescription: nil,
                                                      canCheckNicknameDuplication: canCheckNicknameDuplication,
                                                      canEditProfile: false)
@@ -74,7 +75,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
             let introduceAlertDescription = introduce == changedIntroduce || introduceState == .valid ? nil : introduceState.description
 
-            response = Models.ChangeProfile.Response(nicknameAlertDescription: nil,
+            response = Models.ChangeProfile.Response(nicknameState: nicknameState,
+                                                     nicknameAlertDescription: nil,
                                                      introduceAlertDescription: introduceAlertDescription,
                                                      canCheckNicknameDuplication: nil,
                                                      canEditProfile: canEditProfile)
@@ -83,7 +85,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             let canEditProfile = didCheckedNicknameDuplicate
             && nicknameState == .valid
             && introduceState == .valid
-            response = Models.ChangeProfile.Response(nicknameAlertDescription: nil,
+            response = Models.ChangeProfile.Response(nicknameState: nicknameState,
+                                                     nicknameAlertDescription: nil,
                                                      introduceAlertDescription: nil,
                                                      canCheckNicknameDuplication: nil,
                                                      canEditProfile: canEditProfile)

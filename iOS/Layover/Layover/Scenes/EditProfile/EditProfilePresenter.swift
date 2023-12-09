@@ -37,7 +37,8 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
     }
 
     func presentProfileState(with response: Models.ChangeProfile.Response) {
-        let viewModel = Models.ChangeProfile.ViewModel(nicknameAlertDescription: response.nicknameAlertDescription,
+        let viewModel = Models.ChangeProfile.ViewModel(nicknameState: response.nicknameState, 
+                                                       nicknameAlertDescription: response.nicknameAlertDescription,
                                                        introduceAlertDescription: response.introduceAlertDescription,
                                                        canCheckNicknameDuplication: response.canCheckNicknameDuplication,
                                                        canEditProfile: response.canEditProfile)

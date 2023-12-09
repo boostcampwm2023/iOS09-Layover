@@ -56,6 +56,7 @@ enum EditProfileModels {
         }
 
         struct Response {
+            let nicknameState: NicknameState
             let nicknameAlertDescription: String?
             let introduceAlertDescription: String?
             let canCheckNicknameDuplication: Bool?
@@ -63,6 +64,7 @@ enum EditProfileModels {
         }
 
         struct ViewModel {
+            let nicknameState: NicknameState
             let nicknameAlertDescription: String?
             let introduceAlertDescription: String?
             let canCheckNicknameDuplication: Bool?
