@@ -29,11 +29,9 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
     func routeToPlayback() {
         let playbackViewController: PlaybackViewController = PlaybackViewController()
         guard let source = dataStore,
-              let destination = playbackViewController.router?.dataStore
+              var destination = playbackViewController.router?.dataStore
         else { return }
-        destination.parentView = .other
-        destination.index = source.postPlayStartIndex
-        destination.posts = source.posts
+        passDataToPlayback(source: source, destination: &destination)
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
 
@@ -47,5 +45,11 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
 
     private func passDataToEditVideo(source: MapDataStore, destination: inout EditVideoDataStore) {
         destination.videoURL = source.selectedVideoURL
+    }
+
+    private func passDataToPlayback(source: MapDataStore, destination: inout PlaybackDataStore) {
+        destination.posts = source.posts
+        destination.index = source.postPlayStartIndex
+        destination.parentView = .other
     }
 }

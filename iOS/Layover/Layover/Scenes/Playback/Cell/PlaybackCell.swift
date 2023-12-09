@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import AVFoundation
+import CoreLocation
+import OSLog
 
 final class PlaybackCell: UICollectionViewCell {
 
@@ -29,16 +30,18 @@ final class PlaybackCell: UICollectionViewCell {
         resetObserver()
     }
 
-    func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
-        boardID = info.boardID
-        playbackView.descriptionView.titleLabel.text = info.title
-        playbackView.descriptionView.setText(info.content)
+    func setPlaybackContents(post: PlaybackModels.DisplayPost) {
+        boardID = post.board.boardID
+        playbackView.descriptionView.titleLabel.text = post.board.title
+        playbackView.descriptionView.setText(post.board.description ?? "")
         playbackView.setDescriptionViewUI()
-        playbackView.profileLabel.text = info.profileName
+        playbackView.profileLabel.text = post.member.username
         playbackView.tagStackView.resetTagStackView()
-        info.tag.forEach { tag in
+        post.tags.forEach { tag in
             playbackView.tagStackView.addTag(tag)
         }
+        playbackView.setProfileButton(member: post.member)
+        playbackView.setLocationText(location: transLocation(latitude: post.board.latitude, longitude: post.board.longitude) ?? "이름 모를 곳")
     }
 
     func addAVPlayer(url: URL) {
@@ -66,5 +69,21 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
+    }
+
+    private func transLocation(latitude: Double, longitude: Double) -> String? {
+        let findLocation: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
+        let geoCoder: CLGeocoder = CLGeocoder()
+        let local: Locale = Locale(identifier: "Ko-kr")
+        var location: String? = nil
+        geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: local) { (place, error) in
+            if let address: [CLPlacemark] = place {
+                location = address.last?.administrativeArea
+            }
+            if let error {
+                os_log(.error, "convert location error: %@", error.localizedDescription)
+            }
+        }
+        return location
     }
 }

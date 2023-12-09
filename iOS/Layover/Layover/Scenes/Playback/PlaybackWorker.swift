@@ -6,7 +6,9 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
+import CoreLocation
+
 import OSLog
 
 protocol PlaybackWorkerProtocol {
