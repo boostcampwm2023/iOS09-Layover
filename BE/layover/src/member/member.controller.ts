@@ -114,7 +114,9 @@ export class MemberController {
     const profileImageKey = member.profile_image_key;
 
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    const preSignedUrl = generateDownloadPreSignedUrl(bucketname, profileImageKey);
+    let preSignedUrl: string;
+    if (profileImageKey !== 'default') preSignedUrl = generateDownloadPreSignedUrl(bucketname, profileImageKey);
+    else preSignedUrl = null;
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new MemberInfosResDto(id, username, introduce, preSignedUrl));
@@ -168,5 +170,21 @@ export class MemberController {
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new PreSignedUrlResDto(preSignedUrl));
+  }
+
+  @ApiOperation({
+    summary: '프로필 이미지를 기본 이미지로 변경',
+    description: '프로필 이미지를 기본 이미지로 변경합니다.',
+  })
+  @ApiResponse(MEMBER_SWAGGER.UPDATE_PROFILE_IMAGE_TO_DEFAULT_SUCCESS)
+  @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
+  @ApiBearerAuth('token')
+  @Post('profile-image/default')
+  async updateProfileImageToDefault(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+    // db에 반영
+    await this.memberService.updateProfileImage(payload.memberId, 'default');
+
+    // 응답
+    throw new CustomResponse(ECustomCode.SUCCESS);
   }
 }
