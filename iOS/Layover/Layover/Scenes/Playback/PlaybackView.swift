@@ -318,7 +318,10 @@ private extension PlaybackView {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.descriptionView.descriptionLabel.transform = .identity
                     self.descriptionView.titleLabel.transform = .identity
-                    self.descriptionView.descriptionLabel.layer.mask = self.gradientLayer
+                }, completion: { _ in
+                    UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+                        self.descriptionView.descriptionLabel.layer.mask = self.gradientLayer
+                    })
                 })
                 self.descriptionView.state = .hidden
             }
