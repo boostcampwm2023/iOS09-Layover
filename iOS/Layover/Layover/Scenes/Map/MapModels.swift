@@ -12,7 +12,7 @@ enum MapModels {
 
     struct DisplayedPost: Hashable {
         let boardID: Int
-        let thumbnailImageData: Data
+        let thumbnailImageData: Data?
         let videoURL: URL
         let latitude: Double
         let longitude: Double

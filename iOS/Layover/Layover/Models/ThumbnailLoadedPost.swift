@@ -12,5 +12,5 @@ struct ThumbnailLoadedPost {
     let member: Member
     let board: Board
     let tags: [String]
-    let thumbnailImageData: Data
+    let thumbnailImageData: Data?
 }

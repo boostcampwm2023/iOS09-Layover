@@ -8,6 +8,8 @@
 
 import Foundation
 
+import OSLog
+
 protocol MapWorkerProtocol {
     func fetchPosts(latitude: Double, longitude: Double) async -> [ThumbnailLoadedPost]?
 }
@@ -32,16 +34,26 @@ final class MapWorker: MapWorkerProtocol {
         let endPoint = postEndPointFactory.makeMapPostListEndPoint(latitude: latitude, longitude: longitude)
         do {
             let response = try await provider.request(with: endPoint)
-            guard let data = response.data else { return nil }
-            let posts = try await data.concurrentMap { postDTO -> ThumbnailLoadedPost in
-                let thumbnailImageData = try await self.provider.request(url: postDTO.board.videoThumbnailURL)
-                return .init(member: postDTO.member.toDomain(),
-                             board: postDTO.board.toDomain(),
-                             tags: postDTO.tag,
-                             thumbnailImageData: thumbnailImageData)
+            guard let posts = response.data else { return nil }
+            return await withTaskGroup(of: ThumbnailLoadedPost.self,
+                                       returning: [ThumbnailLoadedPost].self) { group in
+                for post in posts {
+                    group.addTask {
+                        let thumnailImageData = try? await self.provider.request(url: post.board.videoThumbnailURL)
+                        return .init(member: post.member.toDomain(),
+                                     board: post.board.toDomain(),
+                                     tags: post.tag,
+                                     thumbnailImageData: thumnailImageData)
+                    }
+                }
+                var thumbnailLoadedPosts: [ThumbnailLoadedPost] = []
+                for await thumbnailLoadedPost in group {
+                    thumbnailLoadedPosts.append(thumbnailLoadedPost)
+                }
+                return thumbnailLoadedPosts
             }
-            return posts
         } catch {
+            os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
         }
     }
