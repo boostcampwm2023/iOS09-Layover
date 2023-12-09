@@ -7,7 +7,6 @@ export const SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: '<type><num>' },
         message: { type: 'string', example: '서버에서 처리한 예외' },
         statusCode: { type: 'number', example: '000' },
       },
@@ -20,7 +19,6 @@ export const SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'NEST_OFFER_EXCEPTION' },
         message: { type: 'string', example: 'message from nest' },
         statusCode: { type: 'number', example: '000' },
       },
@@ -33,7 +31,6 @@ export const SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'INTERNAL_SERVER_ERROR' },
         message: { type: 'string', example: 'message from nest' },
         statusCode: { type: 'number', example: HttpStatus.INTERNAL_SERVER_ERROR },
       },
@@ -46,7 +43,6 @@ export const SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'OAUTH01' },
         message: { type: 'string', example: '회원가입이 되지 않은 유저입니다.' },
         statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
@@ -59,7 +55,6 @@ export const SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'JWT02' },
         message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
         statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
@@ -72,7 +67,6 @@ export const SWAGGER = {
     schema: {
       type: 'object',
       properties: {
-        customCode: { type: 'string', example: 'JWT02' },
         message: { type: 'string', example: '토큰 만료기간이 경과하였습니다.' },
         statusCode: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       },
