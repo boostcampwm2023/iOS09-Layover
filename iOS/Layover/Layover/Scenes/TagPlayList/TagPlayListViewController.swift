@@ -137,7 +137,7 @@ extension TagPlayListViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        interactor?.showPostsDetail(request: Models.ShowPostsDetail.Request(startIndex: indexPath.row))
     }
 }
 
