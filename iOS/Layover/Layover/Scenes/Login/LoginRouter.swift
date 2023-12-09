@@ -28,6 +28,7 @@ final class LoginRouter: LoginRoutingLogic, LoginDataPassing {
 
     func routeToMainTabBar() {
         let tabBarViewController = MainTabBarViewController()
+        viewController?.navigationController?.setNavigationBarHidden(true, animated: true)
         viewController?.navigationController?.setViewControllers([tabBarViewController], animated: true)
     }
 
