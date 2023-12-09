@@ -36,8 +36,11 @@ final class EditVideoInteractor: EditVideoBusinessLogic, EditVideoDataStore {
 
     func fetchVideo(request: EditVideoModels.FetchVideo.Request) {
         let isEdited = request.editedVideoURL != nil
-        guard let videoURL = isEdited ? request.editedVideoURL : videoURL else { return }
+        if let editedVideoURL = request.editedVideoURL {
+            videoURL = editedVideoURL
+        }
 
+        guard let videoURL else { return }
         Task {
             let duration = try await AVAsset(url: videoURL).load(.duration)
             let seconds = CMTimeGetSeconds(duration)
