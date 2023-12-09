@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Install') {
+            steps {
+                dir('BE/layover') {
+                    sh 'npm install'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('BE/layover') {
+                    echo '빌드 시작'
+                    sh 'npm run build'
+                }
+            }
+            post {
+                success {
+                    echo '빌드 성공'
+                }
+                failure {
+                    echo '빌드 실패'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('BE/layover') {
+                    echo '테스트 시작'
+                    sh 'npm run test'
+                }
+            }
+            post {
+                success {
+                    echo '테스트 성공'
+                }
+                failure {
+                    echo '테스트 실패'
+                }
+            }
+        }
+    }
+}
