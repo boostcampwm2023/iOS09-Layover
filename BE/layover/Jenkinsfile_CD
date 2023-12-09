@@ -8,7 +8,35 @@ pipeline {
     }
 
     stages {
-        // ...
+        stage('Cleanup') {
+                    steps {
+                        script {
+                            try {
+                                // 컨테이너가 존재하면 삭제
+                                sh """
+                                CONTAINER_ID=\$(docker ps -a -q -f name=$CONTAINER_NAME)
+                                if [ -n "\$CONTAINER_ID" ]; then
+                                    docker rm -f \$CONTAINER_ID
+                                    echo "컨테이너 '$CONTAINER_NAME'를 삭제했습니다."
+                                fi
+                                """
+
+                                // 기존 이미지 삭제
+                                sh """
+                                IMAGE_ID=\$(docker images | grep "${DOCKER_IMG_NAME}" | awk '{print \$3}')
+                                if [ -n "\$IMAGE_ID" ]; then
+                                    docker rmi -f \$IMAGE_ID
+                                else
+                                    echo "Image does not exist. Skipping deletion."
+                                fi
+                                """
+                            } catch (Exception e) {
+                                echo 'Cleanup 실패: ' + e.getMessage()
+                                currentBuild.result = 'FAILURE'
+                            }
+                        }
+                    }
+                }
 
         stage('Build and Push Docker Image') {
             steps {
