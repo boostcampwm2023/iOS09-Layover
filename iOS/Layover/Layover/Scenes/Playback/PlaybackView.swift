@@ -64,7 +64,6 @@ final class PlaybackView: UIView {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2)
         label.textColor = UIColor.layoverWhite
-        label.text = "파리"
         return label
     }()
 
@@ -189,6 +188,19 @@ final class PlaybackView: UIView {
             descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight).isActive = true
             descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor).isActive = true
         }
+    }
+
+    func setProfileButton(member: PlaybackModels.Member) {
+        if let imageData: Data = member.profileImageData {
+            profileButton.setImage(UIImage(data: imageData), for: .normal)
+        } else {
+            profileButton.setImage(UIImage.profile, for: .normal)
+        }
+        // TODO: Target 추가
+    }
+
+    func setLocationText(location: String) {
+        locationLabel.text = "\(location)에서"
     }
 }
 

@@ -9,7 +9,8 @@
 import UIKit
 
 protocol PlaybackBusinessLogic {
-    func displayVideoList()
+    @discardableResult
+    func displayVideoList() -> Task<Bool, Never>
     func moveInitialPlaybackCell()
     func setInitialPlaybackCell()
     func leavePlaybackView()
@@ -42,6 +43,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     typealias Models = PlaybackModels
 
     var worker: PlaybackWorkerProtocol?
+    var userWorker: UserWorkerProtocol?
     var presenter: PlaybackPresentationLogic?
 
     var parentView: Models.ParentView?
@@ -58,16 +60,22 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     // MARK: - UseCase Load Video List
 
-    func displayVideoList() {
-        guard let parentView: Models.ParentView else { return }
-        guard var posts: [Post] else { return }
-        guard let worker else { return }
-        if parentView == .other {
-            posts = worker.makeInfiniteScroll(posts: posts)
-            self.posts = posts
+    func displayVideoList() -> Task<Bool, Never> {
+        Task {
+            guard let parentView: Models.ParentView,
+                  var posts: [Post],
+                  let worker: PlaybackWorkerProtocol else { return false }
+            if parentView == .other {
+                posts = worker.makeInfiniteScroll(posts: posts)
+                self.posts = posts
+            }
+            let videos: [Models.PlaybackVideo] = await transPostToVideo(posts)
+            let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+            await MainActor.run {
+                presenter?.presentVideoList(with: response)
+            }
+            return true
         }
-        let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(posts: posts)
-        presenter?.presentVideoList(with: response)
     }
 
     func moveInitialPlaybackCell() {
@@ -216,5 +224,33 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func resumeVideo() {
         guard let previousCell else { return }
         previousCell.playbackView.playPlayer()
+    }
+
+    private func transPostToVideo(_ posts: [Post]) async -> [Models.PlaybackVideo] {
+        var videos: [Models.PlaybackVideo] = []
+        for post in posts {
+            guard let videoURL: URL = post.board.videoURL else { continue }
+            var imageData: Data?
+            if let url: URL = post.member.profileImageURL {
+                imageData = await userWorker?.fetchImageData(with: url)
+            }
+            videos.append(Models.PlaybackVideo(
+                displayPost: Models.DisplayPost(
+                    member: Models.Member(
+                        memberID: post.member.identifier,
+                        username: post.member.username,
+                        profileImageData: imageData),
+                    board: Models.Board(
+                        boardID: post.board.identifier,
+                        title: post.board.title,
+                        description: post.board.description,
+                        // TODO: thumbnail관련 로직이 변경된다면 같이 변경
+                        thumbnailImageURL: post.board.thumbnailImageURL,
+                        vidieoURL: videoURL,
+                        latitude: post.board.latitude,
+                        longitude: post.board.longitude),
+                    tags: post.tag)))
+        }
+        return videos
     }
 }
