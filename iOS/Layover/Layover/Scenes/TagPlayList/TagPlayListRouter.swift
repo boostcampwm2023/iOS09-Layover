@@ -9,7 +9,7 @@
 import UIKit
 
 protocol TagPlayListRoutingLogic {
-    
+    func routeToPlayback()
 }
 
 protocol TagPlayListDataPassing {
@@ -22,4 +22,19 @@ final class TagPlayListRouter: TagPlayListRoutingLogic, TagPlayListDataPassing {
 
     weak var viewController: TagPlayListViewController?
     var dataStore: TagPlayListDataStore?
+
+    func routeToPlayback() {
+        let playbackViewController: PlaybackViewController = PlaybackViewController()
+        guard let source = dataStore,
+              var destination = playbackViewController.router?.dataStore else { return }
+
+        passDataToPlayback(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
+    }
+
+    private func passDataToPlayback(source: TagPlayListDataStore, destination: inout PlaybackDataStore) {
+        destination.parentView = .other
+        destination.index = source.postPlayStartIndex
+        destination.posts = source.posts
+    }
 }

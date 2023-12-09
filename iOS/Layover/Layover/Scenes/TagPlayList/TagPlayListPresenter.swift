@@ -12,6 +12,7 @@ protocol TagPlayListPresentationLogic {
     func presentPlayList(response: TagPlayListModels.FetchPosts.Response)
     func presentMorePlayList(response: TagPlayListModels.FetchMorePosts.Response)
     func presentTitleTag(response: TagPlayListModels.FetchTitleTag.Response)
+    func presentPostsDetail(response: TagPlayListModels.ShowPostsDetail.Response)
 }
 
 final class TagPlayListPresenter: TagPlayListPresentationLogic {
@@ -35,5 +36,9 @@ final class TagPlayListPresenter: TagPlayListPresentationLogic {
     func presentTitleTag(response: TagPlayListModels.FetchTitleTag.Response) {
         let titleTag = response.titleTag
         viewController?.displayTitle(viewModel: Models.FetchTitleTag.ViewModel(title: titleTag))
+    }
+
+    func presentPostsDetail(response: TagPlayListModels.ShowPostsDetail.Response) {
+        viewController?.routeToPlayback()
     }
 }

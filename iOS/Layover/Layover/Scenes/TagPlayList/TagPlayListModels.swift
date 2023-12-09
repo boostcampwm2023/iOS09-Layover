@@ -55,4 +55,16 @@ enum TagPlayListModels {
             let title: String
         }
     }
+
+    enum ShowPostsDetail {
+        struct Request {
+            let startIndex: Int
+        }
+
+        struct Response {
+        }
+
+        struct ViewModel {
+        }
+    }
 }

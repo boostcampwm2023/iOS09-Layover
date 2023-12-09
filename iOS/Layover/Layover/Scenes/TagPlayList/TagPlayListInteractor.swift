@@ -15,11 +15,13 @@ protocol TagPlayListBusinessLogic {
     func fetchPlayList(request: TagPlayListModels.FetchPosts.Request) -> Task<Bool, Never>
     @discardableResult
     func fetchMorePlayList(request: TagPlayListModels.FetchMorePosts.Request) -> Task<Bool, Never>
+    func showPostsDetail(request: TagPlayListModels.ShowPostsDetail.Request)
 }
 
 protocol TagPlayListDataStore {
     var titleTag: String? { get set }
     var posts: [Post] { get set }
+    var postPlayStartIndex: Int? { get set }
 }
 
 final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStore {
@@ -36,9 +38,10 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
 
     var titleTag: String?
     var posts: [Post] = []
+    var postPlayStartIndex: Int?
 
     // MARK: - TagPlayListBusinessLogic
-    
+
     func setTitleTag(request: TagPlayListModels.FetchTitleTag.Request) {
         guard let titleTag = titleTag else { return }
         presenter?.presentTitleTag(response: Models.FetchTitleTag.Response(titleTag: titleTag))
@@ -81,6 +84,11 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
 
             return true
         }
+    }
+
+    func showPostsDetail(request: Models.ShowPostsDetail.Request) {
+        postPlayStartIndex = request.startIndex
+        presenter?.presentPostsDetail(response: Models.ShowPostsDetail.Response())
     }
 
     private func transformDisplayedPost(with posts: [Post]) async -> [Models.DisplayedPost] {

@@ -11,6 +11,7 @@ protocol TagPlayListDisplayLogic: AnyObject {
     func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel)
     func displayMorePlayList(viewModel: TagPlayListModels.FetchMorePosts.ViewModel)
     func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel)
+    func routeToPlayback()
 }
 
 final class TagPlayListViewController: BaseViewController {
@@ -134,6 +135,10 @@ extension TagPlayListViewController: UICollectionViewDelegate {
             interactor?.fetchMorePlayList(request: Models.FetchMorePosts.Request())
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+    }
 }
 
 // MARK: - TagPlayListDisplayLogic
@@ -154,6 +159,10 @@ extension TagPlayListViewController: TagPlayListDisplayLogic {
 
     func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel) {
         setNavigationBar(with: viewModel.title)
+    }
+
+    func routeToPlayback() {
+        router?.routeToPlayback()
     }
 }
 
