@@ -28,7 +28,11 @@ export class ReportController {
   @ApiBearerAuth('token')
   @Post()
   async receiveReport(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() body: ReportDto) {
-    const responseData: ReportResDto = await this.reportService.insertReport(payload.memberId, body.boardId, body.reportType);
+    const responseData: ReportResDto = await this.reportService.createReport(
+      payload.memberId,
+      body.boardId,
+      body.reportType,
+    );
 
     throw new CustomResponse(ECustomCode.SUCCESS, responseData);
   }
