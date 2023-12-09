@@ -114,6 +114,7 @@ final class EditVideoViewController: BaseViewController {
     }
 
     @objc private func cutButtonDidTap() {
+        loopingPlayerView.player?.isMuted = true
         guard let videoPath = originalVideoURL?.path() else { return }
         if UIVideoEditorController.canEditVideo(atPath: videoPath) {
             let editController = UIVideoEditorController()
@@ -139,7 +140,18 @@ extension EditVideoViewController: UINavigationControllerDelegate, UIVideoEditor
     func videoEditorController(_ editor: UIVideoEditorController, didSaveEditedVideoToPath editedVideoPath: String) {
         let editedVideoURL = NSURL(fileURLWithPath: editedVideoPath) as URL
         interactor?.fetchVideo(request: EditVideoModels.FetchVideo.Request(editedVideoURL: editedVideoURL))
-        dismiss(animated: true)
+        loopingPlayerView.player?.isMuted = soundButton.isSelected
+        editor.dismiss(animated: true)
+    }
+
+    func videoEditorControllerDidCancel(_ editor: UIVideoEditorController) {
+        loopingPlayerView.player?.isMuted = soundButton.isSelected
+        editor.dismiss(animated: true)
+    }
+
+    func videoEditorController(_ editor: UIVideoEditorController, didFailWithError error: Error) {
+        loopingPlayerView.player?.isMuted = soundButton.isSelected
+        editor.dismiss(animated: true)
     }
 
 }
