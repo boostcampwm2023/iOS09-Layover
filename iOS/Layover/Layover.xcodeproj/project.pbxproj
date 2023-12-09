@@ -59,6 +59,7 @@
 		198167A32B20583D0032F563 /* SettingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679E2B20583D0032F563 /* SettingModels.swift */; };
 		198167A42B20583D0032F563 /* SettingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981679F2B20583D0032F563 /* SettingInteractor.swift */; };
 		198167A62B20593B0032F563 /* SettingConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198167A52B20593B0032F563 /* SettingConfigurator.swift */; };
+		198167A82B20DD670032F563 /* PresignedURLDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198167A72B20DD670032F563 /* PresignedURLDTO.swift */; };
 		19A169232B176C5F00DB34C0 /* TagPlayListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */; };
 		19A169242B176C5F00DB34C0 /* TagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */; };
 		19A169252B176C5F00DB34C0 /* TagPlayListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */; };
@@ -272,6 +273,7 @@
 		1981679E2B20583D0032F563 /* SettingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModels.swift; sourceTree = "<group>"; };
 		1981679F2B20583D0032F563 /* SettingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractor.swift; sourceTree = "<group>"; };
 		198167A52B20593B0032F563 /* SettingConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingConfigurator.swift; sourceTree = "<group>"; };
+		198167A72B20DD670032F563 /* PresignedURLDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresignedURLDTO.swift; sourceTree = "<group>"; };
 		19A1691D2B176C5F00DB34C0 /* TagPlayListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListPresenter.swift; sourceTree = "<group>"; };
 		19A1691E2B176C5F00DB34C0 /* TagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListWorker.swift; sourceTree = "<group>"; };
 		19A1691F2B176C5F00DB34C0 /* TagPlayListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListRouter.swift; sourceTree = "<group>"; };
@@ -627,6 +629,7 @@
 				FC4084C52B1F1C5B00CE4727 /* UploadPostDTO.swift */,
 				FC4084C92B1F291200CE4727 /* UploadVideoDTO.swift */,
 				1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */,
+				198167A72B20DD670032F563 /* PresignedURLDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -1042,15 +1045,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FC7E45602AFEB62C004F155A /* Build configuration list for PBXNativeTarget "Layover" */;
 			buildPhases = (
+				FC182BD22B1D90C700051CBC /* SwiftLint Script */,
 				FC7E45322AFEB623004F155A /* Sources */,
 				FC7E45332AFEB623004F155A /* Frameworks */,
 				FC7E45342AFEB623004F155A /* Resources */,
-				FC182BD22B1D90C700051CBC /* SwiftLint Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				194552192B03DD7A00299768 /* PBXTargetDependency */,
 			);
 			name = Layover;
 			packageProductDependencies = (
@@ -1358,6 +1360,7 @@
 				FC68E2A52B0233D3001AABFF /* Provider.swift in Sources */,
 				FC930E7E2B0CDB2900AA48E3 /* ThumbnailCollectionViewCell.swift in Sources */,
 				194552112B03AF2B00299768 /* MainTabBarConfigurator.swift in Sources */,
+				198167A82B20DD670032F563 /* PresignedURLDTO.swift in Sources */,
 				8321A2F72B1E14A1000A12AF /* LOPopUpView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1377,10 +1380,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		194552192B03DD7A00299768 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 194552182B03DD7A00299768 /* SwiftLintPlugin */;
-		};
 		FC7E454E2AFEB62C004F155A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FC7E45352AFEB623004F155A /* Layover */;
@@ -1668,14 +1667,6 @@
 				kind = branch;
 			};
 		};
-		FC7E456D2AFF6E44004F155A /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/SwiftLint";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1683,11 +1674,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDK;
-		};
-		194552182B03DD7A00299768 /* SwiftLintPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FC7E456D2AFF6E44004F155A /* XCRemoteSwiftPackageReference "SwiftLint" */;
-			productName = "plugin:SwiftLintPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

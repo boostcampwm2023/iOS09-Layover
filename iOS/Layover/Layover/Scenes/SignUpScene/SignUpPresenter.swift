@@ -25,7 +25,7 @@ final class SignUpPresenter: SignUpPresentationLogic {
 
     func presentNicknameValidation(with response: Models.ValidateNickname.Response) {
         let viewModel = Models.ValidateNickname.ViewModel(canCheckDuplication: response.nicknameState == .valid,
-                                                          alertDescription: response.nicknameState.alertDescription)
+                                                          alertDescription: response.nicknameState.description)
         viewController?.displayNicknameValidation(response: viewModel)
     }
 

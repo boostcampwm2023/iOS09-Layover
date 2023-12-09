@@ -15,6 +15,8 @@ protocol UserEndPointFactory {
     func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>>
     func makeUserInformationEndPoint(with id: Int?) -> EndPoint<Response<MemberDTO>>
     func makeUserPostsEndPoint(at page: Int, of id: Int?) -> EndPoint<Response<[PostDTO]>>
+    func makeUserProfileImageDefaultEndPoint() -> EndPoint<Response<Data>>
+    func makeFetchUserProfilePresignedURL(of fileType: String) -> EndPoint<Response<PresignedURLDTO>>
 }
 
 final class DefaultUserEndPointFactory: UserEndPointFactory {
@@ -75,7 +77,6 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
     }
 
     func makeUserPostsEndPoint(at page: Int, of id: Int? = nil) -> EndPoint<Response<[PostDTO]>> {
-
         var queryParameters = [String: String]()
         queryParameters.updateValue(String(page), forKey: "page")
 
@@ -87,6 +88,24 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
             path: "/board/profile",
             method: .GET,
             queryParameters: queryParameters
+        )
+    }
+
+    func makeUserProfileImageDefaultEndPoint() -> EndPoint<Response<Data>> {
+        return EndPoint(
+            path: "/member/profile-image/default",
+            method: .POST
+        )
+    }
+
+    func makeFetchUserProfilePresignedURL(of fileType: String) -> EndPoint<Response<PresignedURLDTO>> {
+        var bodyParameters = [String: String]()
+        bodyParameters.updateValue(fileType, forKey: "filetype")
+
+        return EndPoint(
+            path: "/member/profile-image/presigned-url",
+            method: .POST,
+            bodyParameters: bodyParameters
         )
     }
 }

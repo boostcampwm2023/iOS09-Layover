@@ -12,12 +12,12 @@ protocol ProviderType {
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
-    func upload(data: Data, to url: String, method: HTTPMethod) async throws -> Data
+    func upload(data: Data, to presignedURL: String, method: HTTPMethod) async throws -> Data
     func upload(fromFile: URL,
-                          to url: String,
-                          method: HTTPMethod,
-                          sessionTaskDelegate: URLSessionTaskDelegate?,
-                          delegateQueue: OperationQueue?) async throws -> Data
+                to url: String,
+                method: HTTPMethod,
+                sessionTaskDelegate: URLSessionTaskDelegate?,
+                delegateQueue: OperationQueue?) async throws -> Data
 }
 
 extension ProviderType {
@@ -29,10 +29,14 @@ extension ProviderType {
                                  retryCount: retryCount)
     }
 
-    func upload(data: Data, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+    func upload(data: Data, to presignedURL: String, method: HTTPMethod = .PUT) async throws -> Data {
         return try await upload(data: data,
-                                to: url,
+                                to: presignedURL,
                                 method: method)
+    }
+
+    func upload(from fileURL: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+        return try await upload(from: fileURL, to: url, method: method)
     }
 
     func upload(fromFile: URL,
@@ -126,12 +130,24 @@ class Provider: ProviderType {
     }
 
     // 이미지 업로드용
-    func upload(data: Data, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
+    func upload(data: Data, to presignedURL: String, method: HTTPMethod = .PUT) async throws -> Data {
+        guard let contentType = URLComponents(string: presignedURL)?.queryItems?.first(where: { $0.name == "Content-Type"} )?.value,
+              let url = URL(string: presignedURL) else { throw NetworkError.components }
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
+        request.httpMethod = method.rawValue
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+
+        let (data, response) = try await session.upload(for: request, from: data)
+        try self.checkStatusCode(of: response)
+        return data
+    }
+
+    func upload(from fileURL: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
 
-        let (data, response) = try await session.upload(for: request, from: data)
+        let (data, response) = try await session.upload(for: request, fromFile: fileURL)
         try self.checkStatusCode(of: response)
         return data
     }

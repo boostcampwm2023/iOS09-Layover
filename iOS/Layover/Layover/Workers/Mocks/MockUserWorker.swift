@@ -10,7 +10,6 @@ import Foundation
 import OSLog
 
 final class MockUserWorker: UserWorkerProtocol {
-    
 
     // MARK: - Properties
 
@@ -195,4 +194,15 @@ final class MockUserWorker: UserWorkerProtocol {
         }
     }
 
+    func setProfileImageDefault() async -> Bool {
+        true
+    }
+
+    func modifyProfileImage(data: Data, to url: String) async -> Bool {
+        true
+    }
+
+    func fetchImagePresignedURL(with fileType: String) async -> String? {
+        return nil
+    }
 }

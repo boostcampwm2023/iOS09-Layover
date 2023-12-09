@@ -14,7 +14,7 @@ protocol UploadPostEndPointFactory {
                                 latitude: Double,
                                 longitude: Double,
                                 tag: [String]) -> EndPoint<Response<UploadPostDTO>>
-    func makeUploadVideoEndPoint(boardID: Int, fileType: String) -> EndPoint<Response<UploadVideoDTO>>
+    func makeUploadVideoEndPoint(boardID: Int, fileType: String) -> EndPoint<Response<PresignedURLDTO>>
 }
 
 final class DefaultUploadPostEndPointFactory: UploadPostEndPointFactory {
@@ -33,7 +33,7 @@ final class DefaultUploadPostEndPointFactory: UploadPostEndPointFactory {
                                                              tag: tag))
     }
 
-    func makeUploadVideoEndPoint(boardID: Int, fileType: String) -> EndPoint<Response<UploadVideoDTO>> {
+    func makeUploadVideoEndPoint(boardID: Int, fileType: String) -> EndPoint<Response<PresignedURLDTO>> {
         return EndPoint(path: "/board/presigned-url",
                         method: .POST,
                         bodyParameters: UploadVideoRequestDTO(boardID: boardID,

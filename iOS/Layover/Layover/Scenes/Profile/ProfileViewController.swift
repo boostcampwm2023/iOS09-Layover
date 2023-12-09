@@ -72,6 +72,10 @@ final class ProfileViewController: BaseViewController {
         super.viewDidLoad()
         setNavigationBar()
         setDataSource()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchProfile()
     }
 

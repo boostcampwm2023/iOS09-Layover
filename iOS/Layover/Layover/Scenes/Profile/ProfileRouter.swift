@@ -40,7 +40,7 @@ final class ProfileRouter: ProfileRoutingLogic, ProfileDataPassing {
     }
 
     func routeToSetting() {
-        let settingViewController: SettingViewController = SettingViewController()
+        let settingViewController = SettingViewController()
         viewController?.navigationController?.pushViewController(settingViewController, animated: true)
     }
 

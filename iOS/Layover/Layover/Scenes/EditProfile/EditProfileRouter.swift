@@ -16,7 +16,7 @@ protocol EditProfileDataPassing {
     var dataStore: EditProfileDataStore? { get }
 }
 
-final class EditProfileRouter: NSObject, EditProfileRoutingLogic, EditProfileDataPassing {
+final class EditProfileRouter: EditProfileRoutingLogic, EditProfileDataPassing {
 
     // MARK: - Properties
 

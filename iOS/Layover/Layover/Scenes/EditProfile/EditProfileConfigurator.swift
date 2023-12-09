@@ -20,7 +20,7 @@ final class EditProfileConfigurator: Configurator {
         let viewController = viewController
         let interactor = EditProfileInteractor()
         let presenter = EditProfilePresenter()
-        let worker = MockUserWorker()
+        let worker = UserWorker()
         let router = EditProfileRouter()
 
         router.viewController = viewController
