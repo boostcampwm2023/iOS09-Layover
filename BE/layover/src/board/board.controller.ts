@@ -55,7 +55,7 @@ export class BoardController {
     const bucketname = process.env.NCLOUD_S3_ORIGINAL_BUCKET_NAME;
 
     await this.boardService.updateFilenameById(preSignedUrlDto.boardId, filename);
-    const preSignedUrl = generateUploadPreSignedUrl(bucketname, filename, 'video', filetype);
+    const preSignedUrl = generateUploadPreSignedUrl(bucketname, filename, filetype);
     throw new CustomResponse(ECustomCode.SUCCESS, new PreSignedUrlResDto(preSignedUrl));
   }
 
