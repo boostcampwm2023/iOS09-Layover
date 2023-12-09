@@ -109,6 +109,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        interactor?.setInitialPlaybackCell()
         interactor?.moveInitialPlaybackCell()
     }
 
