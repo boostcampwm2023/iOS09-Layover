@@ -21,12 +21,12 @@ final class PlaybackView: UIView {
     // TODO: private 다시 붙이고 Method 처리
     lazy var descriptionView: LODescriptionView = {
         let descriptionView: LODescriptionView = LODescriptionView()
-        descriptionView.setText("임시내용임")
         descriptionView.clipsToBounds = true
         return descriptionView
     }()
 
-    private let descriptionViewHeight: NSLayoutConstraint! = nil
+    private lazy var descriptionViewHeight: NSLayoutConstraint? = descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight)
+    private lazy var titleTopAnchor: NSLayoutConstraint? = descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor)
 
     private let gradientLayer: CAGradientLayer = {
         let gradientLayer: CAGradientLayer = CAGradientLayer()
@@ -181,13 +181,21 @@ final class PlaybackView: UIView {
             let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
             let estimatedSize: CGSize = descriptionView.descriptionLabel.sizeThatFits(size)
             let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
-            descriptionView.heightAnchor.constraint(equalToConstant: totalHeight).isActive = true
-            descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight).isActive = true
+            descriptionViewHeight?.isActive = false
+            titleTopAnchor?.isActive = false
+            descriptionViewHeight = descriptionView.heightAnchor.constraint(equalToConstant: totalHeight)
+            descriptionViewHeight?.isActive = true
+            titleTopAnchor = descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight)
+            titleTopAnchor?.isActive = true
             descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
             addDescriptionAnimateGesture()
         } else {
-            descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight).isActive = true
-            descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor).isActive = true
+            descriptionViewHeight?.isActive = false
+            descriptionViewHeight = descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight)
+            descriptionViewHeight?.isActive = true
+            titleTopAnchor?.isActive = false
+            titleTopAnchor = descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor)
+            titleTopAnchor?.isActive = true
         }
     }
 
