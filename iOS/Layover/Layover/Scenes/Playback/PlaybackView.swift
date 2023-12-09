@@ -31,9 +31,10 @@ final class PlaybackView: UIView {
     private let gradientLayer: CAGradientLayer = {
         let gradientLayer: CAGradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(x: 0, y: 0, width: LODescriptionView.descriptionWidth, height: LODescriptionView.descriptionHeight)
-        let colors: [CGColor] = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        let colors: [CGColor] = [UIColor.layoverWhite.cgColor, UIColor.clear.cgColor]
         gradientLayer.colors = colors
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.opacity = 0.8
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.3)
         gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
         return gradientLayer
     }()
@@ -67,19 +68,17 @@ final class PlaybackView: UIView {
         return label
     }()
 
-    private let pauseImage: UIImageView = {
+    private lazy var pauseImage: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.image = UIImage.pause
-        imageView.isHidden = true
-        imageView.alpha = 0.4
+        imageView.alpha = 0.0
         return imageView
     }()
 
-    private let playImage: UIImageView = {
+    private lazy var playImage: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.image = UIImage.play
-        imageView.isHidden = true
-        imageView.alpha = 0.4
+        imageView.alpha = 0.0
         return imageView
     }()
 
@@ -187,15 +186,17 @@ final class PlaybackView: UIView {
             descriptionViewHeight?.isActive = true
             titleTopAnchor = descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: totalHeight - LODescriptionView.descriptionHeight)
             titleTopAnchor?.isActive = true
-            descriptionView.descriptionLabel.layer.addSublayer(gradientLayer)
+            descriptionView.descriptionLabel.layer.mask = gradientLayer
             addDescriptionAnimateGesture()
         } else {
+            descriptionView.descriptionLabel.layer.mask = nil
             descriptionViewHeight?.isActive = false
             descriptionViewHeight = descriptionView.heightAnchor.constraint(equalToConstant: LODescriptionView.descriptionHeight)
             descriptionViewHeight?.isActive = true
             titleTopAnchor?.isActive = false
             titleTopAnchor = descriptionView.titleLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor)
             titleTopAnchor?.isActive = true
+            removeDescriptionAnimateGesture()
         }
     }
 
@@ -211,6 +212,7 @@ final class PlaybackView: UIView {
     func setLocationText(location: String) {
         locationLabel.text = "\(location)에서"
     }
+
 }
 
 // MARK: PlaybackView 내부에서만 쓰이는 Method
@@ -236,6 +238,12 @@ private extension PlaybackView {
             descriptionView.descriptionLabel.removeGestureRecognizer(recognizer)
         }
         descriptionView.descriptionLabel.addGestureRecognizer(descriptionViewGesture)
+    }
+
+    func removeDescriptionAnimateGesture() {
+        for recognizer in descriptionView.descriptionLabel.gestureRecognizers ?? [] {
+            descriptionView.descriptionLabel.removeGestureRecognizer(recognizer)
+        }
     }
 
     // MARK: - UI Method
@@ -297,38 +305,46 @@ private extension PlaybackView {
                 let size = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
                 let estimatedSize = descriptionView.descriptionLabel.sizeThatFits(size)
                 let totalHeight: CGFloat = estimatedSize.height + descriptionView.titleLabel.intrinsicContentSize.height
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
-                    self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
-                    self.gradientLayer.isHidden = true
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.descriptionView.descriptionLabel.layer.mask = nil
+                }, completion: { _ in
+                    UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
+                        self.descriptionView.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
+                        self.descriptionView.descriptionLabel.transform = CGAffineTransform(translationX: 0, y: -(totalHeight - LODescriptionView.descriptionHeight))
+                    })
                 })
                 self.descriptionView.state = .show
             } else {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.descriptionView.descriptionLabel.transform = .identity
                     self.descriptionView.titleLabel.transform = .identity
-                    self.gradientLayer.isHidden = false
+                    self.descriptionView.descriptionLabel.layer.mask = self.gradientLayer
                 })
                 self.descriptionView.state = .hidden
             }
     }
 
     @objc func playerViewDidTap() {
+        let scale: CGFloat = 1.2
         if !playerView.isPlaying() {
-            UIView.transition(with: playImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
-                self.playImage.isHidden = false
+            UIView.animate(withDuration: 0.5, animations: {
+                self.playImage.transform = CGAffineTransform(scaleX: scale, y: scale)
+                self.playImage.alpha = 0.8
             }, completion: { _ in
-                UIView.transition(with: self.playImage, duration: 0.5, animations: {
-                    self.playImage.isHidden = true
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.playImage.transform = .identity
+                    self.playImage.alpha = 0.0
                 })
             })
             playerView.play()
         } else {
-            UIView.transition(with: pauseImage, duration: 0.5, options: .transitionCrossDissolve, animations: {
-                self.pauseImage.isHidden = false
+            UIView.animate(withDuration: 0.5, animations: {
+                self.pauseImage.transform = CGAffineTransform(scaleX: scale, y: scale)
+                self.pauseImage.alpha = 0.8
             }, completion: { _ in
-                UIView.transition(with: self.pauseImage, duration: 0.5, animations: {
-                    self.pauseImage.isHidden = true
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.pauseImage.transform = .identity
+                    self.pauseImage.alpha = 0.0
                 })
             })
             playerView.pause()

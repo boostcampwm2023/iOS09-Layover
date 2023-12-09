@@ -234,6 +234,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             if let url: URL = post.member.profileImageURL {
                 imageData = await userWorker?.fetchImageData(with: url)
             }
+            let location: String? = await worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
             videos.append(Models.PlaybackVideo(
                 displayPost: Models.DisplayPost(
                     member: Models.Member(
@@ -247,8 +248,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                         // TODO: thumbnail관련 로직이 변경된다면 같이 변경
                         thumbnailImageURL: post.board.thumbnailImageURL,
                         vidieoURL: videoURL,
-                        latitude: post.board.latitude,
-                        longitude: post.board.longitude),
+                        location: location),
                     tags: post.tag)))
         }
         return videos

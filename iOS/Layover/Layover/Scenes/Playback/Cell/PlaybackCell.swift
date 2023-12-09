@@ -41,13 +41,14 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.tagStackView.addTag(tag)
         }
         playbackView.setProfileButton(member: post.member)
-        playbackView.setLocationText(location: transLocation(latitude: post.board.latitude, longitude: post.board.longitude) ?? "이름 모를 곳")
+        playbackView.setLocationText(location: post.board.location ?? "이름 모를 곳")
     }
 
     func addAVPlayer(url: URL) {
         playbackView.resetPlayer()
         playbackView.addAVPlayer(url: url)
         playbackView.setPlayerSlider()
+        playbackView.playerView.setVideoFillMode(.resizeAspectFill)
     }
 
     func addPlayerSlider(tabBarHeight: CGFloat) {
@@ -69,21 +70,5 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
-    }
-
-    private func transLocation(latitude: Double, longitude: Double) -> String? {
-        let findLocation: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
-        let geoCoder: CLGeocoder = CLGeocoder()
-        let local: Locale = Locale(identifier: "Ko-kr")
-        var location: String? = nil
-        geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: local) { (place, error) in
-            if let address: [CLPlacemark] = place {
-                location = address.last?.administrativeArea
-            }
-            if let error {
-                os_log(.error, "convert location error: %@", error.localizedDescription)
-            }
-        }
-        return location
     }
 }

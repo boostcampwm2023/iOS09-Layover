@@ -39,8 +39,7 @@ enum PlaybackModels {
         let description: String?
         let thumbnailImageURL: URL?
         let vidieoURL: URL
-        let latitude: Double
-        let longitude: Double
+        let location: String?
     }
 
     // MARK: - UseCase Load Video List
