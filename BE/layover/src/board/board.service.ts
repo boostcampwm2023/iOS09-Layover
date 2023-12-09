@@ -155,8 +155,8 @@ export class BoardService {
     }
   }
 
-  async deleteByMemberId(id: number) {
-    await this.boardRepository.deleteByMemberId(id);
+  async deleteBoardsByMemberId(id: number) {
+    await this.boardRepository.deleteBoardsByMemberId(id);
   }
 
   parsingFilenameFromFilePath(filePath: string) {
