@@ -86,4 +86,8 @@ export class BoardRepository {
   async updateEncodedVideoUrlByFilename(filename: string, encoded_video_url: string) {
     await this.boardRepository.update({ filename: filename }, { encoded_video_url: encoded_video_url });
   }
+
+  async deleteByMemberId(id: number) {
+    await this.boardRepository.update({ member: { id: id } }, { status: 'DELETED' });
+  }
 }

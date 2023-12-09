@@ -155,6 +155,10 @@ export class BoardService {
     }
   }
 
+  async deleteByMemberId(id: number) {
+    await this.boardRepository.deleteByMemberId(id);
+  }
+
   parsingFilenameFromFilePath(filePath: string) {
     const regExp = /^\/layover-station\/(.*?)(_AVC.*?)\.mp4$/;
     return filePath.match(regExp)[1];
