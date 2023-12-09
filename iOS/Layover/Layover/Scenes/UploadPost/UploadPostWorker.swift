@@ -62,7 +62,7 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
             return true
         } catch {
             os_log(.error, log: .data, "Failed to upload Video: %@", error.localizedDescription)
-            NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
+            NotificationCenter.default.post(name: .uploadTaskDidFail, object: nil)
             return false
         }
     }

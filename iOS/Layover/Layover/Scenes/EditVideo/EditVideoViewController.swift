@@ -175,6 +175,10 @@ extension EditVideoViewController: EditVideoDisplayLogic {
         loopingPlayerView.play()
         loopingPlayerView.player?.isMuted = soundButton.isSelected
         nextButton.isEnabled = viewModel.canNext
+
+        if !viewModel.canNext {
+            Toast.shared.showToast(message: "3초 ~ 60초의 영상만 올릴 수 있어요 👀")
+        }
     }
 
 }

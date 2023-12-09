@@ -81,10 +81,14 @@ extension SceneDelegate {
            self?.showProgressView()
         }
         NotificationCenter.default.addObserver(forName: .progressChanged, object: nil, queue: .main) { [weak self] notification in
-            self?.progressChanged(notification)
+            guard let progress = notification.userInfo?["progress"] as? Float else { return }
+            self?.progressView.setProgress(progress, animated: true)
         }
         NotificationCenter.default.addObserver(forName: .uploadTaskDidComplete, object: nil, queue: .main) { [weak self] _ in
-            self?.removeProgressView()
+            self?.removeProgressView(message: "업로드가 완료되었습니다 ✨")
+        }
+        NotificationCenter.default.addObserver(forName: .uploadTaskDidFail, object: nil, queue: .main) { [weak self] _ in
+            self?.removeProgressView(message: "업로드에 실패했습니다 💦")
         }
     }
 
@@ -93,13 +97,16 @@ extension SceneDelegate {
                                                   name: .refreshTokenDidExpired,
                                                   object: nil)
         NotificationCenter.default.removeObserver(self,
-                                                  name: .refreshTokenDidExpired,
+                                                  name: .uploadTaskStart,
                                                   object: nil)
         NotificationCenter.default.removeObserver(self,
                                                   name: .progressChanged,
                                                   object: nil)
         NotificationCenter.default.removeObserver(self,
                                                   name: .uploadTaskDidComplete,
+                                                  object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .uploadTaskDidFail,
                                                   object: nil)
     }
 
@@ -113,8 +120,10 @@ extension SceneDelegate {
     private func showProgressView() {
         guard let progressViewWidth = window?.screen.bounds.width,
               let windowHeight = window?.screen.bounds.height,
-              let tabBarViewController = window?.rootViewController as? UITabBarController else { return }
-        let tabBarHeight: CGFloat = tabBarViewController.tabBar.frame.height
+              let navigationController = window?.rootViewController as? UINavigationController,
+              let tabBarController = navigationController.topViewController as? UITabBarController
+        else { return }
+        let tabBarHeight: CGFloat = tabBarController.tabBar.frame.height
         progressView.progress = 0
         progressView.tintColor = .primaryPurple
         progressView.frame = CGRect(x: 0,
@@ -124,17 +133,9 @@ extension SceneDelegate {
         window?.addSubview(progressView)
     }
 
-
-    private func progressChanged(_ notification: Notification) {
-        guard let progress = notification.userInfo?["progress"] as? Float else { return }
-        progressView.setProgress(progress, animated: true)
-        if progress == 1 {
-            Toast.shared.showToast(message: "업로드가 완료되었습니다 ✨")
-        }
-    }
-
-    private func removeProgressView() {
+    private func removeProgressView(message: String) {
         progressView.removeFromSuperview()
+        Toast.shared.showToast(message: message)
     }
 
 }
