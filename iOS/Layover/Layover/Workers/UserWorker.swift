@@ -98,7 +98,7 @@ final class UserWorker: UserWorkerProtocol {
 
     func modifyProfileImage(data: Data, to url: String) async -> Bool {
         do {
-            let responseData = try await provider.upload(data: data, to: url, method: .PUT)
+            let responseData = try await provider.upload(data: data, to: url)
             return true
         } catch {
             os_log(.error, log: .default, "Failed to modify profile image with error: %@", error.localizedDescription)

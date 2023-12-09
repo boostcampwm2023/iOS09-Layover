@@ -138,7 +138,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
             // 이미지 변경 시도
             if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
-                guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
+                let imageExtension = profileImageExtension == "jpg" ? "jpeg" : profileImageExtension // 서버에서는 jpeg로 받음
+                guard await profileImageEditRequest(into: profileImageData, fileExtension: imageExtension) else {
                     await MainActor.run {
                         presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
                     }
