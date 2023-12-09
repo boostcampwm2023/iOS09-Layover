@@ -92,7 +92,7 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
 
     func makeFetchUserProfilePresignedURL(of fileType: String) -> EndPoint<Response<PresignedURLDTO>> {
         var bodyParameters = [String: String]()
-        bodyParameters.updateValue(fileType, forKey: "fileType")
+        bodyParameters.updateValue(fileType, forKey: "filetype")
 
         return EndPoint(
             path: "/member/profile-image/presigned-url",
