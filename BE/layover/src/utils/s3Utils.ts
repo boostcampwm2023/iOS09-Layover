@@ -19,7 +19,7 @@ export function generateUploadPreSignedUrl(
     Bucket: bucketname,
     Key: `${filename}.${filetype}`,
     Expires: 60 * 60, // URL 만료되는 시간(초 단위)
-    ContentType: `${fileCategory}/${filetype}`,
+    ContentType: `${fileCategory}/${filetype === 'mov' ? 'quicktime' : filetype}`,
   });
 }
 
