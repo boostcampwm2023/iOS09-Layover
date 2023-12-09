@@ -146,7 +146,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
                     return false
                 }
             } else { // 이미지 변경이 없는 경우 이미지 삭제 시도
-                guard await userWorker?.fetchImagePresignedURL(with: "jpeg") != nil else {
+                guard await userWorker?.setProfileImageDefault() == true else {
                     await MainActor.run {
                         presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
                     }

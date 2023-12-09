@@ -15,6 +15,7 @@ protocol UserEndPointFactory {
     func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>>
     func makeUserInformationEndPoint(with id: Int?) -> EndPoint<Response<MemberDTO>>
     func makeUserPostsEndPoint(at page: Int, of id: Int?) -> EndPoint<Response<[PostDTO]>>
+    func makeUserProfileImageDefaultEndPoint() -> EndPoint<Response<Data>>
     func makeFetchUserProfilePresignedURL(of fileType: String) -> EndPoint<Response<PresignedURLDTO>>
 }
 
@@ -87,6 +88,13 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
             path: "/board/profile",
             method: .GET,
             queryParameters: queryParameters
+        )
+    }
+
+    func makeUserProfileImageDefaultEndPoint() -> EndPoint<Response<Data>> {
+        return EndPoint(
+            path: "/member/profile-image/default",
+            method: .POST
         )
     }
 

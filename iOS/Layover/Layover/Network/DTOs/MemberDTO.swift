@@ -11,7 +11,7 @@ import Foundation
 struct MemberDTO: Decodable {
     let id: Int
     let username, introduce: String
-    let profileImageURL: String
+    let profileImageURL: String?
 
     enum CodingKeys: String, CodingKey {
         case id, username, introduce
@@ -21,11 +21,16 @@ struct MemberDTO: Decodable {
 
 extension MemberDTO {
     func toDomain() -> Member {
+        var imageURL: URL? = nil
+        if let profileImageURL {
+            imageURL = URL(string: profileImageURL)
+        }
+        
         return Member(
             identifier: id,
             username: username,
             introduce: introduce,
-            profileImageURL: URL(string: profileImageURL)
+            profileImageURL: imageURL
         )
     }
 }
