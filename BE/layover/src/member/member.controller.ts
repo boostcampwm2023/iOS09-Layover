@@ -162,7 +162,7 @@ export class MemberController {
     const filename = member.username;
     const filetype = body.filetype;
     const bucketname = process.env.NCLOUD_S3_PROFILE_BUCKET_NAME;
-    const preSignedUrl = generateUploadPreSignedUrl(bucketname, filename, 'image', filetype);
+    const preSignedUrl = generateUploadPreSignedUrl(bucketname, filename, filetype);
 
     // db에 반영
     const key = `${filename}.${filetype}`;
