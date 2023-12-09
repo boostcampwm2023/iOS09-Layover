@@ -1042,15 +1042,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FC7E45602AFEB62C004F155A /* Build configuration list for PBXNativeTarget "Layover" */;
 			buildPhases = (
+				FC182BD22B1D90C700051CBC /* SwiftLint Script */,
 				FC7E45322AFEB623004F155A /* Sources */,
 				FC7E45332AFEB623004F155A /* Frameworks */,
 				FC7E45342AFEB623004F155A /* Resources */,
-				FC182BD22B1D90C700051CBC /* SwiftLint Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				194552192B03DD7A00299768 /* PBXTargetDependency */,
 			);
 			name = Layover;
 			packageProductDependencies = (
@@ -1377,10 +1376,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		194552192B03DD7A00299768 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 194552182B03DD7A00299768 /* SwiftLintPlugin */;
-		};
 		FC7E454E2AFEB62C004F155A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FC7E45352AFEB623004F155A /* Layover */;
@@ -1668,14 +1663,6 @@
 				kind = branch;
 			};
 		};
-		FC7E456D2AFF6E44004F155A /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/SwiftLint";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1683,11 +1670,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDK;
-		};
-		194552182B03DD7A00299768 /* SwiftLintPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FC7E456D2AFF6E44004F155A /* XCRemoteSwiftPackageReference "SwiftLint" */;
-			productName = "plugin:SwiftLintPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
