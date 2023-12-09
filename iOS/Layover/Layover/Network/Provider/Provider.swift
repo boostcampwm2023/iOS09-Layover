@@ -14,10 +14,10 @@ protocol ProviderType {
     func request(url: String) async throws -> Data
     func upload(data: Data, to presignedURL: String, method: HTTPMethod) async throws -> Data
     func upload(fromFile: URL,
-                          to url: String,
-                          method: HTTPMethod,
-                          sessionTaskDelegate: URLSessionTaskDelegate?,
-                          delegateQueue: OperationQueue?) async throws -> Data
+                to url: String,
+                method: HTTPMethod,
+                sessionTaskDelegate: URLSessionTaskDelegate?,
+                delegateQueue: OperationQueue?) async throws -> Data
 }
 
 extension ProviderType {

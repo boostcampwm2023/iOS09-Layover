@@ -178,7 +178,7 @@ final class UserWorker: UserWorkerProtocol {
         let endPoint = userEndPointFactory.makeUserProfileImageDefaultEndPoint()
 
         do {
-            let response = try await provider.request(with: endPoint)
+            let _ = try await provider.request(with: endPoint)
             return true
         } catch {
             os_log(.error, log: .data, "Error: %s", error.localizedDescription)

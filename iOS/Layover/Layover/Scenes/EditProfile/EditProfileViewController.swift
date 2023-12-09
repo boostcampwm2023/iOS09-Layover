@@ -93,7 +93,7 @@ final class EditProfileViewController: BaseViewController {
     private lazy var editProfileImageController: UIAlertController = {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let defaultAction = UIAlertAction(title: "기본 이미지로 변경", style: .default) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.changedProfileImageData = nil
             self.changedProfileImageExtension = nil
             self.profileImageView.image = UIImage.profile
@@ -235,13 +235,12 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
         picker.dismiss(animated: true) {
             let item = results.first?.itemProvider
             if let item = item, item.canLoadObject(ofClass: UIImage.self) {
-                item.loadFileRepresentation(for: .image) { url, Bool, error in
+                item.loadFileRepresentation(for: .image) { url, _, error in
                     if let error {
                         os_log(.error, log: .ui, "%@", error.localizedDescription)
                     }
 
                     if let url { // item.loadFileRepresentation에서 주는 url은 클로저가 끝나면 없어지는 temporary file url이므로, 복사해서 사용한다.
-                        let fileData = FileManager.default.contents(atPath: url.path())
                         let pathExtension = url.pathExtension
                         let temporaryCopyFileName = UUID().uuidString + ".\(pathExtension)"
                         let temporaryCopyFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(temporaryCopyFileName)
