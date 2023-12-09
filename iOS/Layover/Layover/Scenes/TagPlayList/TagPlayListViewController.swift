@@ -9,6 +9,7 @@ import UIKit
 
 protocol TagPlayListDisplayLogic: AnyObject {
     func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel)
+    func displayMorePlayList(viewModel: TagPlayListModels.FetchMorePosts.ViewModel)
     func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel)
 }
 
@@ -139,6 +140,11 @@ extension TagPlayListViewController: UICollectionViewDataSource {
 extension TagPlayListViewController: TagPlayListDisplayLogic {
     func displayPlayList(viewModel: Models.FetchPosts.ViewModel) {
         displayedPosts = viewModel.displayedPost
+        collectionView.reloadData()
+    }
+
+    func displayMorePlayList(viewModel: TagPlayListModels.FetchMorePosts.ViewModel) {
+        displayedPosts.append(contentsOf: viewModel.displayedPost)
         collectionView.reloadData()
     }
 

@@ -10,6 +10,7 @@ import UIKit
 
 protocol TagPlayListPresentationLogic {
     func presentPlayList(response: TagPlayListModels.FetchPosts.Response)
+    func presentMorePlayList(response: TagPlayListModels.FetchMorePosts.Response)
     func presentTitleTag(response: TagPlayListModels.FetchTitleTag.Response)
 }
 
@@ -24,6 +25,11 @@ final class TagPlayListPresenter: TagPlayListPresentationLogic {
     func presentPlayList(response: TagPlayListModels.FetchPosts.Response) {
         let displayedPosts = response.post
         viewController?.displayPlayList(viewModel: Models.FetchPosts.ViewModel(displayedPost: displayedPosts))
+    }
+
+    func presentMorePlayList(response: TagPlayListModels.FetchMorePosts.Response) {
+        let displayedPosts = response.post
+        viewController?.displayMorePlayList(viewModel: Models.FetchMorePosts.ViewModel(displayedPost: displayedPosts))
     }
 
     func presentTitleTag(response: TagPlayListModels.FetchTitleTag.Response) {

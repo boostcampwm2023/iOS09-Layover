@@ -18,8 +18,9 @@ final class MockTagPlayListWorker: TagPlayListWorkerProtocol {
 
     // MARK: - Methods
 
-    func fetchPlayList(by tag: String) async -> [Post]? {
-        guard let fileLocation = Bundle.main.url(forResource: "PostList", withExtension: "json") else {
+    func fetchPlayList(of tag: String, at page: Int) async -> [Post]? {
+        let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
+        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else {
             return nil
         }
 
