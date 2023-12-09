@@ -21,7 +21,7 @@ struct MemberDTO: Decodable {
 
 extension MemberDTO {
     func toDomain() -> Member {
-        var imageURL: URL? = nil
+        var imageURL: URL?
         if let profileImageURL {
             imageURL = URL(string: profileImageURL)
         }
