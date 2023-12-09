@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditProfilePresentationLogic {
-    func presentProfile(with response: EditProfileModels.FetchProfile.Response)
+    func presentProfile(with response: EditProfileModels.SetProfile.Response)
     func presentProfile(with response: EditProfileModels.EditProfile.Response)
     func presentProfileState(with response: EditProfileModels.ChangeProfile.Response)
     func presentNicknameDuplication(with response: EditProfileModels.CheckNicknameDuplication.Response)
@@ -24,8 +24,8 @@ final class EditProfilePresenter: EditProfilePresentationLogic {
 
     // MARK: - Methods
 
-    func presentProfile(with response: Models.FetchProfile.Response) {
-        let viewModel = Models.FetchProfile.ViewModel(nickname: response.nickname,
+    func presentProfile(with response: Models.SetProfile.Response) {
+        let viewModel = Models.SetProfile.ViewModel(nickname: response.nickname,
                                                       introduce: response.introduce,
                                                       profileImageData: response.profileImageData)
         viewController?.displayProfile(with: viewModel)

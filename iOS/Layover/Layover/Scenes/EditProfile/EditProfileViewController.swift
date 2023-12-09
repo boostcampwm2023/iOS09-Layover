@@ -12,7 +12,7 @@ import PhotosUI
 import OSLog
 
 protocol EditProfileDisplayLogic: AnyObject {
-    func displayProfile(with viewModel: EditProfileModels.FetchProfile.ViewModel)
+    func displayProfile(with viewModel: EditProfileModels.SetProfile.ViewModel)
     func displayProfileEditCompleted(with viewModel: EditProfileModels.EditProfile.ViewModel)
     func displayChangedProfileState(with viewModel: EditProfileModels.ChangeProfile.ViewModel)
     func displayNicknameDuplication(with viewModel: EditProfileModels.CheckNicknameDuplication.ViewModel)
@@ -141,7 +141,7 @@ final class EditProfileViewController: BaseViewController {
     override func setUI() {
         super.setUI()
         title = "프로필 수정"
-        interactor?.fetchProfile(with: Models.FetchProfile.Request())
+        interactor?.setProfile(with: Models.SetProfile.Request())
     }
 
     override func setConstraints() {
@@ -269,7 +269,7 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
 // MARK: - Display Logic
 
 extension EditProfileViewController: EditProfileDisplayLogic {
-    func displayProfile(with viewModel: Models.FetchProfile.ViewModel) {
+    func displayProfile(with viewModel: Models.SetProfile.ViewModel) {
         nicknameTextfield.text = viewModel.nickname
         if let introduce = viewModel.introduce {
             introduceTextfield.text = introduce

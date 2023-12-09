@@ -10,7 +10,7 @@ import Foundation
 
 enum EditProfileModels {
 
-    enum FetchProfile {
+    enum SetProfile {
         struct Request {
         }
 

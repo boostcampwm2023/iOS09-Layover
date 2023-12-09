@@ -10,7 +10,7 @@ import Foundation
 import OSLog
 
 protocol EditProfileBusinessLogic {
-    func fetchProfile(with request: EditProfileModels.FetchProfile.Request)
+    func setProfile(with request: EditProfileModels.SetProfile.Request)
     func changeProfile(with request: EditProfileModels.ChangeProfile.Request)
     func checkDuplication(with request: EditProfileModels.CheckNicknameDuplication.Request)
     @discardableResult
@@ -44,8 +44,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
     // MARK: - Use Case
 
-    func fetchProfile(with request: EditProfileModels.FetchProfile.Request) {
-        presenter?.presentProfile(with: EditProfileModels.FetchProfile.Response(nickname: nickname,
+    func setProfile(with request: EditProfileModels.SetProfile.Request) {
+        presenter?.presentProfile(with: EditProfileModels.SetProfile.Response(nickname: nickname,
                                                                                 introduce: introduce,
                                                                                 profileImageData: profileImageData))
     }
