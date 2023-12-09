@@ -225,7 +225,7 @@ extension ProfileViewController: ProfileDisplayLogic {
 // MARK: - UICollectionViewDelegate
 
 extension ProfileViewController: UICollectionViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         let contentHeight = scrollView.contentSize.height
         let scrollOffset = scrollView.contentOffset.y
         let height = scrollView.bounds.height
