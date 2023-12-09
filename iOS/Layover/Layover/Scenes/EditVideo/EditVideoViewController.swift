@@ -114,7 +114,7 @@ final class EditVideoViewController: BaseViewController {
     }
 
     @objc private func cutButtonDidTap() {
-        loopingPlayerView.player?.isMuted = true
+        loopingPlayerView.player?.pause()
         guard let videoPath = originalVideoURL?.path() else { return }
         if UIVideoEditorController.canEditVideo(atPath: videoPath) {
             let editController = UIVideoEditorController()
@@ -140,18 +140,24 @@ extension EditVideoViewController: UINavigationControllerDelegate, UIVideoEditor
     func videoEditorController(_ editor: UIVideoEditorController, didSaveEditedVideoToPath editedVideoPath: String) {
         let editedVideoURL = NSURL(fileURLWithPath: editedVideoPath) as URL
         interactor?.fetchVideo(request: EditVideoModels.FetchVideo.Request(editedVideoURL: editedVideoURL))
-        loopingPlayerView.player?.isMuted = soundButton.isSelected
-        editor.dismiss(animated: true)
+        editor.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.loopingPlayerView.play()
+        }
     }
 
     func videoEditorControllerDidCancel(_ editor: UIVideoEditorController) {
-        loopingPlayerView.player?.isMuted = soundButton.isSelected
-        editor.dismiss(animated: true)
+        editor.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.loopingPlayerView.play()
+        }
     }
 
     func videoEditorController(_ editor: UIVideoEditorController, didFailWithError error: Error) {
-        loopingPlayerView.player?.isMuted = soundButton.isSelected
-        editor.dismiss(animated: true)
+        editor.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.loopingPlayerView.play()
+        }
     }
 
 }
@@ -167,6 +173,7 @@ extension EditVideoViewController: EditVideoDisplayLogic {
                                        loopStart: .zero,
                                        duration: viewModel.duration)
         loopingPlayerView.play()
+        loopingPlayerView.player?.isMuted = soundButton.isSelected
         nextButton.isEnabled = viewModel.canNext
     }
 
