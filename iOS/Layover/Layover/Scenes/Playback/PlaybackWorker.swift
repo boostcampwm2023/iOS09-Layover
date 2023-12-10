@@ -15,6 +15,7 @@ protocol PlaybackWorkerProtocol {
     func deletePlaybackVideo(boardID: Int) async -> Bool
     func makeInfiniteScroll(posts: [Post]) -> [Post]
     func transLocation(latitude: Double, longitude: Double) async -> String?
+    func fetchImageData(with url: URL?) async -> Data?
 }
 
 final class PlaybackWorker: PlaybackWorkerProtocol {
@@ -57,13 +58,23 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     func transLocation(latitude: Double, longitude: Double) async -> String? {
         let findLocation: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
         let geoCoder: CLGeocoder = CLGeocoder()
-        let identifier = Locale.current.identifier == "en_KR" ? "ko_kr" : Locale.current.identifier
-        let local: Locale = Locale(identifier: identifier)
+        let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
+        let locale = Locale(identifier: localeIdentifier)
         do {
-            let place = try await geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: local)
+            let place = try await geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: locale)
             return place.last?.administrativeArea
         } catch {
             os_log(.error, "convert location error: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImageData(with url: URL?) async -> Data? {
+        guard let url else { return nil }
+        do {
+            return try await provider.request(url: url)
+        } catch {
+            os_log(.error, log: .data, "Error: %s", error.localizedDescription)
             return nil
         }
     }

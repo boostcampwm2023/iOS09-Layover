@@ -30,7 +30,7 @@ final class PlaybackCell: UICollectionViewCell {
         resetObserver()
     }
 
-    func setPlaybackContents(post: PlaybackModels.DisplayPost) {
+    func setPlaybackContents(post: PlaybackModels.DisplayedPost) {
         boardID = post.board.boardID
         playbackView.descriptionView.titleLabel.text = post.board.title
         playbackView.descriptionView.setText(post.board.description ?? "")

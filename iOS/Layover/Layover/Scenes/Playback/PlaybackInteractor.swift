@@ -43,7 +43,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     typealias Models = PlaybackModels
 
     var worker: PlaybackWorkerProtocol?
-    var userWorker: UserWorkerProtocol?
     var presenter: PlaybackPresentationLogic?
 
     var parentView: Models.ParentView?
@@ -230,29 +229,24 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         return await withTaskGroup(of: Models.PlaybackVideo.self) { group -> [Models.PlaybackVideo] in
             for post in posts {
                 guard let videoURL: URL = post.board.videoURL else { continue }
-                if let thumbnailImageURL = post.board.thumbnailImageURL {
-                    group.addTask {
-                        var profileImageData: Data?
-                        let thumbnailImageData = await self.userWorker?.fetchImageData(with: thumbnailImageURL)
-                        if let profileImageURL = post.member.profileImageURL {
-                            profileImageData = await self.userWorker?.fetchImageData(with: profileImageURL)
-                        }
-                        let location: String? = await self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
-                        return Models.PlaybackVideo(
-                            displayPost: Models.DisplayPost(
-                                member: Models.Member(
-                                    memberID: post.member.identifier,
-                                    username: post.member.username,
-                                    profileImageData: profileImageData),
-                                board: Models.Board(
-                                    boardID: post.board.identifier,
-                                    title: post.board.title,
-                                    description: post.board.description,
-                                    thumbnailImageData: thumbnailImageData,
-                                    videoURL: videoURL,
-                                    location: location),
-                                tags: post.tag))
-                    }
+                group.addTask {
+                    async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
+                    async let thumbnailImageData: Data? = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
+                    async let location: String? = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
+                    return Models.PlaybackVideo(
+                        displayPost: Models.DisplayedPost(
+                            member: Models.Member(
+                                memberID: post.member.identifier,
+                                username: post.member.username,
+                                profileImageData: await profileImageData),
+                            board: Models.Board(
+                                boardID: post.board.identifier,
+                                title: post.board.title,
+                                description: post.board.description,
+                                thumbnailImageData: await thumbnailImageData,
+                                videoURL: videoURL,
+                                location: await location),
+                            tags: post.tag))
                 }
             }
             var result = [Models.PlaybackVideo]()

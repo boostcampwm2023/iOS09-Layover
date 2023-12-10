@@ -12,7 +12,7 @@ enum PlaybackModels {
     // MARK: - Properties Type
     struct PlaybackVideo: Hashable {
         var id: UUID = UUID()
-        let displayPost: DisplayPost
+        let displayPost: DisplayedPost
     }
 
     enum ParentView {
@@ -21,7 +21,7 @@ enum PlaybackModels {
         case other
     }
 
-    struct DisplayPost: Hashable {
+    struct DisplayedPost: Hashable {
         let member: PlaybackModels.Member
         let board: PlaybackModels.Board
         let tags: [String]
