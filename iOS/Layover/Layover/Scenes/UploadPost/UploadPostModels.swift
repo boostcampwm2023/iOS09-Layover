@@ -10,6 +10,9 @@ import UIKit
 
 enum UploadPostModels {
 
+    static let titleMaxLength: Int = 15
+    static let contentMaxLength: Int = 50
+
     enum CanUploadPost {
         struct Request {
             let title: String?
@@ -31,6 +34,12 @@ enum UploadPostModels {
         }
 
         struct ViewModel {
+            let tags: [String]
+        }
+    }
+
+    enum EditTags {
+        struct Request {
             let tags: [String]
         }
     }

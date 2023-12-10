@@ -14,6 +14,7 @@ import OSLog
 
 protocol UploadPostBusinessLogic {
     func fetchTags()
+    func editTags(with request: UploadPostModels.EditTags.Request)
 
     @discardableResult
     func fetchThumbnailImage() -> Task<Bool, Never>
@@ -62,6 +63,10 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     func fetchTags() {
         guard let tags else { return }
         presenter?.presentTags(with: Models.FetchTags.Response(tags: tags))
+    }
+
+    func editTags(with request: UploadPostModels.EditTags.Request) {
+        tags = request.tags
     }
 
     @discardableResult
