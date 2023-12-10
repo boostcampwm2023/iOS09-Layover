@@ -7,6 +7,11 @@
 //
 
 import UIKit
+
+protocol LOTagStackViewDelegate: AnyObject {
+    func tagStackViewDidDeletedTag(_ stackView: LOTagStackView, sender: UIButton)
+}
+
 final class LOTagStackView: UIStackView {
 
     // MARK: - TagStackView Style
@@ -24,6 +29,8 @@ final class LOTagStackView: UIStackView {
     }
 
     private let style: Style
+
+    weak var delegate: LOTagStackViewDelegate?
 
     // MARK: - Initializer
 
@@ -97,5 +104,6 @@ final class LOTagStackView: UIStackView {
         guard let button = sender.superview else { return }
         removeArrangedSubview(button)
         button.removeFromSuperview()
+        delegate?.tagStackViewDidDeletedTag(self, sender: sender)
     }
 }

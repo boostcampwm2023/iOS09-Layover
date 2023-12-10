@@ -31,11 +31,14 @@ final class EditTagRouter: NSObject, EditTagRoutingLogic, EditTagDataPassing {
               let tabbarViewController = presentingViewController.viewControllers.last as? UITabBarController,
               let selectedViewcontroller = tabbarViewController.selectedViewController as? UINavigationController,
               let previousViewController = selectedViewcontroller.viewControllers.last as? UploadPostViewController,
-              var destination = previousViewController.router?.dataStore
+              let dataStore, var destination = previousViewController.router?.dataStore
         else { return }
-
-        destination.tags = dataStore?.tags
+        passDataToBack(source: dataStore, destination: &destination)
         viewController?.dismiss(animated: true)
+    }
+
+    private func passDataToBack(source: EditTagDataStore, destination: inout UploadPostDataStore) {
+        destination.tags = source.tags
     }
 
 }

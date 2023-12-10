@@ -10,6 +10,9 @@ import UIKit
 
 enum EditTagModels {
 
+    static let maxTagCount: Int = 3
+    static let maxTagLength: Int = 5
+
     enum FetchTags {
         struct Request {
 
@@ -19,12 +22,34 @@ enum EditTagModels {
         }
         struct ViewModel {
             let tags: [String]
+            var tagCountDescription: String
         }
     }
 
-    enum EditTag {
+    enum AddTag {
         struct Request {
             let tags: [String]
+            let newTag: String
+        }
+        struct Response {
+            let tags: [String]
+            let addedTag: String?
+        }
+        struct ViewModel {
+            let addedTag: String?
+            let tagCountDescription: String
+        }
+    }
+
+    enum EditTags {
+        struct Request {
+            let editedTags: [String]
+        }
+        struct Response {
+            let editedTags: [String]
+        }
+        struct ViewModel {
+            let tagCountDescription: String
         }
     }
 

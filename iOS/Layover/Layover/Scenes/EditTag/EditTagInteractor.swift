@@ -10,7 +10,8 @@ import UIKit
 
 protocol EditTagBusinessLogic {
     func fetchTags()
-    func editTag(request: EditTagModels.EditTag.Request)
+    func editTags(request: EditTagModels.EditTags.Request)
+    func addTag(request: EditTagModels.AddTag.Request)
 }
 
 protocol EditTagDataStore {
@@ -32,8 +33,19 @@ final class EditTagInteractor: EditTagBusinessLogic, EditTagDataStore {
         presenter?.presentTags(with: EditTagModels.FetchTags.Response(tags: tags))
     }
 
-    func editTag(request: EditTagModels.EditTag.Request) {
+    func editTags(request: EditTagModels.EditTags.Request) {
+        tags = request.editedTags
+        guard let tags else { return }
+        presenter?.presentEditedTags(with: EditTagModels.EditTags.Response(editedTags: tags))
+    }
+
+    func addTag(request: EditTagModels.AddTag.Request) {
+        if request.tags.count >= Models.maxTagCount { return }
         tags = request.tags
+        tags?.append(request.newTag)
+        let response = Models.AddTag.Response(tags: tags ?? [],
+                                              addedTag: request.newTag)
+        presenter?.presentAddedTag(with: response)
     }
 
 }
