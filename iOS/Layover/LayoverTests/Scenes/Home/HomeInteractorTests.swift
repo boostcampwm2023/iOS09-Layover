@@ -90,44 +90,44 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 4, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
     }
 
-    func test_fetchThumbnailImageData는_presenter의_presentThumbnailImage를_호출한다() async throws {
-        // Arrange
-        let spy = HomePresentationLogicSpy()
-        sut.presenter = spy
-
-        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
-            XCTFail("URL 생성 실패")
-            return
-        }
-
-        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
-
-        // Act
-        _ = await sut.fetchThumbnailImageData(with: request).value
-
-        // Assert
-        XCTAssertTrue(spy.presentThumbnailImageCalled, "fetchThumbnailImageData()가 presenter의 presentThumbnailImage()를 호출했다.")
-    }
-
-    func test_fetchThumbnailImageData는_presenter에게_올바른_데이터를_전달한다() async throws {
-        // Arrange
-        let spy = HomePresentationLogicSpy()
-        sut.presenter = spy
-
-        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
-            XCTFail("URL 생성 실패")
-            return
-        }
-
-        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
-
-        // Act
-        _ = await sut.fetchThumbnailImageData(with: request).value
-
-        // Assert
-        let assertImageData = try Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg")!)
-        XCTAssertEqual(spy.presentThumbnailImageReceivedResponse.imageData, assertImageData,"fetchThumbnailImageData()가 presenter에게 올바른 데이터를 저장했다.")
-    }
+//    func test_fetchThumbnailImageData는_presenter의_presentThumbnailImage를_호출한다() async throws {
+//        // Arrange
+//        let spy = HomePresentationLogicSpy()
+//        sut.presenter = spy
+//
+//        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
+//            XCTFail("URL 생성 실패")
+//            return
+//        }
+//
+//        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
+//
+//        // Act
+//        _ = await sut.fetchThumbnailImageData(with: request).value
+//
+//        // Assert
+//        XCTAssertTrue(spy.presentThumbnailImageCalled, "fetchThumbnailImageData()가 presenter의 presentThumbnailImage()를 호출했다.")
+//    }
+//
+//    func test_fetchThumbnailImageData는_presenter에게_올바른_데이터를_전달한다() async throws {
+//        // Arrange
+//        let spy = HomePresentationLogicSpy()
+//        sut.presenter = spy
+//
+//        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
+//            XCTFail("URL 생성 실패")
+//            return
+//        }
+//
+//        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
+//
+//        // Act
+//        _ = await sut.fetchThumbnailImageData(with: request).value
+//
+//        // Assert
+//        let assertImageData = try Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg")!)
+//        XCTAssertEqual(spy.presentThumbnailImageReceivedResponse.imageData, assertImageData,"fetchThumbnailImageData()가 presenter에게 올바른 데이터를 저장했다.")
+//    }
 
     func test_playPosts는_자신의_selectedIndex값을_변경한다() async throws {
         // Arrange

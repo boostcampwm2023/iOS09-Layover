@@ -11,8 +11,6 @@ import UIKit
 protocol HomeBusinessLogic {
     @discardableResult
     func fetchPosts(with request: HomeModels.FetchPosts.Request) -> Task<Bool, Never>
-    @discardableResult
-    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never>
     func playPosts(with request: HomeModels.PlayPosts.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
     func showTagPlayList(with request: HomeModels.ShowTagPlayList.Request)
@@ -56,21 +54,6 @@ extension HomeInteractor: HomeBusinessLogic {
             await MainActor.run {
                 self.posts = posts
                 presenter?.presentPosts(with: response)
-            }
-
-            return true
-        }
-    }
-
-    @discardableResult
-    func fetchThumbnailImageData(with request: HomeModels.FetchThumbnailImageData.Request) -> Task<Bool, Never> {
-        Task {
-            guard let imageData = await homeWorker?.fetchImageData(of: request.imageURL) else { return false }
-            let response = Models.FetchThumbnailImageData.Response(imageData: imageData,
-                                                                   indexPath: request.indexPath)
-
-            await MainActor.run {
-                presenter?.presentThumbnailImage(with: response)
             }
 
             return true

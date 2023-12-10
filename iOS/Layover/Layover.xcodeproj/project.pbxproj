@@ -116,7 +116,6 @@
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
-		836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingViewController.swift */; };
 		83957AA62B20F94C00B3BA8A /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
@@ -195,6 +194,7 @@
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
+		FC8696D32B26008B00F9A7B9 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingViewController.swift */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
 		FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */; };
@@ -208,7 +208,6 @@
 		FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF12B036B6000195BBE /* LOButton.swift */; };
 		FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF52B03804000195BBE /* LOTextField.swift */; };
 		FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */; };
-		FCFEDD7F2B23690E0038E875 /* ThumbnailLoadedPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFEDD7E2B23690E0038E875 /* ThumbnailLoadedPost.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -428,7 +427,6 @@
 		FCEE0FF12B036B6000195BBE /* LOButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOButton.swift; sourceTree = "<group>"; };
 		FCEE0FF52B03804000195BBE /* LOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextField.swift; sourceTree = "<group>"; };
 		FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = ../SignUpViewController.swift; sourceTree = "<group>"; };
-		FCFEDD7E2B23690E0038E875 /* ThumbnailLoadedPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailLoadedPost.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -584,7 +582,6 @@
 				19A169412B17C70C00DB34C0 /* Member.swift */,
 				19A169432B17C71C00DB34C0 /* Board.swift */,
 				FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */,
-				FCFEDD7E2B23690E0038E875 /* ThumbnailLoadedPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1165,6 +1162,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		FC182BD22B1D90C700051CBC /* SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1188,6 +1186,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC8696D32B26008B00F9A7B9 /* SettingViewController.swift in Sources */,
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
@@ -1286,7 +1285,6 @@
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
 				FC0E80282B1A0BBB00EF56D6 /* UploadPostViewController.swift in Sources */,
 				1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */,
-				FCFEDD7F2B23690E0038E875 /* ThumbnailLoadedPost.swift in Sources */,
 				8321A2F32B1E1026000A12AF /* ReportInteractor.swift in Sources */,
 				19A169262B176C5F00DB34C0 /* TagPlayListModels.swift in Sources */,
 				8321A2F22B1E1026000A12AF /* ReportViewController.swift in Sources */,
@@ -1315,8 +1313,6 @@
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
-				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
-				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
 				8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
