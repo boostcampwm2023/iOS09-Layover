@@ -9,7 +9,7 @@ import { BoardsResDto } from './dtos/boards-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { generateDownloadPreSignedUrl } from '../utils/s3Utils';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { BoardRepository } from './board.repository';
+import { BoardRepository, boardStatus } from './board.repository';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
 
 @Injectable()
@@ -73,12 +73,14 @@ export class BoardService {
   }
 
   async createBoardResDto(board: Board): Promise<BoardsResDto> {
-    const member = new MemberInfosResDto(
-      board.member.id,
-      board.member.username,
-      board.member.introduce,
-      board.member.profile_image_key,
-    );
+    let preSignedUrl: string | null;
+    if (board.member.profile_image_key !== 'default')
+      preSignedUrl = generateDownloadPreSignedUrl(
+        process.env.NCLOUD_S3_PROFILE_BUCKET_NAME,
+        board.member.profile_image_key,
+      );
+    else preSignedUrl = null;
+    const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, preSignedUrl);
     const videoThumbnailUrl = generateDownloadPreSignedUrl(
       process.env.NCLOUD_S3_THUMBNAIL_BUCKET_NAME,
       `${process.env.HLS_ENCODING_PATH}/${board.filename}_01.jpg`,
@@ -158,8 +160,8 @@ export class BoardService {
     }
   }
 
-  async deleteBoardsByMemberId(id: number) {
-    await this.boardRepository.deleteBoardsByMemberId(id);
+  async updateBoardsStatusByMemberId(id: number, fromStatus: boardStatus, toStatus: boardStatus) {
+    await this.boardRepository.updateBoardsStatusByMemberId(id, fromStatus, toStatus);
   }
 
   parsingFilenameFromFilePath(filePath: string) {

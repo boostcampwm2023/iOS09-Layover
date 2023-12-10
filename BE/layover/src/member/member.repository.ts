@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Member } from './member.entity';
+import { Member, memberStatus } from './member.entity';
 import { Inject } from '@nestjs/common';
 
 export class MemberRepository {
@@ -11,6 +11,7 @@ export class MemberRepository {
     introduce: string,
     provider: string,
     hash: string,
+    status: memberStatus,
   ): Promise<void> {
     await this.memberRepository.save({
       username,
@@ -18,6 +19,7 @@ export class MemberRepository {
       introduce,
       provider,
       hash,
+      status,
     });
   }
 
@@ -33,8 +35,8 @@ export class MemberRepository {
     await this.memberRepository.update({ id }, { profile_image_key: key });
   }
 
-  async deleteMember(id: number): Promise<void> {
-    await this.memberRepository.delete({ id });
+  async updateMemberStatus(id: number, status: memberStatus): Promise<void> {
+    await this.memberRepository.update({ id }, { status });
   }
 
   async findUsernameById(id: number): Promise<string> {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { BoardController } from './board.controller';
 import { BoardService } from './board.service';
 import { DatabaseModule } from '../database/database.module';
@@ -8,7 +8,7 @@ import { TagModule } from '../tag/tag.module';
 import { BoardRepository } from './board.repository';
 
 @Module({
-  imports: [DatabaseModule, MemberModule, TagModule],
+  imports: [DatabaseModule, forwardRef(() => MemberModule), TagModule],
   providers: [BoardService, BoardRepository, ...boardProvider],
   exports: [BoardService],
   controllers: [BoardController],

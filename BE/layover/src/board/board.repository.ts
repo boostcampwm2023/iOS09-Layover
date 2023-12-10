@@ -2,6 +2,8 @@ import { Board } from './board.entity';
 import { Repository } from 'typeorm';
 import { Inject } from '@nestjs/common';
 
+export type boardStatus = 'RUNNING' | 'WAITING' | 'FAILURE' | 'COMPLETE' | 'DELETED' | 'INACTIVE';
+
 export class BoardRepository {
   constructor(@Inject('BOARD_REPOSITORY') private boardRepository: Repository<Board>) {}
 
@@ -87,7 +89,17 @@ export class BoardRepository {
     await this.boardRepository.update({ filename: filename }, { encoded_video_url: encoded_video_url });
   }
 
-  async deleteBoardsByMemberId(id: number) {
-    await this.boardRepository.update({ member: { id: id } }, { status: 'DELETED' });
+  // fromStatus의 상태들을 toStatus로 변경, 복수 데이터를 다루기 때문에 이렇게 조건을 추가
+  async updateBoardsStatusByMemberId(id: number, fromStatus: boardStatus, toStatus: boardStatus) {
+    const boardToUpdate = await this.boardRepository
+      .createQueryBuilder('board')
+      .innerJoin('board.member', 'member')
+      .where('member.id = :id and board.status = :fromStatus', { id, fromStatus })
+      .getOne();
+
+    if (boardToUpdate) {
+      boardToUpdate.status = toStatus;
+      await this.boardRepository.save(boardToUpdate);
+    }
   }
 }

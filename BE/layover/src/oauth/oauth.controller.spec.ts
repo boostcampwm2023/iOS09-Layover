@@ -172,7 +172,7 @@ describe('oauthController', () => {
     const memberHash = 'testMemberHash';
     beforeEach(() => {
       mockOauthService.getKakaoMemberHash = jest.fn().mockResolvedValue(memberHash);
-      mockOauthService.isMemberExistByHash = jest.fn().mockResolvedValue(true);
+      mockOauthService.isMemberExistByHash = jest.fn().mockResolvedValue('EXIST');
     });
 
     //clear mock
@@ -230,7 +230,7 @@ describe('oauthController', () => {
     beforeEach(() => {
       mockOauthService.verifyAppleIdentityToken = jest.fn();
       mockOauthService.getAppleMemberHash = jest.fn().mockReturnValue(memberHash);
-      mockOauthService.isMemberExistByHash = jest.fn().mockResolvedValue(true);
+      mockOauthService.isMemberExistByHash = jest.fn().mockResolvedValue('EXIST');
     });
 
     // clear mock
@@ -298,8 +298,8 @@ describe('oauthController', () => {
         return memberHash;
       });
       mockOauthService.isMemberExistByHash = jest.fn(async (memberHash) => {
-        if (memberHash === existMemberHash) return true;
-        return false;
+        if (memberHash === existMemberHash) return 'EXIST';
+        return 'NOTEXIST';
       });
       mockOauthService.generateAccessRefreshTokens = jest
         .fn()
@@ -475,8 +475,8 @@ describe('oauthController', () => {
         return memberHash;
       });
       mockOauthService.isMemberExistByHash = jest.fn(async (memberHash) => {
-        if (memberHash === existMemberHash) return true;
-        return false;
+        if (memberHash === existMemberHash) return 'EXIST';
+        return 'NOTEXIST';
       });
       mockOauthService.generateAccessRefreshTokens = jest
         .fn()

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Member } from './member.entity';
+import { Member, memberStatus } from './member.entity';
 import { MemberRepository } from './member.repository';
+
+export type memberExistence = 'EXIST' | 'DELETED' | 'NOTEXIST';
 
 @Injectable()
 export class MemberService {
@@ -13,7 +15,7 @@ export class MemberService {
     provider: string,
     hash: string,
   ): Promise<void> {
-    await this.memberRepository.saveMember(username, profile_image_key, introduce, provider, hash);
+    await this.memberRepository.saveMember(username, profile_image_key, introduce, provider, hash, 'EXIST');
   }
 
   async updateUsername(id: number, username: string): Promise<void> {
@@ -28,17 +30,20 @@ export class MemberService {
     await this.memberRepository.updateProfileImage(id, key);
   }
 
-  async deleteMember(id: number): Promise<void> {
-    await this.memberRepository.deleteMember(id);
+  async updateMemberStatusById(id: number, status: memberStatus): Promise<void> {
+    await this.memberRepository.updateMemberStatus(id, status);
   }
 
   async getUsernameById(id: number): Promise<string> {
     return await this.memberRepository.findUsernameById(id);
   }
 
-  async isMemberExistByHash(hash: string): Promise<boolean> {
+  async isMemberExistByHash(hash: string): Promise<memberExistence> {
     const member = await this.memberRepository.findMemberByHash(hash);
-    return member !== null; // 이렇게 비교해도 되겟지?
+    if (member) {
+      return member.status === 'EXIST' ? 'EXIST' : 'DELETED';
+    }
+    return 'NOTEXIST';
   }
 
   async isExistUsername(username: string): Promise<boolean> {

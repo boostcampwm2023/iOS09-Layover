@@ -1,17 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-/*
-CREATE TABLE layover_member
-(
-     id INT PRIMARY KEY AUTO_INCREMENT,
-     username VARCHAR(20) NOT NULL,
-     profile_image_url VARCHAR(255) NOT NULL,
-     introduce VARCHAR(100) NOT NULL,
-     provider VARCHAR(255) NOT NULL,
-     hash VARCHAR(255) NOT NULL,
-     date_created DATETIME NOT NULL,
-)
-*/
+export type memberStatus = 'EXIST' | 'DELETED';
 
 @Entity()
 export class Member {
@@ -40,6 +29,12 @@ export class Member {
   })
   date_created: Date;
 
+  @Column({
+    nullable: false,
+    length: 20,
+  })
+  status: memberStatus;
+
   constructor(
     id: number,
     username: string,
@@ -48,6 +43,7 @@ export class Member {
     provider: string,
     hash: string,
     date_created: Date,
+    status: memberStatus,
   ) {
     this.id = id;
     this.username = username;
@@ -56,5 +52,6 @@ export class Member {
     this.provider = provider;
     this.hash = hash;
     this.date_created = date_created;
+    this.status = status;
   }
 }

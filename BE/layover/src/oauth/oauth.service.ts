@@ -3,7 +3,7 @@ import { firstValueFrom, catchError } from 'rxjs';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
-import { MemberService } from 'src/member/member.service';
+import { MemberService, memberExistence } from 'src/member/member.service';
 import { extractPayloadJWT, makeJwtPaylaod, verifyJwtToken } from 'src/utils/jwtUtils';
 import { createClient } from 'redis';
 import { CustomResponse } from 'src/response/custom-response';
@@ -11,12 +11,14 @@ import { AxiosError } from 'axios';
 import { hashSHA256 } from 'src/utils/hashUtils';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { TokenResDto } from './dtos/token-res.dto';
+import { BoardService } from 'src/board/board.service';
 
 @Injectable()
 export class OauthService {
   constructor(
     private readonly httpService: HttpService,
     private readonly memberService: MemberService,
+    private readonly boardService: BoardService,
     private readonly jwtService: JwtService,
     @Inject('REDIS_CLIENT')
     private readonly redisClient: ReturnType<typeof createClient>,
@@ -69,12 +71,21 @@ export class OauthService {
     }
   }
 
-  async isMemberExistByHash(hash: string): Promise<boolean> {
+  async isMemberExistByHash(hash: string): Promise<memberExistence> {
     return await this.memberService.isMemberExistByHash(hash);
   }
 
   async isExistUsername(username: string) {
     return await this.memberService.isExistUsername(username);
+  }
+
+  async getMemberIdByHash(hash: string): Promise<number> {
+    return (await this.memberService.getMemberByHash(hash)).id;
+  }
+
+  async recoverUserData(id: number) {
+    this.memberService.updateMemberStatusById(id, 'EXIST');
+    this.boardService.updateBoardsStatusByMemberId(id, 'INACTIVE', 'COMPLETE');
   }
 
   async signup(memberHash: string, username: string, provider: string): Promise<void> {
@@ -88,7 +99,7 @@ export class OauthService {
   async login(memberHash: string): Promise<TokenResDto> {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
-    if (!isUserExist) {
+    if (isUserExist !== 'EXIST') {
       throw new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER);
     }
 

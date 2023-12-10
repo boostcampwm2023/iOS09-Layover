@@ -19,6 +19,8 @@ import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { MEMBER_SWAGGER } from './member.swagger';
 import { generateDownloadPreSignedUrl, generateUploadPreSignedUrl } from '../utils/s3Utils';
 import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
+import { BoardService } from 'src/board/board.service';
+import { ReportService } from 'src/report/report.service';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -26,7 +28,11 @@ import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 @ApiResponse(SWAGGER.HTTP_ERROR_RESPONSE)
 @ApiResponse(SWAGGER.INTERNAL_SERVER_ERROR_RESPONSE)
 export class MemberController {
-  constructor(private readonly memberService: MemberService) {}
+  constructor(
+    private readonly memberService: MemberService,
+    private readonly boardService: BoardService,
+    private readonly reportService: ReportService,
+  ) {}
 
   @ApiOperation({
     summary: '닉네임 검증(중복)',
@@ -137,7 +143,8 @@ export class MemberController {
     const memberInfo = await this.memberService.getUsernameById(id);
 
     // db에 반영
-    await this.memberService.deleteMember(id);
+    await this.boardService.updateBoardsStatusByMemberId(id, 'COMPLETE', 'INACTIVE');
+    await this.memberService.updateMemberStatusById(id, 'DELETED');
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new DeleteMemberResDto(memberInfo));

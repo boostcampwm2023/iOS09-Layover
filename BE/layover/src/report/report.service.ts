@@ -13,7 +13,7 @@ export class ReportService {
     private readonly boardService: BoardService,
   ) {}
 
-  async insertReport(memberId: number, boardId: number, reportType: string): Promise<ReportResDto> {
+  async createReport(memberId: number, boardId: number, reportType: string): Promise<ReportResDto> {
     const member = await this.memberService.getMemberById(memberId);
     const board = await this.boardService.getBoardById(boardId);
     await this.reportRepository.insert({
