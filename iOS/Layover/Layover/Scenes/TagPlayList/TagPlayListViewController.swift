@@ -9,7 +9,9 @@ import UIKit
 
 protocol TagPlayListDisplayLogic: AnyObject {
     func displayPlayList(viewModel: TagPlayListModels.FetchPosts.ViewModel)
+    func displayMorePlayList(viewModel: TagPlayListModels.FetchMorePosts.ViewModel)
     func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel)
+    func routeToPlayback()
 }
 
 final class TagPlayListViewController: BaseViewController {
@@ -25,19 +27,27 @@ final class TagPlayListViewController: BaseViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
+        collectionView.delegate = self
         collectionView.register(TagPlayListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: TagPlayListCollectionViewCell.identifier)
-        collectionView.dataSource = self
         return collectionView
     }()
+
+    private lazy var dataSource = UICollectionViewDiffableDataSource<UUID, Models.DisplayedPost>(collectionView: collectionView) { collectionView, indexPath, displayedPost in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagPlayListCollectionViewCell.identifier,
+                                                            for: indexPath) as? TagPlayListCollectionViewCell
+        else { return UICollectionViewCell() }
+
+        cell.configure(thumbnailImageData: displayedPost.thumbnailImageData,
+                       title: displayedPost.title)
+        return cell
+    }
 
     // MARK: - Properties
 
     typealias Models = TagPlayListModels
     var interactor: TagPlayListBusinessLogic?
     var router: (TagPlayListRoutingLogic & TagPlayListDataPassing)?
-
-    private var displayedPosts: [Models.DisplayedPost] = []
 
     // MARK: - Intializer
 
@@ -81,7 +91,8 @@ final class TagPlayListViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        fetchTitleTag()
+        collectionView.dataSource = dataSource
+        setTitleTag()
     }
 
     // MARK: - Methods
@@ -103,8 +114,8 @@ final class TagPlayListViewController: BaseViewController {
         navigationItem.titleView = button
     }
 
-    private func fetchTitleTag() {
-        interactor?.fetchTitleTag(request: Models.FetchTitleTag.Request())
+    private func setTitleTag() {
+        interactor?.setTitleTag(request: Models.FetchTitleTag.Request())
     }
 
     private func fetchPlayList() {
@@ -114,23 +125,19 @@ final class TagPlayListViewController: BaseViewController {
 
 // MARK: - UICollectionViewDataSource
 
-extension TagPlayListViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return displayedPosts.count
+extension TagPlayListViewController: UICollectionViewDelegate {
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        let contentHeight = scrollView.contentSize.height
+        let scrollOffset = scrollView.contentOffset.y
+        let height = scrollView.bounds.height
+
+        if scrollOffset > contentHeight - height {
+            interactor?.fetchMorePlayList(request: Models.FetchMorePosts.Request())
+        }
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagPlayListCollectionViewCell.identifier,
-                                                            for: indexPath) as? TagPlayListCollectionViewCell
-        else { return UICollectionViewCell() }
-
-        let data = displayedPosts[indexPath.item]
-        guard let imageData = data.thumbnailImageData,
-              let image = UIImage(data: imageData)
-        else { return UICollectionViewCell() }
-
-        cell.configure(thumbnailImage: image, title: data.title)
-        return cell
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        interactor?.showPostsDetail(request: Models.ShowPostsDetail.Request(startIndex: indexPath.row))
     }
 }
 
@@ -138,12 +145,24 @@ extension TagPlayListViewController: UICollectionViewDataSource {
 
 extension TagPlayListViewController: TagPlayListDisplayLogic {
     func displayPlayList(viewModel: Models.FetchPosts.ViewModel) {
-        displayedPosts = viewModel.displayedPost
-        collectionView.reloadData()
+        var snapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()
+        snapshot.appendSections([UUID()])
+        snapshot.appendItems(viewModel.displayedPost)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    func displayMorePlayList(viewModel: TagPlayListModels.FetchMorePosts.ViewModel) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(viewModel.displayedPost)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     func displayTitle(viewModel: TagPlayListModels.FetchTitleTag.ViewModel) {
         setNavigationBar(with: viewModel.title)
+    }
+
+    func routeToPlayback() {
+        router?.routeToPlayback()
     }
 }
 

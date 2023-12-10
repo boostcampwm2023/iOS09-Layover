@@ -64,8 +64,10 @@ final class TagPlayListCollectionViewCell: UICollectionViewCell {
         backgroundColor = .darkGray
     }
 
-    func configure(thumbnailImage: UIImage, title: String) {
-        thumbnailImageView.image = thumbnailImage
+    func configure(thumbnailImageData: Data?, title: String) {
+        if let thumbnailImageData = thumbnailImageData {
+            thumbnailImageView.image = UIImage(data: thumbnailImageData)
+        }
         titleLabel.text = title
     }
 

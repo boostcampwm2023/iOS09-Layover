@@ -10,7 +10,7 @@ import UIKit
 import OSLog
 
 protocol TagPlayListWorkerProtocol {
-    func fetchPlayList(by tag: String) async -> [Post]?
+    func fetchPlayList(of tag: String, at page: Int) async -> [Post]?
     func loadImageData(from url: URL) async -> Data?
 }
 
@@ -36,8 +36,8 @@ final class TagPlayListWorker: TagPlayListWorkerProtocol {
 
     // MARK: - Methods
 
-    func fetchPlayList(by tag: String) async -> [Post]? {
-        let endPoint = postEndPointFactory.makeTagSearchPostListEndPoint(by: tag)
+    func fetchPlayList(of tag: String, at page: Int) async -> [Post]? {
+        let endPoint = postEndPointFactory.makeTagSearchPostListEndPoint(of: tag, at: page)
         do {
             let responseData = try await provider.request(with: endPoint)
             return responseData.data?.map { $0.toDomain() }
