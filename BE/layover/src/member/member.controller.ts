@@ -143,7 +143,7 @@ export class MemberController {
     const memberInfo = await this.memberService.getUsernameById(id);
 
     // db에 반영
-    await this.boardService.updateBoardsStatusByMemberId(id, 'INACTIVE');
+    await this.boardService.updateBoardsStatusByMemberId(id, 'COMPLETE', 'INACTIVE');
     await this.memberService.updateMemberStatusById(id, 'DELETED');
 
     // 응답

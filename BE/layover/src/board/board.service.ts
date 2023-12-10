@@ -160,8 +160,8 @@ export class BoardService {
     }
   }
 
-  async updateBoardsStatusByMemberId(id: number, status: boardStatus) {
-    await this.boardRepository.updateBoardsStatusByMemberId(id, status);
+  async updateBoardsStatusByMemberId(id: number, fromStatus: boardStatus, toStatus: boardStatus) {
+    await this.boardRepository.updateBoardsStatusByMemberId(id, fromStatus, toStatus);
   }
 
   parsingFilenameFromFilePath(filePath: string) {

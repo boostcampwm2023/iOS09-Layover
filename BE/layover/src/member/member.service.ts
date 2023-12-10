@@ -41,8 +41,7 @@ export class MemberService {
   async isMemberExistByHash(hash: string): Promise<memberExistence> {
     const member = await this.memberRepository.findMemberByHash(hash);
     if (member) {
-      if (member.status === 'EXIST') return 'EXIST';
-      else return 'DELETED';
+      return member.status === 'EXIST' ? 'EXIST' : 'DELETED';
     }
     return 'NOTEXIST';
   }

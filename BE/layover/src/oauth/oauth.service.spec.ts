@@ -196,8 +196,7 @@ describe('OauthService', () => {
     beforeEach(() => {
       mockMemberService.getMemberByHash = jest.fn().mockResolvedValue({ id: 777 });
       mockMemberService.isMemberExistByHash = jest.fn(async (memberHash) => {
-        if (memberHash === notExistMemberHash) return 'NOTEXIST';
-        return 'EXIST';
+        return memberHash === notExistMemberHash ? 'NOTEXIST' : 'EXIST';
       });
       mockRedisClient.setEx = jest.fn();
       mockJwtService.signAsync = jest.fn(async () => `aaa.bbb.ccc`);

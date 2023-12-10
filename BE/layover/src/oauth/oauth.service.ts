@@ -85,7 +85,7 @@ export class OauthService {
 
   async recoverUserData(id: number) {
     this.memberService.updateMemberStatusById(id, 'EXIST');
-    this.boardService.updateBoardsStatusByMemberId(id, 'COMPLETE');
+    this.boardService.updateBoardsStatusByMemberId(id, 'INACTIVE', 'COMPLETE');
   }
 
   async signup(memberHash: string, username: string, provider: string): Promise<void> {

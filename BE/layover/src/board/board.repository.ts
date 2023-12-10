@@ -89,7 +89,17 @@ export class BoardRepository {
     await this.boardRepository.update({ filename: filename }, { encoded_video_url: encoded_video_url });
   }
 
-  async updateBoardsStatusByMemberId(id: number, status: boardStatus) {
-    await this.boardRepository.update({ member: { id: id } }, { status: status });
+  // fromStatus의 상태들을 toStatus로 변경, 복수 데이터를 다루기 때문에 이렇게 조건을 추가
+  async updateBoardsStatusByMemberId(id: number, fromStatus: boardStatus, toStatus: boardStatus) {
+    const boardToUpdate = await this.boardRepository
+      .createQueryBuilder('board')
+      .innerJoin('board.member', 'member')
+      .where('member.id = :id and board.status = :fromStatus', { id, fromStatus })
+      .getOne();
+
+    if (boardToUpdate) {
+      boardToUpdate.status = toStatus;
+      await this.boardRepository.save(boardToUpdate);
+    }
   }
 }
