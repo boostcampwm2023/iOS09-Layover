@@ -40,7 +40,8 @@ final class Toast {
         let windowScene: UIWindowScene? = scenes.first as? UIWindowScene
         guard let window: UIWindow = windowScene?.windows.first else { return }
         let toastLabel: ToastLabel = ToastLabel()
-        toastLabel.backgroundColor = .background
+        toastLabel.alpha = 0
+        toastLabel.backgroundColor = .background.withAlphaComponent(0.8)
         toastLabel.textColor = .layoverWhite
         toastLabel.textAlignment = .center
         toastLabel.font = .loFont(type: .body2)
@@ -48,14 +49,18 @@ final class Toast {
         toastLabel.layer.cornerRadius = 8
         toastLabel.clipsToBounds  =  true
         toastLabel.numberOfLines = 1
-        toastLabel.layer.opacity = 0.8
         toastLabel.frame.size = toastLabel.intrinsicContentSize
         window.addSubview(toastLabel)
         toastLabel.center = window.center
-        UIView.animate(withDuration: 2.0, delay: 0.1, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
+
+        UIView.animate(withDuration: 0.3, delay: 0.5, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 1.0
         }, completion: { _ in
-            toastLabel.removeFromSuperview()
+            UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut, animations: {
+                toastLabel.alpha = 0.0
+            }, completion: { _ in
+                toastLabel.removeFromSuperview()
+            })
         })
     }
 }

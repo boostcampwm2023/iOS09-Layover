@@ -114,6 +114,7 @@ final class EditVideoViewController: BaseViewController {
     }
 
     @objc private func cutButtonDidTap() {
+        loopingPlayerView.player?.pause()
         guard let videoPath = originalVideoURL?.path() else { return }
         if UIVideoEditorController.canEditVideo(atPath: videoPath) {
             let editController = UIVideoEditorController()
@@ -139,7 +140,24 @@ extension EditVideoViewController: UINavigationControllerDelegate, UIVideoEditor
     func videoEditorController(_ editor: UIVideoEditorController, didSaveEditedVideoToPath editedVideoPath: String) {
         let editedVideoURL = NSURL(fileURLWithPath: editedVideoPath) as URL
         interactor?.fetchVideo(request: EditVideoModels.FetchVideo.Request(editedVideoURL: editedVideoURL))
-        dismiss(animated: true)
+        editor.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.loopingPlayerView.play()
+        }
+    }
+
+    func videoEditorControllerDidCancel(_ editor: UIVideoEditorController) {
+        editor.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.loopingPlayerView.play()
+        }
+    }
+
+    func videoEditorController(_ editor: UIVideoEditorController, didFailWithError error: Error) {
+        editor.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.loopingPlayerView.play()
+        }
     }
 
 }
@@ -155,7 +173,12 @@ extension EditVideoViewController: EditVideoDisplayLogic {
                                        loopStart: .zero,
                                        duration: viewModel.duration)
         loopingPlayerView.play()
+        loopingPlayerView.player?.isMuted = soundButton.isSelected
         nextButton.isEnabled = viewModel.canNext
+
+        if !viewModel.canNext {
+            Toast.shared.showToast(message: "3초 ~ 60초의 영상만 올릴 수 있어요 👀")
+        }
     }
 
 }

@@ -77,6 +77,8 @@ final class UploadPostViewController: BaseViewController {
     private let currentAddressLabel: UILabel = {
         let label = UILabel()
         label.font = .loFont(type: .body2)
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
 
@@ -143,10 +145,7 @@ final class UploadPostViewController: BaseViewController {
         super.setConstraints()
         view.addSubviews(scrollView, uploadButton)
         scrollView.addSubview(contentView)
-        [scrollView, uploadButton, contentView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-
+        [scrollView, uploadButton, contentView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -164,16 +163,13 @@ final class UploadPostViewController: BaseViewController {
             uploadButton.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
             uploadButton.heightAnchor.constraint(equalToConstant: 50)
         ])
-
         setContentViewSubviewsConstraints()
     }
 
     private func setContentViewSubviewsConstraints() {
         contentView.addSubviews(thumbnailImageView, titleImageLabel, titleTextField, tagImageLabel, tagStackView, addTagButton,
                                locationImageLabel, currentAddressLabel, contentImageLabel, contentTextView)
-        contentView.subviews.forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             thumbnailImageView.widthAnchor.constraint(equalToConstant: 156),
@@ -204,15 +200,16 @@ final class UploadPostViewController: BaseViewController {
 
             locationImageLabel.topAnchor.constraint(equalTo: tagStackView.bottomAnchor, constant: 22),
             locationImageLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            locationImageLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 60),
             locationImageLabel.heightAnchor.constraint(equalToConstant: 22),
 
             currentAddressLabel.centerYAnchor.constraint(equalTo: locationImageLabel.centerYAnchor),
+            currentAddressLabel.leadingAnchor.constraint(equalTo: locationImageLabel.trailingAnchor, constant: 15),
             currentAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            currentAddressLabel.leadingAnchor.constraint(equalTo: locationImageLabel.trailingAnchor),
 
             contentImageLabel.topAnchor.constraint(equalTo: locationImageLabel.bottomAnchor, constant: 22),
             contentImageLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentImageLabel.trailingAnchor.constraint(equalTo: currentAddressLabel.leadingAnchor),
+            contentImageLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentImageLabel.heightAnchor.constraint(equalToConstant: 22),
 
             contentTextView.topAnchor.constraint(equalTo: contentImageLabel.bottomAnchor, constant: 10),
