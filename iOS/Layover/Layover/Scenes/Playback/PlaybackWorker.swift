@@ -17,6 +17,8 @@ protocol PlaybackWorkerProtocol {
     func transLocation(latitude: Double, longitude: Double) async -> String?
     func fetchImageData(with url: URL?) async -> Data?
     func fetchHomePosts() async -> [Post]?
+    func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]?
+//    func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]?
 }
 
 final class PlaybackWorker: PlaybackWorkerProtocol {
@@ -28,13 +30,15 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     private let provider: ProviderType
     private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
     private let defaultPostEndPointFactory: PostEndPointFactory
+    private let defaultUserEndPointFactory: UserEndPointFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory()) {
+    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(), defaultUserEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory()) {
         self.provider = provider
         self.defaultPostManagerEndPointFactory = defaultPostManagerEndPointFactory
         self.defaultPostEndPointFactory = defaultPostEndPointFactory
+        self.defaultUserEndPointFactory = defaultUserEndPointFactory
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
@@ -88,8 +92,23 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
             let response = try await provider.request(with: endPoint)
             return response.data?.map { $0.toDomain() }
         } catch {
-            os_log(.error, log: .default, "Failed to fetch posts: %@", error.localizedDescription)
+            os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
         }
     }
+
+    func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]? {
+        let endPoint = defaultUserEndPointFactory.makeUserPostsEndPoint(at: page, of: profileID)
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+//    func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]? {
+//        let endPoint = defaultPostEndPointFactory.makeTagSearchPostListEndPoint(by: <#T##String#>)
+//    }
 }

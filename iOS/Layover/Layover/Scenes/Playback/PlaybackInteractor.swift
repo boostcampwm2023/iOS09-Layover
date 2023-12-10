@@ -71,6 +71,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     private var isFetchReqeust: Bool = false
 
+    private var currentPage: Int = 1
+
     // MARK: - UseCase Load Video List
 
     func displayVideoList() -> Task<Bool, Never> {
@@ -78,7 +80,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             guard let parentView: Models.ParentView,
                   var posts: [Post],
                   let worker: PlaybackWorkerProtocol else { return false }
-            if parentView == .other {
+            if parentView == .map {
                 posts = worker.makeInfiniteScroll(posts: posts)
                 self.posts = posts
             }
@@ -95,24 +97,17 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         guard let parentView,
               let index
         else { return }
-        switch parentView {
-        case .home, .myProfile:
-            presenter?.presentMoveInitialPlaybackCell(with: Models.SetInitialPlaybackCell.Response(indexPathRow: index))
-        case .other:
-            presenter?.presentSetCellIfInfinite(with: Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1))
-        }
+        let willMoveIndex: Int
+        willMoveIndex = parentView == .map ? index + 1 : index
+        presenter?.presentMoveInitialPlaybackCell(with: Models.SetInitialPlaybackCell.Response(indexPathRow: willMoveIndex))
     }
 
     func setInitialPlaybackCell() {
         guard let parentView,
               let index else { return }
-        let response: Models.SetInitialPlaybackCell.Response
-        switch parentView {
-        case .home, .myProfile:
-            response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
-        case .other:
-            response = Models.SetInitialPlaybackCell.Response(indexPathRow: index + 1)
-        }
+        let willMoveIndex: Int
+        willMoveIndex = parentView == .map ? index + 1 : index
+        let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: willMoveIndex)
         presenter?.presentSetInitialPlaybackCell(with: response)
     }
 
@@ -133,8 +128,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             isTeleport = false
             return
         }
-        // Home이 아닌 다른 뷰에서 왔을 경우(로드한 목록 무한 반복)
-        if parentView == .other {
+        // map에서 왔을 경우(로드한 목록 무한 반복)
+        if parentView == .map {
             if request.indexPathRow == (posts.count - 1) {
                 response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, previousCell: previousCell, currentCell: nil)
             } else if request.indexPathRow == 0 {
@@ -150,7 +145,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             presenter?.presentTeleportCell(with: response)
             return
         }
-        // Home이면 다음 셀로 이동(추가적인 비디오 로드)
+        // map이 아니면 다음 셀로 이동(추가적인 비디오 로드)
         isTeleport = false
         response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
         previousCell = request.currentCell
@@ -209,13 +204,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func configurePlaybackCell() {
         guard let posts,
               let parentView else { return }
-        let response: Models.ConfigurePlaybackCell.Response
-        switch parentView {
-        case .home, .myProfile:
-            response = Models.ConfigurePlaybackCell.Response(teleportIndex: nil)
-        case .other:
-            response = Models.ConfigurePlaybackCell.Response(teleportIndex: posts.count + 1)
-        }
+        let willMoveTeleportIndex: Int?
+        willMoveTeleportIndex = parentView == .map ? posts.count + 1 : nil
+        let response: Models.ConfigurePlaybackCell.Response = Models.ConfigurePlaybackCell.Response(teleportIndex: willMoveTeleportIndex)
         presenter?.presentConfigureCell(with: response)
     }
 
@@ -296,10 +287,32 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func fetchPosts() -> Task<Bool, Never> {
         Task {
+            guard let posts else { return false }
+            let page: Int = posts.count / 15 + 1
+            if page == currentPage {
+                return false
+            }
+            currentPage = page
             if !isFetchReqeust {
                 isFetchReqeust = true
-                guard let posts = await worker?.fetchHomePosts() else { return false }
-                let videos: [Models.PlaybackVideo] = await transPostToVideo(posts)
+                var newPosts: [Post]?
+                switch parentView {
+                case .home:
+                    newPosts = await worker?.fetchHomePosts()
+                case .map:
+                    return false
+                case .myProfile, .otherProfile:
+                    newPosts = await worker?.fetchProfilePosts(profileID: memberID, page: page)
+                case .tag:
+//                    guard let selectedTag else { return false }
+//                    newPosts = await worker?.fetchTagPosts(selectedTag: selectedTag, page: page)
+                    return false
+                default:
+                    return false
+                }
+                guard let newPosts else { return false }
+                self.posts?.append(contentsOf: newPosts)
+                let videos: [Models.PlaybackVideo] = await transPostToVideo(newPosts)
                 let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
                 await MainActor.run {
                     presenter?.presentLoadFetchVideos(with: response)

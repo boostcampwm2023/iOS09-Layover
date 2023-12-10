@@ -18,7 +18,9 @@ enum PlaybackModels {
     enum ParentView {
         case home
         case myProfile
-        case other
+        case otherProfile
+        case tag
+        case map
     }
 
     struct DisplayedPost: Hashable {

@@ -50,6 +50,6 @@ final class MapRouter: MapRoutingLogic, MapDataPassing {
     private func passDataToPlayback(source: MapDataStore, destination: inout PlaybackDataStore) {
         destination.posts = source.posts
         destination.index = source.postPlayStartIndex
-        destination.parentView = .other
+        destination.parentView = .map
     }
 }
