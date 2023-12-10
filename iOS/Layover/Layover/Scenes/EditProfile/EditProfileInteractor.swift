@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 import OSLog
 
 protocol EditProfileBusinessLogic {
@@ -111,7 +112,8 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
     private func profileImageEditRequest(into imageData: Data, fileExtension: String) async -> Bool {
         guard let presignedUploadURL = await userWorker?.fetchImagePresignedURL(with: fileExtension),
-              await userWorker?.modifyProfileImage(data: imageData, to: presignedUploadURL) != nil else {
+              let mimeType = UTType(filenameExtension: fileExtension)?.preferredMIMEType,
+              await userWorker?.modifyProfileImage(data: imageData, contentType: mimeType, to: presignedUploadURL) != nil else {
             os_log(.error, log: .data, "Edit ProfileImage Error")
             await MainActor.run {
                 presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
@@ -141,8 +143,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
             // 이미지 변경 시도
             if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
-                let imageExtension = profileImageExtension == "jpg" ? "jpeg" : profileImageExtension // 서버에서는 jpeg로 받음
-                guard await profileImageEditRequest(into: profileImageData, fileExtension: imageExtension) else {
+                guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
                     await MainActor.run {
                         presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
                     }

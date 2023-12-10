@@ -198,7 +198,7 @@ final class MockUserWorker: UserWorkerProtocol {
         true
     }
 
-    func modifyProfileImage(data: Data, to url: String) async -> Bool {
+    func modifyProfileImage(data: Data, contentType: String, to url: String) async -> Bool {
         true
     }
 
