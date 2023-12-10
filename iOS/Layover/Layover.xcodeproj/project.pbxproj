@@ -116,7 +116,6 @@
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
-		836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingViewController.swift */; };
 		83957AA62B20F94C00B3BA8A /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
@@ -195,6 +194,7 @@
 		FC7E45432AFEB62B004F155A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45422AFEB62B004F155A /* Assets.xcassets */; };
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
+		FC8696D32B26008B00F9A7B9 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingViewController.swift */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
 		FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */; };
@@ -1185,6 +1185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC8696D32B26008B00F9A7B9 /* SettingViewController.swift in Sources */,
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
@@ -1311,8 +1312,6 @@
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
 				19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */,
-				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
-				836C339D2B1843BE00ECAFB0 /* SettingViewController.swift in Sources */,
 				8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */,
 				FC9BB82C2B094E5500EB72A9 /* UICollectionViewLayout+.swift in Sources */,
 				194552232B0478B400299768 /* HomeRouter.swift in Sources */,
