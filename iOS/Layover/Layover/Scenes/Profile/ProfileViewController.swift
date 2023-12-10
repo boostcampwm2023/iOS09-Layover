@@ -148,6 +148,12 @@ final class ProfileViewController: BaseViewController {
             cell.configure(profileImage: profileImage,
                            nickname: itemIdentifier.username,
                            introduce: itemIdentifier.introduce)
+            switch profileType {
+            case .own:
+                cell.editButton.isHidden = false
+            case .other:
+                cell.editButton.isHidden = true
+            }
             cell.editButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.editButton.addTarget(self, action: #selector(self.editbuttonDidTap), for: .touchUpInside)
         }
