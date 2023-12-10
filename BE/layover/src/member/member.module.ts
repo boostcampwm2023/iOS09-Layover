@@ -1,12 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 import { memberProviders } from './member.providers';
 import { MemberService } from './member.service';
 import { MemberController } from './member.controller';
 import { MemberRepository } from './member.repository';
+import { BoardModule } from 'src/board/board.module';
+import { ReportModule } from 'src/report/report.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, forwardRef(() => BoardModule), forwardRef(() => ReportModule)],
   providers: [...memberProviders, MemberService, MemberRepository],
   exports: [MemberService],
   controllers: [MemberController],

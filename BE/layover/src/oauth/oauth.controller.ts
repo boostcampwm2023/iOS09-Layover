@@ -73,7 +73,7 @@ export class OauthController {
     const memberHash = await this.oauthService.getKakaoMemberHash(kakaoLoginDto.accessToken);
 
     // memberHash를 기준으로 회원가입 여부 확인
-    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
+    const isUserExist = (await this.oauthService.isMemberExistByHash(memberHash)) === 'EXIST';
 
     // Response access token and refresh token
     throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isUserExist));
@@ -93,7 +93,7 @@ export class OauthController {
     const memberHash = this.oauthService.getAppleMemberHash(appleLoginDto.identityToken);
 
     // memberHash를 기준으로 회원가입 여부 확인
-    const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
+    const isUserExist = (await this.oauthService.isMemberExistByHash(memberHash)) === 'EXIST';
 
     // Response access token and refresh token
     throw new CustomResponse(ECustomCode.SUCCESS, new CheckSignupResDto(isUserExist));
@@ -114,7 +114,16 @@ export class OauthController {
 
     // 이미 회원가입 돼있다면, 바로 로그인 시키기
     const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
-    if (isUserExist) {
+    if (isUserExist === 'EXIST') {
+      // Response access token and refresh token
+      const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
+      throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
+    }
+
+    // 복구 대상 유저라면 데이터들 복구시켜주기
+    if (isUserExist === 'DELETED') {
+      const memberId = await this.oauthService.getMemberIdByHash(memberHash);
+      this.oauthService.recoverUserData(memberId);
       // Response access token and refresh token
       const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
       throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
@@ -151,7 +160,16 @@ export class OauthController {
 
     // 이미 회원가입 돼있다면, 바로 로그인 시키기
     const isUserExist = await this.oauthService.isMemberExistByHash(memberHash);
-    if (isUserExist) {
+    if (isUserExist === 'EXIST') {
+      // Response access token and refresh token
+      const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
+      throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
+    }
+
+    // 복구 대상 유저라면 데이터들 복구시켜주기
+    if (isUserExist === 'DELETED') {
+      const memberId = await this.oauthService.getMemberIdByHash(memberHash);
+      this.oauthService.recoverUserData(memberId);
       // Response access token and refresh token
       const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
       throw new CustomResponse(ECustomCode.SUCCESS, tokenResponseDto);
