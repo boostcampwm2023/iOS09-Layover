@@ -18,7 +18,7 @@ protocol PlaybackWorkerProtocol {
     func fetchImageData(with url: URL?) async -> Data?
     func fetchHomePosts() async -> [Post]?
     func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]?
-//    func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]?
+    func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]?
 }
 
 final class PlaybackWorker: PlaybackWorkerProtocol {
@@ -108,7 +108,14 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
         }
     }
 
-//    func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]? {
-//        let endPoint = defaultPostEndPointFactory.makeTagSearchPostListEndPoint(by: <#T##String#>)
-//    }
+    func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]? {
+        let endPoint = defaultPostEndPointFactory.makeTagSearchPostListEndPoint(of: selectedTag, at: page)
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
+            return nil
+        }
+    }
 }

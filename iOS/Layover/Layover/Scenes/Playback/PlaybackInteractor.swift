@@ -287,14 +287,17 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func fetchPosts() -> Task<Bool, Never> {
         Task {
-            guard let posts else { return false }
-            let page: Int = posts.count / 15 + 1
-            if page == currentPage {
-                return false
-            }
-            currentPage = page
             if !isFetchReqeust {
                 isFetchReqeust = true
+                var page: Int = 0
+                if parentView != .home {
+                    guard let posts else { return false }
+                    page = posts.count / 15 + 1
+                    if page == currentPage {
+                        return false
+                    }
+                }
+                currentPage = page
                 var newPosts: [Post]?
                 switch parentView {
                 case .home:
@@ -304,9 +307,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 case .myProfile, .otherProfile:
                     newPosts = await worker?.fetchProfilePosts(profileID: memberID, page: page)
                 case .tag:
-//                    guard let selectedTag else { return false }
-//                    newPosts = await worker?.fetchTagPosts(selectedTag: selectedTag, page: page)
-                    return false
+                    guard let selectedTag else { return false }
+                    newPosts = await worker?.fetchTagPosts(selectedTag: selectedTag, page: page)
                 default:
                     return false
                 }
