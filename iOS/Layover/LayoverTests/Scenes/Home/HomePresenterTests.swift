@@ -51,11 +51,6 @@ final class HomePresenterTests: XCTestCase {
             displayPostsReceivedViewModel = viewModel
         }
         
-        func displayThumbnailImage(with viewModel: Layover.HomeModels.FetchThumbnailImageData.ViewModel) {
-            displayThumbnailImageCalled = true
-            displayThumbnailImageReceivedViewModel = viewModel
-        }
-        
         func routeToPlayback() {
             routeToPlaybackCalled = true
         }
