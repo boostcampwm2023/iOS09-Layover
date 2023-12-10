@@ -10,7 +10,6 @@ import UIKit
 
 protocol HomePresentationLogic {
     func presentPosts(with response: HomeModels.FetchPosts.Response)
-    func presentThumbnailImage(with response: HomeModels.FetchThumbnailImageData.Response)
     func presentPlaybackScene(with response: HomeModels.PlayPosts.Response)
     func presentTagPlayList(with response: HomeModels.ShowTagPlayList.Response)
 }
@@ -40,12 +39,6 @@ final class HomePresenter: HomePresentationLogic {
 
         let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPosts)
         viewController?.displayPosts(with: viewModel)
-    }
-
-    func presentThumbnailImage(with response: Models.FetchThumbnailImageData.Response) {
-        let viewModel = Models.FetchThumbnailImageData.ViewModel(imageData: response.imageData,
-                                                                 indexPath: response.indexPath)
-        viewController?.displayThumbnailImage(with: viewModel)
     }
 
     // MARK: - UseCase Present PlaybackScene
