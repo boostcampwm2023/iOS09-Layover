@@ -27,7 +27,7 @@ enum MapModels {
         }
 
         struct Response {
-            var posts: [ThumbnailLoadedPost]
+            var posts: [Post]
         }
 
         struct ViewModel {

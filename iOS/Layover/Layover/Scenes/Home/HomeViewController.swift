@@ -50,9 +50,6 @@ final class HomeViewController: BaseViewController {
     private lazy var carouselDatasource = UICollectionViewDiffableDataSource<UUID, Models.DisplayedPost>(collectionView: carouselCollectionView) { collectionView, indexPath, post in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? HomeCarouselCollectionViewCell else { return UICollectionViewCell() }
-
-        self.interactor?.fetchThumbnailImageData(with: Models.FetchThumbnailImageData.Request(imageURL: post.thumbnailImageURL,
-                                                                                              indexPath: indexPath))
         cell.setVideo(url: post.videoURL, loopingAt: .zero)
         cell.configure(title: post.title, tags: post.tags)
         cell.delegate = self

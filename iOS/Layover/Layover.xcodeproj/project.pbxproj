@@ -208,7 +208,6 @@
 		FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF12B036B6000195BBE /* LOButton.swift */; };
 		FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF52B03804000195BBE /* LOTextField.swift */; };
 		FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */; };
-		FCFEDD7F2B23690E0038E875 /* ThumbnailLoadedPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFEDD7E2B23690E0038E875 /* ThumbnailLoadedPost.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -428,7 +427,6 @@
 		FCEE0FF12B036B6000195BBE /* LOButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOButton.swift; sourceTree = "<group>"; };
 		FCEE0FF52B03804000195BBE /* LOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextField.swift; sourceTree = "<group>"; };
 		FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = ../SignUpViewController.swift; sourceTree = "<group>"; };
-		FCFEDD7E2B23690E0038E875 /* ThumbnailLoadedPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailLoadedPost.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -584,7 +582,6 @@
 				19A169412B17C70C00DB34C0 /* Member.swift */,
 				19A169432B17C71C00DB34C0 /* Board.swift */,
 				FC4084CB2B1F2F5D00CE4727 /* UploadPost.swift */,
-				FCFEDD7E2B23690E0038E875 /* ThumbnailLoadedPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1286,7 +1283,6 @@
 				FC7E453A2AFEB623004F155A /* AppDelegate.swift in Sources */,
 				FC0E80282B1A0BBB00EF56D6 /* UploadPostViewController.swift in Sources */,
 				1972CCD82B13A2EC00C3C762 /* SignUpEndPointFactory.swift in Sources */,
-				FCFEDD7F2B23690E0038E875 /* ThumbnailLoadedPost.swift in Sources */,
 				8321A2F32B1E1026000A12AF /* ReportInteractor.swift in Sources */,
 				19A169262B176C5F00DB34C0 /* TagPlayListModels.swift in Sources */,
 				8321A2F22B1E1026000A12AF /* ReportViewController.swift in Sources */,
