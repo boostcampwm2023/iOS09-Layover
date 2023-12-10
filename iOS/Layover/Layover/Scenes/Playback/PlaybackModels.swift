@@ -37,8 +37,8 @@ enum PlaybackModels {
         let boardID: Int
         let title: String
         let description: String?
-        let thumbnailImageURL: URL?
-        let vidieoURL: URL
+        let thumbnailImageData: Data?
+        let videoURL: URL
         let location: String?
     }
 

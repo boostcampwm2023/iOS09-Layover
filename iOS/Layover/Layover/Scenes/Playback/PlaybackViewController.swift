@@ -236,7 +236,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                     return cell
                 }
             }
-            cell.addAVPlayer(url: playbackVideo.displayPost.board.vidieoURL)
+            cell.addAVPlayer(url: playbackVideo.displayPost.board.videoURL)
             return cell
         }
     }

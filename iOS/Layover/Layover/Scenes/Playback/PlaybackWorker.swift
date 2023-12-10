@@ -57,8 +57,8 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     func transLocation(latitude: Double, longitude: Double) async -> String? {
         let findLocation: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
         let geoCoder: CLGeocoder = CLGeocoder()
-        let local: Locale = Locale(identifier: "Ko-kr")
-
+        let identifier = Locale.current.identifier == "en_KR" ? "ko_kr" : Locale.current.identifier
+        let local: Locale = Locale(identifier: identifier)
         do {
             let place = try await geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: local)
             return place.last?.administrativeArea

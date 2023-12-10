@@ -227,30 +227,40 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     private func transPostToVideo(_ posts: [Post]) async -> [Models.PlaybackVideo] {
-        var videos: [Models.PlaybackVideo] = []
-        for post in posts {
-            guard let videoURL: URL = post.board.videoURL else { continue }
-            var imageData: Data?
-            if let url: URL = post.member.profileImageURL {
-                imageData = await userWorker?.fetchImageData(with: url)
+        return await withTaskGroup(of: Models.PlaybackVideo.self) { group -> [Models.PlaybackVideo] in
+            for post in posts {
+                guard let videoURL: URL = post.board.videoURL else { continue }
+                if let thumbnailImageURL = post.board.thumbnailImageURL {
+                    group.addTask {
+                        var profileImageData: Data?
+                        let thumbnailImageData = await self.userWorker?.fetchImageData(with: thumbnailImageURL)
+                        if let profileImageURL = post.member.profileImageURL {
+                            profileImageData = await self.userWorker?.fetchImageData(with: profileImageURL)
+                        }
+                        let location: String? = await self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
+                        return Models.PlaybackVideo(
+                            displayPost: Models.DisplayPost(
+                                member: Models.Member(
+                                    memberID: post.member.identifier,
+                                    username: post.member.username,
+                                    profileImageData: profileImageData),
+                                board: Models.Board(
+                                    boardID: post.board.identifier,
+                                    title: post.board.title,
+                                    description: post.board.description,
+                                    thumbnailImageData: thumbnailImageData,
+                                    videoURL: videoURL,
+                                    location: location),
+                                tags: post.tag))
+                    }
+                }
             }
-            let location: String? = await worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
-            videos.append(Models.PlaybackVideo(
-                displayPost: Models.DisplayPost(
-                    member: Models.Member(
-                        memberID: post.member.identifier,
-                        username: post.member.username,
-                        profileImageData: imageData),
-                    board: Models.Board(
-                        boardID: post.board.identifier,
-                        title: post.board.title,
-                        description: post.board.description,
-                        // TODO: thumbnail관련 로직이 변경된다면 같이 변경
-                        thumbnailImageURL: post.board.thumbnailImageURL,
-                        vidieoURL: videoURL,
-                        location: location),
-                    tags: post.tag)))
+            var result = [Models.PlaybackVideo]()
+            for await post in group {
+                result.append(post)
+            }
+
+            return result
         }
-        return videos
     }
 }
