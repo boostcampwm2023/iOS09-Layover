@@ -81,7 +81,7 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
         queryParameters.updateValue(String(page), forKey: "page")
 
         if let id {
-            queryParameters.updateValue(String(id), forKey: "id")
+            queryParameters.updateValue(String(id), forKey: "memberId")
         }
 
         return EndPoint(
