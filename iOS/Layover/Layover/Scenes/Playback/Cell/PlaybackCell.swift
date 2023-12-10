@@ -66,6 +66,10 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.removePlayerSlider()
     }
 
+    func isPlaying() -> Bool {
+        playbackView.playerView.isPlaying()
+    }
+
     private func configure() {
         playbackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(playbackView)

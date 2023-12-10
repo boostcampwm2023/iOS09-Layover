@@ -18,6 +18,7 @@ protocol PlaybackBusinessLogic {
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func resetVideo()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
@@ -190,6 +191,16 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
         presenter?.presentResetPlaybackCell(with: response)
     }
+
+    func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        if previousCell == nil {
+            previousCell = request.currentCell
+            let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
+            presenter?.presentMoveCellNext(with: response)
+        }
+    }
+
+    // MARK: - UseCase ConfigureCell
 
     func configurePlaybackCell() {
         guard let posts,

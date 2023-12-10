@@ -199,7 +199,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             previousCell.playbackView.stopPlayer()
             previousCell.playbackView.replayPlayer()
         }
-        if let currentCell = viewModel.currentCell {
+        if let currentCell = viewModel.currentCell, !currentCell.isPlaying() {
             currentCell.addPlayerSlider(tabBarHeight: tabBarHeight)
             currentCell.playbackView.addTargetPlayerSlider()
             currentCell.playbackView.playPlayer()
@@ -332,6 +332,7 @@ extension PlaybackViewController: UICollectionViewDelegate {
 
         let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
         interactor?.playTeleportVideo(with: request)
+        interactor?.careVideoLoading(with: request)
     }
 }
 
