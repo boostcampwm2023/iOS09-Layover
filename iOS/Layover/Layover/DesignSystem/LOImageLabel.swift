@@ -20,6 +20,7 @@ final class LOImageLabel: UIView {
         let label = UILabel()
         label.font = .loFont(type: .body2Semibold)
         label.textAlignment = .left
+        label.numberOfLines = 1
         return label
     }()
 
@@ -54,6 +55,7 @@ final class LOImageLabel: UIView {
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

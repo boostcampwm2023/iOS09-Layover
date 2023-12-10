@@ -13,4 +13,5 @@ extension Notification.Name {
     static let uploadTaskStart = Notification.Name("uploadTaskStart")
     static let progressChanged = Notification.Name("progressChanged")
     static let uploadTaskDidComplete = Notification.Name("uploadTaskDidComplete")
+    static let uploadTaskDidFail = Notification.Name("uploadTaskDidFail")
 }

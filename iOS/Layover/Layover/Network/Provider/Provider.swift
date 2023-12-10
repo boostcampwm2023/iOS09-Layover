@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
+
 import OSLog
 
 protocol ProviderType {
@@ -40,15 +42,15 @@ extension ProviderType {
     }
 
     func upload(fromFile: URL,
-                          to url: String,
-                          method: HTTPMethod = .PUT,
-                          sessionTaskDelegate: URLSessionTaskDelegate? = nil,
-                          delegateQueue: OperationQueue? = nil) async throws -> Data {
+                to url: String,
+                method: HTTPMethod = .PUT,
+                sessionTaskDelegate: URLSessionTaskDelegate? = nil,
+                delegateQueue: OperationQueue? = nil) async throws -> Data {
         return try await upload(fromFile: fromFile,
-                                          to: url,
-                                          method: method,
-                                          sessionTaskDelegate: sessionTaskDelegate,
-                                          delegateQueue: delegateQueue)
+                                to: url,
+                                method: method,
+                                sessionTaskDelegate: sessionTaskDelegate,
+                                delegateQueue: delegateQueue)
     }
 
 }
@@ -159,9 +161,10 @@ class Provider: ProviderType {
                 sessionTaskDelegate: URLSessionTaskDelegate? = nil,
                 delegateQueue: OperationQueue? = nil) async throws -> Data {
         guard let url = URL(string: url) else { throw NetworkError.components }
+        guard let mimeType = UTType(filenameExtension: fromFile.pathExtension)?.preferredMIMEType else { throw NetworkError.unknown }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
-        request.setValue("video/\(fromFile.pathExtension)", forHTTPHeaderField: "Content-Type")
+        request.setValue(mimeType, forHTTPHeaderField: "Content-Type")
         let (data, response) = try await session.upload(for: request,
                                                         fromFile: fromFile,
                                                         delegate: sessionTaskDelegate)

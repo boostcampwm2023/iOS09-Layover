@@ -109,6 +109,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        interactor?.setInitialPlaybackCell()
         interactor?.moveInitialPlaybackCell()
     }
 
@@ -229,13 +230,13 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
         dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, playbackVideo) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
-            cell.setPlaybackContents(info: playbackVideo.playbackInfo)
+            cell.setPlaybackContents(post: playbackVideo.displayPost)
             if let teleportIndex = viewModel.teleportIndex {
                 if indexPath.row == 0 || indexPath.row == teleportIndex {
                     return cell
                 }
             }
-            cell.addAVPlayer(url: playbackVideo.playbackInfo.videoURL)
+            cell.addAVPlayer(url: playbackVideo.displayPost.board.videoURL)
             return cell
         }
     }

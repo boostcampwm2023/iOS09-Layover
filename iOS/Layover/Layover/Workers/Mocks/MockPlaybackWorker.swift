@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 import OSLog
 
 final class MockPlaybackWorker: PlaybackWorkerProtocol {
@@ -60,6 +61,43 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
         } catch {
             os_log(.error, log: .data, "Failed to delete with error%@", error.localizedDescription)
             return false
+        }
+    }
+
+    func transLocation(latitude: Double, longitude: Double) async -> String? {
+        let findLocation: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
+        let geoCoder: CLGeocoder = CLGeocoder()
+        let local: Locale = Locale(identifier: "Ko-kr")
+
+        do {
+            let place = try await geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: local)
+            return place.last?.administrativeArea
+        } catch {
+            os_log(.error, "convert location error: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchImageData(with url: URL?) async -> Data? {
+        guard let url else { return nil }
+        do {
+            guard let imageURL = Bundle.main.url(forResource: "sample", withExtension: "jpeg") else {
+                return nil
+            }
+            let mockData = try? Data(contentsOf: imageURL)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+
+            let data = try await provider.request(url: url)
+            return data
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
         }
     }
 }

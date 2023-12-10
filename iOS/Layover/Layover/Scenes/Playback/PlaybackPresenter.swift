@@ -6,7 +6,7 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 protocol PlaybackPresentationLogic {
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response)
@@ -32,25 +32,11 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     typealias Models = PlaybackModels
     weak var viewController: PlaybackDisplayLogic?
 
-    private func transPostToVideo(_ posts: [Post]) -> [Models.PlaybackVideo] {
-        posts.compactMap { post in
-            guard let videoURL: URL = post.board.videoURL else {
-                return nil
-            }
-            return Models.PlaybackVideo(playbackInfo: PlaybackModels.PlaybackInfo(
-                boardID: post.board.identifier,
-                title: post.board.title,
-                content: post.board.description ?? "",
-                profileImageURL: post.member.profileImageURL,
-                profileName: post.member.username,
-                tag: post.tag,
-                videoURL: videoURL))
-        }
-    }
+
     // MARK: - UseCase Load Video List
 
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
-        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: transPostToVideo(response.posts))
+        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
         viewController?.displayVideoList(viewModel: viewModel)
     }
 
