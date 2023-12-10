@@ -36,11 +36,9 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
     func routeToPlayback() {
         let playbackViewController: PlaybackViewController = PlaybackViewController()
         guard let source = dataStore,
-              let destination = playbackViewController.router?.dataStore
+              var destination = playbackViewController.router?.dataStore
         else { return }
-        destination.parentView = .home
-        destination.index = source.postPlayStartIndex
-        destination.posts = source.posts
+        passDataToPlayback(source: source, destination: &destination)
         viewController?.navigationController?.pushViewController(playbackViewController, animated: true)
     }
 
@@ -70,5 +68,11 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
 
     private func passDataToTagPlayList(source: HomeDataStore, destination: inout TagPlayListDataStore) {
         destination.titleTag = source.selectedTag
+    }
+
+    private func passDataToPlayback(source: HomeDataStore, destination: inout PlaybackDataStore) {
+        destination.posts = source.posts
+        destination.index = source.postPlayStartIndex
+        destination.parentView = .home
     }
 }

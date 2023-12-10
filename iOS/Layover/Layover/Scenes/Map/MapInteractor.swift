@@ -64,7 +64,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
             let posts = await worker?.fetchPosts(latitude: coordinate.latitude,
                                                  longitude: coordinate.longitude)
             guard let posts else { return false }
-            self.posts = posts.map { .init(member: $0.member, board: $0.board, tag: $0.tags) }
+            self.posts = posts
             let response = Models.FetchPosts.Response(posts: posts)
             await MainActor.run {
                 presenter?.presentFetchedPosts(with: response)
@@ -77,7 +77,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
         Task {
             let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
             guard let posts else { return false }
-            self.posts = posts.map { .init(member: $0.member, board: $0.board, tag: $0.tags) }
+            self.posts = posts
             let response = Models.FetchPosts.Response(posts: posts)
             await MainActor.run {
                 presenter?.presentFetchedPosts(with: response)

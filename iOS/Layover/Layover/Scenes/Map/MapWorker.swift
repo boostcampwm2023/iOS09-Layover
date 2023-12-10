@@ -8,8 +8,10 @@
 
 import Foundation
 
+import OSLog
+
 protocol MapWorkerProtocol {
-    func fetchPosts(latitude: Double, longitude: Double) async -> [ThumbnailLoadedPost]?
+    func fetchPosts(latitude: Double, longitude: Double) async -> [Post]?
 }
 
 final class MapWorker: MapWorkerProtocol {
@@ -28,21 +30,33 @@ final class MapWorker: MapWorkerProtocol {
         self.postEndPointFactory = postEndPointFactory
     }
 
-    func fetchPosts(latitude: Double, longitude: Double) async -> [ThumbnailLoadedPost]? {
+    func fetchPosts(latitude: Double, longitude: Double) async -> [Post]? {
         let endPoint = postEndPointFactory.makeMapPostListEndPoint(latitude: latitude, longitude: longitude)
         do {
             let response = try await provider.request(with: endPoint)
-            guard let data = response.data else { return nil }
-            let posts = try await data.concurrentMap { postDTO -> ThumbnailLoadedPost in
-                let thumbnailImageData = try await self.provider.request(url: postDTO.board.videoThumbnailURL)
-                return .init(member: postDTO.member.toDomain(),
-                             board: postDTO.board.toDomain(),
-                             tags: postDTO.tag,
-                             thumbnailImageData: thumbnailImageData)
-            }
-            return posts
+            guard let posts = response.data else { return nil }
+            return await fetchThumbnailImageData(of: posts)
         } catch {
+            os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
+        }
+    }
+
+    private func fetchThumbnailImageData(of posts: [PostDTO]) async -> [Post] {
+        await withTaskGroup(of: Post.self, returning: [Post].self) { group in
+            for post in posts {
+                group.addTask {
+                    let thumbnailImageData = try? await self.provider.request(url: post.board.videoThumbnailURL)
+                    var thumbnailLoadedPost = post.toDomain()
+                    thumbnailLoadedPost.thumbnailImageData = thumbnailImageData
+                    return thumbnailLoadedPost
+                }
+            }
+            var thumbnailLoadedPosts: [Post] = []
+            for await thumbnailLoadedPost in group {
+                thumbnailLoadedPosts.append(thumbnailLoadedPost)
+            }
+            return thumbnailLoadedPosts
         }
     }
 

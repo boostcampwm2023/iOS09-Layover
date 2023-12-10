@@ -60,8 +60,13 @@ final class LOAnnotationView: MKAnnotationView {
 
     // MARK: - Methods
 
-    func setThumbnailImage(data: Data) {
-        self.thumbnailImageView.image = UIImage(data: data)
+    func setThumbnailImage(data: Data?) {
+        if let data {
+            thumbnailImageView.image = UIImage(data: data)
+        } else {
+            thumbnailImageView.image = .profile
+        }
+
     }
 
     private func render() {
