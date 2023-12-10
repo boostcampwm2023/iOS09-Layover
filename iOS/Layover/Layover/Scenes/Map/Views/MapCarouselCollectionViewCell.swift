@@ -38,8 +38,10 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.player?.isMuted = true
     }
 
-    func configure(thumbnailImageData: Data) {
-        thumbnailImageView.image = UIImage(data: thumbnailImageData)
+    func configure(thumbnailImageData: Data?) {
+        if let thumbnailImageData {
+            thumbnailImageView.image = UIImage(data: thumbnailImageData)
+        }
     }
 
     func play() {
@@ -51,7 +53,6 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.pause()
         thumbnailImageView.isHidden = false
     }
-
 
     private func setUI() {
         backgroundColor = .background
