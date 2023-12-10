@@ -14,6 +14,7 @@ protocol PlaybackBusinessLogic {
     func moveInitialPlaybackCell()
     func setInitialPlaybackCell()
     func leavePlaybackView()
+    func resumePlaybackView()
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
@@ -26,6 +27,7 @@ protocol PlaybackBusinessLogic {
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
     func resumeVideo()
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
+    func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -36,7 +38,7 @@ protocol PlaybackDataStore: AnyObject {
     var isDelete: Bool? { get set }
     var posts: [Post]? { get set }
     var memberID: Int? { get set }
-    var tagContent: String? { get set }
+    var selectedTag: String? { get set }
 }
 
 final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
@@ -62,7 +64,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     var memberID: Int?
 
-    var tagContent: String?
+    var selectedTag: String?
 
     // MARK: - UseCase Load Video List
 
@@ -168,6 +170,17 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
     }
 
+    func resumePlaybackView() {
+        if let previousCell {
+            let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
+            presenter?.presentPlayInitialPlaybackCell(with: response)
+        } else {
+            guard let index else { return }
+            let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
+            presenter?.presentSetInitialPlaybackCell(with: response)
+        }
+    }
+
     func leavePlaybackView() {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: nil)
         presenter?.presentLeavePlaybackView(with: response)
@@ -258,5 +271,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         guard let memberID = request.memberID else { return }
         self.memberID = memberID
         presenter?.presentProfile()
+    }
+
+    func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request) {
+        guard let selectedTag = request.selectedTag else { return }
+        self.selectedTag = selectedTag
+        presenter?.presentTagPlay()
     }
 }

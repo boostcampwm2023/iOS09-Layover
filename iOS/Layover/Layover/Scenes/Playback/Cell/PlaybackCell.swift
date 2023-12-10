@@ -40,10 +40,7 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.descriptionView.setText(post.board.description ?? "")
         playbackView.setDescriptionViewUI()
         playbackView.profileLabel.text = post.member.username
-        playbackView.tagStackView.resetTagStackView()
-        post.tags.forEach { tag in
-            playbackView.tagStackView.addTag(tag)
-        }
+        setTagButtons(with: post.tags)
         playbackView.setProfileButton(member: post.member)
         playbackView.setLocationText(location: post.board.location ?? "이름 모를 곳")
         memberID = nil
@@ -80,8 +77,33 @@ final class PlaybackCell: UICollectionViewCell {
         ])
     }
 
+    private func setTagButtons(with tags: [String]) {
+        playbackView.tagStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        tags.forEach {
+            var configuration = UIButton.Configuration.filled()
+            configuration.baseBackgroundColor = UIColor.primaryPurple
+            configuration.title = $0
+            configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = UIFont.loFont(ofSize: 13, weight: .bold)
+                outgoing.foregroundColor = UIColor.layoverWhite
+                return outgoing
+            }
+            let button = UIButton(configuration: configuration)
+            button.clipsToBounds = true
+            button.layer.cornerRadius = 12
+            button.addTarget(self, action: #selector(tagButtonDidTap(_:)), for: .touchUpInside)
+            playbackView.tagStackView.addArrangedSubview(button)
+        }
+    }
+
     @objc private func profileButtonDidTap() {
         guard let memberID else { return }
         delegate?.moveToProfile(memberID: memberID)
+    }
+
+    @objc private func tagButtonDidTap(_ sender: UIButton) {
+        guard let selectedTag: String = sender.titleLabel?.text else { return }
+        delegate?.moveToTagPlay(selectedTag: selectedTag)
     }
 }

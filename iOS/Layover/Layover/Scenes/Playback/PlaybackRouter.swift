@@ -12,6 +12,7 @@ protocol PlaybackRoutingLogic {
     func routeToBack()
     func routeToReport()
     func routeToProfile()
+    func routeToTagPlay()
 }
 
 protocol PlaybackDataPassing {
@@ -50,9 +51,22 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
         viewController?.navigationController?.pushViewController(profileViewController, animated: true)
     }
 
+    func routeToTagPlay() {
+        let tagPlayListViewController: TagPlayListViewController = TagPlayListViewController()
+        guard let source = dataStore,
+              var destination = tagPlayListViewController.router?.dataStore
+        else { return }
+        passDataToTagPlay(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(tagPlayListViewController, animated: true)
+    }
+
     // MARK: - Data Passing
 
     private func passDataToProfile(source: PlaybackDataStore, destination: inout ProfileDataStore) {
         destination.profileId = source.memberID
+    }
+
+    private func passDataToTagPlay(source: PlaybackDataStore, destination: inout TagPlayListDataStore) {
+        destination.titleTag = source.selectedTag
     }
 }

@@ -222,7 +222,7 @@ enum PlaybackModels {
     enum MoveToRelativeView {
         struct Request {
             let memberID: Int?
-            let tagContent: String?
+            let selectedTag: String?
         }
 
         struct Response {

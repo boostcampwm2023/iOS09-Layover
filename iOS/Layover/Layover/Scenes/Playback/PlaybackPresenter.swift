@@ -24,6 +24,7 @@ protocol PlaybackPresentationLogic {
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response)
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response)
     func presentProfile()
+    func presentTagPlay()
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -116,5 +117,9 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
 
     func presentProfile() {
         viewController?.routeToProfile()
+    }
+
+    func presentTagPlay() {
+        viewController?.routeToTagPlay()
     }
 }

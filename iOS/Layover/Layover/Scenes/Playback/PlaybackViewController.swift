@@ -13,6 +13,7 @@ import OSLog
 
 protocol PlaybackViewControllerDelegate: AnyObject {
     func moveToProfile(memberID: Int)
+    func moveToTagPlay(selectedTag: String)
 }
 
 protocol PlaybackDisplayLogic: AnyObject {
@@ -30,6 +31,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
     func routeToProfile()
+    func routeToTagPlay()
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -100,7 +102,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        interactor?.setInitialPlaybackCell()
+        interactor?.resumePlaybackView()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -285,6 +287,10 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     func routeToProfile() {
         router?.routeToProfile()
     }
+
+    func routeToTagPlay() {
+        router?.routeToTagPlay()
+    }
 }
 
 extension PlaybackViewController: UICollectionViewDelegateFlowLayout {
@@ -331,8 +337,13 @@ extension PlaybackViewController: UICollectionViewDelegate {
 
 extension PlaybackViewController: PlaybackViewControllerDelegate {
     func moveToProfile(memberID: Int) {
-        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: memberID, tagContent: nil)
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: memberID, selectedTag: nil)
         interactor?.moveToProfile(with: request)
+    }
+
+    func moveToTagPlay(selectedTag: String) {
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: nil, selectedTag: selectedTag)
+        interactor?.moveToTagPlay(with: request)
     }
 }
 //#Preview {
