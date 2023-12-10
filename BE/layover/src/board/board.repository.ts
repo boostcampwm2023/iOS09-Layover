@@ -2,6 +2,8 @@ import { Board } from './board.entity';
 import { Repository } from 'typeorm';
 import { Inject } from '@nestjs/common';
 
+export type boardStatus = 'RUNNING' | 'WAITING' | 'FAILURE' | 'COMPLETE' | 'DELETED' | 'INACTIVE';
+
 export class BoardRepository {
   constructor(@Inject('BOARD_REPOSITORY') private boardRepository: Repository<Board>) {}
 
@@ -87,7 +89,7 @@ export class BoardRepository {
     await this.boardRepository.update({ filename: filename }, { encoded_video_url: encoded_video_url });
   }
 
-  async deleteBoardsByMemberId(id: number) {
-    await this.boardRepository.update({ member: { id: id } }, { status: 'DELETED' });
+  async updateBoardsStatusByMemberId(id: number, status: boardStatus) {
+    await this.boardRepository.update({ member: { id: id } }, { status: status });
   }
 }

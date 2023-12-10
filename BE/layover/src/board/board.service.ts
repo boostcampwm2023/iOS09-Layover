@@ -9,7 +9,7 @@ import { BoardsResDto } from './dtos/boards-res.dto';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
 import { generateDownloadPreSignedUrl } from '../utils/s3Utils';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { BoardRepository } from './board.repository';
+import { BoardRepository, boardStatus } from './board.repository';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
 
 @Injectable()
@@ -158,8 +158,8 @@ export class BoardService {
     }
   }
 
-  async deleteBoardsByMemberId(id: number) {
-    await this.boardRepository.deleteBoardsByMemberId(id);
+  async updateBoardsStatusByMemberId(id: number, status: boardStatus) {
+    await this.boardRepository.updateBoardsStatusByMemberId(id, status);
   }
 
   parsingFilenameFromFilePath(filePath: string) {
