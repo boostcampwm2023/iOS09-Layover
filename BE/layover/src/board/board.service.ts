@@ -73,12 +73,14 @@ export class BoardService {
   }
 
   async createBoardResDto(board: Board): Promise<BoardsResDto> {
-    const member = new MemberInfosResDto(
-      board.member.id,
-      board.member.username,
-      board.member.introduce,
-      board.member.profile_image_key,
-    );
+    let preSignedUrl: string | null;
+    if (board.member.profile_image_key !== 'default')
+      preSignedUrl = generateDownloadPreSignedUrl(
+        process.env.NCLOUD_S3_PROFILE_BUCKET_NAME,
+        board.member.profile_image_key,
+      );
+    else preSignedUrl = null;
+    const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, preSignedUrl);
     const videoThumbnailUrl = generateDownloadPreSignedUrl(
       process.env.NCLOUD_S3_THUMBNAIL_BUCKET_NAME,
       `${process.env.HLS_ENCODING_PATH}/${board.filename}_01.jpg`,
