@@ -8,6 +8,7 @@ import { ECustomCode } from 'src/response/ecustom-code.jenum';
 import * as jwtUtils from 'src/utils/jwtUtils';
 import * as hashUtils from 'src/utils/hashUtils';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
+import { BoardService } from 'src/board/board.service';
 
 describe('OauthService', () => {
   let service: OauthService;
@@ -20,6 +21,7 @@ describe('OauthService', () => {
     createMember: jest.fn(),
     getMemberByHash: jest.fn(),
   };
+  const mockBoardService = {};
   const mockRedisClient = {
     setEx: jest.fn(),
   };
@@ -30,7 +32,9 @@ describe('OauthService', () => {
         OauthService,
         { provide: JwtService, useValue: mockJwtService },
         { provide: HttpService, useValue: mockHttpService },
+        { provide: HttpService, useValue: mockHttpService },
         { provide: MemberService, useValue: mockMemberService },
+        { provide: BoardService, useValue: mockBoardService },
         { provide: 'REDIS_CLIENT', useValue: mockRedisClient },
       ],
     }).compile();
@@ -192,8 +196,8 @@ describe('OauthService', () => {
     beforeEach(() => {
       mockMemberService.getMemberByHash = jest.fn().mockResolvedValue({ id: 777 });
       mockMemberService.isMemberExistByHash = jest.fn(async (memberHash) => {
-        if (memberHash === notExistMemberHash) return false;
-        return true;
+        if (memberHash === notExistMemberHash) return 'NOTEXIST';
+        return 'EXIST';
       });
       mockRedisClient.setEx = jest.fn();
       mockJwtService.signAsync = jest.fn(async () => `aaa.bbb.ccc`);
