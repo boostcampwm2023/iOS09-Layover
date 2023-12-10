@@ -11,6 +11,10 @@ import AVFoundation
 
 import OSLog
 
+protocol PlaybackViewControllerDelegate: AnyObject {
+    func moveToProfile(memberID: Int)
+}
+
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
@@ -25,6 +29,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
     func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
+    func routeToProfile()
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -236,6 +241,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                     return cell
                 }
             }
+            cell.delegate = self
             cell.addAVPlayer(url: playbackVideo.displayPost.board.videoURL)
             return cell
         }
@@ -274,6 +280,10 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         if snapshot.itemIdentifiers.count < 1 {
             self.navigationController?.popViewController(animated: true)
         }
+    }
+
+    func routeToProfile() {
+        router?.routeToProfile()
     }
 }
 
@@ -316,6 +326,13 @@ extension PlaybackViewController: UICollectionViewDelegate {
 
         let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
         interactor?.playTeleportVideo(with: request)
+    }
+}
+
+extension PlaybackViewController: PlaybackViewControllerDelegate {
+    func moveToProfile(memberID: Int) {
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: memberID, tagContent: nil)
+        interactor?.moveToProfile(with: request)
     }
 }
 //#Preview {

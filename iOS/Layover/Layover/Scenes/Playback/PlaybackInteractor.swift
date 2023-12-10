@@ -25,6 +25,7 @@ protocol PlaybackBusinessLogic {
     @discardableResult
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
     func resumeVideo()
+    func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -34,6 +35,8 @@ protocol PlaybackDataStore: AnyObject {
     var isTeleport: Bool? { get set }
     var isDelete: Bool? { get set }
     var posts: [Post]? { get set }
+    var memberID: Int? { get set }
+    var tagContent: String? { get set }
 }
 
 final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
@@ -56,6 +59,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     var isDelete: Bool?
 
     var posts: [Post]?
+
+    var memberID: Int?
+
+    var tagContent: String?
 
     // MARK: - UseCase Load Video List
 
@@ -226,35 +233,30 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     private func transPostToVideo(_ posts: [Post]) async -> [Models.PlaybackVideo] {
-        return await withTaskGroup(of: Models.PlaybackVideo.self) { group -> [Models.PlaybackVideo] in
-            for post in posts {
-                guard let videoURL: URL = post.board.videoURL else { continue }
-                group.addTask {
-                    async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
-                    async let thumbnailImageData: Data? = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
-                    async let location: String? = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
-                    return Models.PlaybackVideo(
-                        displayPost: Models.DisplayedPost(
-                            member: Models.Member(
-                                memberID: post.member.identifier,
-                                username: post.member.username,
-                                profileImageData: await profileImageData),
-                            board: Models.Board(
-                                boardID: post.board.identifier,
-                                title: post.board.title,
-                                description: post.board.description,
-                                thumbnailImageData: await thumbnailImageData,
-                                videoURL: videoURL,
-                                location: await location),
-                            tags: post.tag))
-                }
-            }
-            var result = [Models.PlaybackVideo]()
-            for await post in group {
-                result.append(post)
-            }
-
-            return result
+        return await posts.asyncCompactMap { post in
+            guard let videoURL: URL = post.board.videoURL else { return nil }
+            async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
+            async let thumbnailImageData = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
+            async let location = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
+            return Models.PlaybackVideo(displayPost: Models.DisplayedPost(
+                member: Models.Member(
+                    memberID: post.member.identifier,
+                    username: post.member.username,
+                    profileImageData: await profileImageData),
+                board: Models.Board(
+                    boardID: post.board.identifier,
+                    title: post.board.title,
+                    description: post.board.description,
+                    thumbnailImageData: await thumbnailImageData,
+                    videoURL: videoURL,
+                    location: await location),
+                tags: post.tag))
         }
+    }
+
+    func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request) {
+        guard let memberID = request.memberID else { return }
+        self.memberID = memberID
+        presenter?.presentProfile()
     }
 }

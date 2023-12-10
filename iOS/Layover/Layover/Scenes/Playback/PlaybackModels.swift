@@ -216,4 +216,21 @@ enum PlaybackModels {
             let playbackVideo: PlaybackVideo
         }
     }
+
+    // MARK: - UseCase MoveTo Profile & Tag
+
+    enum MoveToRelativeView {
+        struct Request {
+            let memberID: Int?
+            let tagContent: String?
+        }
+
+        struct Response {
+
+        }
+
+        struct ViewModel {
+
+        }
+    }
 }

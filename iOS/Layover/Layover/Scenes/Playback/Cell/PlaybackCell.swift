@@ -14,6 +14,10 @@ final class PlaybackCell: UICollectionViewCell {
 
     var boardID: Int?
 
+    weak var delegate: PlaybackViewControllerDelegate?
+
+    private var memberID: Int?
+
     let playbackView: PlaybackView = PlaybackView()
 
     override init(frame: CGRect) {
@@ -42,6 +46,10 @@ final class PlaybackCell: UICollectionViewCell {
         }
         playbackView.setProfileButton(member: post.member)
         playbackView.setLocationText(location: post.board.location ?? "이름 모를 곳")
+        memberID = nil
+        memberID = post.member.memberID
+        playbackView.profileButton.removeTarget(nil, action: nil, for: .allEvents)
+        playbackView.profileButton.addTarget(self, action: #selector(profileButtonDidTap), for: .touchUpInside)
     }
 
     func addAVPlayer(url: URL) {
@@ -70,5 +78,10 @@ final class PlaybackCell: UICollectionViewCell {
             playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
+    }
+
+    @objc private func profileButtonDidTap() {
+        guard let memberID else { return }
+        delegate?.moveToProfile(memberID: memberID)
     }
 }
