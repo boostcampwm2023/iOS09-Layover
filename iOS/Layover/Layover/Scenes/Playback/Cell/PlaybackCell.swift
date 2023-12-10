@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import AVFoundation
+import CoreLocation
+import OSLog
 
 final class PlaybackCell: UICollectionViewCell {
 
@@ -29,22 +30,25 @@ final class PlaybackCell: UICollectionViewCell {
         resetObserver()
     }
 
-    func setPlaybackContents(info: PlaybackModels.PlaybackInfo) {
-        boardID = info.boardID
-        playbackView.descriptionView.titleLabel.text = info.title
-        playbackView.descriptionView.setText(info.content)
+    func setPlaybackContents(post: PlaybackModels.DisplayedPost) {
+        boardID = post.board.boardID
+        playbackView.descriptionView.titleLabel.text = post.board.title
+        playbackView.descriptionView.setText(post.board.description ?? "")
         playbackView.setDescriptionViewUI()
-        playbackView.profileLabel.text = info.profileName
+        playbackView.profileLabel.text = post.member.username
         playbackView.tagStackView.resetTagStackView()
-        info.tag.forEach { tag in
+        post.tags.forEach { tag in
             playbackView.tagStackView.addTag(tag)
         }
+        playbackView.setProfileButton(member: post.member)
+        playbackView.setLocationText(location: post.board.location ?? "이름 모를 곳")
     }
 
     func addAVPlayer(url: URL) {
         playbackView.resetPlayer()
         playbackView.addAVPlayer(url: url)
         playbackView.setPlayerSlider()
+        playbackView.playerView.setVideoFillMode(.resizeAspectFill)
     }
 
     func addPlayerSlider(tabBarHeight: CGFloat) {

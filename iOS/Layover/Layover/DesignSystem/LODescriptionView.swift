@@ -8,7 +8,7 @@
 import UIKit
 
 final class LODescriptionView: UIView {
-    static let descriptionWidth: CGFloat = 104
+    static let descriptionWidth: CGFloat = 170
     static let descriptionHeight: CGFloat = 63
 
     // MARK: - View isTouched State
@@ -25,9 +25,9 @@ final class LODescriptionView: UIView {
         label.numberOfLines = 1
         label.font = .loFont(type: .body1)
         label.textColor = .layoverWhite
-        label.text = "시차"
         return label
     }()
+    
     let descriptionLabel: UILabel = {
         let label: UILabel = UILabel()
         label.textColor = .layoverWhite
@@ -76,7 +76,9 @@ final class LODescriptionView: UIView {
 
     func checkLabelOverflow() -> Bool {
         let originViewSize: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: LODescriptionView.descriptionHeight)
-        let currentSize: CGSize = descriptionLabel.intrinsicContentSize
-        return currentSize.height > originViewSize.height || currentSize.width > originViewSize.width
+        let size: CGSize = CGSize(width: LODescriptionView.descriptionWidth, height: .infinity)
+        let estimatedSize: CGSize = descriptionLabel.sizeThatFits(size)
+        // 줄간격 만큼 더해줌
+        return (estimatedSize.height + 16) > originViewSize.height || estimatedSize.width > originViewSize.width
     }
 }

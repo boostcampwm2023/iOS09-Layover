@@ -9,7 +9,8 @@
 import UIKit
 
 protocol PlaybackBusinessLogic {
-    func displayVideoList()
+    @discardableResult
+    func displayVideoList() -> Task<Bool, Never>
     func moveInitialPlaybackCell()
     func setInitialPlaybackCell()
     func leavePlaybackView()
@@ -58,16 +59,22 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     // MARK: - UseCase Load Video List
 
-    func displayVideoList() {
-        guard let parentView: Models.ParentView else { return }
-        guard var posts: [Post] else { return }
-        guard let worker else { return }
-        if parentView == .other {
-            posts = worker.makeInfiniteScroll(posts: posts)
-            self.posts = posts
+    func displayVideoList() -> Task<Bool, Never> {
+        Task {
+            guard let parentView: Models.ParentView,
+                  var posts: [Post],
+                  let worker: PlaybackWorkerProtocol else { return false }
+            if parentView == .other {
+                posts = worker.makeInfiniteScroll(posts: posts)
+                self.posts = posts
+            }
+            let videos: [Models.PlaybackVideo] = await transPostToVideo(posts)
+            let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+            await MainActor.run {
+                presenter?.presentVideoList(with: response)
+            }
+            return true
         }
-        let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(posts: posts)
-        presenter?.presentVideoList(with: response)
     }
 
     func moveInitialPlaybackCell() {
@@ -216,5 +223,38 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func resumeVideo() {
         guard let previousCell else { return }
         previousCell.playbackView.playPlayer()
+    }
+
+    private func transPostToVideo(_ posts: [Post]) async -> [Models.PlaybackVideo] {
+        return await withTaskGroup(of: Models.PlaybackVideo.self) { group -> [Models.PlaybackVideo] in
+            for post in posts {
+                guard let videoURL: URL = post.board.videoURL else { continue }
+                group.addTask {
+                    async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
+                    async let thumbnailImageData: Data? = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
+                    async let location: String? = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
+                    return Models.PlaybackVideo(
+                        displayPost: Models.DisplayedPost(
+                            member: Models.Member(
+                                memberID: post.member.identifier,
+                                username: post.member.username,
+                                profileImageData: await profileImageData),
+                            board: Models.Board(
+                                boardID: post.board.identifier,
+                                title: post.board.title,
+                                description: post.board.description,
+                                thumbnailImageData: await thumbnailImageData,
+                                videoURL: videoURL,
+                                location: await location),
+                            tags: post.tag))
+                }
+            }
+            var result = [Models.PlaybackVideo]()
+            for await post in group {
+                result.append(post)
+            }
+
+            return result
+        }
     }
 }
