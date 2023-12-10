@@ -46,7 +46,7 @@ export const boardsResDto: BoardsResDto[] = [
  */
 
 export const savedBoard: Board = new Board(
-  new Member(1, '이름', '프로필사진', '소개', 'provider', 'hash', new Date()),
+  new Member(1, '이름', '프로필사진', '소개', 'provider', 'hash', new Date(), 'EXIST'),
   '제목',
   '내용',
   '비디오url',
