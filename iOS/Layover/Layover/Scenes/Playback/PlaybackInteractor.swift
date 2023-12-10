@@ -29,6 +29,8 @@ protocol PlaybackBusinessLogic {
     func resumeVideo()
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
     func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
+    @discardableResult
+    func fetchPosts() -> Task<Bool, Never>
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -66,6 +68,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     var memberID: Int?
 
     var selectedTag: String?
+
+    private var isFetchReqeust: Bool = false
 
     // MARK: - UseCase Load Video List
 
@@ -288,5 +292,22 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         guard let selectedTag = request.selectedTag else { return }
         self.selectedTag = selectedTag
         presenter?.presentTagPlay()
+    }
+
+    func fetchPosts() -> Task<Bool, Never> {
+        Task {
+            if !isFetchReqeust {
+                isFetchReqeust = true
+                guard let posts = await worker?.fetchHomePosts() else { return false }
+                let videos: [Models.PlaybackVideo] = await transPostToVideo(posts)
+                let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+                await MainActor.run {
+                    presenter?.presentLoadFetchVideos(with: response)
+                    isFetchReqeust = false
+                }
+                return true
+            }
+            return false
+        }
     }
 }

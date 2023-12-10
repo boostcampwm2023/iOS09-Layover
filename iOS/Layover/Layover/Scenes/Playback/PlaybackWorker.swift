@@ -16,6 +16,7 @@ protocol PlaybackWorkerProtocol {
     func makeInfiniteScroll(posts: [Post]) -> [Post]
     func transLocation(latitude: Double, longitude: Double) async -> String?
     func fetchImageData(with url: URL?) async -> Data?
+    func fetchHomePosts() async -> [Post]?
 }
 
 final class PlaybackWorker: PlaybackWorkerProtocol {
@@ -26,12 +27,14 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
 
     private let provider: ProviderType
     private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
+    private let defaultPostEndPointFactory: PostEndPointFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory()) {
+    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory()) {
         self.provider = provider
         self.defaultPostManagerEndPointFactory = defaultPostManagerEndPointFactory
+        self.defaultPostEndPointFactory = defaultPostEndPointFactory
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
@@ -75,6 +78,17 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
             return try await provider.request(url: url)
         } catch {
             os_log(.error, log: .data, "Error: %s", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchHomePosts() async -> [Post]? {
+        let endPoint = defaultPostEndPointFactory.makeHomePostListEndPoint()
+        do {
+            let response = try await provider.request(with: endPoint)
+            return response.data?.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .default, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
         }
     }

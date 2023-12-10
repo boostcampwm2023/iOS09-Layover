@@ -100,4 +100,29 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
             return nil
         }
     }
+
+    func fetchHomePosts() async -> [Post]? {
+        guard let fileLocation = Bundle.main.url(forResource: "PostList",
+                                                 withExtension: "json") else { return nil }
+
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint: EndPoint = EndPoint<Response<[PostDTO]>>(path: "/board/home",
+                                                                   method: .GET)
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { return nil }
+            return data.map { $0.toDomain() }
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
+    }
+
 }

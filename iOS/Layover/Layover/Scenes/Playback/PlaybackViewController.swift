@@ -18,6 +18,7 @@ protocol PlaybackViewControllerDelegate: AnyObject {
 
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
+    func loadFetchVideos(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
@@ -188,6 +189,12 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
+    func loadFetchVideos(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel) {
+        guard var currentSnapshot = dataSource?.snapshot() else { return }
+        currentSnapshot.appendItems(viewModel.videos)
+        dataSource?.apply(currentSnapshot, animatingDifferences: true)
+    }
+
     func displayMoveCellIfinfinite(viewModel: Models.SetInitialPlaybackCell.ViewModel) {
         playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height * CGFloat(viewModel.indexPathRow)), animated: false)
     }
@@ -333,6 +340,14 @@ extension PlaybackViewController: UICollectionViewDelegate {
         let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
         interactor?.playTeleportVideo(with: request)
         interactor?.careVideoLoading(with: request)
+    }
+
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        if maximumOffset < currentOffset {
+            interactor?.fetchPosts()
+        }
     }
 }
 
