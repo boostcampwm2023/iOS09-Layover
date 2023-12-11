@@ -278,6 +278,17 @@ extension MapViewController: VideoPickerDelegate {
         }
     }
 
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKCircle {
+            let renderer = MKCircleRenderer(overlay: overlay)
+            renderer.strokeColor = UIColor.primaryPurple.withAlphaComponent(0.6)
+            renderer.fillColor = UIColor.primaryPurple.withAlphaComponent(0.3)
+            renderer.lineWidth = 2.0
+            return renderer
+        }
+        return MKOverlayRenderer()
+    }
+
 }
 
 // MARK: - MapDisplayLogic
@@ -293,6 +304,10 @@ extension MapViewController: MapDisplayLogic {
         carouselDatasource.apply(snapshot)
 
         mapView.removeAnnotations(mapView.annotations)
+        mapView.removeOverlays(mapView.overlays)
+
+        let circleOverlay = MKCircle(center: mapView.centerCoordinate, radius: Models.searchRadiusInMeters)
+        mapView.addOverlay(circleOverlay, level: .aboveLabels)
         viewModel.displayedPosts.forEach { createMapAnnotation(post: $0) }
     }
 
