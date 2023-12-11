@@ -10,10 +10,10 @@ import Foundation
 
 enum System {
 
-    @UserDefaultStored(key: UserDefaultKey.hasBeenLaunchedBefore, defaultValue: false) static var hasBeenLaunchedBefore: Bool
+    @UserDefaultStored(key: UserDefaultKey.hasBeenLaunchedBefore, defaultValue: false) static var hasBeenLaunchedBefore: Bool?
 
     static func isFirstLaunch() -> Bool {
-        if !hasBeenLaunchedBefore {
+        if hasBeenLaunchedBefore == false {
             hasBeenLaunchedBefore = true
             return true
         }
