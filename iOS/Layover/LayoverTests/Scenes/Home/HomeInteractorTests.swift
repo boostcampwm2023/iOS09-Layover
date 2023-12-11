@@ -38,8 +38,6 @@ final class HomeInteractorTests: XCTestCase {
     final class HomePresentationLogicSpy: HomePresentationLogic { // 호출 테스트를 위한 Spy
         var presentPostsCalled = false
         var presentPostsReceivedResponse: Models.FetchPosts.Response!
-        var presentThumbnailImageCalled = false
-        var presentThumbnailImageReceivedResponse: Models.FetchThumbnailImageData.Response!
         var presentPlaybackSceneCalled = false
         var presentTagPlayListCalled = false
 
@@ -47,16 +45,11 @@ final class HomeInteractorTests: XCTestCase {
             presentPostsCalled = true
             presentPostsReceivedResponse = response
         }
-        
-        func presentThumbnailImage(with response: Models.FetchThumbnailImageData.Response) {
-            presentThumbnailImageCalled = true
-            presentThumbnailImageReceivedResponse = response
-        }
-        
+
         func presentPlaybackScene(with response: Models.PlayPosts.Response) {
             presentPlaybackSceneCalled = true
         }
-        
+
         func presentTagPlayList(with response: Models.ShowTagPlayList.Response) {
             presentTagPlayListCalled = true
         }
@@ -90,44 +83,21 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 4, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
     }
 
-//    func test_fetchThumbnailImageData는_presenter의_presentThumbnailImage를_호출한다() async throws {
-//        // Arrange
-//        let spy = HomePresentationLogicSpy()
-//        sut.presenter = spy
-//
-//        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
-//            XCTFail("URL 생성 실패")
-//            return
-//        }
-//
-//        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
-//
-//        // Act
-//        _ = await sut.fetchThumbnailImageData(with: request).value
-//
-//        // Assert
-//        XCTAssertTrue(spy.presentThumbnailImageCalled, "fetchThumbnailImageData()가 presenter의 presentThumbnailImage()를 호출했다.")
-//    }
-//
-//    func test_fetchThumbnailImageData는_presenter에게_올바른_데이터를_전달한다() async throws {
-//        // Arrange
-//        let spy = HomePresentationLogicSpy()
-//        sut.presenter = spy
-//
-//        guard let imageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
-//            XCTFail("URL 생성 실패")
-//            return
-//        }
-//
-//        let request = Models.FetchThumbnailImageData.Request(imageURL: imageURL, indexPath: IndexPath())
-//
-//        // Act
-//        _ = await sut.fetchThumbnailImageData(with: request).value
-//
-//        // Assert
-//        let assertImageData = try Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg")!)
-//        XCTAssertEqual(spy.presentThumbnailImageReceivedResponse.imageData, assertImageData,"fetchThumbnailImageData()가 presenter에게 올바른 데이터를 저장했다.")
-//    }
+    func test_fetchPost는_presenter에게_올바른_이미지_데이터를_전달한다() async throws {
+        // Arrange
+        let spy = HomePresentationLogicSpy()
+        sut.presenter = spy
+        let request = Models.FetchPosts.Request()
+        let imageData = try Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg")!)
+
+        // Act
+        _ = await sut.fetchPosts(with: request).value
+
+        // Assert
+        spy.presentPostsReceivedResponse.posts.forEach {
+            XCTAssertEqual($0.thumbnailImageData, imageData, "fetchPost()가 presenter에게 올바른 이미지 데이터를 전달했다.")
+        }
+    }
 
     func test_playPosts는_자신의_selectedIndex값을_변경한다() async throws {
         // Arrange

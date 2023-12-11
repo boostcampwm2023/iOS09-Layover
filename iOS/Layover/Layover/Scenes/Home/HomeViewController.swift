@@ -11,7 +11,6 @@ import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
     func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel)
-    func displayThumbnailImage(with viewModel: HomeModels.FetchThumbnailImageData.ViewModel)
     func routeToPlayback()
     func routeToTagPlayList()
 }
@@ -236,14 +235,6 @@ extension HomeViewController: HomeDisplayLogic {
         carouselDatasource.apply(snapshot) {
             self.playVideoAtCenterCell()
         }
-    }
-
-    func displayThumbnailImage(with viewModel: HomeModels.FetchThumbnailImageData.ViewModel) {
-        guard let cell = carouselCollectionView.cellForItem(at: viewModel.indexPath) as? HomeCarouselCollectionViewCell,
-              let thumbnailImage = UIImage(data: viewModel.imageData)
-        else { return }
-
-        cell.configure(thumbnailImage: thumbnailImage)
     }
 
     func routeToPlayback() {

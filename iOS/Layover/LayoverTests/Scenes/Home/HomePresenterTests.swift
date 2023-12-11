@@ -51,11 +51,6 @@ final class HomePresenterTests: XCTestCase {
             displayPostsReceivedViewModel = viewModel
         }
         
-        func displayThumbnailImage(with viewModel: Layover.HomeModels.FetchThumbnailImageData.ViewModel) {
-            displayThumbnailImageCalled = true
-            displayThumbnailImageReceivedViewModel = viewModel
-        }
-        
         func routeToPlayback() {
             routeToPlaybackCalled = true
         }
@@ -170,20 +165,6 @@ final class HomePresenterTests: XCTestCase {
         // assert
         XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행했다.")
         XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 0, "비디오 URL이 nil인 데이터는 뷰에게 전달하지 않는다.")
-    }
-
-    func test_presentThumbnailImage는_데이터를_받아오면_뷰의_displayThumbnailImage를_실행한다() {
-        // arrange
-        let spy = HomeDisplayLogicSpy()
-        sut.viewController = spy
-
-        let response = Models.FetchThumbnailImageData.Response(imageData: Data(), indexPath: IndexPath())
-
-        // act
-        sut.presentThumbnailImage(with: response)
-
-        // assert
-        XCTAssertTrue(spy.displayThumbnailImageCalled, "presentThumbnailImage는 displayThumbnailImage를 실행해서 뷰에게 데이터를 전달했다.")
     }
 
     func test_presentPlaybackScene은_뷰의_routeToPlayback을_실행한다() {
