@@ -109,10 +109,10 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.viewWillAppear(true)
 
         // Assert
-        XCTAssertTrue(spy.fetchPlayListCalled, "viewWillAppear() 가 호출되면 interactor에게 playList를 요청했다.")
+        XCTAssertTrue(spy.fetchPlayListCalled, "viewWillAppear() 가 호출되면 interactor의 fetchPlayList를 호출했다.")
     }
 
-    func test_scrollView가_아래_끝에_다다라_scrollViewWillBeginDecelearting가_호출되면_interactor에게_morePlayList를_요청한다() {
+    func test_scrollView가_아래_끝에_다다라_scrollViewWillBeginDecelearting가_호출되면_interactor의_fetchMorePlayList를_호출한다() {
         // Arrange
         let spy = TagPlayListBusinessLogicSpy()
         sut.interactor = spy
@@ -124,7 +124,22 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.scrollViewWillBeginDecelerating(scrollView)
 
         // Assert
-        XCTAssertTrue(spy.fetchMorePlayListCalled, "scrollViewWillBeginDecelerating() 가 호출되면 interactor에게 morePlayList를 요청했다.")
+        XCTAssertTrue(spy.fetchMorePlayListCalled, "scrollView가 아래 끝에 다다라 scrollViewWillBeginDecelerating() 이 호출되면 interactor의 fetchMorePlayList를 호출했다.")
+    }
+
+    func test_scrollView가_아래_끝에_다다르지_않은_상태에서_scrollViewWillBeginDecelearting가_호출되면_interactor의_fetchMorePlayList를_호출하지_않는다() {
+        // Arrange
+        let spy = TagPlayListBusinessLogicSpy()
+        sut.interactor = spy
+        let scrollView = UIScrollView(frame: .init(x: 0, y: 0, width: 100, height: 100))
+        scrollView.contentOffset.y = 100
+        scrollView.contentSize = .init(width: 100, height: 200)
+
+        // Act
+        sut.scrollViewWillBeginDecelerating(scrollView)
+
+        // Assert
+        XCTAssertFalse(spy.fetchMorePlayListCalled, "scrollView가 아래 끝에 다다르지 않고 scrollViewWillBeginDecelerating() 이 호출되면 interactor의 fetchMorePlayList를 호출하지 않는다.")
     }
 
     func test_collectionView의_didSelectItemAt이_호출되면_interactor에게_showPostsDetail를_요청한다() {
