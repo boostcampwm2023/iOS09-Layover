@@ -10,6 +10,13 @@
 		1901D4A22B18F4BE00617A64 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1901D4A12B18F4BE00617A64 /* System.swift */; };
 		1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */; };
 		1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */; };
+		192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513642B26F7CE001533FA /* TagPlayListViewControllerTests.swift */; };
+		192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513652B26F7CE001533FA /* TagPlayListInteractorTests.swift */; };
+		1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513662B26F7CE001533FA /* TagPlayListWorkerTests.swift */; };
+		1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513672B26F7CE001533FA /* TagPlayListPresenterTests.swift */; };
+		1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */; };
+		192513752B2715BF001533FA /* PostListMore.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513742B2715BF001533FA /* PostListMore.json */; };
+		192513772B2715D3001533FA /* PostListEnd.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513762B2715D3001533FA /* PostListEnd.json */; };
 		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
 		193686742B15C489008902CD /* UserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686732B15C489008902CD /* UserWorker.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
@@ -224,6 +231,13 @@
 		1901D4A12B18F4BE00617A64 /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		1915D6E42B1FB82000CE1DD0 /* CheckSignUpDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckSignUpDTO.swift; sourceTree = "<group>"; };
 		1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CheckSignUp.json; sourceTree = "<group>"; };
+		192513642B26F7CE001533FA /* TagPlayListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListViewControllerTests.swift; sourceTree = "<group>"; };
+		192513652B26F7CE001533FA /* TagPlayListInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListInteractorTests.swift; sourceTree = "<group>"; };
+		192513662B26F7CE001533FA /* TagPlayListWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListWorkerTests.swift; sourceTree = "<group>"; };
+		192513672B26F7CE001533FA /* TagPlayListPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListPresenterTests.swift; sourceTree = "<group>"; };
+		1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTagPlayListWorker.swift; sourceTree = "<group>"; };
+		192513742B2715BF001533FA /* PostListMore.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListMore.json; sourceTree = "<group>"; };
+		192513762B2715D3001533FA /* PostListEnd.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListEnd.json; sourceTree = "<group>"; };
 		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
 		193686732B15C489008902CD /* UserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWorker.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
@@ -448,6 +462,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		192513632B26F7BB001533FA /* TagPlayList */ = {
+			isa = PBXGroup;
+			children = (
+				192513642B26F7CE001533FA /* TagPlayListViewControllerTests.swift */,
+				192513652B26F7CE001533FA /* TagPlayListInteractorTests.swift */,
+				192513662B26F7CE001533FA /* TagPlayListWorkerTests.swift */,
+				192513672B26F7CE001533FA /* TagPlayListPresenterTests.swift */,
+			);
+			path = TagPlayList;
+			sourceTree = "<group>";
+		};
 		194551EB2B037F1E00299768 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -508,6 +533,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				192513632B26F7BB001533FA /* TagPlayList */,
 				194C21BE2B1DEE5500C62645 /* Home */,
 			);
 			path = Scenes;
@@ -526,6 +552,7 @@
 			isa = PBXGroup;
 			children = (
 				194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */,
+				1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -535,6 +562,8 @@
 			children = (
 				194C21D32B1EEE3700C62645 /* sample.jpeg */,
 				194C21CF2B1DF65200C62645 /* PostList.json */,
+				192513742B2715BF001533FA /* PostListMore.json */,
+				192513762B2715D3001533FA /* PostListEnd.json */,
 			);
 			path = MockDatas;
 			sourceTree = "<group>";
@@ -1152,6 +1181,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				192513752B2715BF001533FA /* PostListMore.json in Resources */,
+				192513772B2715D3001533FA /* PostListEnd.json in Resources */,
 				194C21D02B1DF65200C62645 /* PostList.json in Resources */,
 				194C21D42B1EEE3700C62645 /* sample.jpeg in Resources */,
 			);
@@ -1366,9 +1397,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				194C21C42B1DEE6B00C62645 /* HomeInteractorTests.swift in Sources */,
+				1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */,
+				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
+				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
+				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
+				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
