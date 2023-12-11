@@ -12,7 +12,6 @@
 		1915D6E92B1FBABA00CE1DD0 /* CheckSignUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */; };
 		192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925137C2B277CD7001533FA /* ProfileViewControllerTests.swift */; };
 		192513812B277CD7001533FA /* ProfileInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925137D2B277CD7001533FA /* ProfileInteractorTests.swift */; };
-		192513822B277CD7001533FA /* ProfileWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925137E2B277CD7001533FA /* ProfileWorkerTests.swift */; };
 		192513832B277CD7001533FA /* ProfilePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925137F2B277CD7001533FA /* ProfilePresenterTests.swift */; };
 		192513852B27852C001533FA /* MockUserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513842B27852C001533FA /* MockUserWorker.swift */; };
 		192513982B278645001533FA /* LoginData.json in Resources */ = {isa = PBXBuildFile; fileRef = 1925138A2B278645001533FA /* LoginData.json */; };
@@ -29,6 +28,7 @@
 		192513A32B278646001533FA /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 192513952B278645001533FA /* sample.jpeg */; };
 		192513A42B278646001533FA /* GetMember.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513962B278645001533FA /* GetMember.json */; };
 		192513A52B278646001533FA /* CheckSignUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513972B278645001533FA /* CheckSignUp.json */; };
+		192513A72B278BB3001533FA /* Seeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513A62B278BB3001533FA /* Seeds.swift */; };
 		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
 		193686742B15C489008902CD /* UserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686732B15C489008902CD /* UserWorker.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
@@ -243,7 +243,6 @@
 		1915D6E82B1FBABA00CE1DD0 /* CheckSignUp.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CheckSignUp.json; sourceTree = "<group>"; };
 		1925137C2B277CD7001533FA /* ProfileViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerTests.swift; sourceTree = "<group>"; };
 		1925137D2B277CD7001533FA /* ProfileInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInteractorTests.swift; sourceTree = "<group>"; };
-		1925137E2B277CD7001533FA /* ProfileWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWorkerTests.swift; sourceTree = "<group>"; };
 		1925137F2B277CD7001533FA /* ProfilePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenterTests.swift; sourceTree = "<group>"; };
 		192513842B27852C001533FA /* MockUserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserWorker.swift; sourceTree = "<group>"; };
 		1925138A2B278645001533FA /* LoginData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -260,6 +259,7 @@
 		192513952B278645001533FA /* sample.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpeg; sourceTree = "<group>"; };
 		192513962B278645001533FA /* GetMember.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GetMember.json; sourceTree = "<group>"; };
 		192513972B278645001533FA /* CheckSignUp.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CheckSignUp.json; sourceTree = "<group>"; };
+		192513A62B278BB3001533FA /* Seeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seeds.swift; sourceTree = "<group>"; };
 		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
 		193686732B15C489008902CD /* UserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWorker.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
@@ -487,7 +487,6 @@
 			children = (
 				1925137C2B277CD7001533FA /* ProfileViewControllerTests.swift */,
 				1925137D2B277CD7001533FA /* ProfileInteractorTests.swift */,
-				1925137E2B277CD7001533FA /* ProfileWorkerTests.swift */,
 				1925137F2B277CD7001533FA /* ProfilePresenterTests.swift */,
 			);
 			path = Profile;
@@ -965,6 +964,7 @@
 		FC7E454F2AFEB62C004F155A /* LayoverTests */ = {
 			isa = PBXGroup;
 			children = (
+				192513A62B278BB3001533FA /* Seeds.swift */,
 				194C21C92B1DF36E00C62645 /* Mocks */,
 				194C21C72B1DF09B00C62645 /* Scenes */,
 			);
@@ -1439,8 +1439,8 @@
 				192513852B27852C001533FA /* MockUserWorker.swift in Sources */,
 				192513832B277CD7001533FA /* ProfilePresenterTests.swift in Sources */,
 				192513812B277CD7001533FA /* ProfileInteractorTests.swift in Sources */,
-				192513822B277CD7001533FA /* ProfileWorkerTests.swift in Sources */,
 				194C21C42B1DEE6B00C62645 /* HomeInteractorTests.swift in Sources */,
+				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
