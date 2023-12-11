@@ -2,15 +2,20 @@
 
 ## 프로젝트 소개
 
-Layover는 5초에서 60초의 짧은 영상을 위치기반으로 기록하고 공유하는 플랫폼입니다. 
-
-유저들은 지구를 여행하는 여행자가 되어 자신의 여정을 간편하고 직관적인 방식으로 기록하고, 
-
-다양한 장소들의 대한 영상을 다른 유저들과 공유하고, 감상할 수 있습니다.
-
-어디서든 간편하게 Layover를 통해 방문의 순간, 기억을 지도에 기록하고, 다양한 경험을 나눌 수 있습니다. 
-
-당신의 여정을 Layover에 쌓아가보세요!
+<p align="center">
+    <img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/525b6629-8e2e-42a1-b665-e1a9b04e17cf" width=20% />
+</p>
+<p align="center">
+    Layover는 5초에서 60초의 짧은 영상을 위치기반으로 기록하고 공유하는 플랫폼입니다. 
+</p>
+    
+    유저들은 지구를 여행하는 여행자가 되어 자신의 여정을 간편하고 직관적인 방식으로 기록하고, 
+    
+    다양한 장소들의 대한 영상을 다른 유저들과 공유하고, 감상할 수 있습니다.
+    
+    어디서든 간편하게 Layover를 통해 방문의 순간, 기억을 지도에 기록하고, 다양한 경험을 나눌 수 있습니다. 
+    
+    당신의 여정을 Layover에 쌓아가보세요!
 
 ## 팀원 소개
 
@@ -61,6 +66,14 @@ Layover는 5초에서 60초의 짧은 영상을 위치기반으로 기록하고 
 ![Layover표지](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/11befbb5-46af-4e24-b8e9-cb1378239f74)
 
 ![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
+
+---
+
+## 기술스택
+- iOS
+  - `UIKit`, `CleanSwift (a.k.a. VIP)`, `MapKit`, `AVFoundation`, `Swift Concurrency`
+- BE
+  -  `TypeScript`, `NestJS`, `MySQL`, `Redis`, `Jenkins`, `Docker`, `ncloud`
 
 ---
 
