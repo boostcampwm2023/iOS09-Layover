@@ -16,5 +16,5 @@ final class StubAuthManager: AuthManagerProtocol {
     var refreshToken: String? = "Fake Refresh Token"
     var isLoggedIn: Bool? = true
     var loginType: LoginType? = .kakao
-    var memberId: Int? = 0
+    var memberID: Int? = -1
 }
