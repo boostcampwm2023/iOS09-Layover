@@ -19,15 +19,18 @@ final class SignUpWorker {
     // MARK: Properties
 
     private let signUpEndPointFactory: SignUpEndPointFactory
+    private let userEndPointFactory: UserEndPointFactory
     private let provider: ProviderType
     private let authManager: AuthManagerProtocol
 
     // MARK: Intializer
 
     init(signUpEndPointFactory: SignUpEndPointFactory = DefaultSignUpEndPointFactory(),
+         userEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(),
          provider: ProviderType = Provider(),
          authManager: AuthManagerProtocol = AuthManager.shared) {
         self.signUpEndPointFactory = signUpEndPointFactory
+        self.userEndPointFactory = userEndPointFactory
         self.provider = provider
         self.authManager = authManager
     }
@@ -50,6 +53,7 @@ extension SignUpWorker: SignUpWorkerProtocol {
             authManager.accessToken = data.accessToken
             authManager.refreshToken = data.refreshToken
             authManager.isLoggedIn = true
+            authManager.memberId = await fetchMemberId()
             return true
         } catch {
             os_log(.error, log: .default, "Failed to sign up with error: %@", error.localizedDescription)
@@ -69,10 +73,26 @@ extension SignUpWorker: SignUpWorkerProtocol {
             authManager.accessToken = data.accessToken
             authManager.refreshToken = data.refreshToken
             authManager.isLoggedIn = true
+            authManager.memberId = await fetchMemberId()
             return true
         } catch {
             os_log(.error, log: .default, "Failed to sign up with error: %@", error.localizedDescription)
             return false
+        }
+    }
+
+    private func fetchMemberId() async -> Int? {
+        let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: nil)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = responseData.data else {
+                os_log(.error, log: .default, "Failed to fetch member id with error: %@", responseData.message)
+                return nil
+            }
+            return data.id
+        } catch {
+            os_log(.error, log: .default, "Failed to fetch member id with error: %@", error.localizedDescription)
+            return nil
         }
     }
 }
