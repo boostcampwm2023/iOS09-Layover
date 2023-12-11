@@ -201,8 +201,8 @@ final class PlaybackView: UIView {
         }
     }
 
-    func setProfileButton(member: PlaybackModels.Member) {
-        if let imageData: Data = member.profileImageData {
+    func setProfileButton(imageData: Data?) {
+        if let imageData {
             profileButton.setImage(UIImage(data: imageData), for: .normal)
         } else {
             profileButton.setImage(UIImage.profile, for: .normal)

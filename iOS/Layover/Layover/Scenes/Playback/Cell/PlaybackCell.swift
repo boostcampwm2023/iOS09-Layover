@@ -41,12 +41,15 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.setDescriptionViewUI()
         playbackView.profileLabel.text = post.member.username
         setTagButtons(with: post.tags)
-        playbackView.setProfileButton(member: post.member)
-        playbackView.setLocationText(location: post.board.location ?? "이름 모를 곳")
         memberID = nil
         memberID = post.member.memberID
         playbackView.profileButton.removeTarget(nil, action: nil, for: .allEvents)
         playbackView.profileButton.addTarget(self, action: #selector(profileButtonDidTap), for: .touchUpInside)
+    }
+
+    func setProfileImageAndLocation(imageData: Data?, location: String) {
+        playbackView.setLocationText(location: location)
+        playbackView.setProfileButton(imageData: imageData)
     }
 
     func addAVPlayer(url: URL) {

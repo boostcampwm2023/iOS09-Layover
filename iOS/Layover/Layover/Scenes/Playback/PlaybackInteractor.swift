@@ -31,6 +31,8 @@ protocol PlaybackBusinessLogic {
     func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
     @discardableResult
     func fetchPosts() -> Task<Bool, Never>
+    @discardableResult
+    func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) -> Task<Bool, Never>
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -84,7 +86,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 posts = worker.makeInfiniteScroll(posts: posts)
                 self.posts = posts
             }
-            let videos: [Models.PlaybackVideo] = await transPostToVideo(posts)
+            let videos: [Models.PlaybackVideo] = transPostToVideo(posts)
             let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
             await MainActor.run {
                 presenter?.presentVideoList(with: response)
@@ -251,25 +253,23 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         previousCell.playbackView.playPlayer()
     }
 
-    private func transPostToVideo(_ posts: [Post]) async -> [Models.PlaybackVideo] {
-        return await posts.asyncCompactMap { post in
+    private func transPostToVideo(_ posts: [Post]) -> [Models.PlaybackVideo] {
+        return posts.compactMap { post in
             guard let videoURL: URL = post.board.videoURL else { return nil }
-            async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
-            async let thumbnailImageData = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
-            async let location = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
-            return Models.PlaybackVideo(displayPost: Models.DisplayedPost(
-                member: Models.Member(
-                    memberID: post.member.identifier,
-                    username: post.member.username,
-                    profileImageData: await profileImageData),
-                board: Models.Board(
-                    boardID: post.board.identifier,
-                    title: post.board.title,
-                    description: post.board.description,
-                    thumbnailImageData: await thumbnailImageData,
-                    videoURL: videoURL,
-                    location: await location),
-                tags: post.tag))
+            return Models.PlaybackVideo(
+                displayedPost: Models.DisplayedPost(
+                    member: Models.Member(
+                        memberID: post.member.identifier,
+                        username: post.member.username,
+                        profileImageURL: post.member.profileImageURL),
+                    board: Models.Board(
+                        boardID: post.board.identifier,
+                        title: post.board.title,
+                        description: post.board.title,
+                        videoURL: videoURL,
+                        latitude: post.board.latitude,
+                        longitude: post.board.longitude),
+                    tags: post.tag))
         }
     }
 
@@ -314,12 +314,25 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 }
                 guard let newPosts else { return false }
                 self.posts?.append(contentsOf: newPosts)
-                let videos: [Models.PlaybackVideo] = await transPostToVideo(newPosts)
+                let videos: [Models.PlaybackVideo] = transPostToVideo(newPosts)
                 let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
                 await MainActor.run {
                     presenter?.presentLoadFetchVideos(with: response)
                     isFetchReqeust = false
                 }
+                return true
+            }
+            return false
+        }
+    }
+
+    func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) -> Task<Bool, Never> {
+        Task {
+            async let profileImageData = self.worker?.fetchImageData(with: request.profileImageURL)
+            async let location: String? = self.worker?.transLocation(latitude: request.latitude, longitude: request.longitude)
+            let response: Models.LoadProfileImageAndLocation.Response = Models.LoadProfileImageAndLocation.Response(curCell: request.curCell, profileImageData: await profileImageData, location: await location)
+            await MainActor.run {
+                presenter?.presentLoadProfileImageAndLocation(with: response)
                 return true
             }
             return false

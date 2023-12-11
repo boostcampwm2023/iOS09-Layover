@@ -33,6 +33,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
     func routeToProfile()
     func routeToTagPlay()
+    func setProfileImageAndLocation(viewModel: PlaybackModels.LoadProfileImageAndLocation.ViewModel)
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -244,14 +245,19 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         playbackCollectionView.register(PlaybackCell.self, forCellWithReuseIdentifier: PlaybackCell.identifier)
         dataSource = UICollectionViewDiffableDataSource<Section, Models.PlaybackVideo>(collectionView: playbackCollectionView) { (collectionView, indexPath, playbackVideo) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaybackCell.identifier, for: indexPath) as? PlaybackCell else { return PlaybackCell() }
-            cell.setPlaybackContents(post: playbackVideo.displayPost)
+            cell.setPlaybackContents(post: playbackVideo.displayedPost)
             if let teleportIndex = viewModel.teleportIndex {
                 if indexPath.row == 0 || indexPath.row == teleportIndex {
                     return cell
                 }
             }
+            cell.addAVPlayer(url: playbackVideo.displayedPost.board.videoURL)
+            self.interactor?.loadProfileImageAndLocation(with: Models.LoadProfileImageAndLocation.Request(
+                curCell: cell,
+                profileImageURL: playbackVideo.displayedPost.member.profileImageURL,
+                latitude: playbackVideo.displayedPost.board.latitude,
+                longitude: playbackVideo.displayedPost.board.longitude))
             cell.delegate = self
-            cell.addAVPlayer(url: playbackVideo.displayPost.board.videoURL)
             return cell
         }
     }
@@ -297,6 +303,10 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func routeToTagPlay() {
         router?.routeToTagPlay()
+    }
+
+    func setProfileImageAndLocation(viewModel: PlaybackModels.LoadProfileImageAndLocation.ViewModel) {
+        viewModel.curCell.setProfileImageAndLocation(imageData: viewModel.profileImageData, location: viewModel.location)
     }
 }
 
