@@ -248,6 +248,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             cell.setPlaybackContents(post: playbackVideo.displayedPost)
             if let teleportIndex = viewModel.teleportIndex {
                 if indexPath.row == 0 || indexPath.row == teleportIndex {
+                    cell.playbackView.resetPlayer()
                     return cell
                 }
             }
