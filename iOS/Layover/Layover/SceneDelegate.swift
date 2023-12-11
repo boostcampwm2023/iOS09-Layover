@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        let rootViewController = AuthManager.shared.isLoggedIn ? MainTabBarViewController() : LoginViewController()
+        let rootViewController = AuthManager.shared.isLoggedIn == true ? MainTabBarViewController() : LoginViewController()
         let rootNavigationController = UINavigationController(rootViewController: rootViewController)
 
         if rootViewController is MainTabBarViewController {

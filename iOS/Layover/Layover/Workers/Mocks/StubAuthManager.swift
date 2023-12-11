@@ -14,13 +14,7 @@ final class StubAuthManager: AuthManagerProtocol {
 
     var accessToken: String? = "Fake Access Token"
     var refreshToken: String? = "Fake Refresh Token"
-    var isLoggedIn: Bool = true
-
-    // MARK: Methods
-
-    func logout() {
-        accessToken = nil
-        refreshToken = nil
-        isLoggedIn = false
-    }
+    var isLoggedIn: Bool? = true
+    var loginType: LoginType? = .kakao
+    var memberID: Int? = -1
 }

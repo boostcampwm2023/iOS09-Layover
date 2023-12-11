@@ -26,16 +26,19 @@ final class LoginWorker: NSObject {
 
     typealias Models = LoginModels
 
-    let provider: ProviderType
-    let loginEndPointFactory: LoginEndPointFactory
-    let authManager: AuthManager
+    private let provider: ProviderType
+    private let loginEndPointFactory: LoginEndPointFactory
+    private let userEndPointFactory: UserEndPointFactory
+    private let authManager: AuthManager
 
     init(provider: ProviderType = Provider(), 
          loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(),
+         userEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(),
          authManager: AuthManager = .shared) {
         self.provider = provider
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
+        self.userEndPointFactory = userEndPointFactory
     }
 }
 
@@ -85,9 +88,10 @@ extension LoginWorker: LoginWorkerProtocol {
             let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
 
-            authManager.accessToken = result.data?.accessToken
-            authManager.refreshToken = result.data?.refreshToken
-            authManager.isLoggedIn = true
+            authManager.login(accessToken: result.data?.accessToken,
+                              refreshToken: result.data?.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .kakao)
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
@@ -113,13 +117,29 @@ extension LoginWorker: LoginWorkerProtocol {
             let endPoint: EndPoint = loginEndPointFactory.makeAppleLoginEndPoint(with: identityToken)
             let result: EndPoint<Response<LoginDTO>>.Response = try await provider.request(with: endPoint, authenticationIfNeeded: false)
 
-            authManager.accessToken = result.data?.accessToken
-            authManager.refreshToken = result.data?.refreshToken
-            authManager.isLoggedIn = true
+            authManager.login(accessToken: result.data?.accessToken,
+                              refreshToken: result.data?.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .apple)
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return false
+        }
+    }
+
+    private func fetchMemberId() async -> Int? {
+        let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: nil)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = responseData.data else {
+                os_log(.error, log: .default, "Failed to fetch member id with error: %@", responseData.message)
+                return nil
+            }
+            return data.id
+        } catch {
+            os_log(.error, log: .default, "Failed to fetch member id with error: %@", error.localizedDescription)
+            return nil
         }
     }
 }
