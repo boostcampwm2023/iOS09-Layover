@@ -14,6 +14,15 @@ protocol AuthManagerProtocol: AnyObject {
     func logout()
 }
 
+extension AuthManagerProtocol {
+    func logout() {
+        accessToken = nil
+        refreshToken = nil
+        memberId = nil
+        isLoggedIn = false
+    }
+}
+
 final class AuthManager: AuthManagerProtocol {
 
     // MARK: Properties
@@ -27,11 +36,4 @@ final class AuthManager: AuthManagerProtocol {
     static let shared = AuthManager()
 
     private init() { }
-
-    func logout() {
-        accessToken = nil
-        refreshToken = nil
-        memberId = nil
-        isLoggedIn = false
-    }
 }

@@ -26,16 +26,19 @@ final class LoginWorker: NSObject {
 
     typealias Models = LoginModels
 
-    let provider: ProviderType
-    let loginEndPointFactory: LoginEndPointFactory
-    let authManager: AuthManager
+    private let provider: ProviderType
+    private let loginEndPointFactory: LoginEndPointFactory
+    private let userEndPointFactory: UserEndPointFactory
+    private let authManager: AuthManager
 
     init(provider: ProviderType = Provider(), 
          loginEndPointFactory: LoginEndPointFactory = DefaultLoginEndPointFactory(),
+         userEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(),
          authManager: AuthManager = .shared) {
         self.provider = provider
         self.authManager = authManager
         self.loginEndPointFactory = loginEndPointFactory
+        self.userEndPointFactory = userEndPointFactory
     }
 }
 
@@ -88,6 +91,7 @@ extension LoginWorker: LoginWorkerProtocol {
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
             authManager.isLoggedIn = true
+            authManager.memberId = await fetchMemberId()
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
@@ -116,10 +120,26 @@ extension LoginWorker: LoginWorkerProtocol {
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
             authManager.isLoggedIn = true
+            authManager.memberId = await fetchMemberId()
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return false
+        }
+    }
+
+    private func fetchMemberId() async -> Int? {
+        let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: nil)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = responseData.data else {
+                os_log(.error, log: .default, "Failed to fetch member id with error: %@", responseData.message)
+                return nil
+            }
+            return data.id
+        } catch {
+            os_log(.error, log: .default, "Failed to fetch member id with error: %@", error.localizedDescription)
+            return nil
         }
     }
 }
