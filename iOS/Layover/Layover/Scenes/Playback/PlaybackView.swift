@@ -66,6 +66,7 @@ final class PlaybackView: UIView {
     private let locationLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2)
+        label.text = "이름 모를 곳에서"
         label.textColor = UIColor.layoverWhite
         return label
     }()

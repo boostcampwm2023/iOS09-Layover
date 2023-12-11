@@ -39,6 +39,7 @@ final class PlaybackCell: UICollectionViewCell {
         playbackView.descriptionView.titleLabel.text = post.board.title
         playbackView.descriptionView.setText(post.board.description ?? "")
         playbackView.setDescriptionViewUI()
+        playbackView.profileButton.setImage(UIImage.profile, for: .normal)
         playbackView.profileLabel.text = post.member.username
         setTagButtons(with: post.tags)
         memberID = nil
