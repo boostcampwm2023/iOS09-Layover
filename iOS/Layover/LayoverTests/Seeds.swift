@@ -8,6 +8,7 @@
 @testable import Layover
 import Foundation
 
+// JSON 데이터와 비교하기 위한 모델
 class Seeds {
     static let sampleImageData = try! Data(contentsOf: Bundle(for: Seeds.self).url(forResource: "sample", withExtension: "jpeg")!)
 
@@ -50,5 +51,12 @@ class Seeds {
                                       latitude: 127.060123123,
                                       longitude: 37.0532156213),
                          tag: ["아이브", "yujin"])
+    }
+
+    struct Members {
+        static let getMember1 = Member(identifier: 221,
+                                       username: "안유진",
+                                       introduce: "안녕하세요, 아이브의 안유진입니다.",
+                                       profileImageURL: URL(string: "https://cdn.footballist.co.kr/news/photo/202307/170226_100422_1733.jpg")!)
     }
 }

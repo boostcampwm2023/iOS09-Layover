@@ -70,17 +70,18 @@ final class ProfileInteractorTests: XCTestCase {
         // arrange
         let presentationLogicSpy = ProfilePresentationLogicSpy()
         sut.presenter = presentationLogicSpy
-        let sampleImageData = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg")!)
 
         // act
         _ = await sut.fetchProfile(with: Models.FetchProfile.Request()).value
 
         // assert
         XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출했다")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, "안유진", "presentProfileResponse에는 fetchProfile의 결과가 담겼다")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, "안녕하세요, 아이브의 안유진입니다~!", "presentProfileResponse에는 fetchProfile의 결과가 담겼다")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, sampleImageData)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts.count, 1, "presentProfileResponse에는 fetchProfile의 결과가 담겼다")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts.count, 1)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].id, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].thumbnailImageData, Seeds.sampleImageData)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, Seeds.Members.getMember1.username)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, Seeds.Members.getMember1.introduce)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담겼다.")
     }
 
     func test_fetchMorePosts을_호출하면_presenter의_presentMorePosts을_호출하고_presentMorePostsResponse를_전달한다() async {
