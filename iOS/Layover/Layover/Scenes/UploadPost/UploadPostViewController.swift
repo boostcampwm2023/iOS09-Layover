@@ -95,6 +95,13 @@ final class UploadPostViewController: BaseViewController {
         return textView
     }()
 
+    private let contentCountLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = .loFont(type: .caption)
+        label.textColor = .grey500
+        return label
+    }()
+
     private lazy var uploadButton: LOButton = {
         let button = LOButton(style: .basic)
         button.setTitle("업로드", for: .normal)
@@ -132,6 +139,7 @@ final class UploadPostViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setConstraints()
+        setDelegation()
         addTarget()
         interactor?.fetchThumbnailImage()
         interactor?.fetchCurrentAddress()
@@ -166,9 +174,14 @@ final class UploadPostViewController: BaseViewController {
         setContentViewSubviewsConstraints()
     }
 
+    private func setDelegation() {
+        titleTextField.delegate = self
+        contentTextView.delegate = self
+    }
+
     private func setContentViewSubviewsConstraints() {
         contentView.addSubviews(thumbnailImageView, titleImageLabel, titleTextField, tagImageLabel, tagStackView, addTagButton,
-                               locationImageLabel, currentAddressLabel, contentImageLabel, contentTextView)
+                               locationImageLabel, currentAddressLabel, contentImageLabel, contentTextView, contentCountLabel)
         contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
@@ -215,7 +228,10 @@ final class UploadPostViewController: BaseViewController {
             contentTextView.topAnchor.constraint(equalTo: contentImageLabel.bottomAnchor, constant: 10),
             contentTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            contentTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            contentCountLabel.centerYAnchor.constraint(equalTo: contentTextView.centerYAnchor),
+            contentCountLabel.trailingAnchor.constraint(equalTo: contentTextView.trailingAnchor, constant: -10)
         ])
     }
 
@@ -233,6 +249,8 @@ final class UploadPostViewController: BaseViewController {
     }
 
     @objc private func addTagButtonDidTap() {
+        let request = UploadPostModels.EditTags.Request(tags: tagStackView.tags)
+        interactor?.editTags(with: request)
         router?.routeToNext()
     }
 
@@ -245,6 +263,31 @@ final class UploadPostViewController: BaseViewController {
         router?.routeToBack()
     }
 
+}
+
+extension UploadPostViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 { return true }
+        }
+        guard text.count < Models.titleMaxLength else { return false }
+        return true
+    }
+}
+
+extension UploadPostViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let originalText = textView.text else { return true }
+        let newLength = originalText.count + text.count - range.length
+        return newLength <= Models.contentMaxLength
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        let textCount = textView.text == nil ? 0 : textView.text.count
+        contentCountLabel.text = "\(textCount)"
+    }
 }
 
 extension UploadPostViewController: UploadPostDisplayLogic {

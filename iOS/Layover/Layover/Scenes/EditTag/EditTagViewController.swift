@@ -10,6 +10,8 @@ import UIKit
 
 protocol EditTagDisplayLogic: AnyObject {
     func displayTags(viewModel: EditTagModels.FetchTags.ViewModel)
+    func displayEditedTags(viewModel: EditTagModels.EditTags.ViewModel)
+    func displayAddedTag(viewModel: EditTagModels.AddTag.ViewModel)
 }
 
 final class EditTagViewController: BaseViewController {
@@ -27,6 +29,13 @@ final class EditTagViewController: BaseViewController {
         let textField: LOTextField = LOTextField()
         textField.placeholder = "태그"
         return textField
+    }()
+
+    private let tagCountLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = .loFont(type: .caption)
+        label.textColor = .grey400
+        return label
     }()
 
     private let tagStackView: LOTagStackView = {
@@ -63,12 +72,12 @@ final class EditTagViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.fetchTags()
-        tagTextField.delegate = self
+        setDelegation()
     }
 
     override func setConstraints() {
         super.setConstraints()
-        view.addSubviews(closeButton, tagTextField, tagStackView)
+        view.addSubviews(closeButton, tagTextField, tagCountLabel, tagStackView)
         view.subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -82,6 +91,9 @@ final class EditTagViewController: BaseViewController {
             tagTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             tagTextField.heightAnchor.constraint(equalToConstant: 44),
 
+            tagCountLabel.centerYAnchor.constraint(equalTo: tagTextField.centerYAnchor),
+            tagCountLabel.trailingAnchor.constraint(equalTo: tagTextField.trailingAnchor, constant: -10),
+
             tagStackView.topAnchor.constraint(equalTo: tagTextField.bottomAnchor, constant: 14),
             tagStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             tagStackView.heightAnchor.constraint(equalToConstant: 25)
@@ -90,9 +102,12 @@ final class EditTagViewController: BaseViewController {
 
     // MARK: - Methods
 
+    private func setDelegation() {
+        tagTextField.delegate = self
+        tagStackView.delegate = self
+    }
+
     @objc private func closeButtonDidTap() {
-        let request = EditTagModels.EditTag.Request(tags: tagStackView.tags)
-        interactor?.editTag(request: request)
         router?.routeToBack()
     }
 
@@ -103,10 +118,30 @@ final class EditTagViewController: BaseViewController {
 extension EditTagViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let tagText = textField.text else { return true }
-        tagStackView.addTag(tagText)
         textField.text = nil
+        let request = Models.AddTag.Request(tags: tagStackView.tags, newTag: tagText)
+        interactor?.addTag(request: request)
         return true
     }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 { return true }
+        }
+        guard text.count < Models.maxTagLength else { return false }
+        return true
+    }
+}
+
+extension EditTagViewController: LOTagStackViewDelegate {
+
+    func tagStackViewDidDeletedTag(_ stackView: LOTagStackView, sender: UIButton) {
+        let request = EditTagModels.EditTags.Request(editedTags: stackView.tags)
+        interactor?.editTags(request: request)
+    }
+
 }
 
 extension EditTagViewController: EditTagDisplayLogic {
@@ -114,6 +149,18 @@ extension EditTagViewController: EditTagDisplayLogic {
     func displayTags(viewModel: EditTagModels.FetchTags.ViewModel) {
         tagStackView.resetTagStackView()
         viewModel.tags.forEach { tagStackView.addTag($0) }
+        tagCountLabel.text = viewModel.tagCountDescription
+    }
+
+    func displayEditedTags(viewModel: EditTagModels.EditTags.ViewModel) {
+        tagCountLabel.text = viewModel.tagCountDescription
+    }
+
+    func displayAddedTag(viewModel: EditTagModels.AddTag.ViewModel) {
+        if let tag = viewModel.addedTag {
+            tagStackView.addTag(tag)
+        }
+        tagCountLabel.text = viewModel.tagCountDescription
     }
 
 }
