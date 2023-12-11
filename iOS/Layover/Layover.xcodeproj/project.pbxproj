@@ -17,6 +17,7 @@
 		1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */; };
 		192513752B2715BF001533FA /* PostListMore.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513742B2715BF001533FA /* PostListMore.json */; };
 		192513772B2715D3001533FA /* PostListEnd.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513762B2715D3001533FA /* PostListEnd.json */; };
+		1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513792B273D98001533FA /* StubAuthManager.swift */; };
 		193686722B15BCA7008902CD /* UserEndPointFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686712B15BCA7008902CD /* UserEndPointFactory.swift */; };
 		193686742B15C489008902CD /* UserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193686732B15C489008902CD /* UserWorker.swift */; };
 		194551F22B037F2D00299768 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194551EC2B037F2D00299768 /* LoginPresenter.swift */; };
@@ -238,6 +239,7 @@
 		1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTagPlayListWorker.swift; sourceTree = "<group>"; };
 		192513742B2715BF001533FA /* PostListMore.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListMore.json; sourceTree = "<group>"; };
 		192513762B2715D3001533FA /* PostListEnd.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListEnd.json; sourceTree = "<group>"; };
+		192513792B273D98001533FA /* StubAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubAuthManager.swift; sourceTree = "<group>"; };
 		193686712B15BCA7008902CD /* UserEndPointFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndPointFactory.swift; sourceTree = "<group>"; };
 		193686732B15C489008902CD /* UserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWorker.swift; sourceTree = "<group>"; };
 		194551EC2B037F2D00299768 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
@@ -471,6 +473,14 @@
 				192513672B26F7CE001533FA /* TagPlayListPresenterTests.swift */,
 			);
 			path = TagPlayList;
+			sourceTree = "<group>";
+		};
+		192513782B273D74001533FA /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				192513792B273D98001533FA /* StubAuthManager.swift */,
+			);
+			path = Stubs;
 			sourceTree = "<group>";
 		};
 		194551EB2B037F1E00299768 /* Login */ = {
@@ -935,6 +945,7 @@
 		FC7E454F2AFEB62C004F155A /* LayoverTests */ = {
 			isa = PBXGroup;
 			children = (
+				192513782B273D74001533FA /* Stubs */,
 				194C21C92B1DF36E00C62645 /* Mocks */,
 				194C21C72B1DF09B00C62645 /* Scenes */,
 			);
@@ -1402,6 +1413,7 @@
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
+				1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */,
 				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,

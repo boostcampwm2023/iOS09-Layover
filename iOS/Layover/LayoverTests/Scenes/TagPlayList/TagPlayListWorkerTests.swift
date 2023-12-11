@@ -13,38 +13,119 @@
 @testable import Layover
 import XCTest
 
-class TagPlayListWorkerTests: XCTestCase
-{
+final class TagPlayListWorkerTests: XCTestCase {
     // MARK: Subject under test
-  
+
     var sut: TagPlayListWorker!
-  
+
     // MARK: - Test lifecycle
-  
+
     override func setUp() {
         super.setUp()
         setupTagPlayListWorker()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: - Test setup
-  
-    func setupTagPlayListWorker() {
-        sut = TagPlayListWorker()
-    }
 
-    // MARK: - Test doubles
+    func setupTagPlayListWorker() {
+        sut = TagPlayListWorker(provider: Provider(session: .initMockSession(), authManager: StubAuthManager()),
+                                authManager: StubAuthManager())
+    }
 
     // MARK: - Tests
-  
-    func testSomething() {
-        // Given
 
-        // When
+    func test_fetchPlayList를_호출했을때_성공적으로_응답이오면_Post배열을_반환한다() async {
+        // arrange
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "PostList", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
 
-        // Then
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        var result: [Post]?
+
+        // act
+        result = await sut.fetchPlayList(of: "안유진", at: 1)
+        // assert
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.count, 4)
+    }
+
+    func test_fetchPlayList를_호출했을때_404_에러가_발생하면_nil을_반환한다() async {
+        // arrange
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 404,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, nil, nil)
+        }
+
+        var result: [Post]?
+
+        // act
+        result = await sut.fetchPlayList(of: "안유진", at: 1)
+        // assert
+        XCTAssertNil(result)
+    }
+
+    func test_loadImageData를_호출하면_이미지데이터를_반환한다() async {
+        // arrange
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
+        guard let dummyURL = URL(string: "https://www.google.com") else {
+            XCTFail("Mock URL 로드 실패.")
+            return
+        }
+
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        var result: Data?
+
+        // act
+        result = await sut.loadImageData(from: dummyURL)
+        // assert
+        XCTAssertNotNil(result)
+        XCTAssertEqual(mockData, result)
+    }
+
+    func test_loadImageData를_호출했을때_404_에러가_발생하면_nil을_반환한다() async {
+        // arrange
+        guard let dummyURL = URL(string: "https://www.google.com") else {
+            XCTFail("Mock URL 로드 실패.")
+            return
+        }
+
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 404,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, nil, nil)
+        }
+
+        var result: Data?
+
+        // act
+        result = await sut.loadImageData(from: dummyURL)
+        // assert
+        XCTAssertNil(result)
     }
 }
