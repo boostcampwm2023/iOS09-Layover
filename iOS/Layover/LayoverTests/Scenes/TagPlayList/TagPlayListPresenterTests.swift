@@ -72,19 +72,7 @@ final class TagPlayListPresenterTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_presentPlayList는_displayPlayList를_호출한다() {
-        // arrange
-        let spy = TagPlayListDisplayLogicSpy()
-        sut.viewController = spy
-
-        // act
-        sut.presentPlayList(response: .init(post: []))
-
-        // assert
-        XCTAssertTrue(spy.displayPlayListCalled, "presentPlayList() 는 displayPlayList()를 호출했다.")
-    }
-
-    func test_presentPlayList는_올바른_값을_뷰컨트롤러에_전달한다() throws {
+    func test_presentPlayList는_뷰컨트롤러의_displayPlayList를_호출하고_올바른_값을_뷰컨트롤러에_전달한다() throws {
         // arrange
         let spy = TagPlayListDisplayLogicSpy()
         sut.viewController = spy
@@ -102,22 +90,11 @@ final class TagPlayListPresenterTests: XCTestCase {
         sut.presentPlayList(response: .init(post: [dummyDisplayedPost, dummyDisplayedPost, dummyDisplayedPost]))
 
         // assert
+        XCTAssertTrue(spy.displayPlayListCalled, "presentPlayList() 는 displayPlayList()를 호출했다.")
         XCTAssertEqual(spy.displayPlayListViewModel.displayedPost, [dummyDisplayedPost, dummyDisplayedPost, dummyDisplayedPost], "presentPlayList() 는 displayPlayList()에 올바른 값을 전달했다.")
     }
 
-    func test_presentMorePlayList는_displayMorePlayList를_호출한다() {
-        // arrange
-        let spy = TagPlayListDisplayLogicSpy()
-        sut.viewController = spy
-
-        // act
-        sut.presentMorePlayList(response: .init(post: []))
-
-        // assert
-        XCTAssertTrue(spy.displayMorePlayListCalled, "presentMorePlayList() 는 displayMorePlayList()를 호출했다.")
-    }
-
-    func test_presentMorePlayList는_올바른_값을_뷰컨트롤러에_전달한다() throws {
+    func test_presentMorePlayList는_뷰컨트롤러의_displayMorePlayList를_호출하고_올바른_값을_뷰컨트롤러에_전달한다() throws {
         // arrange
         let spy = TagPlayListDisplayLogicSpy()
         sut.viewController = spy
@@ -135,10 +112,11 @@ final class TagPlayListPresenterTests: XCTestCase {
         sut.presentMorePlayList(response: .init(post: [dummyDisplayedPost, dummyDisplayedPost, dummyDisplayedPost]))
 
         // assert
+        XCTAssertTrue(spy.displayMorePlayListCalled, "presentMorePlayList() 는 displayMorePlayList()를 호출했다.")
         XCTAssertEqual(spy.displayMorePlayListViewModel.displayedPost, [dummyDisplayedPost, dummyDisplayedPost, dummyDisplayedPost], "presentMorePlayList() 는 displayMorePlayList()에 올바른 값을 전달했다.")
     }
 
-    func test_presentTitle는_displayTitle를_호출한다() {
+    func test_presentTitle은_뷰컨트롤러의_displayTitle를_호출하고_올바른_title값을_뷰컨트롤러에_전달한다() {
         // arrange
         let spy = TagPlayListDisplayLogicSpy()
         sut.viewController = spy
@@ -148,17 +126,6 @@ final class TagPlayListPresenterTests: XCTestCase {
 
         // assert
         XCTAssertTrue(spy.displayTitleCalled, "presentTitle() 는 displayTitle()를 호출했다.")
-    }
-
-    func test_presentTitle은_올바른_title값을_뷰컨트롤러에_전달한다() {
-        // arrange
-        let spy = TagPlayListDisplayLogicSpy()
-        sut.viewController = spy
-
-        // act
-        sut.presentTitleTag(response: .init(titleTag: "안유진"))
-
-        // assert
         XCTAssertEqual(spy.displayTitleViewModel.title, "안유진", "presentTitle() 는 displayTitle()에 올바른 title을 전달했다.")
     }
 
