@@ -265,7 +265,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                     board: Models.Board(
                         boardID: post.board.identifier,
                         title: post.board.title,
-                        description: post.board.title,
+                        description: post.board.description,
                         videoURL: videoURL,
                         latitude: post.board.latitude,
                         longitude: post.board.longitude),

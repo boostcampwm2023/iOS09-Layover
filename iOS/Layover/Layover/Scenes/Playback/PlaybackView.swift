@@ -51,6 +51,7 @@ final class PlaybackView: UIView {
         button.layer.borderColor = UIColor.layoverWhite.cgColor
         button.backgroundColor = .layoverWhite
         button.clipsToBounds = true
+        button.imageView?.contentMode = .scaleAspectFill
         return button
     }()
 
