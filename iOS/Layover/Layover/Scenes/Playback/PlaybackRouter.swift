@@ -6,11 +6,13 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 protocol PlaybackRoutingLogic {
     func routeToBack()
     func routeToReport()
+    func routeToProfile()
+    func routeToTagPlay()
 }
 
 protocol PlaybackDataPassing {
@@ -38,5 +40,33 @@ final class PlaybackRouter: NSObject, PlaybackRoutingLogic, PlaybackDataPassing 
         destination.boardID = source.previousCell?.boardID
         reportViewController.modalPresentationStyle = .fullScreen
         viewController?.present(reportViewController, animated: false)
+    }
+
+    func routeToProfile() {
+        let profileViewController: ProfileViewController = ProfileViewController(profileType: .other)
+        guard let source = dataStore,
+              var destination = profileViewController.router?.dataStore
+        else { return }
+        passDataToProfile(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(profileViewController, animated: true)
+    }
+
+    func routeToTagPlay() {
+        let tagPlayListViewController: TagPlayListViewController = TagPlayListViewController()
+        guard let source = dataStore,
+              var destination = tagPlayListViewController.router?.dataStore
+        else { return }
+        passDataToTagPlay(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(tagPlayListViewController, animated: true)
+    }
+
+    // MARK: - Data Passing
+
+    private func passDataToProfile(source: PlaybackDataStore, destination: inout ProfileDataStore) {
+        destination.profileId = source.memberID
+    }
+
+    private func passDataToTagPlay(source: PlaybackDataStore, destination: inout TagPlayListDataStore) {
+        destination.titleTag = source.selectedTag
     }
 }

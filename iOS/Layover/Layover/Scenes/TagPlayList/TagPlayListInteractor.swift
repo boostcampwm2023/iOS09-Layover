@@ -50,6 +50,7 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
     @discardableResult
     func fetchPlayList(request: Models.FetchPosts.Request) -> Task<Bool, Never> {
         Task {
+            fetchPostsPage = 1
             guard let titleTag = titleTag,
                   let fetchedPosts = await worker?.fetchPlayList(of: titleTag, at: fetchPostsPage) else { return false }
             self.posts.append(contentsOf: fetchedPosts)

@@ -62,7 +62,7 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
 
     func makeUserInformationEndPoint(with id: Int? = nil) -> EndPoint<Response<MemberDTO>> {
         if let id {
-            let queryParameters = ["id": id]
+            let queryParameters = ["memberId": id]
             return EndPoint(
                 path: "/member",
                 method: .GET,
@@ -81,7 +81,7 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
         queryParameters.updateValue(String(page), forKey: "page")
 
         if let id {
-            queryParameters.updateValue(String(id), forKey: "id")
+            queryParameters.updateValue(String(id), forKey: "memberId")
         }
 
         return EndPoint(

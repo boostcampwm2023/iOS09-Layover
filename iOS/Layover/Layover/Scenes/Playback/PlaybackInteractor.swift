@@ -14,9 +14,11 @@ protocol PlaybackBusinessLogic {
     func moveInitialPlaybackCell()
     func setInitialPlaybackCell()
     func leavePlaybackView()
+    func resumePlaybackView()
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func resetVideo()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
@@ -25,6 +27,8 @@ protocol PlaybackBusinessLogic {
     @discardableResult
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
     func resumeVideo()
+    func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
+    func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -34,6 +38,8 @@ protocol PlaybackDataStore: AnyObject {
     var isTeleport: Bool? { get set }
     var isDelete: Bool? { get set }
     var posts: [Post]? { get set }
+    var memberID: Int? { get set }
+    var selectedTag: String? { get set }
 }
 
 final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
@@ -56,6 +62,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     var isDelete: Bool?
 
     var posts: [Post]?
+
+    var memberID: Int?
+
+    var selectedTag: String?
 
     // MARK: - UseCase Load Video List
 
@@ -161,6 +171,17 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
     }
 
+    func resumePlaybackView() {
+        if let previousCell {
+            let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
+            presenter?.presentPlayInitialPlaybackCell(with: response)
+        } else {
+            guard let index else { return }
+            let response: Models.SetInitialPlaybackCell.Response = Models.SetInitialPlaybackCell.Response(indexPathRow: index)
+            presenter?.presentSetInitialPlaybackCell(with: response)
+        }
+    }
+
     func leavePlaybackView() {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: nil)
         presenter?.presentLeavePlaybackView(with: response)
@@ -170,6 +191,16 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
         presenter?.presentResetPlaybackCell(with: response)
     }
+
+    func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        if previousCell == nil {
+            previousCell = request.currentCell
+            let response: Models.DisplayPlaybackVideo.Response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
+            presenter?.presentMoveCellNext(with: response)
+        }
+    }
+
+    // MARK: - UseCase ConfigureCell
 
     func configurePlaybackCell() {
         guard let posts,
@@ -226,35 +257,36 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     private func transPostToVideo(_ posts: [Post]) async -> [Models.PlaybackVideo] {
-        return await withTaskGroup(of: Models.PlaybackVideo.self) { group -> [Models.PlaybackVideo] in
-            for post in posts {
-                guard let videoURL: URL = post.board.videoURL else { continue }
-                group.addTask {
-                    async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
-                    async let thumbnailImageData: Data? = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
-                    async let location: String? = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
-                    return Models.PlaybackVideo(
-                        displayPost: Models.DisplayedPost(
-                            member: Models.Member(
-                                memberID: post.member.identifier,
-                                username: post.member.username,
-                                profileImageData: await profileImageData),
-                            board: Models.Board(
-                                boardID: post.board.identifier,
-                                title: post.board.title,
-                                description: post.board.description,
-                                thumbnailImageData: await thumbnailImageData,
-                                videoURL: videoURL,
-                                location: await location),
-                            tags: post.tag))
-                }
-            }
-            var result = [Models.PlaybackVideo]()
-            for await post in group {
-                result.append(post)
-            }
-
-            return result
+        return await posts.asyncCompactMap { post in
+            guard let videoURL: URL = post.board.videoURL else { return nil }
+            async let profileImageData = self.worker?.fetchImageData(with: post.member.profileImageURL)
+            async let thumbnailImageData = self.worker?.fetchImageData(with: post.board.thumbnailImageURL)
+            async let location = self.worker?.transLocation(latitude: post.board.latitude, longitude: post.board.longitude)
+            return Models.PlaybackVideo(displayPost: Models.DisplayedPost(
+                member: Models.Member(
+                    memberID: post.member.identifier,
+                    username: post.member.username,
+                    profileImageData: await profileImageData),
+                board: Models.Board(
+                    boardID: post.board.identifier,
+                    title: post.board.title,
+                    description: post.board.description,
+                    thumbnailImageData: await thumbnailImageData,
+                    videoURL: videoURL,
+                    location: await location),
+                tags: post.tag))
         }
+    }
+
+    func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request) {
+        guard let memberID = request.memberID else { return }
+        self.memberID = memberID
+        presenter?.presentProfile()
+    }
+
+    func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request) {
+        guard let selectedTag = request.selectedTag else { return }
+        self.selectedTag = selectedTag
+        presenter?.presentTagPlay()
     }
 }

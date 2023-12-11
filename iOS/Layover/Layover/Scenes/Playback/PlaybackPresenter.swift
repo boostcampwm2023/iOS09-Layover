@@ -23,6 +23,8 @@ protocol PlaybackPresentationLogic {
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response)
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response)
+    func presentProfile()
+    func presentTagPlay()
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -111,5 +113,13 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
         let deleteMessage: Models.DeletePlaybackVideo.DeleteMessage = response.result ? .success : .fail
         let viewModel: Models.DeletePlaybackVideo.ViewModel = Models.DeletePlaybackVideo.ViewModel(deleteMessage: deleteMessage, playbackVideo: response.playbackVideo)
         viewController?.deleteVideo(viewModel: viewModel)
+    }
+
+    func presentProfile() {
+        viewController?.routeToProfile()
+    }
+
+    func presentTagPlay() {
+        viewController?.routeToTagPlay()
     }
 }

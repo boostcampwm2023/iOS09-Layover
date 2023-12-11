@@ -11,6 +11,11 @@ import AVFoundation
 
 import OSLog
 
+protocol PlaybackViewControllerDelegate: AnyObject {
+    func moveToProfile(memberID: Int)
+    func moveToTagPlay(selectedTag: String)
+}
+
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
@@ -25,6 +30,8 @@ protocol PlaybackDisplayLogic: AnyObject {
     func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
     func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
+    func routeToProfile()
+    func routeToTagPlay()
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -95,7 +102,7 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        interactor?.setInitialPlaybackCell()
+        interactor?.resumePlaybackView()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -192,7 +199,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             previousCell.playbackView.stopPlayer()
             previousCell.playbackView.replayPlayer()
         }
-        if let currentCell = viewModel.currentCell {
+        if let currentCell = viewModel.currentCell, !currentCell.isPlaying() {
             currentCell.addPlayerSlider(tabBarHeight: tabBarHeight)
             currentCell.playbackView.addTargetPlayerSlider()
             currentCell.playbackView.playPlayer()
@@ -236,6 +243,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                     return cell
                 }
             }
+            cell.delegate = self
             cell.addAVPlayer(url: playbackVideo.displayPost.board.videoURL)
             return cell
         }
@@ -274,6 +282,14 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         if snapshot.itemIdentifiers.count < 1 {
             self.navigationController?.popViewController(animated: true)
         }
+    }
+
+    func routeToProfile() {
+        router?.routeToProfile()
+    }
+
+    func routeToTagPlay() {
+        router?.routeToTagPlay()
     }
 }
 
@@ -316,6 +332,19 @@ extension PlaybackViewController: UICollectionViewDelegate {
 
         let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
         interactor?.playTeleportVideo(with: request)
+        interactor?.careVideoLoading(with: request)
+    }
+}
+
+extension PlaybackViewController: PlaybackViewControllerDelegate {
+    func moveToProfile(memberID: Int) {
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: memberID, selectedTag: nil)
+        interactor?.moveToProfile(with: request)
+    }
+
+    func moveToTagPlay(selectedTag: String) {
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: nil, selectedTag: selectedTag)
+        interactor?.moveToTagPlay(with: request)
     }
 }
 //#Preview {

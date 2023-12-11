@@ -44,12 +44,13 @@ final class PlaybackView: UIView {
         return tagStackView
     }()
 
-    private let profileButton: UIButton = {
+    let profileButton: UIButton = {
         let button: UIButton = UIButton()
         button.layer.cornerRadius = 19
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.layoverWhite.cgColor
         button.backgroundColor = .layoverWhite
+        button.clipsToBounds = true
         return button
     }()
 
@@ -206,7 +207,6 @@ final class PlaybackView: UIView {
         } else {
             profileButton.setImage(UIImage.profile, for: .normal)
         }
-        // TODO: Target 추가
     }
 
     func setLocationText(location: String) {
