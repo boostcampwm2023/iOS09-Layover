@@ -32,6 +32,7 @@ const contentTypes = {
 };
 
 export function generateUploadPreSignedUrl(bucketname: string, filename: string, filetype: string) {
+  filetype = filetype.toLowerCase();
   const s3 = new AWS.S3({
     endpoint: process.env.NCLOUD_S3_ENDPOINT,
     credentials: {
