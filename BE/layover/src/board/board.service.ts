@@ -99,6 +99,7 @@ export class BoardService {
     return new BoardsResDto(member, boardInfo, tag);
   }
 
+  // 인코딩 되기전, 되는 중 상태 게시글도 가져온다.
   async getBoardsByMap(lat: string, lon: string) {
     const latitude: number = parseFloat(lat);
     const longitude: number = parseFloat(lon);

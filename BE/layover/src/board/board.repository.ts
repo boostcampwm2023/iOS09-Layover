@@ -26,6 +26,7 @@ export class BoardRepository {
       .getMany();
   }
 
+  // 인코딩 되기전, 되는 중 상태 게시글도 가져온다.
   async findBoardsByMap(latitude: number, longitude: number) {
     return await this.boardRepository
       .createQueryBuilder('board')
@@ -36,7 +37,7 @@ export class BoardRepository {
         latitude,
         distance: 10000, // 10km
       })
-      .andWhere("board.status = 'COMPLETE'")
+      .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
       .getMany();
   }
 
@@ -66,8 +67,8 @@ export class BoardRepository {
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
-      .where("board.status = 'COMPLETE'")
-      .andWhere('member.id = :id', { id })
+      .where('member.id = :id', { id })
+      .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
       .skip(offset)
       .take(itemsPerPage)
       .getMany();
