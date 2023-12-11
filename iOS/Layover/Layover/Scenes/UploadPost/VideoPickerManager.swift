@@ -19,7 +19,7 @@ final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
     weak var videoPickerDelegate: VideoPickerDelegate?
 
     let phPickerViewController: PHPickerViewController = {
-        var configuration = PHPickerConfiguration()
+        var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         configuration.preferredAssetRepresentationMode = .current
         configuration.filter = .videos
         configuration.selectionLimit = 1
@@ -41,7 +41,6 @@ final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
             self.phPickerViewController.dismiss(animated: true)
             return
         }
-
         _ = result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, error in
             if error != nil {
                 Task {
@@ -55,6 +54,7 @@ final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
                 self.videoPickerDelegate?.didFinishPickingVideo(url)
             }
         }
+        picker.deselectAssets(withIdentifiers: results.compactMap(\.assetIdentifier))
     }
 
 }
