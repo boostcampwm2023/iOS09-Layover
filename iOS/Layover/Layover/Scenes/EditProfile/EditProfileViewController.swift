@@ -6,7 +6,6 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
-
 import UIKit
 import PhotosUI
 import OSLog
@@ -23,7 +22,7 @@ final class EditProfileViewController: BaseViewController {
     // MARK: - UI Components
 
     private lazy var phPickerViewController: PHPickerViewController = {
-        var configuration = PHPickerConfiguration()
+        var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         configuration.filter = .images
         configuration.selectionLimit = 1
         let phPickerViewController = PHPickerViewController(configuration: configuration)
@@ -263,6 +262,7 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
                     }
                 }.resume()
             }
+            picker.deselectAssets(withIdentifiers: results.compactMap(\.assetIdentifier))
         }
     }
 }

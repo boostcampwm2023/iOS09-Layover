@@ -9,21 +9,30 @@
 import Foundation
 
 @propertyWrapper
-struct UserDefaultStored<T> {
+struct UserDefaultStored<T: Codable> {
     private let key: String
-    private let defaultValue: T
+    private let defaultValue: T?
 
-    init(key: String, defaultValue: T) {
+    init(key: String, defaultValue: T?) {
         self.key = key
         self.defaultValue = defaultValue
     }
 
-    var wrappedValue: T {
+    var wrappedValue: T? {
         get {
-            return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+            if let savedData = UserDefaults.standard.object(forKey: key) as? Data {
+                let decoder = JSONDecoder()
+                if let loadedObject = try? decoder.decode(T.self, from: savedData) {
+                    return loadedObject
+                }
+            }
+            return defaultValue
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: key)
+            let encoder = JSONEncoder()
+            if let encodedObject = try? encoder.encode(newValue) {
+                UserDefaults.standard.set(encodedObject, forKey: key)
+            }
         }
     }
 }
@@ -31,4 +40,6 @@ struct UserDefaultStored<T> {
 enum UserDefaultKey {
     static let isLoggedIn = "isLoggedIn"
     static let hasBeenLaunchedBefore = "hasBeenLaunchedBefore"
+    static let memberId = "memberId"
+    static let loginType = "loginType"
 }

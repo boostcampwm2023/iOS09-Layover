@@ -10,6 +10,8 @@ import Foundation
 
 enum MapModels {
 
+    static let searchRadiusInMeters: Double = 10000
+
     struct DisplayedPost: Hashable {
         let boardID: Int
         let thumbnailImageData: Data?

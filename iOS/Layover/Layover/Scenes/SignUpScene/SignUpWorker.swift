@@ -19,15 +19,18 @@ final class SignUpWorker {
     // MARK: Properties
 
     private let signUpEndPointFactory: SignUpEndPointFactory
+    private let userEndPointFactory: UserEndPointFactory
     private let provider: ProviderType
     private let authManager: AuthManagerProtocol
 
     // MARK: Intializer
 
     init(signUpEndPointFactory: SignUpEndPointFactory = DefaultSignUpEndPointFactory(),
+         userEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(),
          provider: ProviderType = Provider(),
          authManager: AuthManagerProtocol = AuthManager.shared) {
         self.signUpEndPointFactory = signUpEndPointFactory
+        self.userEndPointFactory = userEndPointFactory
         self.provider = provider
         self.authManager = authManager
     }
@@ -47,12 +50,13 @@ extension SignUpWorker: SignUpWorkerProtocol {
                 return false
             }
 
-            authManager.accessToken = data.accessToken
-            authManager.refreshToken = data.refreshToken
-            authManager.isLoggedIn = true
+            authManager.login(accessToken: data.accessToken,
+                              refreshToken: data.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .kakao)
             return true
         } catch {
-            os_log(.error, log: .default, "Failed to sign up with error: %@", error.localizedDescription)
+            os_log(.error, log: .data, "Failed to sign up with error: %@", error.localizedDescription)
             return false
         }
     }
@@ -66,13 +70,29 @@ extension SignUpWorker: SignUpWorkerProtocol {
                 os_log(.error, log: .default, "Failed to sign up with error: %@", responseData.message)
                 return false
             }
-            authManager.accessToken = data.accessToken
-            authManager.refreshToken = data.refreshToken
-            authManager.isLoggedIn = true
+            authManager.login(accessToken: data.accessToken,
+                              refreshToken: data.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .apple)
             return true
         } catch {
-            os_log(.error, log: .default, "Failed to sign up with error: %@", error.localizedDescription)
+            os_log(.error, log: .data, "Failed to sign up with error: %@", error.localizedDescription)
             return false
+        }
+    }
+
+    private func fetchMemberId() async -> Int? {
+        let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: nil)
+        do {
+            let responseData = try await provider.request(with: endPoint)
+            guard let data = responseData.data else {
+                os_log(.error, log: .data, "Failed to fetch member id with error: %@", responseData.message)
+                return nil
+            }
+            return data.id
+        } catch {
+            os_log(.error, log: .data, "Failed to fetch member id with error: %@", error.localizedDescription)
+            return nil
         }
     }
 }

@@ -36,7 +36,7 @@ final class SettingViewController: BaseViewController {
     }()
 
     private lazy var withdrawAlertController: UIAlertController = {
-        let alertController = UIAlertController(title: "회원탈퇴", message: "회원탈퇴 하시겠습니까?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "회원탈퇴", message: "7일 내로 재로그인시 계정이 복구됩니다.\n정말 탈퇴하시겠어요?", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "탈퇴", style: .destructive, handler: { [weak self] _ in
             self?.interactor?.performUserWithdraw(request: Models.Withdraw.Request())
         }))
