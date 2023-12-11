@@ -60,7 +60,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
             guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
                 return false
             }
-
+            posts = []
             nickname = userProfile.username
             introduce = userProfile.introduce
 

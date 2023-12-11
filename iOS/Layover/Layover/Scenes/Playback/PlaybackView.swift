@@ -48,9 +48,10 @@ final class PlaybackView: UIView {
         let button: UIButton = UIButton()
         button.layer.cornerRadius = 19
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.layoverWhite.cgColor
+        button.layer.borderColor = UIColor.grey400.cgColor
         button.backgroundColor = .layoverWhite
         button.clipsToBounds = true
+        button.imageView?.contentMode = .scaleAspectFill
         return button
     }()
 
@@ -65,6 +66,7 @@ final class PlaybackView: UIView {
     private let locationLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .loFont(type: .body2)
+        label.text = "이름 모를 곳에서"
         label.textColor = UIColor.layoverWhite
         return label
     }()
@@ -201,8 +203,8 @@ final class PlaybackView: UIView {
         }
     }
 
-    func setProfileButton(member: PlaybackModels.Member) {
-        if let imageData: Data = member.profileImageData {
+    func setProfileButton(imageData: Data?) {
+        if let imageData {
             profileButton.setImage(UIImage(data: imageData), for: .normal)
         } else {
             profileButton.setImage(UIImage.profile, for: .normal)

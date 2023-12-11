@@ -12,7 +12,7 @@ enum PlaybackModels {
     // MARK: - Properties Type
     struct PlaybackVideo: Hashable {
         var id: UUID = UUID()
-        let displayPost: DisplayedPost
+        let displayedPost: DisplayedPost
     }
 
     enum ParentView {
@@ -32,16 +32,16 @@ enum PlaybackModels {
     struct Member: Hashable {
         let memberID: Int
         let username: String
-        let profileImageData: Data?
+        let profileImageURL: URL?
     }
 
     struct Board: Hashable {
         let boardID: Int
         let title: String
         let description: String?
-        let thumbnailImageData: Data?
         let videoURL: URL
-        let location: String?
+        let latitude: Double
+        let longitude: Double
     }
 
     // MARK: - UseCase Load Video List
@@ -233,6 +233,29 @@ enum PlaybackModels {
 
         struct ViewModel {
 
+        }
+    }
+
+    // MARK: - UseCase Load ProfileImage & Location
+
+    enum LoadProfileImageAndLocation {
+        struct Request {
+            let curCell: PlaybackCell
+            let profileImageURL: URL?
+            let latitude: Double
+            let longitude: Double
+        }
+
+        struct Response {
+            let curCell: PlaybackCell
+            let profileImageData: Data?
+            let location: String?
+        }
+
+        struct ViewModel {
+            let curCell: PlaybackCell
+            let profileImageData: Data?
+            let location: String
         }
     }
 }

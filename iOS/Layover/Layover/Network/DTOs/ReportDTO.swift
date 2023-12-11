@@ -9,7 +9,13 @@
 import Foundation
 
 struct ReportDTO: Codable {
-    let memberId: Int?
+    let memberID: Int?
     let boardID: Int
     let reportType: String
+
+    enum CodingKeys: String, CodingKey {
+        case memberID = "memberId"
+        case boardID = "boardId"
+        case reportType
+    }
 }
