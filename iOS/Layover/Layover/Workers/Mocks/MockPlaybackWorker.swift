@@ -20,10 +20,6 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     private let authManager: AuthManagerProtocol
 
     // MARK: - Methods
-
-//    init(provider: ProviderType = Provider(session: .initMockSession())) {
-//        self.provider = provider
-//    }
     
     init(provider: ProviderType = Provider(session: .initMockSession()), authManager: AuthManagerProtocol = StubAuthManager()) {
         self.provider = provider

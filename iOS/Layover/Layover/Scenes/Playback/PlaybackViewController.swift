@@ -287,14 +287,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel) {
-//        guard let button = seemoreButton.customView as? UIButton else { return }
-//        switch viewModel.buttonType {
-//        case .delete:
-//            button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
-//        case .report:
-//            button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
-//        }
-//        self.navigationItem.rightBarButtonItem = seemoreButton
         switch viewModel.buttonType {
         case .delete:
             deleteButtonDidTap()
