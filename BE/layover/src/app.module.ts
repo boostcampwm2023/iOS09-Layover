@@ -8,6 +8,8 @@ import { join } from 'path';
 import { BoardModule } from './board/board.module';
 import { TagModule } from './tag/tag.module';
 import { ReportModule } from './report/report.module';
+import { LoggingInterceptor } from './utils/logging-interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -19,6 +21,12 @@ import { ReportModule } from './report/report.module';
     ReportModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}
