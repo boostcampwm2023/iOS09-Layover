@@ -91,6 +91,7 @@ extension LoginWorker: LoginWorkerProtocol {
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
             authManager.isLoggedIn = true
+            authManager.loginType = .kakao
             authManager.memberId = await fetchMemberId()
             return true
         } catch {
@@ -120,6 +121,7 @@ extension LoginWorker: LoginWorkerProtocol {
             authManager.accessToken = result.data?.accessToken
             authManager.refreshToken = result.data?.refreshToken
             authManager.isLoggedIn = true
+            authManager.loginType = .apple
             authManager.memberId = await fetchMemberId()
             return true
         } catch {

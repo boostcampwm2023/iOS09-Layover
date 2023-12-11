@@ -41,4 +41,5 @@ enum UserDefaultKey {
     static let isLoggedIn = "isLoggedIn"
     static let hasBeenLaunchedBefore = "hasBeenLaunchedBefore"
     static let memberId = "memberId"
+    static let loginType = "loginType"
 }

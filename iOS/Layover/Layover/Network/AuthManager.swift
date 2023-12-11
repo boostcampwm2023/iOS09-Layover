@@ -5,13 +5,20 @@
 //  Created by 김인환 on 11/13/23.
 //
 
+
 protocol AuthManagerProtocol: AnyObject {
     var accessToken: String? { get set }
     var refreshToken: String? { get set }
     var isLoggedIn: Bool? { get set }
+    var loginType: LoginType? { get set }
     var memberId: Int? { get set }
 
     func logout()
+}
+
+enum LoginType: String, Codable {
+    case kakao
+    case apple
 }
 
 extension AuthManagerProtocol {
@@ -19,6 +26,7 @@ extension AuthManagerProtocol {
         accessToken = nil
         refreshToken = nil
         memberId = nil
+        loginType = nil
         isLoggedIn = false
     }
 }
@@ -32,6 +40,7 @@ final class AuthManager: AuthManagerProtocol {
 
     @UserDefaultStored(key: UserDefaultKey.isLoggedIn, defaultValue: false) var isLoggedIn: Bool?
     @UserDefaultStored(key: UserDefaultKey.memberId, defaultValue: nil) var memberId: Int?
+    @UserDefaultStored(key: UserDefaultKey.loginType, defaultValue: nil) var loginType: LoginType?
 
     static let shared = AuthManager()
 

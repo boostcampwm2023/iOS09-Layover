@@ -48,6 +48,7 @@ final class SettingInteractor: SettingBusinessLogic, SettingDataStore {
     func performUserWithdraw(request: SettingModels.Withdraw.Request) -> Task<Bool, Never> {
         Task {
             guard (await userWorker?.withdraw()) != nil else { return false }
+            userWorker?.logout()
             await MainActor.run {
                 presenter?.presentUserWithdrawConfirmed(with: Models.Withdraw.Response())
             }

@@ -53,6 +53,7 @@ extension SignUpWorker: SignUpWorkerProtocol {
             authManager.accessToken = data.accessToken
             authManager.refreshToken = data.refreshToken
             authManager.isLoggedIn = true
+            authManager.loginType = .kakao
             authManager.memberId = await fetchMemberId()
             return true
         } catch {
@@ -73,6 +74,7 @@ extension SignUpWorker: SignUpWorkerProtocol {
             authManager.accessToken = data.accessToken
             authManager.refreshToken = data.refreshToken
             authManager.isLoggedIn = true
+            authManager.loginType = .apple
             authManager.memberId = await fetchMemberId()
             return true
         } catch {
