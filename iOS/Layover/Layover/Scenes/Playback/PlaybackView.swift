@@ -48,7 +48,7 @@ final class PlaybackView: UIView {
         let button: UIButton = UIButton()
         button.layer.cornerRadius = 19
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.layoverWhite.cgColor
+        button.layer.borderColor = UIColor.grey400.cgColor
         button.backgroundColor = .layoverWhite
         button.clipsToBounds = true
         button.imageView?.contentMode = .scaleAspectFill
