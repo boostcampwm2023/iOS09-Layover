@@ -17,8 +17,8 @@ final class ReportConfigurator: Configurator {
         let viewController: ReportViewController = viewController
         let interactor: ReportInteractor = ReportInteractor()
         let presenter: ReportPresenter = ReportPresenter()
-//        let worker: ReportWorker = ReportWorker()
-        let worker: ReportWorkerProtocol = MockReportWorker()
+        let worker: ReportWorker = ReportWorker()
+//        let worker: ReportWorkerProtocol = MockReportWorker()
         let router: ReportRouter = ReportRouter()
 
         router.viewController = viewController

@@ -36,7 +36,7 @@ final class MockReportWorker: ReportWorkerProtocol {
         do {
             let bodyParameters = ReportDTO(
                 memberId: nil,
-                boardID: 1, 
+                boardId: 1, 
                 reportType: "청소년에게 유해한 내용입니다.")
             let endPoint = EndPoint<Response<ReportDTO>>(path: "/report",
                                                          method: .POST,

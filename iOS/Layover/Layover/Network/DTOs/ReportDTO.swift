@@ -10,6 +10,6 @@ import Foundation
 
 struct ReportDTO: Codable {
     let memberId: Int?
-    let boardID: Int
+    let boardId: Int
     let reportType: String
 }
