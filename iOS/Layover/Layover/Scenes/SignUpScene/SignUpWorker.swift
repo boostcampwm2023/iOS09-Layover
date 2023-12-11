@@ -50,11 +50,10 @@ extension SignUpWorker: SignUpWorkerProtocol {
                 return false
             }
 
-            authManager.accessToken = data.accessToken
-            authManager.refreshToken = data.refreshToken
-            authManager.isLoggedIn = true
-            authManager.loginType = .kakao
-            authManager.memberID = await fetchMemberId()
+            authManager.login(accessToken: data.accessToken,
+                              refreshToken: data.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .kakao)
             return true
         } catch {
             os_log(.error, log: .data, "Failed to sign up with error: %@", error.localizedDescription)
@@ -71,11 +70,10 @@ extension SignUpWorker: SignUpWorkerProtocol {
                 os_log(.error, log: .default, "Failed to sign up with error: %@", responseData.message)
                 return false
             }
-            authManager.accessToken = data.accessToken
-            authManager.refreshToken = data.refreshToken
-            authManager.isLoggedIn = true
-            authManager.loginType = .apple
-            authManager.memberID = await fetchMemberId()
+            authManager.login(accessToken: data.accessToken,
+                              refreshToken: data.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .apple)
             return true
         } catch {
             os_log(.error, log: .data, "Failed to sign up with error: %@", error.localizedDescription)

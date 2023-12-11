@@ -13,6 +13,7 @@ protocol AuthManagerProtocol: AnyObject {
     var loginType: LoginType? { get set }
     var memberID: Int? { get set }
 
+    func login(accessToken: String?, refreshToken: String?, memberID: Int?, loginType: LoginType?)
     func logout()
 }
 
@@ -22,6 +23,14 @@ enum LoginType: String, Codable {
 }
 
 extension AuthManagerProtocol {
+    func login(accessToken: String?, refreshToken: String?, memberID: Int?, loginType: LoginType?) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+        self.memberID = memberID
+        self.loginType = loginType
+        isLoggedIn = true
+    }
+
     func logout() {
         accessToken = nil
         refreshToken = nil

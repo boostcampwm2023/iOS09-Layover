@@ -88,11 +88,10 @@ extension LoginWorker: LoginWorkerProtocol {
             let endPoint = loginEndPointFactory.makeKakaoLoginEndPoint(with: socialToken)
             let result = try await provider.request(with: endPoint, authenticationIfNeeded: false)
 
-            authManager.accessToken = result.data?.accessToken
-            authManager.refreshToken = result.data?.refreshToken
-            authManager.isLoggedIn = true
-            authManager.loginType = .kakao
-            authManager.memberID = await fetchMemberId()
+            authManager.login(accessToken: result.data?.accessToken,
+                              refreshToken: result.data?.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .kakao)
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
@@ -118,11 +117,10 @@ extension LoginWorker: LoginWorkerProtocol {
             let endPoint: EndPoint = loginEndPointFactory.makeAppleLoginEndPoint(with: identityToken)
             let result: EndPoint<Response<LoginDTO>>.Response = try await provider.request(with: endPoint, authenticationIfNeeded: false)
 
-            authManager.accessToken = result.data?.accessToken
-            authManager.refreshToken = result.data?.refreshToken
-            authManager.isLoggedIn = true
-            authManager.loginType = .apple
-            authManager.memberID = await fetchMemberId()
+            authManager.login(accessToken: result.data?.accessToken,
+                              refreshToken: result.data?.refreshToken,
+                              memberID: await fetchMemberId(),
+                              loginType: .apple)
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
