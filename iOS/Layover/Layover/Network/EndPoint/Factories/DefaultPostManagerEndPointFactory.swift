@@ -16,7 +16,7 @@ protocol PostManagerEndPointFactory {
 struct DefaultPostManagerEndPointFactory: PostManagerEndPointFactory {
     func reportPlaybackVideoEndpoint(boardID: Int, reportType: String) -> EndPoint<Response<ReportDTO>> {
         let bodyParmeters: ReportDTO = ReportDTO(
-            memberId: nil,
+            memberID: nil,
             boardID: boardID,
             reportType: reportType)
 

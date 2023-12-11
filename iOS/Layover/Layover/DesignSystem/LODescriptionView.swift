@@ -8,7 +8,7 @@
 import UIKit
 
 final class LODescriptionView: UIView {
-    static let descriptionWidth: CGFloat = 170
+    static let descriptionWidth: CGFloat = 210
     static let descriptionHeight: CGFloat = 63
 
     // MARK: - View isTouched State

@@ -26,6 +26,7 @@ protocol PlaybackPresentationLogic {
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response)
     func presentProfile()
     func presentTagPlay()
+    func presentLoadProfileImageAndLocation(with response: PlaybackModels.LoadProfileImageAndLocation.Response)
 }
 
 final class PlaybackPresenter: PlaybackPresentationLogic {
@@ -127,5 +128,10 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
 
     func presentTagPlay() {
         viewController?.routeToTagPlay()
+    }
+
+    func presentLoadProfileImageAndLocation(with response: PlaybackModels.LoadProfileImageAndLocation.Response) {
+        let viewModel: Models.LoadProfileImageAndLocation.ViewModel = Models.LoadProfileImageAndLocation.ViewModel(curCell: response.curCell, profileImageData: response.profileImageData, location: response.location ?? "이름 모를 곳")
+        viewController?.setProfileImageAndLocation(viewModel: viewModel)
     }
 }
