@@ -36,4 +36,23 @@ class BaseViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(
                 title: "", style: .plain, target: nil, action: nil)
     }
+
+    func showLoading() {
+        let loadingIndicatorView: UIActivityIndicatorView
+        if let existedView = view.window?.subviews.first(where: { $0 is UIActivityIndicatorView } ) as? UIActivityIndicatorView {
+            loadingIndicatorView = existedView
+        } else {
+            loadingIndicatorView = UIActivityIndicatorView(style: .large)
+            loadingIndicatorView.color = UIColor.primaryPurple
+            /// 다른 UI가 눌리지 않도록 indicatorView의 크기를 full로 할당
+            loadingIndicatorView.frame = view.window?.frame ?? view.bounds
+            view.window?.addSubview(loadingIndicatorView)
+        }
+        loadingIndicatorView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        loadingIndicatorView.startAnimating()
+    }
+
+    func hideLoading() {
+        view.window?.subviews.filter({ $0 is UIActivityIndicatorView }).forEach { $0.removeFromSuperview() }
+    }
 }

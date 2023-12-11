@@ -14,7 +14,7 @@ protocol ProviderType {
     func request<R: Decodable, E: RequestResponsable>(with endPoint: E, authenticationIfNeeded: Bool, retryCount: Int) async throws -> R where E.Response == R
     func request(url: URL) async throws -> Data
     func request(url: String) async throws -> Data
-    func upload(data: Data, to presignedURL: String, method: HTTPMethod) async throws -> Data
+    func upload(data: Data, contentType: String, to presignedURL: String, method: HTTPMethod) async throws -> Data
     func upload(fromFile: URL,
                 to url: String,
                 method: HTTPMethod,
@@ -31,8 +31,9 @@ extension ProviderType {
                                  retryCount: retryCount)
     }
 
-    func upload(data: Data, to presignedURL: String, method: HTTPMethod = .PUT) async throws -> Data {
+    func upload(data: Data, contentType: String, to presignedURL: String, method: HTTPMethod = .PUT) async throws -> Data {
         return try await upload(data: data,
+                                contentType: contentType,
                                 to: presignedURL,
                                 method: method)
     }
@@ -132,9 +133,8 @@ class Provider: ProviderType {
     }
 
     // 이미지 업로드용
-    func upload(data: Data, to presignedURL: String, method: HTTPMethod = .PUT) async throws -> Data {
-        guard let contentType = URLComponents(string: presignedURL)?.queryItems?.first(where: { $0.name == "Content-Type"} )?.value,
-              let url = URL(string: presignedURL) else { throw NetworkError.components }
+    func upload(data: Data, contentType: String, to presignedURL: String, method: HTTPMethod = .PUT) async throws -> Data {
+        guard let url = URL(string: presignedURL) else { throw NetworkError.components }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method.rawValue
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")

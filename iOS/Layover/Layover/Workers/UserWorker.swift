@@ -30,7 +30,7 @@ protocol UserWorkerProtocol {
     func validateNickname(_ nickname: String) -> NicknameState
     func modifyNickname(to nickname: String) async -> String?
     func checkNotDuplication(for userName: String) async -> Bool?
-    func modifyProfileImage(data: Data, to url: String) async -> Bool
+    func modifyProfileImage(data: Data, contentType: String, to url: String) async -> Bool
     func modifyIntroduce(to introduce: String) async -> String?
     func withdraw() async -> String?
     func logout()
@@ -97,9 +97,9 @@ final class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func modifyProfileImage(data: Data, to url: String) async -> Bool {
+    func modifyProfileImage(data: Data, contentType: String, to url: String) async -> Bool {
         do {
-            let responseData = try await provider.upload(data: data, to: url)
+            let responseData = try await provider.upload(data: data, contentType: contentType, to: url)
             return true
         } catch {
             os_log(.error, log: .default, "Failed to modify profile image with error: %@", error.localizedDescription)

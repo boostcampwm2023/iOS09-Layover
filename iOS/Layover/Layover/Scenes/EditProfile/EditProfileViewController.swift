@@ -226,6 +226,7 @@ final class EditProfileViewController: BaseViewController {
                                                  introduce: introduce,
                                                  profileImageData: changedProfileImageData,
                                                  profileImageExtension: changedProfileImageExtension)
+        showLoading()
         interactor?.editProfile(with: request)
     }
 }
@@ -284,7 +285,7 @@ extension EditProfileViewController: EditProfileDisplayLogic {
 
     func displayProfileEditCompleted(with viewModel: EditProfileModels.EditProfile.ViewModel) {
         Toast.shared.showToast(message: viewModel.toastMessage)
-        confirmButton.isEnabled = false
+        hideLoading()
     }
 
     func displayChangedProfileState(with viewModel: EditProfileModels.ChangeProfile.ViewModel) {
