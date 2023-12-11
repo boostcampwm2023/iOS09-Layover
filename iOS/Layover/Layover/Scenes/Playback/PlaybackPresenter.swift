@@ -10,6 +10,7 @@ import Foundation
 
 protocol PlaybackPresentationLogic {
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response)
+    func presentLoadFetchVideos(with response: PlaybackModels.LoadPlaybackVideoList.Response)
     func presentSetCellIfInfinite(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
@@ -40,6 +41,11 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
         let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
         viewController?.displayVideoList(viewModel: viewModel)
+    }
+
+    func presentLoadFetchVideos(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
+        let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
+        viewController?.loadFetchVideos(viewModel: viewModel)
     }
 
     func presentSetCellIfInfinite(with response: PlaybackModels.SetInitialPlaybackCell.Response) {

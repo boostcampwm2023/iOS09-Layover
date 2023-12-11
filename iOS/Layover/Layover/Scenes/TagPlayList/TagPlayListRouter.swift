@@ -33,7 +33,7 @@ final class TagPlayListRouter: TagPlayListRoutingLogic, TagPlayListDataPassing {
     }
 
     private func passDataToPlayback(source: TagPlayListDataStore, destination: inout PlaybackDataStore) {
-        destination.parentView = .other
+        destination.parentView = .tag
         destination.index = source.postPlayStartIndex
         destination.posts = source.posts
     }
