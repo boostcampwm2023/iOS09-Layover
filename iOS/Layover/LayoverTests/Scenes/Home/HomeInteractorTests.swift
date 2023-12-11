@@ -80,7 +80,7 @@ final class HomeInteractorTests: XCTestCase {
         _ = await sut.fetchPosts(with: request).value
 
         // Assert
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 4, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 5, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
     }
 
     func test_fetchPost는_presenter에게_올바른_이미지_데이터를_전달한다() async throws {

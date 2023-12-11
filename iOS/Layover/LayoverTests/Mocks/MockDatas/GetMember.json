@@ -1,0 +1,10 @@
+{
+    "message": "성공",
+    "statusCode": 200,
+    "data": {
+        "id": 221,
+        "username": "안유진",
+        "introduce": "안녕하세요, 아이브의 안유진입니다~!",
+        "profile_image_url": "https://qi-o.qoo10cdn.com/goods_image_big/3/3/1/6/8645113316_l.jpg"
+    }
+}

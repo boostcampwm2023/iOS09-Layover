@@ -59,7 +59,7 @@ final class HomeWorkerTests: XCTestCase {
 
         // assert
         XCTAssertNotNil(result)
-        XCTAssertEqual(result?.count, 4)
+        XCTAssertEqual(result?.count, 5)
     }
 
     func test_fetchPost는_데이터를_받아오지_못하면_nil을_리턴한다() async {
