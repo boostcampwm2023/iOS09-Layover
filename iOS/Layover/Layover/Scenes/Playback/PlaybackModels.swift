@@ -179,7 +179,7 @@ enum PlaybackModels {
         }
 
         struct Response {
-            let parentView: ParentView
+            let buttonType: ButtonType
         }
 
         struct ViewModel {

@@ -17,13 +17,19 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     typealias Models = PlaybackModels
 
     private let provider: ProviderType
+    private let authManager: AuthManagerProtocol
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(session: .initMockSession())) {
-        self.provider = provider
-    }
+//    init(provider: ProviderType = Provider(session: .initMockSession())) {
+//        self.provider = provider
+//    }
     
+    init(provider: ProviderType = Provider(session: .initMockSession()), authManager: AuthManagerProtocol = StubAuthManager()) {
+        self.provider = provider
+        self.authManager = authManager
+    }
+
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
         guard let tempLastVideo: Post = posts.last,
               let tempFirstVideo: Post = posts.first
@@ -174,6 +180,10 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
         }
+    }
+
+    func isMyVideo(currentCellMemberID: Int) -> Bool {
+        return currentCellMemberID == authManager.memberID
     }
 
 }

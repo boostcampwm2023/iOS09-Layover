@@ -138,11 +138,17 @@ final class PlaybackViewController: BaseViewController {
 
     override func setUI() {
         super.setUI()
-        interactor?.setSeeMoreButton()
+        setSeeMoreButton()
         self.navigationController?.navigationBar.tintColor = .layoverWhite
     }
 
-    @objc private func reportButtonDidTap() {
+    private func setSeeMoreButton() {
+        guard let button = seemoreButton.customView as? UIButton else { return }
+        button.addTarget(self, action: #selector(seeMoreButtonDidTap), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = seemoreButton
+    }
+
+    private func reportButtonDidTap() {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
             [weak self] _ in
@@ -159,7 +165,7 @@ final class PlaybackViewController: BaseViewController {
         })
     }
 
-    @objc private func deleteButtonDidTap() {
+    private func deleteButtonDidTap() {
         let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
         if visibleIndexPaths.count > 1 { return }
         guard let currentItemIndex = visibleIndexPaths.first else { return }
@@ -179,6 +185,10 @@ final class PlaybackViewController: BaseViewController {
         present(alert, animated: true, completion: {
             self.interactor?.leavePlaybackView()
         })
+    }
+
+    @objc private func seeMoreButtonDidTap() {
+        interactor?.setSeeMoreButton()
     }
 }
 
@@ -277,14 +287,20 @@ extension PlaybackViewController: PlaybackDisplayLogic {
     }
 
     func setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel) {
-        guard let button = seemoreButton.customView as? UIButton else { return }
+//        guard let button = seemoreButton.customView as? UIButton else { return }
+//        switch viewModel.buttonType {
+//        case .delete:
+//            button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
+//        case .report:
+//            button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+//        }
+//        self.navigationItem.rightBarButtonItem = seemoreButton
         switch viewModel.buttonType {
         case .delete:
-            button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
+            deleteButtonDidTap()
         case .report:
-            button.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+            reportButtonDidTap()
         }
-        self.navigationItem.rightBarButtonItem = seemoreButton
     }
 
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel) {
