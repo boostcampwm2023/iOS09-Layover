@@ -25,7 +25,7 @@ export class LoggingInterceptor implements NestInterceptor {
       await axios.post(errorWebHook, {
         embeds: [
           {
-            title: `[${method}] ${url}`,
+            title: `**[${method}] ${url}**`,
             description: exception.message,
             color: 16711680,
           },
