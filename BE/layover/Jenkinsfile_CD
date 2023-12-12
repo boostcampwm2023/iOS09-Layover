@@ -77,7 +77,7 @@ pipeline {
                             -v ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
                             -v ~/envs/certificate.crt:/usr/src/app/certificate.crt
                             -v ~/envs/private.key:/usr/src/app/private.key
-                            --log-driver=syslog
+                            -v /var/log/logs.log:/usr/src/app/logs.log
                             """.replaceAll("\n", " ").trim())
                             echo '컨테이너 실행 성공'
                         }
