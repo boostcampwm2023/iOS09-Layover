@@ -1,11 +1,15 @@
-import { PipeTransform, Injectable } from '@nestjs/common';
+import { PipeTransform, Injectable, Inject } from '@nestjs/common';
 import { CustomResponse } from 'src/response/custom-response';
 import { extractPayloadJWT, verifyJwtToken } from 'src/utils/jwtUtils';
 import { ECustomCode } from '../response/ecustom-code.jenum';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
+import { createClient } from 'redis';
 
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
+  @Inject('REDIS_CLIENT')
+  private readonly redisClient: ReturnType<typeof createClient>;
+
   async transform(header): Promise<tokenPayload> {
     const [tokenType, token] = header['authorization']?.split(' ');
 
@@ -19,14 +23,32 @@ export class JwtValidationPipe implements PipeTransform {
     // 1-1. sign 검증됐으면.. payload 추출
     const payload = extractPayloadJWT(token);
 
-    // 2. issuer가 일치하는지 검사 (아직은 issuer만 확인)
+    // 1-2. 없는 payload 항목이 있는지 검사
+    if (
+      !payload.aud ||
+      !payload.exp ||
+      !payload.iat ||
+      !payload.iss ||
+      !payload.jti ||
+      !payload.memberHash ||
+      !payload.memberId ||
+      !payload.nbf ||
+      !payload.sub
+    )
+      throw new CustomResponse(ECustomCode.NO_SOME_PAYLOAD_DATA_JWT);
+
+    // 2. 블랙리스트에 올라가있는지 확인(access token)
+    const value = await this.redisClient.get(payload.jti);
+    if (value !== null) throw new CustomResponse(ECustomCode.INVALID_JWT);
+
+    // 3. issuer가 일치하는지 검사 (아직은 issuer만 확인)
     const issuer = process.env.LAYOVER_PUBLIC_IP;
     if (payload.iss != issuer) throw new CustomResponse(ECustomCode.JWT_INFO_ERR);
 
-    // 3. exp를 지났는지 검사
+    // 4. exp를 지났는지 검사
     if (Math.floor(Date.now() / 1000) > payload.exp) throw new CustomResponse(ECustomCode.JWT_EXPIRED);
 
-    // jwt 페이로드를 넘겨줌 (객체형태)
+    // 5. jwt 페이로드를 넘겨줌 (객체형태)
     return payload;
   }
 }
