@@ -90,7 +90,7 @@ export class OauthService {
 
   async signup(memberHash: string, username: string, provider: string): Promise<void> {
     try {
-      await this.memberService.createMember(username, 'default.jpeg', 'default introduce', provider, memberHash);
+      await this.memberService.createMember(username, 'default', '', provider, memberHash);
     } catch (e) {
       throw new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR);
     }
@@ -116,24 +116,43 @@ export class OauthService {
     const accessTokenPaylaod = makeJwtPaylaod('access', memberHash, memberId);
     const refreshTokenPaylaod = makeJwtPaylaod('refresh', memberHash, memberId);
 
-    let accessJWT: string;
-    let refreshJWT: string;
+    let accessJWTstr: string;
+    let refreshJWTstr: string;
 
     try {
-      accessJWT = await this.jwtService.signAsync(accessTokenPaylaod);
-      refreshJWT = await this.jwtService.signAsync(refreshTokenPaylaod);
+      accessJWTstr = await this.jwtService.signAsync(accessTokenPaylaod);
+      refreshJWTstr = await this.jwtService.signAsync(refreshTokenPaylaod);
     } catch (e) {
       throw new CustomResponse(ECustomCode.TOKEN_GENERATE_ERR);
     }
 
     try {
-      // refresh token은 redis에 저장, 유효기간도 추가
-      this.redisClient.setEx(refreshJWT, REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+      // refresh token의 jti는 redis에 저장, 유효기간도 추가
+      const refreshToken = extractPayloadJWT(refreshJWTstr);
+      await this.redisClient.setEx(refreshToken.jti, REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+      await this.redisClient.setEx(memberHash, REFRESH_TOKEN_EXP_IN_SECOND, refreshToken.jti);
     } catch (e) {
       throw new CustomResponse(ECustomCode.REFRESH_TOKEN_SAVE_ERR);
     }
 
     // 각 토큰 반환
-    return new TokenResDto(accessJWT, refreshJWT);
+    return new TokenResDto(accessJWTstr, refreshJWTstr);
+  }
+
+  async isRefreshTokenValid(refreshToken: string): Promise<boolean> {
+    const value = await this.redisClient.get(refreshToken);
+    if (value === null) return true;
+    return false;
+  }
+
+  async addAccessTokenToBlackList(jti: string, exp: number, memberHash: string): Promise<void> {
+    // JWT의 고유한 값인 jti를 이용해 redis에 해당 JWT를 블랙리스트로 등록, exp 이후 삭제되게 설정
+    await this.redisClient.setEx(jti, exp, memberHash);
+  }
+
+  async deleteExistRefreshTokenFromRedis(memberHash: string): Promise<void> {
+    const refreshJti = await this.redisClient.get(memberHash);
+    await this.redisClient.del(refreshJti);
+    await this.redisClient.del(memberHash);
   }
 }

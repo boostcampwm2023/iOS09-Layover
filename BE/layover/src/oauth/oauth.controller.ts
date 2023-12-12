@@ -14,6 +14,7 @@ import { SWAGGER } from 'src/utils/swaggerUtils';
 import { tokenPayload } from 'src/utils/interfaces/token.payload';
 import { OAUTH_SWAGGER } from './oauth.swagger';
 import { CheckSignupResDto } from './dtos/check-signup-res-dto';
+import { ACCESS_TOKEN_EXP_IN_SECOND, REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 
 @ApiTags('OAuth API')
 @Controller('oauth')
@@ -197,6 +198,16 @@ export class OauthController {
   @ApiBearerAuth('token')
   @Post('refresh-token')
   async renewTokens(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+    // AccessToken이 아직 만료되지 않았다면 error
+    if (payload.exp - (REFRESH_TOKEN_EXP_IN_SECOND - ACCESS_TOKEN_EXP_IN_SECOND) > Math.floor(Date.now() / 1000))
+      throw new CustomResponse(ECustomCode.ACCESS_TOKEN_NOT_EXPIRED);
+
+    // redis에 해당 refresh token이 있는지 확인
+    await this.oauthService.isRefreshTokenValid(payload.jti);
+
+    // 기존 토큰은 없앰 (기존 RefreshToken -> redis에서 삭제)
+    this.oauthService.deleteExistRefreshTokenFromRedis(payload.memberHash);
+
     // 새로운 토큰을 생성하고 이를 반환함
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
 
