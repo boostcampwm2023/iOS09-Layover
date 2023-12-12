@@ -1,4 +1,4 @@
-# iOS09-Layover
+![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 04 55 17](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ab9a5878-de87-40f1-aec7-1297cab387df)# iOS09-Layover
 
 ## 프로젝트 소개
 
@@ -73,26 +73,34 @@
 
 ![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
 
-## 데모 영상
+## 프로젝트 주요 기능
 
-### 영상 시청
+### 영상 탐색 및 시청
+> 홈에서 랜덤한 영상을 탐색하고, 원하는 영상을 골라 재생할 수 있습니다.
 
-https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/d5da6557-790e-4ea8-8c92-63899e4d8fc8
+![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 05 16 41](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/9aece43f-26b8-402c-a455-b615297afc35)
+![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 04 55 17](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/37776130-09ad-4572-91df-c83a9f26b29c)
 
-### 지도 기반 시청
+### 위치 기반 영상 탐색
+> 지도에서 원하는 지역의 영상을 탐색하고, 원하는 영상을 골라 재생할 수 있습니다.
 
-https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/bec63ae8-3100-4b50-8868-75dec062716b
+![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 05 05 10](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/0facd15c-6a23-4d1f-994d-b5a5b613934f)
 
-### 업로드
+### 영상 편집 및 위치 기반 영상 업로드
+> 현재 위치를 기반으로, 간단한 편집 기능과 함께 영상을 업로드 할 수 있습니다.
 
-https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/af9abd6d-4207-43ff-b516-6513b10027e6
+![1](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/99e6c197-6817-4d17-9fb9-0816f1b904e0)
+![2](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/775f45fb-64a5-4c2e-ad41-dd562a50ba9b)
 
-### 업로드 로딩
 
-https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/7cc625b3-d982-4af4-8c83-b0b49de601ec
+### 프로필
+> 프로필에서 내가 업로드한 영상의 목록을 확인하고 재생할 수 있습니다.
 
-## 기술스택
-# iOS 
+![3b893515ea72abfc](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/aefcd98c-bee2-494e-9677-d7c4813b0801)
+
+
+# 기술스택
+## iOS 
 
 ### CleanSwift + Test
 
@@ -119,7 +127,7 @@ https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/7cc625b3-d982-4
 
 - [Dev Log에서 확인할 수 있어요!](https://www.notion.so/Dev-Log-346d2f9ee4c64869a7a25d350761c4a9?pvs=21)
 
-# BE
+## BE
 
 ### ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
 
