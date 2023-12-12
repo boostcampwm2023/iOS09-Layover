@@ -67,21 +67,21 @@ final class HomeInteractorTests: XCTestCase {
         _ = await sut.fetchPosts(with: request).value
 
         // Assert
-        XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 1, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].tag, Seeds.Posts.post1.tag, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.identifier, Seeds.Posts.post1.board.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.title, Seeds.Posts.post1.board.title, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.description, Seeds.Posts.post1.board.description, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.username, Seeds.Posts.post1.member.username, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
+        XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 1, "fetchPost()가 presenter에게 올바른 데이터 갯수를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].tag, Seeds.Posts.post1.tag, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.identifier, Seeds.Posts.post1.board.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.title, Seeds.Posts.post1.board.title, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.description, Seeds.Posts.post1.board.description, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.username, Seeds.Posts.post1.member.username, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
     }
 
     func test_playPosts는_자신의_selectedIndex값을_변경한다() async throws {
@@ -92,7 +92,7 @@ final class HomeInteractorTests: XCTestCase {
         sut.playPosts(with: request)
 
         // Assert
-        XCTAssertEqual(sut.postPlayStartIndex, 101, "playPosts()가 자신의 selectedIndex를 변경했다.")
+        XCTAssertEqual(sut.postPlayStartIndex, 101, "playPosts()가 자신의 selectedIndex를 변경하지 못했다.")
     }
 
     func test_playPosts는_presenter의_presentPlaybackScene를_호출한다() async throws {
@@ -105,7 +105,7 @@ final class HomeInteractorTests: XCTestCase {
         sut.playPosts(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentPlaybackSceneCalled, "playPosts()가 presenter의 presentPlaybackScene()를 호출했다.")
+        XCTAssertTrue(spy.presentPlaybackSceneCalled, "playPosts()가 presenter의 presentPlaybackScene()를 호출하지 않았다.")
     }
 
     // TODO: - videoFileWorker Mock 객체 생성 후 테스트 코드 작성
@@ -138,7 +138,7 @@ final class HomeInteractorTests: XCTestCase {
         sut.showTagPlayList(with: request)
 
         // Assert
-        XCTAssertEqual(sut.selectedTag, "DummyTag", "showTagPlayList()가 자신의 selectedTag를 변경했다.")
+        XCTAssertEqual(sut.selectedTag, "DummyTag", "showTagPlayList()가 자신의 selectedTag를 변경되지 않았다.")
     }
 
     func test_showTagPlayList는_presenter의_presentTagPlayList를_호출한다() {
@@ -151,6 +151,6 @@ final class HomeInteractorTests: XCTestCase {
         sut.showTagPlayList(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentTagPlayListCalled, "showTagPlayList()가 presenter의 presentTagPlayList()를 호출했다.")
+        XCTAssertTrue(spy.presentTagPlayListCalled, "showTagPlayList()가 presenter의 presentTagPlayList()를 호출되지 않았다.")
     }
 }

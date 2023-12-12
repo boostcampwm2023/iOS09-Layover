@@ -77,13 +77,13 @@ final class ProfilePresenterTests: XCTestCase {
         sut.presentProfile(with: response)
 
         // assert
-        XCTAssertTrue(spy.displayProfileDidCalled, "presentProfile은 displayProfile을 호출했다")
-        XCTAssertEqual(spy.displayProfileViewModel.userProfile.username, Seeds.Members.getMember1.username)
-        XCTAssertEqual(spy.displayProfileViewModel.userProfile.introduce, Seeds.Members.getMember1.introduce)
-        XCTAssertEqual(spy.displayProfileViewModel.userProfile.profileImageData, Seeds.sampleImageData)
-        XCTAssertEqual(spy.displayProfileViewModel.posts.count, 1)
-        XCTAssertEqual(spy.displayProfileViewModel.posts.first?.id, Seeds.Posts.post1.board.identifier)
-        XCTAssertEqual(spy.displayProfileViewModel.posts.first?.thumbnailImageData, Seeds.sampleImageData, "presentprofile은 올바른 데이터를 뷰에 전달했다")
+        XCTAssertTrue(spy.displayProfileDidCalled, "presentProfile은 displayProfile을 호출하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.userProfile.username, Seeds.Members.getMember1.username, "presentprofile은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.userProfile.introduce, Seeds.Members.getMember1.introduce, "presentprofile은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.userProfile.profileImageData, Seeds.sampleImageData, "presentprofile은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.posts.count, 1, "presentprofile은 올바른 데이터 갯수를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.posts.first?.id, Seeds.Posts.post1.board.identifier, "presentprofile은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.posts.first?.thumbnailImageData, Seeds.sampleImageData, "presentprofile은 올바른 데이터를 뷰에 전달하지 못했다")
     }
 
     func test_presentMorePosts을_호출하면_displayMorePosts를_호출하고_올바른_데이터를_전달한다() {
@@ -97,10 +97,10 @@ final class ProfilePresenterTests: XCTestCase {
         sut.presentMorePosts(with: response)
 
         // assert
-        XCTAssertTrue(spy.displayMorePostsCalled, "presentMorePosts은 displayMorePosts을 호출했다")
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts.count, 1)
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts.first?.id, Seeds.Posts.post1.board.identifier)
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts.first?.thumbnailImageData, Seeds.sampleImageData, "presentMorePosts은 올바른 데이터를 뷰에 전달했다")
+        XCTAssertTrue(spy.displayMorePostsCalled, "presentMorePosts은 displayMorePosts을 호출하지 못했다")
+        XCTAssertEqual(spy.displayMorePostsViewModel.posts.count, 1, "presentMorePosts은 올바른 데이터 갯수를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayMorePostsViewModel.posts.first?.id, Seeds.Posts.post1.board.identifier, "presentMorePosts은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayMorePostsViewModel.posts.first?.thumbnailImageData, Seeds.sampleImageData, "presentMorePosts은 올바른 데이터를 뷰에 전달하지 못했다")
     }
 
     func test_presentPostDetail을_호출하면_routeToPostDetail을_호출한다() {
@@ -112,6 +112,6 @@ final class ProfilePresenterTests: XCTestCase {
         sut.presentPostDetail(with: .init())
 
         // assert
-        XCTAssertTrue(spy.routeToPostDetailCalled, "presentPostDetail은 routeToPostDetail을 호출했다")
+        XCTAssertTrue(spy.routeToPostDetailCalled, "presentPostDetail은 routeToPostDetail을 호출하지 못했다")
     }
 }

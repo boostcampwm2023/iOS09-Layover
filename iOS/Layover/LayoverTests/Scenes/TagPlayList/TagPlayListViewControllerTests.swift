@@ -97,7 +97,7 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.viewDidLoad()
 
         // Assert
-        XCTAssertTrue(spy.setTitleTagCalled, "viewDidLoad() 가 호출되면 interactor에게 titleTag를 요청했다.")
+        XCTAssertTrue(spy.setTitleTagCalled, "viewDidLoad() 가 호출되어 interactor에게 titleTag를 요청하지 못했다.")
     }
 
     func test_viewWillAppear가_호출되면_interactor에게_playList를_요청한다() {
@@ -109,7 +109,7 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.viewWillAppear(true)
 
         // Assert
-        XCTAssertTrue(spy.fetchPlayListCalled, "viewWillAppear() 가 호출되면 interactor의 fetchPlayList를 호출했다.")
+        XCTAssertTrue(spy.fetchPlayListCalled, "viewWillAppear()가 호출되어 interactor의 fetchPlayList를 호출하지 못했다.")
     }
 
     func test_scrollView가_아래_끝에_다다라_scrollViewWillBeginDecelearting가_호출되면_interactor의_fetchMorePlayList를_호출한다() {
@@ -124,7 +124,7 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.scrollViewWillBeginDecelerating(scrollView)
 
         // Assert
-        XCTAssertTrue(spy.fetchMorePlayListCalled, "scrollView가 아래 끝에 다다라 scrollViewWillBeginDecelerating() 이 호출되면 interactor의 fetchMorePlayList를 호출했다.")
+        XCTAssertTrue(spy.fetchMorePlayListCalled, "scrollView가 아래 끝에 다다라 scrollViewWillBeginDecelerating() 이 호출되어 interactor의 fetchMorePlayList를 호출하지 못했다.")
     }
 
     func test_scrollView가_아래_끝에_다다르지_않은_상태에서_scrollViewWillBeginDecelearting가_호출되면_interactor의_fetchMorePlayList를_호출하지_않는다() {
@@ -139,7 +139,7 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.scrollViewWillBeginDecelerating(scrollView)
 
         // Assert
-        XCTAssertFalse(spy.fetchMorePlayListCalled, "scrollView가 아래 끝에 다다르지 않고 scrollViewWillBeginDecelerating() 이 호출되면 interactor의 fetchMorePlayList를 호출하지 않는다.")
+        XCTAssertFalse(spy.fetchMorePlayListCalled, "scrollView가 아래 끝에 다다르지 않고 scrollViewWillBeginDecelerating() 이 호출되어 interactor의 fetchMorePlayList를 호출했다.")
     }
 
     func test_collectionView의_didSelectItemAt이_호출되면_interactor에게_showPostsDetail를_요청한다() {
@@ -152,7 +152,7 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.collectionView(collectionView, didSelectItemAt: IndexPath(item: 0, section: 0))
 
         // Assert
-        XCTAssertTrue(spy.showPostsDetailCalled, "collectionView의 didSelectItemAt이 호출되면 interactor에게 showPostsDetail를 요청했다.")
+        XCTAssertTrue(spy.showPostsDetailCalled, "collectionView의 didSelectItemAt을 호출해서 interactor에게 showPostsDetail를 요청하지 못했다.")
     }
 
     func test_collectionView의_didSelectItemAt이_호출되면_router에게_routeToPlayback을_요청한다() {
@@ -165,6 +165,6 @@ final class TagPlayListViewControllerTests: XCTestCase {
         sut.collectionView(collectionView, didSelectItemAt: IndexPath(item: 0, section: 0))
 
         // Assert
-        XCTAssertTrue(spy.routeToPlaybackCalled, "collectionView의 didSelectItemAt이 호출되면 router에게 routeToPlayback을 요청했다.")
+        XCTAssertTrue(spy.routeToPlaybackCalled, "collectionView의 didSelectItemAt을 호출해서 router에게 routeToPlayback을 요청하지 못했다.")
     }
 }

@@ -75,13 +75,13 @@ final class ProfileInteractorTests: XCTestCase {
         _ = await sut.fetchProfile(with: Models.FetchProfile.Request()).value
 
         // assert
-        XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출했다")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts.count, 1)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].id, Seeds.Posts.post1.board.identifier)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].thumbnailImageData, Seeds.sampleImageData)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, Seeds.Members.getMember1.username)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, Seeds.Members.getMember1.introduce)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담겼다.")
+        XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출하지 못했다")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts.count, 1, "presentProfileResponse에는 fetchProfile의 결과 갯수가 올바르게 담기지 못했다.")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].id, Seeds.Posts.post1.board.identifier, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, Seeds.Members.getMember1.username, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, Seeds.Members.getMember1.introduce, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
     }
 
     func test_fetchMorePosts을_호출하면_presenter의_presentMorePosts을_호출하고_presentMorePostsResponse를_전달한다() async {
@@ -93,10 +93,10 @@ final class ProfileInteractorTests: XCTestCase {
         _ = await sut.fetchMorePosts(with: Models.FetchMorePosts.Request()).value
 
         // assert
-        XCTAssertTrue(presentationLogicSpy.presentMorePostsCalled, "fetchMorePosts을 호출해서 presentMorePosts을 호출했다")
-        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts.count, 1, "presentMorePostsResponse에는 fetchPosts의 결과가 담겼다")
-        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts[0].id, Seeds.Posts.post1.board.identifier, "presentMorePostsResponse에는 fetchPosts의 결과가 담겼다")
-        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "presentMorePostsResponse에는 fetchPosts의 결과가 담겼다")
+        XCTAssertTrue(presentationLogicSpy.presentMorePostsCalled, "fetchMorePosts을 호출해서 presentMorePosts을 호출하지 못했다")
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts.count, 1, "presentMorePostsResponse에는 fetchPosts의 결과 갯수가 올바르게 담기지 못했다")
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts[0].id, Seeds.Posts.post1.board.identifier, "presentMorePostsResponse에는 fetchPosts의 결과가 올바르게 담기지 못했다")
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "presentMorePostsResponse에는 fetchPosts의 결과가 올바르게 담기지 못했다")
     }
 
     func test_showPostDetail을_호출하면_자신의_playbackStartIndex에_값을_저장하고_presenter의_presentPostDetail을_호출한다() async {
@@ -108,7 +108,7 @@ final class ProfileInteractorTests: XCTestCase {
         sut.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: 7))
 
         // assert
-        XCTAssertEqual(sut.playbackStartIndex, 7, "showPostDetail을 호출해서 playbackStartIndex에 값을 저장했다")
-        XCTAssertTrue(presentationLogicSpy.presentPostDetailCalled, "showPostDetail을 호출해서 presentPostDetail을 호출했다")
+        XCTAssertEqual(sut.playbackStartIndex, 7, "showPostDetail을 호출해서 playbackStartIndex에 값을 저장하지 못했다")
+        XCTAssertTrue(presentationLogicSpy.presentPostDetailCalled, "showPostDetail을 호출해서 presentPostDetail을 호출하지 못했다")
     }
 }
