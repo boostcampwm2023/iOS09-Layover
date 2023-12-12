@@ -13,9 +13,9 @@ export const databaseProviders = [
         database: 'layover_test',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
-        charset: 'utf8mb4_unicode_ci',
+        charset: 'utf8mb4_0900_ai_ci',
         extra: {
-          charset: 'utf8mb4_unicode_ci',
+          charset: 'utf8mb4_0900_ai_ci',
         },
       });
 
