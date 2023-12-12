@@ -35,6 +35,13 @@ export class Board {
   @Column({ nullable: false })
   status: string;
 
+  @Column({
+    nullable: false,
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  date_created: Date;
+
   constructor(
     member: Member,
     title: string,
