@@ -90,8 +90,8 @@ extension LoginWorker: LoginWorkerProtocol {
 
             authManager.login(accessToken: result.data?.accessToken,
                               refreshToken: result.data?.refreshToken,
-                              memberID: await fetchMemberId(),
                               loginType: .kakao)
+            authManager.memberID = await fetchMemberId()
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
@@ -119,8 +119,8 @@ extension LoginWorker: LoginWorkerProtocol {
 
             authManager.login(accessToken: result.data?.accessToken,
                               refreshToken: result.data?.refreshToken,
-                              memberID: await fetchMemberId(),
                               loginType: .apple)
+            authManager.memberID = await fetchMemberId()
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
