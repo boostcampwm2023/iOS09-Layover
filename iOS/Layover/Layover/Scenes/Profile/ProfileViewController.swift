@@ -268,8 +268,13 @@ extension ProfileViewController: UICollectionViewDelegate {
         case .profile:
             return
         case .posts:
-            guard collectionViewDatasource?.itemIdentifier(for: indexPath) is Models.DisplayedPost else { return }
-            interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
+            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.DisplayedPost else { return }
+            switch post.status {
+            case .complete:
+                interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
+            default:
+                Toast.shared.showToast(message: "인코딩 중인 영상입니다. 잠시만 기다려주세요!")
+            }
         }
     }
 }
