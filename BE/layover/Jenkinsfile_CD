@@ -77,6 +77,9 @@ pipeline {
                             -v ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
                             -v ~/envs/certificate.crt:/usr/src/app/certificate.crt
                             -v ~/envs/private.key:/usr/src/app/private.key
+                            --log-driver json-file
+                            --log-opt max-size=10m
+                            --log-opt max-file=3
                             """.replaceAll("\n", " ").trim())
                             echo '컨테이너 실행 성공'
                         }
