@@ -152,8 +152,6 @@ final class PlaybackPresenterTests: XCTestCase {
             setProfileImageAndLocationDidCalled = true
             setProfileImageAndLocationViewModel = viewModel
         }
-        
-
     }
 
     // MARK: - Tests
@@ -168,7 +166,8 @@ final class PlaybackPresenterTests: XCTestCase {
         // assert
         XCTAssertTrue(spy.displayVideoListDidCalled, "presentProfile은 displayVideoList를 호출했다")
         // videos는 Hashable
-        XCTAssertEqual(spy.displayVideoListViewModel.videos, Seeds.PlaybackVideos.videos)
+        XCTAssertEqual(spy.displayVideoListViewModel.videos.first!, Seeds.PlaybackVideos.videos.first!)
+        XCTAssertEqual(spy.displayVideoListViewModel.videos.last!, Seeds.PlaybackVideos.videos.last!)
         XCTAssertEqual(spy.displayVideoListViewModel.videos.count, 2)
     }
 
@@ -181,7 +180,8 @@ final class PlaybackPresenterTests: XCTestCase {
 
         // assert
         XCTAssertTrue(spy.loadFetchVideosDidCalled, "presentLoadFetchVideos는 loadFetchVideos를 호출했다")
-        XCTAssertEqual(spy.loadFetchVideosViewModel.videos, Seeds.PlaybackVideos.videos)
+        XCTAssertEqual(spy.loadFetchVideosViewModel.videos.first!, Seeds.PlaybackVideos.videos.first!)
+        XCTAssertEqual(spy.loadFetchVideosViewModel.videos.last!, Seeds.PlaybackVideos.videos.last!)
         XCTAssertEqual(spy.loadFetchVideosViewModel.videos.count, 2)
     }
 

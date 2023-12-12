@@ -96,16 +96,16 @@ class Seeds {
             displayedPost: PlaybackModels.DisplayedPost(
                 member: PlaybackModels.Member(
                     memberID: 2,
-                    username: "안유진",
-                    profileImageURL: URL(string: "https://cdn.footballist.co.kr/news/photo/202307/170226_100422_1733.jpg")),
+                    username: "장원영",
+                    profileImageURL: URL(string: "https://www.fnnews.com/resource/media/image/2023/10/17/202310171126334525_l.jpg")),
                 board: PlaybackModels.Board(
                     boardID: 2,
-                    title: "최강 아이돌",
-                    description: "게시글 설명",
-                    videoURL: URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")!,
-                    latitude: 127.060123123,
-                    longitude: 37.0532156213),
-                tags: ["아이브", "yujin"]))
+                    title: "아이브의 멤버",
+                    description: "게시글 설명설명설명",
+                    videoURL: URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!,
+                    latitude: 100.060123123,
+                    longitude: 35.001828282),
+                tags: ["Ive", "wonyoung"]))
         ]
     }
 
