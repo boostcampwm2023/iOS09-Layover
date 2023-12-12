@@ -515,6 +515,8 @@
 				192513792B273D98001533FA /* StubAuthManager.swift */,
 			);
 			path = Stubs;
+			sourceTree = "<group>";
+		};
 		1925137B2B277CC4001533FA /* Profile */ = {
 			isa = PBXGroup;
 			children = (
