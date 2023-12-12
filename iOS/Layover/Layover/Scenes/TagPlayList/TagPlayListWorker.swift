@@ -21,14 +21,14 @@ final class TagPlayListWorker: TagPlayListWorkerProtocol {
     typealias Models = TagPlayListModels
 
     let provider: ProviderType
-    let authManager: AuthManager
+    let authManager: AuthManagerProtocol
     let postEndPointFactory: PostEndPointFactory
 
     // MARK: - Initializer
 
     init(provider: ProviderType = Provider(),
          postEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(),
-         authManager: AuthManager = AuthManager.shared) {
+         authManager: AuthManagerProtocol = AuthManager.shared) {
         self.provider = provider
         self.postEndPointFactory = postEndPointFactory
         self.authManager = authManager

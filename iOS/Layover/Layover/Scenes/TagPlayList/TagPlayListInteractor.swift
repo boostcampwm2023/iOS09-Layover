@@ -53,7 +53,7 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
             fetchPostsPage = 1
             guard let titleTag = titleTag,
                   let fetchedPosts = await worker?.fetchPlayList(of: titleTag, at: fetchPostsPage) else { return false }
-            self.posts.append(contentsOf: fetchedPosts)
+            posts = fetchedPosts
             fetchPostsPage += 1
             canFetchMorePosts = !fetchedPosts.isEmpty
 
