@@ -225,8 +225,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func setSeeMoreButton() {
-        guard let parentView else { return }
-        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(parentView: parentView)
+        guard let worker,
+              let currentCellMemberID: Int = previousCell?.memberID
+        else { return }
+        let buttonType: Models.SetSeemoreButton.ButtonType = worker.isMyVideo(currentCellMemberID: currentCellMemberID) ? .delete : .report
+        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(buttonType: buttonType)
         presenter?.presentSetSeemoreButton(with: response)
     }
 

@@ -112,8 +112,7 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     }
 
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response) {
-        let buttonType: Models.SetSeemoreButton.ButtonType = response.parentView == .myProfile ? .delete : .report
-        viewController?.setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel(buttonType: buttonType))
+        viewController?.setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel(buttonType: response.buttonType))
     }
 
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response) {

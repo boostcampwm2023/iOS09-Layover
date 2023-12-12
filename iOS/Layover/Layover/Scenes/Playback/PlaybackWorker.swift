@@ -19,6 +19,7 @@ protocol PlaybackWorkerProtocol {
     func fetchHomePosts() async -> [Post]?
     func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]?
     func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]?
+    func isMyVideo(currentCellMemberID: Int) -> Bool
 }
 
 final class PlaybackWorker: PlaybackWorkerProtocol {
@@ -28,17 +29,19 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     typealias Models = PlaybackModels
 
     private let provider: ProviderType
+    private let authManager: AuthManagerProtocol
     private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
     private let defaultPostEndPointFactory: PostEndPointFactory
     private let defaultUserEndPointFactory: UserEndPointFactory
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(), defaultUserEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory()) {
+    init(provider: ProviderType = Provider(), authManager: AuthManagerProtocol = AuthManager.shared, defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(), defaultUserEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory()) {
         self.provider = provider
         self.defaultPostManagerEndPointFactory = defaultPostManagerEndPointFactory
         self.defaultPostEndPointFactory = defaultPostEndPointFactory
         self.defaultUserEndPointFactory = defaultUserEndPointFactory
+        self.authManager = authManager
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
@@ -117,5 +120,10 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
             os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
         }
+    }
+
+    func isMyVideo(currentCellMemberID: Int) -> Bool {
+        let myMemberID = authManager.memberID
+        return currentCellMemberID == myMemberID
     }
 }
