@@ -234,8 +234,9 @@ extension ProfileViewController: ProfileDisplayLogic {
         snapshot.appendSections([.profile, .posts])
         snapshot.appendItems([viewModel.userProfile], toSection: .profile)
         snapshot.appendItems(viewModel.displayedPosts, toSection: .posts)
-        collectionViewDatasource?.apply(snapshot)
-        refreshControl.endRefreshing()
+        collectionViewDatasource?.apply(snapshot) { [weak self] in
+            self?.refreshControl.endRefreshing()
+        }
     }
 
     func displayMorePosts(viewModel: ProfileModels.FetchMorePosts.ViewModel) {
