@@ -81,10 +81,10 @@ final class ProfilePresenterTests: XCTestCase {
         XCTAssertEqual(spy.displayProfileViewModel.userProfile.username, Seeds.Members.getMember1.username)
         XCTAssertEqual(spy.displayProfileViewModel.userProfile.introduce, Seeds.Members.getMember1.introduce)
         XCTAssertEqual(spy.displayProfileViewModel.userProfile.profileImageData, Seeds.sampleImageData)
-        XCTAssertEqual(spy.displayProfileViewModel.posts.count, 1)
-        XCTAssertEqual(spy.displayProfileViewModel.posts[0].id, Seeds.Posts.post1.board.identifier)
-        XCTAssertEqual(spy.displayProfileViewModel.posts[0].status, Seeds.Posts.post1.board.status)
-        XCTAssertEqual(spy.displayProfileViewModel.posts[0].thumbnailImageData, Seeds.sampleImageData, "presentprofile은 올바른 데이터를 뷰에 전달했다")
+        XCTAssertEqual(spy.displayProfileViewModel.displayedPosts.count, 1)
+        XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].id, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].status, Seeds.Posts.post1.board.status)
+        XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData, "presentprofile은 올바른 데이터를 뷰에 전달했다")
     }
 
     func test_presentMorePosts을_호출하면_displayMorePosts를_호출하고_올바른_데이터를_전달한다() {
@@ -100,10 +100,10 @@ final class ProfilePresenterTests: XCTestCase {
 
         // assert
         XCTAssertTrue(spy.displayMorePostsCalled, "presentMorePosts은 displayMorePosts을 호출했다")
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts.count, 1)
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts[0].id, Seeds.Posts.post1.board.identifier)
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts[0].status, Seeds.Posts.post1.board.status)
-        XCTAssertEqual(spy.displayMorePostsViewModel.posts[0].thumbnailImageData, Seeds.sampleImageData, "presentMorePosts은 올바른 데이터를 뷰에 전달했다")
+        XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts.count, 1)
+        XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].id, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].status, Seeds.Posts.post1.board.status)
+        XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData, "presentMorePosts은 올바른 데이터를 뷰에 전달했다")
     }
 
     func test_presentPostDetail을_호출하면_routeToPostDetail을_호출한다() {

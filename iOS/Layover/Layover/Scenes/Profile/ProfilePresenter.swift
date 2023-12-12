@@ -25,12 +25,12 @@ final class ProfilePresenter: ProfilePresentationLogic {
 
     func presentProfile(with response: Models.FetchProfile.Response) {
         let viewModel = Models.FetchProfile.ViewModel(userProfile: response.userProfile,
-                                                      posts: response.posts)
+                                                      displayedPosts: response.displayedPosts)
         viewController?.displayProfile(viewModel: viewModel)
     }
 
     func presentMorePosts(with response: ProfileModels.FetchMorePosts.Response) {
-        let viewModel = Models.FetchMorePosts.ViewModel(posts: response.posts)
+        let viewModel = Models.FetchMorePosts.ViewModel(displayedPosts: response.displayedPosts)
         viewController?.displayMorePosts(viewModel: viewModel)
     }
 

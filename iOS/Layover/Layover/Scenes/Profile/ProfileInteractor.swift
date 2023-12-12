@@ -76,7 +76,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
             let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
                                                                                            introduce: userProfile.introduce,
                                                                                            profileImageData: imageData),
-                                                        posts: posts)
+                                                        displayedPosts: posts)
             await MainActor.run {
                 presenter?.presentProfile(with: response)
             }
@@ -96,7 +96,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
                 return false
             }
 
-            let response = Models.FetchMorePosts.Response(posts: fetchedPosts)
+            let response = Models.FetchMorePosts.Response(displayedPosts: fetchedPosts)
 
             await MainActor.run {
                 presenter?.presentMorePosts(with: response)

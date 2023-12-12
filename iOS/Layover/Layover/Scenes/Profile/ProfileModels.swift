@@ -29,12 +29,12 @@ enum ProfileModels {
 
         struct Response {
             let userProfile: Profile
-            let posts: [DisplayedPost]
+            let displayedPosts: [DisplayedPost]
         }
 
         struct ViewModel {
             let userProfile: Profile
-            let posts: [DisplayedPost]
+            let displayedPosts: [DisplayedPost]
         }
     }
 
@@ -43,11 +43,11 @@ enum ProfileModels {
         }
 
         struct Response {
-            let posts: [DisplayedPost]
+            let displayedPosts: [DisplayedPost]
         }
 
         struct ViewModel {
-            let posts: [DisplayedPost]
+            let displayedPosts: [DisplayedPost]
         }
     }
 
