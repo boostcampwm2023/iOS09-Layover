@@ -19,6 +19,14 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
 
+    private let spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .primaryPurple
+        indicator.hidesWhenStopped = true
+        indicator.stopAnimating()
+        return indicator
+    }()
+
     // MARK: - Object Lifecycle
 
     override init(frame: CGRect) {
@@ -35,8 +43,15 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Methods
 
-    func configure(image: UIImage) {
+    func configure(image: UIImage?, status: BoardStatus) {
         thumbnailImageView.image = image
+
+        switch status {
+        case .complete:
+            spinner.stopAnimating()
+        default:
+            spinner.startAnimating()
+        }
     }
 
     private func setUI() {
@@ -46,13 +61,17 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
     }
 
     private func setConstraints() {
-        contentView.addSubview(thumbnailImageView)
-        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubviews(thumbnailImageView, spinner)
+        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            spinner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
 

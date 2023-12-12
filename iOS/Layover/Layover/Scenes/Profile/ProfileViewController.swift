@@ -162,7 +162,9 @@ final class ProfileViewController: BaseViewController {
 
             if let imageData = itemIdentifier.thumbnailImageData,
                let image = UIImage(data: imageData) {
-                cell.configure(image: image)
+                cell.configure(image: image, status: itemIdentifier.status)
+            } else {
+                cell.configure(image: nil, status: itemIdentifier.status)
             }
         }
 
