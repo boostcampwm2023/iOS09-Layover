@@ -42,7 +42,7 @@ protocol UserWorkerProtocol {
     func fetchImagePresignedURL(with fileType: String) async -> String?
 }
 
-final class UserWorker: UserWorkerProtocol {
+class UserWorker: UserWorkerProtocol {
 
     // MARK: - Properties
 
