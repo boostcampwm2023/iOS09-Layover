@@ -161,6 +161,10 @@
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
 		FC4975992B03439000D8627F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4975982B03439000D8627F /* UIFont+.swift */; };
+		FC4E0C0C2B282AE500152596 /* UploadPostViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C082B282AE500152596 /* UploadPostViewControllerTests.swift */; };
+		FC4E0C0D2B282AE500152596 /* UploadPostInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C092B282AE500152596 /* UploadPostInteractorTests.swift */; };
+		FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C0A2B282AE500152596 /* UploadPostWorkerTests.swift */; };
+		FC4E0C0F2B282AE500152596 /* UploadPostPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C0B2B282AE500152596 /* UploadPostPresenterTests.swift */; };
 		FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1162B148D160036366D /* EditProfilePresenter.swift */; };
 		FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1172B148D160036366D /* EditProfileWorker.swift */; };
 		FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1182B148D160036366D /* EditProfileRouter.swift */; };
@@ -378,6 +382,10 @@
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		FC4975982B03439000D8627F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		FC4E0C082B282AE500152596 /* UploadPostViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostViewControllerTests.swift; sourceTree = "<group>"; };
+		FC4E0C092B282AE500152596 /* UploadPostInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostInteractorTests.swift; sourceTree = "<group>"; };
+		FC4E0C0A2B282AE500152596 /* UploadPostWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostWorkerTests.swift; sourceTree = "<group>"; };
+		FC4E0C0B2B282AE500152596 /* UploadPostPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenterTests.swift; sourceTree = "<group>"; };
 		FC5BE1162B148D160036366D /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
 		FC5BE1172B148D160036366D /* EditProfileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileWorker.swift; sourceTree = "<group>"; };
 		FC5BE1182B148D160036366D /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
@@ -509,6 +517,7 @@
 			isa = PBXGroup;
 			children = (
 				194C21BE2B1DEE5500C62645 /* Home */,
+				FCF1A02D2B275A0400D961BE /* UploadPost */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1035,6 +1044,17 @@
 			path = SignUpScene;
 			sourceTree = "<group>";
 		};
+		FCF1A02D2B275A0400D961BE /* UploadPost */ = {
+			isa = PBXGroup;
+			children = (
+				FC4E0C082B282AE500152596 /* UploadPostViewControllerTests.swift */,
+				FC4E0C092B282AE500152596 /* UploadPostInteractorTests.swift */,
+				FC4E0C0A2B282AE500152596 /* UploadPostWorkerTests.swift */,
+				FC4E0C0B2B282AE500152596 /* UploadPostPresenterTests.swift */,
+			);
+			path = UploadPost;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1366,10 +1386,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				194C21C42B1DEE6B00C62645 /* HomeInteractorTests.swift in Sources */,
+				FC4E0C0F2B282AE500152596 /* UploadPostPresenterTests.swift in Sources */,
+				FC4E0C0C2B282AE500152596 /* UploadPostViewControllerTests.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
+				FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */,
+				FC4E0C0D2B282AE500152596 /* UploadPostInteractorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
