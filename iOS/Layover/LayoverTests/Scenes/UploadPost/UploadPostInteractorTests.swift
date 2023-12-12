@@ -31,7 +31,7 @@ class UploadPostInteractorTests: XCTestCase {
     // MARK: - Test Setup
 
     func setupUploadPostInteractor() {
-        sut = UploadPostInteractor(locationManager: CurrentLocationManager())
+        sut = UploadPostInteractor(locationManager: CurrentLocationManager(locationFetcher: MockLocationFetcher()))
         sut.worker = MockUploadPostWorker(provider: Provider(session: .initMockSession()))
     }
 
@@ -82,7 +82,7 @@ class UploadPostInteractorTests: XCTestCase {
         sut.fetchTags()
 
         // then
-        XCTAssertTrue(spy.presentTagCalled, "")
+        XCTAssertTrue(spy.presentTagCalled, "fetchTags 함수가 presentTags을 호출하지 못함")
     }
 
     func test_fetchTags를_호출하면_datastore에_tags데이터가_전달된다() {
@@ -94,46 +94,50 @@ class UploadPostInteractorTests: XCTestCase {
         sut.fetchTags()
 
         // then
-        XCTAssertNotNil(sut.tags)
+        XCTAssertNotNil(sut.tags, "fetchTags 함수가 datastore에 tags 데이터를 전달하지 못함")
     }
 
-    func test_fetchCurrentAddress를_호출하면_presenter의_presentTags가_호출된다() {
+    func test_fetchCurrentAddress를_호출하면_presenter의_presentCurrentAddress가_호출된다() async throws {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
 
         // when
         sut.fetchCurrentAddress()
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // then
-        XCTAssertTrue(spy.presentCurrentAddressCalled, "")
+        XCTAssertTrue(spy.presentCurrentAddressCalled, "fetchCurrentAddress 함수가 presentCurrentAddress을 호출하지 못함")
     }
 
-    func test_fetchCurrentAddress를_호출하면_presenter에게_올바른데이터를_전달한다() {
+    func test_fetchCurrentAddress를_호출하면_presenter에게_위치데이터를_전달한다() async throws {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
 
         // when
         sut.fetchCurrentAddress()
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // then
-//        XCTAssertTrue(spy.presentCurrentAddressResponse, "")
+        XCTAssertNotNil(spy.presentCurrentAddressResponse, "fetchCurrentAddress 함수가 presenter에게 위치데이터를 전달하지 못함")
     }
 
-    func test_fetchThumbnailImage를_호출하면_presenter의_presentThumbnailImage가_호출된다() {
+    func test_fetchThumbnailImage를_호출하면_presenter의_presentThumbnailImage가_호출된다() async throws {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
+        sut.videoURL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")
 
         // when
         sut.fetchThumbnailImage()
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // then
-        XCTAssertTrue(spy.presentThumbnailCalled, "")
+        XCTAssertTrue(spy.presentThumbnailCalled, "fetchThumbnailImage 함수가 presentThumbnailImage을 호출하지 못함")
     }
 
-    func test_editTags를_호출하면_presenter의_presentThumbnailImage가_호출된다() {
+    func test_editTags를_호출하면_datastore에_tags데이터가_전달된다() {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
@@ -143,90 +147,59 @@ class UploadPostInteractorTests: XCTestCase {
         sut.editTags(with: request)
 
         // then
-        XCTAssertTrue(spy.presentThumbnailCalled, "")
+        XCTAssertNotNil(sut.tags, "editTags 함수가 datastore의 tags 데이터를 전달하지 못함")
     }
 
-    func test_canUploadPost를_호출하면_presenter의_presentThumbnailImage가_호출된다() {
+    func test_title이_nil일때_canUploadPost를_호출하면_presenter의_presentUploadButtonCalled가_호출된다() {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
-        let request = UploadPostModels.CanUploadPost.Request(title: <#T##String?#>)
+        let request = UploadPostModels.CanUploadPost.Request(title: nil)
 
         // when
         sut.canUploadPost(request: request)
 
         // then
-        XCTAssertTrue(spy.presentThumbnailCalled, "")
+        XCTAssertTrue(spy.presentUploadButtonCalled, "title이 nil일 때 canUploadPost 함수가 presentUploadButton을 호출하지 못함")
     }
 
-    func test_uploadPost를_호출하면_presenter의_presentThumbnailImage가_호출된다() {
+    func test_title이_nil이아닐때_canUploadPost를_호출하면_presenter의_presentUploadButtonCalled가_호출된다() {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
-        let request = UploadPostModels.UploadPost.Request(title: <#T##String#>,
-                                                          content: <#T##String?#>,
-                                                          tags: <#T##[String]#>)
+        let request = UploadPostModels.CanUploadPost.Request(title: "아아아아")
 
         // when
-        sut.uploadPost(request: request)
+        sut.canUploadPost(request: request)
 
         // then
-        XCTAssertTrue(spy.presentThumbnailCalled, "")
+        XCTAssertTrue(spy.presentUploadButtonCalled, "title이 nil이 아닐 때 canUploadPost 함수가 presentUploadButton을 호출하지 못함")
     }
 
-//
-//    func testFetchFromLocalDataStoreShouldAskPresenterToFormat() {
-//        // given
-//        let spy = UploadPostPresentationLogicSpy()
-//        sut.presenter = spy
-//        let request = Models.FetchFromLocalDataStore.Request()
-//
-//        // when
-//        sut.fetchFromLocalDataStore(with: request)
-//
-//        // then
-//        XCTAssertTrue(spy.presentFetchFromLocalDataStoreCalled, "fetchFromLocalDataStore(with:) should ask the presenter to format the result")
-//    }
-//
-//    func testTrackAnalyticsShouldAskPresenterToFormat() {
-//        // given
-//        let spy = UploadPostPresentationLogicSpy()
-//        sut.presenter = spy
-//        let request = Models.TrackAnalytics.Request(event: .screenView)
-//
-//        // when
-//        sut.trackAnalytics(with: request)
-//
-//        // then
-//        XCTAssertTrue(spy.presentTrackAnalyticsCalled, "trackAnalytics(with:) should ask the presenter to format the result")
-//    }
-//
-//    func testPerformUploadPostShouldValidateExampleVariable() {
-//        // given
-//        let spy = UploadPostWorkerSpy()
-//        sut.worker = spy
-//        let request = Models.PerformUploadPost.Request()
-//
-//        // when
-//        sut.performUploadPost(with: request)
-//
-//        // then
-//        XCTAssertTrue(spy.validateExampleVariableCalled, "performUploadPost(with:) should ask the worker to validate the example variable")
-//    }
-//
-//    func testPerformUploadPostShouldAskPresenterToFormat() {
-//        // given
-//        let spy = UploadPostPresentationLogicSpy()
-//        sut.presenter = spy
-//        let request = Models.PerformUploadPost.Request()
-//
-//        // when
-//        let expect = expectation(description: "Wait for performUploadPost(with:) to return")
-//        sut.performUploadPost(with: request)
-//        expect.fulfill()
-//        waitForExpectations(timeout: 1)
-//
-//        // then
-//        XCTAssertTrue(spy.presentPerformUploadPostCalled, "performUploadPost(with:) should ask the presenter to format the result")
-//    }
+    func test_title이_nil일때_canUploadPost를_호출하면_올바른결과가_presenter에_전달된다() {
+        // given
+        let spy = UploadPostPresentationLogicSpy()
+        sut.presenter = spy
+        let request = UploadPostModels.CanUploadPost.Request(title: nil)
+
+        // when
+        sut.canUploadPost(request: request)
+
+        // then
+        XCTAssertEqual(spy.presentUploadButtonResponse.isEmpty, true, "title이 nil일 때 canUploadPost 함수가 올바른 결과를 전달하지 못함")
+    }
+
+    func test_title이_nil이아닐때_canUploadPost를_호출하면_올바른결과가_presenter에_전달된다() {
+        // given
+        let spy = UploadPostPresentationLogicSpy()
+        sut.presenter = spy
+        let request = UploadPostModels.CanUploadPost.Request(title: "아아아아")
+
+        // when
+        sut.canUploadPost(request: request)
+
+        // then
+        XCTAssertEqual(spy.presentUploadButtonResponse.isEmpty, false, "title이 nil이 아닐 때 canUploadPost 함수가 올바른 결과를 전달하지 못함")
+    }
+
 }

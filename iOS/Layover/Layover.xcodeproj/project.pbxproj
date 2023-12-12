@@ -169,6 +169,7 @@
 		FC4E0C132B28609C00152596 /* PostBoard.json in Resources */ = {isa = PBXBuildFile; fileRef = FC4E0C122B28609C00152596 /* PostBoard.json */; };
 		FC4E0C192B28955400152596 /* LocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C182B28955400152596 /* LocationFetcher.swift */; };
 		FC4E0C1D2B28977000152596 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */; };
+		FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */; };
 		FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1162B148D160036366D /* EditProfilePresenter.swift */; };
 		FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1172B148D160036366D /* EditProfileWorker.swift */; };
 		FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1182B148D160036366D /* EditProfileRouter.swift */; };
@@ -394,6 +395,7 @@
 		FC4E0C122B28609C00152596 /* PostBoard.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostBoard.json; sourceTree = "<group>"; };
 		FC4E0C182B28955400152596 /* LocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetcher.swift; sourceTree = "<group>"; };
 		FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
+		FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationFetcher.swift; sourceTree = "<group>"; };
 		FC5BE1162B148D160036366D /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
 		FC5BE1172B148D160036366D /* EditProfileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileWorker.swift; sourceTree = "<group>"; };
 		FC5BE1182B148D160036366D /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 			children = (
 				194C21CE2B1DF63D00C62645 /* MockDatas */,
 				194C21CA2B1DF37900C62645 /* Workers */,
+				FC4E0C1E2B28B4AD00152596 /* LocationFetcher */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -824,6 +827,14 @@
 				FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */,
 			);
 			path = Location;
+			sourceTree = "<group>";
+		};
+		FC4E0C1E2B28B4AD00152596 /* LocationFetcher */ = {
+			isa = PBXGroup;
+			children = (
+				FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */,
+			);
+			path = LocationFetcher;
 			sourceTree = "<group>";
 		};
 		FC5BE1112B148AF00036366D /* Views */ = {
@@ -1413,6 +1424,7 @@
 				FC4E0C0C2B282AE500152596 /* UploadPostViewControllerTests.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
+				FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
 				FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */,

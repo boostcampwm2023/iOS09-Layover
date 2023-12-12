@@ -56,8 +56,8 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
             let response = try await provider.request(with: endPoint)
             guard let preSignedURLString = response.data?.preSignedURL else { return false }
             _ = try await provider.upload(fromFile: videoURL,
-                                                    to: preSignedURLString,
-                                                    sessionTaskDelegate: self)
+                                          to: preSignedURLString,
+                                          sessionTaskDelegate: self)
             NotificationCenter.default.post(name: .uploadTaskDidComplete, object: nil)
             return true
         } catch {

@@ -73,7 +73,7 @@ class UploadPostPresenterTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_presentTags를_실행하면_displayTags를_실행한다() {
+    func test_presentTags를_호출하면_displayTags를_호출한다() {
         // given
         let spy = UploadPostDisplayLogicSpy()
         sut.viewController = spy
@@ -83,10 +83,10 @@ class UploadPostPresenterTests: XCTestCase {
         sut.presentTags(with: response)
 
         // then
-        XCTAssertTrue(spy.displayTagsCalled, "presentTags(with:) should ask the view controller to display the result")
+        XCTAssertTrue(spy.displayTagsCalled, "presentTags(with:) 함수가 displayTags를 호출하지 못함")
     }
 
-    func test_presentThumbnail을_실행하면_displayThumbnail을_실행한다() {
+    func test_presentThumbnail을_호출하면_displayThumbnail을_호출한다() {
         // given
         let spy = UploadPostDisplayLogicSpy()
         sut.viewController = spy
@@ -97,10 +97,10 @@ class UploadPostPresenterTests: XCTestCase {
         sut.presentThumbnailImage(with: response)
 
         // then
-        XCTAssertTrue(spy.displayThumbnailCalled, "presentThumbnailImage(with:) should ask the view controller to display the result")
+        XCTAssertTrue(spy.displayThumbnailCalled, "presentThumbnailImage(with:) 함수가 displayThumbnail을 호출하지 못함")
     }
 
-    func test_presentCurrentAddress를_실행하면_displayCurrentAddress를_실행한다() {
+    func test_presentCurrentAddress를_호출하면_displayCurrentAddress를_호출한다() {
         // given
         let spy = UploadPostDisplayLogicSpy()
         sut.viewController = spy
@@ -112,10 +112,10 @@ class UploadPostPresenterTests: XCTestCase {
         sut.presentCurrentAddress(with: response)
 
         // then
-        XCTAssertTrue(spy.displayCurrentAddressCalled, "presentCurrentAddress(with:) should ask the view controller to display the result")
+        XCTAssertTrue(spy.displayCurrentAddressCalled, "presentCurrentAddress(with:) 함수가 displayCurrentAddress을 호출하지 못함")
     }
 
-    func test_presentUploadButton를_실행하면_displayUploadButton을_실행한다() {
+    func test_presentUploadButton를_호출하면_displayUploadButton을_호출한다() {
         // given
         let spy = UploadPostDisplayLogicSpy()
         sut.viewController = spy
@@ -125,7 +125,7 @@ class UploadPostPresenterTests: XCTestCase {
         sut.presentUploadButton(with: response)
 
         // then
-        XCTAssertTrue(spy.displayUploadButtonCalled, "presentUploadButton(with:) should ask the view controller to display the result")
+        XCTAssertTrue(spy.displayUploadButtonCalled, "presentUploadButton(with:) 함수가 displayUploadButton을 호출하지 못함")
     }
 
 }
