@@ -82,17 +82,5 @@
 
 ![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
 
-## 협업 전략
-### git flow 전략 🎃
-- 그룹화로 `BE`와 `iOS` 브랜치 구분
-- `release` (default)
-- `iOS`
-    - `iOS`/dev
-    - `iOS`/feat
-- `BE`
-    - `BE`/dev
-    - `BE`/feat
-
-![깃 플로우](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/6ab7693e-52ee-4df2-8b22-ef60dd962ac9)
-
 ---
+
