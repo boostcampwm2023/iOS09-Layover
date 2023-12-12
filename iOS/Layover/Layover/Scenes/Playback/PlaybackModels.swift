@@ -124,24 +124,6 @@ enum PlaybackModels {
         }
     }
 
-    // MARK: - UseCase Seek Video
-
-    enum SeekVideo {
-        struct Request {
-            let currentLocation: Float64
-        }
-
-        struct Response {
-            let willMoveLocation: Float64
-            let currentCell: PlaybackCell
-        }
-
-        struct ViewModel {
-            let willMoveLocation: Float64
-            let currentCell: PlaybackCell
-        }
-    }
-
     // MARK: - UseCase Report Playback Video
 
     enum ReportPlaybackVideo {

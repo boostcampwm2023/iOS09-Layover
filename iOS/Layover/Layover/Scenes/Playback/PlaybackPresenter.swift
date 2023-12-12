@@ -11,17 +11,15 @@ import Foundation
 protocol PlaybackPresentationLogic {
     func presentVideoList(with response: PlaybackModels.LoadPlaybackVideoList.Response)
     func presentLoadFetchVideos(with response: PlaybackModels.LoadPlaybackVideoList.Response)
-    func presentSetCellIfInfinite(with response: PlaybackModels.SetInitialPlaybackCell.Response)
-    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentSetInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
     func presentMoveInitialPlaybackCell(with response: PlaybackModels.SetInitialPlaybackCell.Response)
+    func presentMoveCellNext(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentPlayInitialPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentShowPlayerSlider(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentTeleportCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentLeavePlaybackView(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentResetPlaybackCell(with response: PlaybackModels.DisplayPlaybackVideo.Response)
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response)
-    func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response)
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response)
     func presentProfile()
@@ -47,10 +45,6 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentLoadFetchVideos(with response: PlaybackModels.LoadPlaybackVideoList.Response) {
         let viewModel: Models.LoadPlaybackVideoList.ViewModel = Models.LoadPlaybackVideoList.ViewModel(videos: response.videos)
         viewController?.loadFetchVideos(viewModel: viewModel)
-    }
-
-    func presentSetCellIfInfinite(with response: PlaybackModels.SetInitialPlaybackCell.Response) {
-        viewController?.displayMoveCellIfinfinite(viewModel: Models.SetInitialPlaybackCell.ViewModel(indexPathRow: response.indexPathRow))
     }
 
     // MARK: - UseCase Set Init Playback Scene
@@ -102,13 +96,6 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     func presentConfigureCell(with response: PlaybackModels.ConfigurePlaybackCell.Response) {
         let viewModel: Models.ConfigurePlaybackCell.ViewModel = Models.ConfigurePlaybackCell.ViewModel(teleportIndex: response.teleportIndex)
         viewController?.configureDataSource(viewModel: viewModel)
-    }
-
-    // MARK: - UseCase Seek Video
-
-    func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response) {
-        let viewModel: Models.SeekVideo.ViewModel = Models.SeekVideo.ViewModel(willMoveLocation: response.willMoveLocation, currentCell: response.currentCell)
-        viewController?.seekVideo(viewModel: viewModel)
     }
 
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response) {

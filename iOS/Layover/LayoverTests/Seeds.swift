@@ -59,4 +59,43 @@ class Seeds {
                                        introduce: "안녕하세요, 아이브의 안유진입니다.",
                                        profileImageURL: URL(string: "https://cdn.footballist.co.kr/news/photo/202307/170226_100422_1733.jpg")!)
     }
+
+    struct PlaybackVideos {
+        static let videos: [PlaybackModels.PlaybackVideo] =
+        [PlaybackModels.PlaybackVideo(
+            displayedPost: PlaybackModels.DisplayedPost(
+                member: PlaybackModels.Member(
+                    memberID: 1,
+                    username: "안유진",
+                    profileImageURL: URL(string: "https://cdn.footballist.co.kr/news/photo/202307/170226_100422_1733.jpg")),
+                board: PlaybackModels.Board(
+                    boardID: 1,
+                    title: "최강 아이돌",
+                    description: "게시글 설명",
+                    videoURL: URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")!,
+                    latitude: 127.060123123,
+                    longitude: 37.0532156213),
+                tags: ["아이브", "yujin"])),
+         PlaybackModels.PlaybackVideo(
+            displayedPost: PlaybackModels.DisplayedPost(
+                member: PlaybackModels.Member(
+                    memberID: 2,
+                    username: "안유진",
+                    profileImageURL: URL(string: "https://cdn.footballist.co.kr/news/photo/202307/170226_100422_1733.jpg")),
+                board: PlaybackModels.Board(
+                    boardID: 2,
+                    title: "최강 아이돌",
+                    description: "게시글 설명",
+                    videoURL: URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")!,
+                    latitude: 127.060123123,
+                    longitude: 37.0532156213),
+                tags: ["아이브", "yujin"]))
+        ]
+    }
+
+    enum PlaybackVideo {
+        static let previousCell: PlaybackCell = PlaybackCell()
+        static let currentCell: PlaybackCell = PlaybackCell()
+        static let profileImageData: Data? = try? Data(contentsOf: Bundle(for: Seeds.self).url(forResource: "sample", withExtension: "jpeg")!)
+    }
 }

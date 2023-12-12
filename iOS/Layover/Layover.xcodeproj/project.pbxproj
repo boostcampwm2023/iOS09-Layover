@@ -136,6 +136,7 @@
 		83957AA62B20F94C00B3BA8A /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
+		83DF0B4A2B2849CA00F35F4B /* PlaybackPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DF0B492B2849CA00F35F4B /* PlaybackPresenterTests.swift */; };
 		FC0E80242B1A0BBB00EF56D6 /* UploadPostPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */; };
 		FC0E80252B1A0BBB00EF56D6 /* UploadPostWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801F2B1A0BBB00EF56D6 /* UploadPostWorker.swift */; };
 		FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E80202B1A0BBB00EF56D6 /* UploadPostRouter.swift */; };
@@ -347,6 +348,7 @@
 		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
 		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
 		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
+		8321A38C2B285A12005DCF22 /* Layover.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Layover.xctestplan; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 		83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
 		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
+		83DF0B492B2849CA00F35F4B /* PlaybackPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPresenterTests.swift; sourceTree = "<group>"; };
 		FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenter.swift; sourceTree = "<group>"; };
 		FC0E801F2B1A0BBB00EF56D6 /* UploadPostWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostWorker.swift; sourceTree = "<group>"; };
 		FC0E80202B1A0BBB00EF56D6 /* UploadPostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostRouter.swift; sourceTree = "<group>"; };
@@ -552,6 +555,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				83DF0B462B2848C900F35F4B /* Playback */,
 				1925137B2B277CC4001533FA /* Profile */,
 				194C21BE2B1DEE5500C62645 /* Home */,
 			);
@@ -787,6 +791,14 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		83DF0B462B2848C900F35F4B /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				83DF0B492B2849CA00F35F4B /* PlaybackPresenterTests.swift */,
+			);
+			path = Playback;
+			sourceTree = "<group>";
+		};
 		FC0E801D2B1A0A4900EF56D6 /* UploadPost */ = {
 			isa = PBXGroup;
 			children = (
@@ -924,6 +936,7 @@
 		FC7E452D2AFEB623004F155A = {
 			isa = PBXGroup;
 			children = (
+				8321A38C2B285A12005DCF22 /* Layover.xctestplan */,
 				19AACFC52B0F71DF0088143E /* Secrets.xcconfig */,
 				FC7E45692AFEC06E004F155A /* .swiftlint.yml */,
 				FC7E45382AFEB623004F155A /* Layover */,
@@ -1436,6 +1449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DF0B4A2B2849CA00F35F4B /* PlaybackPresenterTests.swift in Sources */,
 				192513852B27852C001533FA /* MockUserWorker.swift in Sources */,
 				192513832B277CD7001533FA /* ProfilePresenterTests.swift in Sources */,
 				192513812B277CD7001533FA /* ProfileInteractorTests.swift in Sources */,

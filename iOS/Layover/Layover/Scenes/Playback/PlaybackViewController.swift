@@ -19,16 +19,14 @@ protocol PlaybackViewControllerDelegate: AnyObject {
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func loadFetchVideos(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
-    func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
-    func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
+    func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func showPlayerSlider(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func teleportPlaybackCell(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func leavePlaybackView(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func configureDataSource(viewModel: PlaybackModels.ConfigurePlaybackCell.ViewModel)
-    func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel)
     func setSeemoreButton(viewModel: PlaybackModels.SetSeemoreButton.ViewModel)
     func deleteVideo(viewModel: PlaybackModels.DeletePlaybackVideo.ViewModel)
     func routeToProfile()
@@ -206,10 +204,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         dataSource?.apply(currentSnapshot, animatingDifferences: true)
     }
 
-    func displayMoveCellIfinfinite(viewModel: Models.SetInitialPlaybackCell.ViewModel) {
-        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height * CGFloat(viewModel.indexPathRow)), animated: false)
-    }
-
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
         if let previousCell = viewModel.previousCell {
@@ -271,12 +265,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
             cell.delegate = self
             return cell
         }
-    }
-
-    func seekVideo(viewModel: PlaybackModels.SeekVideo.ViewModel) {
-        let seekTime: CMTime = CMTime(value: CMTimeValue(viewModel.willMoveLocation), timescale: 1)
-        viewModel.currentCell.playbackView.seekPlayer(seekTime: seekTime)
-        viewModel.currentCell.playbackView.playPlayer()
     }
 
     func resetVideo(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {

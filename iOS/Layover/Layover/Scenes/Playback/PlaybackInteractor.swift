@@ -21,7 +21,6 @@ protocol PlaybackBusinessLogic {
     func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func resetVideo()
     func configurePlaybackCell()
-    func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
     func setSeeMoreButton()
     @discardableResult
@@ -210,13 +209,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         willMoveTeleportIndex = parentView == .map ? posts.count + 1 : nil
         let response: Models.ConfigurePlaybackCell.Response = Models.ConfigurePlaybackCell.Response(teleportIndex: willMoveTeleportIndex)
         presenter?.presentConfigureCell(with: response)
-    }
-
-    func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request) {
-        guard let previousCell else { return }
-        let willMoveLocation: Float64 = request.currentLocation * previousCell.playbackView.getDuration()
-        let response: Models.SeekVideo.Response = Models.SeekVideo.Response(willMoveLocation: willMoveLocation, currentCell: previousCell)
-        presenter?.presentSeekVideo(with: response)
     }
 
     func hidePlayerSlider() {
