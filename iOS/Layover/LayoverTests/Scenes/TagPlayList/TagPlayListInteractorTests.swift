@@ -91,7 +91,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         XCTAssertEqual(sut.titleTag, spy.presentTitleTagResponse.titleTag, "setTitleTag()가 presenter에게 자신의 titleTag를 전달했다.")
     }
 
-    func test_fetchPlayList를_호출하면_자신의_posts에_데이터를_저장하고_presenter의_presentPlayList를_호출하여_올바른_갯수의_데이터를_전달한다() async {
+    func test_fetchPlayList를_호출하면_자신의_posts에_데이터를_저장하고_presenter의_presentPlayList를_호출하여_올바른_데이터를_전달한다() async {
         // Arrange
         let spy = TagPlayListPresentationLogicSpy()
         sut.presenter = spy
@@ -102,62 +102,68 @@ final class TagPlayListInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentPlayListCalled, "fetchPlayList()가 presenter의 presentPlayList()를 호출했다.")
-        XCTAssertEqual(sut.posts.count, 4, "fetchPlayList()가 자신의 posts에 올바른 갯수의 posts 데이터를 저장했다.")
-        XCTAssertEqual(spy.presentPlayListResponse.post.count, 4, "fetchPlayList()가 presenter에게 올바른 갯수의 displayedPosts 데이터를 전달했다.")
+        XCTAssertEqual(sut.posts.count, 1)
+        XCTAssertEqual(sut.posts[0].tag, Seeds.Posts.post1.tag)
+        XCTAssertNil(sut.posts[0].thumbnailImageData)
+        XCTAssertEqual(sut.posts[0].board.identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(sut.posts[0].board.title, Seeds.Posts.post1.board.title)
+        XCTAssertEqual(sut.posts[0].board.description, Seeds.Posts.post1.board.description)
+        XCTAssertEqual(sut.posts[0].board.latitude, Seeds.Posts.post1.board.latitude)
+        XCTAssertEqual(sut.posts[0].board.longitude, Seeds.Posts.post1.board.longitude)
+        XCTAssertEqual(sut.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL)
+        XCTAssertEqual(sut.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL)
+        XCTAssertEqual(sut.posts[0].member.identifier, Seeds.Posts.post1.member.identifier)
+        XCTAssertEqual(sut.posts[0].member.username, Seeds.Posts.post1.member.username)
+        XCTAssertEqual(sut.posts[0].member.introduce, Seeds.Posts.post1.member.introduce)
+        XCTAssertEqual(sut.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPlayList()가 자신의 posts에 올바른 posts 데이터를 저장했다.")
+        XCTAssertEqual(spy.presentPlayListResponse.post.count, 1)
+        XCTAssertEqual(spy.presentPlayListResponse.post[0].identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(spy.presentPlayListResponse.post[0].thumbnailImageData, Seeds.sampleImageData)
+        XCTAssertEqual(spy.presentPlayListResponse.post[0].title, Seeds.Posts.post1.board.title, "fetchPlayList()가 presenter에게 올바른 displayedPosts 데이터를 전달했다.")
     }
 
     func test_fetchPlayList를_호출하면_기존에_저장된_posts를_비우고_새로운_Posts_데이터를_저장한다() async {
         // Arrange
         let spy = TagPlayListPresentationLogicSpy()
         sut.presenter = spy
-        guard let dummyImageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
-            XCTFail("이미지 URL 생성 오류.")
-            return
-        }
-
-        guard let dummyVideoURL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8") else {
-            XCTFail("비디오 URL 생성 실패")
-            return
-        }
-
-        let dummyPost = Post(member: Member(identifier: -1,
-                                       username: "안유진",
-                                       introduce: "난 아이브의 리더~",
-                                       profileImageURL: dummyImageURL),
-                        board: Board(identifier: -1,
-                                     title: "IZONE",
-                                     description: "아이즈원",
-                                     thumbnailImageURL: dummyImageURL,
-                                     videoURL: dummyVideoURL,
-                                     latitude: 0.1203931,
-                                     longitude: 0.1029382),
-                        tag: ["유진", "아이브", "IVE",])
-
-        sut.posts = [dummyPost]
         let request = Models.FetchPosts.Request()
+        sut.posts = [Seeds.Posts.post2]
 
         // Act
         _ = await sut.fetchPlayList(request: request).value
 
         // Assert
         XCTAssert(!sut.posts.contains(where: {
-            $0.board.identifier == dummyPost.board.identifier
-            && $0.board.title == dummyPost.board.title
-            && $0.board.description == dummyPost.board.description
-            && $0.board.thumbnailImageURL == dummyPost.board.thumbnailImageURL
-            && $0.board.videoURL == dummyPost.board.videoURL
-            && $0.board.latitude == dummyPost.board.latitude
-            && $0.board.longitude == dummyPost.board.longitude
-            && $0.member.identifier == dummyPost.member.identifier
-            && $0.member.username == dummyPost.member.username
-            && $0.member.introduce == dummyPost.member.introduce
-            && $0.member.profileImageURL == dummyPost.member.profileImageURL
-            && $0.tag == dummyPost.tag
+            $0.board.identifier == Seeds.Posts.post2.board.identifier
+            && $0.board.title == Seeds.Posts.post2.board.title
+            && $0.board.description == Seeds.Posts.post2.board.description
+            && $0.board.thumbnailImageURL == Seeds.Posts.post2.board.thumbnailImageURL
+            && $0.board.videoURL == Seeds.Posts.post2.board.videoURL
+            && $0.board.latitude == Seeds.Posts.post2.board.latitude
+            && $0.board.longitude == Seeds.Posts.post2.board.longitude
+            && $0.member.identifier == Seeds.Posts.post2.member.identifier
+            && $0.member.username == Seeds.Posts.post2.member.username
+            && $0.member.introduce == Seeds.Posts.post2.member.introduce
+            && $0.member.profileImageURL == Seeds.Posts.post2.member.profileImageURL
+            && $0.tag == Seeds.Posts.post2.tag
         }))
-        XCTAssertEqual(sut.posts.count, 4, "fetchPlayList()가 자신의 posts를 비우고, 새로운 posts 데이터를 저장했다.")
+        XCTAssertEqual(sut.posts.count, 1)
+        XCTAssertEqual(sut.posts[0].tag, Seeds.Posts.post1.tag)
+        XCTAssertNil(sut.posts[0].thumbnailImageData)
+        XCTAssertEqual(sut.posts[0].board.identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(sut.posts[0].board.title, Seeds.Posts.post1.board.title)
+        XCTAssertEqual(sut.posts[0].board.description, Seeds.Posts.post1.board.description)
+        XCTAssertEqual(sut.posts[0].board.latitude, Seeds.Posts.post1.board.latitude)
+        XCTAssertEqual(sut.posts[0].board.longitude, Seeds.Posts.post1.board.longitude)
+        XCTAssertEqual(sut.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL)
+        XCTAssertEqual(sut.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL)
+        XCTAssertEqual(sut.posts[0].member.identifier, Seeds.Posts.post1.member.identifier)
+        XCTAssertEqual(sut.posts[0].member.username, Seeds.Posts.post1.member.username)
+        XCTAssertEqual(sut.posts[0].member.introduce, Seeds.Posts.post1.member.introduce)
+        XCTAssertEqual(sut.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPlayList()가 자신의 posts에 올바른 posts 데이터를 저장했다.")
     }
 
-    func test_fetchMorePlayList를_호출하면_자신의_posts에_데이터를_저장하고_presenter의_presentMorePlayList를_호출하여_올바른_갯수의_Posts_데이터를_전달한다() async {
+    func test_fetchMorePlayList를_호출하면_자신의_posts에_데이터를_저장하고_presenter의_presentMorePlayList를_호출하여_올바른_Posts_데이터를_전달한다() async {
         // Arrange
         let spy = TagPlayListPresentationLogicSpy()
         sut.presenter = spy
@@ -169,7 +175,10 @@ final class TagPlayListInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출했다.")
-        XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 4, "fetchPlayMoreList()가 presenter에게 올바른 갯수의 posts 데이터를 전달했다.")
+        XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 1, "fetchPlayMoreList()가 presenter에게 올바른 갯수의 posts 데이터를 전달했다.")
+        XCTAssertEqual(spy.presentMorePlayListResponse.post[0].identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(spy.presentMorePlayListResponse.post[0].thumbnailImageData, Seeds.sampleImageData)
+        XCTAssertEqual(spy.presentMorePlayListResponse.post[0].title, Seeds.Posts.post1.board.title, "fetchPlayMoreList()가 presenter에게 올바른 displayedPosts 데이터를 전달했다.")
     }
 
     func test_fetchMorePlayList를_호출하다가_더이상_가져온_데이터가_없으면_본인의_post개수를_유지하고_presenter의_presentMorePlayList를_호출하여_빈_배열을_전달한다() async {
@@ -185,7 +194,7 @@ final class TagPlayListInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출했다.")
-        XCTAssertEqual(sut.posts.count, 8, "fetchPlayMoreList()를 호출하다가 더이상 데이터가 없을 때 자신의 posts를 유지했다.")
+        XCTAssertEqual(sut.posts.count, 2, "fetchPlayMoreList()를 호출하다가 더이상 데이터가 없을 때 자신의 posts를 유지했다.")
         XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 0, "fetchPlayMoreList()가 presenter에게 빈 배열을 전달했다.")
     }
 
@@ -194,30 +203,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         let spy = TagPlayListPresentationLogicSpy()
         sut.presenter = spy
 
-        guard let dummyImageURL = URL(string: "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize") else {
-            XCTFail("이미지 URL 생성 오류.")
-            return
-        }
-
-        guard let dummyVideoURL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8") else {
-            XCTFail("비디오 URL 생성 실패")
-            return
-        }
-
-        let dummyPost = Post(member: Member(identifier: 1,
-                                       username: "안유진",
-                                       introduce: "난 아이브의 리더~",
-                                       profileImageURL: dummyImageURL),
-                        board: Board(identifier: 1,
-                                     title: "IZONE",
-                                     description: "아이즈원",
-                                     thumbnailImageURL: dummyImageURL,
-                                     videoURL: dummyVideoURL,
-                                     latitude: 0.1203931,
-                                     longitude: 0.1029382),
-                        tag: ["유진", "아이브", "IVE",])
-
-        sut.posts = [dummyPost, dummyPost, dummyPost, dummyPost]
+        sut.posts = [Seeds.Posts.post1]
         let request = Models.FetchMorePosts.Request()
 
         // Act
@@ -226,20 +212,20 @@ final class TagPlayListInteractorTests: XCTestCase {
         // Assert
         XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출했다.")
         XCTAssertEqual(sut.posts.filter({
-            $0.board.identifier == dummyPost.board.identifier
-            && $0.board.title == dummyPost.board.title
-            && $0.board.description == dummyPost.board.description
-            && $0.board.thumbnailImageURL == dummyPost.board.thumbnailImageURL
-            && $0.board.videoURL == dummyPost.board.videoURL
-            && $0.board.latitude == dummyPost.board.latitude
-            && $0.board.longitude == dummyPost.board.longitude
-            && $0.member.identifier == dummyPost.member.identifier
-            && $0.member.username == dummyPost.member.username
-            && $0.member.introduce == dummyPost.member.introduce
-            && $0.member.profileImageURL == dummyPost.member.profileImageURL
-            && $0.tag == dummyPost.tag
-        }).count, 4)
-        XCTAssertEqual(sut.posts.count, 8, "fetchPlayMoreList()가 자신의 posts에 새로운 posts 데이터를 더해서 저장했다.")
+            $0.board.identifier == Seeds.Posts.post1.board.identifier
+            && $0.board.title == Seeds.Posts.post1.board.title
+            && $0.board.description == Seeds.Posts.post1.board.description
+            && $0.board.thumbnailImageURL == Seeds.Posts.post1.board.thumbnailImageURL
+            && $0.board.videoURL == Seeds.Posts.post1.board.videoURL
+            && $0.board.latitude == Seeds.Posts.post1.board.latitude
+            && $0.board.longitude == Seeds.Posts.post1.board.longitude
+            && $0.member.identifier == Seeds.Posts.post1.member.identifier
+            && $0.member.username == Seeds.Posts.post1.member.username
+            && $0.member.introduce == Seeds.Posts.post1.member.introduce
+            && $0.member.profileImageURL == Seeds.Posts.post1.member.profileImageURL
+            && $0.tag == Seeds.Posts.post1.tag
+        }).count, 2)
+        XCTAssertEqual(sut.posts.count, 2, "fetchPlayMoreList()가 자신의 posts에 새로운 posts 데이터를 더해서 저장했다.")
     }
 
     func test_showPostDetail을_호출하면_자신의_postPlayStartIndex값을_올바르게_저장하고_presenter의_presentPostDetail을_호출한다() {

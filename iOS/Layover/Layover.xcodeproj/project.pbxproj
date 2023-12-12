@@ -15,8 +15,6 @@
 		1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513662B26F7CE001533FA /* TagPlayListWorkerTests.swift */; };
 		1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513672B26F7CE001533FA /* TagPlayListPresenterTests.swift */; };
 		1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */; };
-		192513752B2715BF001533FA /* PostListMore.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513742B2715BF001533FA /* PostListMore.json */; };
-		192513772B2715D3001533FA /* PostListEnd.json in Resources */ = {isa = PBXBuildFile; fileRef = 192513762B2715D3001533FA /* PostListEnd.json */; };
 		1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192513792B273D98001533FA /* StubAuthManager.swift */; };
 		192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925137C2B277CD7001533FA /* ProfileViewControllerTests.swift */; };
 		192513812B277CD7001533FA /* ProfileInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925137D2B277CD7001533FA /* ProfileInteractorTests.swift */; };
@@ -254,8 +252,6 @@
 		192513662B26F7CE001533FA /* TagPlayListWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListWorkerTests.swift; sourceTree = "<group>"; };
 		192513672B26F7CE001533FA /* TagPlayListPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPlayListPresenterTests.swift; sourceTree = "<group>"; };
 		1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTagPlayListWorker.swift; sourceTree = "<group>"; };
-		192513742B2715BF001533FA /* PostListMore.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListMore.json; sourceTree = "<group>"; };
-		192513762B2715D3001533FA /* PostListEnd.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostListEnd.json; sourceTree = "<group>"; };
 		192513792B273D98001533FA /* StubAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubAuthManager.swift; sourceTree = "<group>"; };
 		1925137C2B277CD7001533FA /* ProfileViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerTests.swift; sourceTree = "<group>"; };
 		1925137D2B277CD7001533FA /* ProfileInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInteractorTests.swift; sourceTree = "<group>"; };
@@ -616,10 +612,6 @@
 		194C21CE2B1DF63D00C62645 /* MockDatas */ = {
 			isa = PBXGroup;
 			children = (
-				194C21D32B1EEE3700C62645 /* sample.jpeg */,
-				194C21CF2B1DF65200C62645 /* PostList.json */,
-				192513742B2715BF001533FA /* PostListMore.json */,
-				192513762B2715D3001533FA /* PostListEnd.json */,
 				192513972B278645001533FA /* CheckSignUp.json */,
 				1925138D2B278645001533FA /* CheckUserName.json */,
 				192513932B278645001533FA /* DeleteUser.json */,
@@ -1005,8 +997,8 @@
 		FC7E454F2AFEB62C004F155A /* LayoverTests */ = {
 			isa = PBXGroup;
 			children = (
-				192513782B273D74001533FA /* Stubs */,
 				192513A62B278BB3001533FA /* Seeds.swift */,
+				192513782B273D74001533FA /* Stubs */,
 				194C21C92B1DF36E00C62645 /* Mocks */,
 				194C21C72B1DF09B00C62645 /* Scenes */,
 			);
@@ -1253,10 +1245,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				192513752B2715BF001533FA /* PostListMore.json in Resources */,
-				192513772B2715D3001533FA /* PostListEnd.json in Resources */,
-				194C21D02B1DF65200C62645 /* PostList.json in Resources */,
-				194C21D42B1EEE3700C62645 /* sample.jpeg in Resources */,
 				192513A02B278646001533FA /* PatchIntroduce.json in Resources */,
 				192513A32B278646001533FA /* sample.jpeg in Resources */,
 				1925139D2B278646001533FA /* PatchUserName.json in Resources */,

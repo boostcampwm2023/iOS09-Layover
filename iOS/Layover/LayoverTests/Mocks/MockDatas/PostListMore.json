@@ -4,75 +4,21 @@
     "data": [
         {
             "member" : {
-                "id" : 5,
-                "username" : "loinsir",
-                "introduce" : "Hi, my name is hwani",
-                "profile_image_url" : "https://i.namu.wiki/i/HPFgEkrlX8wtU-agoxsqlzllzfJrcFkDSJYFQxdBHUNyjyZtUpS9zy-7-6lfz4ngzB-1wbLRyhIP4TmnwPwKJ0mUec5403r5TJnI3NZpsYJL6GEVQTmR52YoFGLMbaIe4aGSzh4B4InI9r2g0VV74g.svg"
+                "id" : 2,
+                "username" : "장원영",
+                "introduce" : "안녕하세요, 아이브의 장원영입니다.",
+                "profile_image_url" : "https://www.fnnews.com/resource/media/image/2023/10/17/202310171126334525_l.jpg"
             },
             "board" : {
-                "id" : 5,
-                "encoded_video_url" : "https://assets.afcdn.com/video49/20210722/v_645516.m3u8",
-                "video_thumbnail_url" : "https://think-note.com/wp-content/uploads/2023/07/eta_3.jpg",
-                "longitude" : 37.0532156213,
-                "latitude" : 127.060123123,
-                "title" : "최강 아이돌",
-                "content" : "게시글 설명"
+                "id" : 2,
+                "encoded_video_url" : "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
+                "video_thumbnail_url" : "https://img.etoday.co.kr/pto_db/2022/11/600/20221108175829_1816470_1200_1800.jpg",
+                "longitude" : 35.001828282,
+                "latitude" : 100.060123123,
+                "title" : "아이브의 멤버",
+                "content" : "게시글 설명설명설명"
             },
-            "tag" : ["나도몰라요", "너도몰라요"]
-        },
-        {
-            "member" : {
-                "id" : 6,
-                "username" : "chopmozzi",
-                "introduce" : "Hi, my name is hwani",
-                "profile_image_url" : "https://m.segye.com/content/image/2023/03/15/20230315514234.jpg"
-            },
-            "board" : {
-                "id" : 6,
-                "encoded_video_url" : "https://qc66zhsq1708.edge.naverncp.com/hls/fMG98EEU8c1UirV-awtm4qKJyhaHRcnDymRFlPLZbTs_/layover-station/IMG_0136_AVC_,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8",
-                "video_thumbnail_url" : "video_thumbnail_link",
-                "longitude" : 37.0532156213,
-                "latitude" : 127.060123123,
-                "title" : "프로듀스 101",
-                "content" : "게시글 설명"
-            },
-            "tag" : ["해시태그", "해시태그2"]
-        },
-        {
-            "member" : {
-                "id" : 7,
-                "username" : "anyukyung",
-                "introduce" : "Hi, my name is hwani",
-                "profile_image_url" : "https://images.khan.co.kr/article/2021/11/15/l_2021111502000877900178361.jpg"
-            },
-            "board" : {
-                "id" : 7,
-                "encoded_video_url" : "https://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8",
-                "video_thumbnail_url" : "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20210831030133473.jpg/melon/quality/90/optimize",
-                "longitude" : 37.0532156213,
-                "latitude" : 127.060123123,
-                "title" : "프로미스 나인",
-                "content" : "게시글 설명"
-            },
-            "tag" : ["해시태그1", "해시태그2"]
-        },
-        {
-            "member" : {
-                "id" : 8,
-                "username" : "layover",
-                "introduce" : "Hi, my name is hwani",
-                "profile_image_url" : "profile_image_link"
-            },
-            "board" : {
-                "id" : 8,
-                "encoded_video_url" : "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-                "video_thumbnail_url" : "https://res.heraldm.com/content/image/2023/04/16/20230416000040_0.jpg",
-                "longitude" : 37.0532156213,
-                "latitude" : 127.060123123,
-                "title" : "아이즈원",
-                "content" : "게시글 설명2"
-            },
-            "tag" : ["해시태그1", "해시태그6"]
+            "tag" : ["Ive", "wonyoung"]
         }
     ]
 }
