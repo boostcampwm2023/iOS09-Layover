@@ -99,6 +99,7 @@ export class OauthService {
   async login(memberHash: string): Promise<TokenResDto> {
     // 유저 정보가 db에 있는지(==회원가입된 유저인지) 확인
     const isUserExist = await this.isMemberExistByHash(memberHash);
+    console.log(isUserExist);
     if (isUserExist !== 'EXIST') {
       throw new CustomResponse(ECustomCode.NOT_SIGNUP_MEMBER);
     }
