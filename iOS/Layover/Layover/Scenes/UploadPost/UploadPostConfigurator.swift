@@ -18,7 +18,7 @@ final class UploadPostConfigurator: Configurator {
 
     func configure(_ viewController: ViewController) {
         let viewController = viewController
-        let interactor = UploadPostInteractor()
+        let interactor = UploadPostInteractor(locationManager: CurrentLocationManager())
         let presenter = UploadPostPresenter()
         let router = UploadPostRouter()
         let worker = UploadPostWorker()

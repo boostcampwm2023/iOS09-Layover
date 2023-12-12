@@ -42,7 +42,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     var presenter: UploadPostPresentationLogic?
 
     private let fileManager: FileManager
-    private let locationManager: CLLocationManager
+    private var locationManager: CurrentLocationManager
 
     // MARK: - Data Store
 
@@ -53,7 +53,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     // MARK: - Object LifeCycle
 
     init(fileManager: FileManager = FileManager.default,
-         locationManager: CLLocationManager = CLLocationManager()) {
+         locationManager: CurrentLocationManager) {
         self.fileManager = fileManager
         self.locationManager = locationManager
     }
@@ -90,7 +90,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     }
 
     func fetchCurrentAddress() {
-        guard let location = getCurrentLocation() else { return }
+        guard let location = locationManager.getCurrentLocation() else { return }
         let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
         let locale = Locale(identifier: localeIdentifier)
 
@@ -123,7 +123,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             guard let worker,
                   let videoURL,
                   let isMuted,
-                  let coordinate = getCurrentLocation()?.coordinate else { return false }
+                  let coordinate = locationManager.getCurrentLocation()?.coordinate else { return false }
             if isMuted {
                 exportVideoWithoutAudio(at: videoURL)
             }
@@ -135,15 +135,6 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
                                                                      videoURL: videoURL))
             return response
         }
-    }
-
-    private func getCurrentLocation() -> CLLocation? {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-
-        guard let space = locationManager.location?.coordinate else { return nil }
-        let location = CLLocation(latitude: space.latitude, longitude: space.longitude)
-        return location
     }
 
     private func exportVideoWithoutAudio(at url: URL) {
