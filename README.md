@@ -17,6 +17,13 @@
     
     당신의 여정을 Layover에 쌓아가보세요!
 
+## 문서
+
+| 그라운드 룰                                                                           | 기획/디자인 | 템플릿 | 회의록 | ***개발일지*** |
+| ------------------------------------------------------------------------------------- | ---------------- | ------ | ------ | ------ |
+| ⛳️ [그라운드 룰](https://loinsir.notion.site/51835aceabde449a82b56f7c15353a98?pvs=4) | 🎨 [디자인](https://www.figma.com/file/wqUKtYD2tqY6qS0TZnw2eO/Layover-UI?type=design&mode=design&t=9Io4sVa1Q17CxICu-1)             | 🔭 [템플릿](https://loinsir.notion.site/084324b5761c4d38bfd69a102e525d97?pvs=4)|📝 [회의록](https://loinsir.notion.site/2132e55f2dfd4f83ad895aabeab41684?pvs=4)| 🛠️ [DevLog](https://loinsir.notion.site/Dev-Log-346d2f9ee4c64869a7a25d350761c4a9?pvs=4)
+
+
 ## 팀원 소개
 
 <table align=center>
@@ -40,7 +47,7 @@
         <tr>
             <td><a href="https://github.com/loinsir">@loinsir</a></td>
             <td><a href="https://github.com/anyukyung">@anyukyung</a></td>
-            <td><a                   href="https://github.com/chopmozzi">@chopmozzi</a></td>
+            <td><a href="https://github.com/chopmozzi">@chopmozzi</a></td>
             <td><a href="https://github.com/hw-ani">@hw-ani</a></td>
             <td><a href="https://github.com/whipbaek">@whipbaek</a></td>
         </tr>
@@ -63,12 +70,6 @@
 
 ---
 
-![Layover표지](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/11befbb5-46af-4e24-b8e9-cb1378239f74)
-
-![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
-
----
-
 ## 기술스택
 - iOS
   - `UIKit`, `CleanSwift (a.k.a. VIP)`, `MapKit`, `AVFoundation`, `Swift Concurrency`
@@ -76,6 +77,10 @@
   -  `TypeScript`, `NestJS`, `MySQL`, `Redis`, `Jenkins`, `Docker`, `ncloud`
 
 ---
+
+![Layover표지](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/11befbb5-46af-4e24-b8e9-cb1378239f74)
+
+![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
 
 ## 협업 전략
 ### git flow 전략 🎃
@@ -91,9 +96,3 @@
 ![깃 플로우](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/6ab7693e-52ee-4df2-8b22-ef60dd962ac9)
 
 ---
-
-## 문서
-
-| 그라운드 룰                                                                           | 기획/디자인 | 템플릿 | 회의록 |
-| ------------------------------------------------------------------------------------- | ---------------- | ------ | ------ |
-| ⛳️ [그라운드 룰](https://loinsir.notion.site/51835aceabde449a82b56f7c15353a98?pvs=4) | 🎨 [디자인](https://www.figma.com/file/wqUKtYD2tqY6qS0TZnw2eO/Layover-UI?type=design&mode=design&t=9Io4sVa1Q17CxICu-1)             | 🔭 [템플릿](https://loinsir.notion.site/084324b5761c4d38bfd69a102e525d97?pvs=4)|📝 [회의록](https://loinsir.notion.site/2132e55f2dfd4f83ad895aabeab41684?pvs=4)|
