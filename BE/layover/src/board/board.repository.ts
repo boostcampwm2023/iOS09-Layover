@@ -48,6 +48,7 @@ export class BoardRepository {
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
       .andWhere("board.status = 'COMPLETE'")
+      .orderBy('board.date_created', 'DESC')
       .skip(offset)
       .take(itemsPerPage)
       .getMany();
@@ -69,6 +70,7 @@ export class BoardRepository {
       .leftJoinAndSelect('board.tags', 'tag')
       .where('member.id = :id', { id })
       .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
+      .orderBy('board.date_created', 'DESC')
       .skip(offset)
       .take(itemsPerPage)
       .getMany();
