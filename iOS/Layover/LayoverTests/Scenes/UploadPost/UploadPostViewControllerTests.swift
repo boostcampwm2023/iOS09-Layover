@@ -9,40 +9,40 @@
 @testable import Layover
 import XCTest
 
-//class UploadPostViewControllerTests: XCTestCase {
-//
-//    // MARK: - Subject Under Test (SUT)
-//
-//    typealias Models = UploadPostModels
-//    var sut: UploadPostViewController!
-//    var window: UIWindow!
-//
-//    // MARK: - Test Lifecycle
-//
-//    override func setUp() {
-//        super.setUp()
-//        window = UIWindow()
-//        setupUploadPostViewController()
-//    }
-//
-//    override func tearDown() {
-//        window = nil
-//        sut = nil
-//        super.tearDown()
-//    }
-//
-//    // MARK: - Test Setup
-//
-//    func setupUploadPostViewController() {
-//        let bundle = Bundle.main
-//        let storyboard = UIStoryboard(name: "Main", bundle: bundle)
-//        sut = storyboard.instantiateViewController(withIdentifier: "UploadPostViewController") as? UploadPostViewController
-//    }
-//
-//    func loadView() {
-//        window.addSubview(sut.view)
-//        RunLoop.current.run(until: Date())
-//    }
+class UploadPostViewControllerTests: XCTestCase {
+
+    // MARK: - Subject Under Test (SUT)
+
+    typealias Models = UploadPostModels
+    var sut: UploadPostViewController!
+    var window: UIWindow!
+
+    // MARK: - Test Lifecycle
+
+    override func setUp() {
+        super.setUp()
+        window = UIWindow()
+        setupUploadPostViewController()
+    }
+
+    override func tearDown() {
+        window = nil
+        sut = nil
+        super.tearDown()
+    }
+
+    // MARK: - Test Setup
+
+    func setupUploadPostViewController() {
+        let bundle = Bundle.main
+        let storyboard = UIStoryboard(name: "Main", bundle: bundle)
+        sut = storyboard.instantiateViewController(withIdentifier: "UploadPostViewController") as? UploadPostViewController
+    }
+
+    func loadView() {
+        window.addSubview(sut.view)
+        RunLoop.current.run(until: Date())
+    }
 //
 //    // MARK: - Test Doubles
 //
@@ -200,4 +200,4 @@ import XCTest
 //        // then
 //        XCTAssertTrue(spy.routeToNextCalled, "displayPerformUploadPost(with:) should route to next screen if there is no error")
 //    }
-//}
+}

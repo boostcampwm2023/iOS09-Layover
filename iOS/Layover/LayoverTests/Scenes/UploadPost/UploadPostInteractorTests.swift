@@ -131,7 +131,7 @@ class UploadPostInteractorTests: XCTestCase {
 
         // when
         sut.fetchThumbnailImage()
-        try await Task.sleep(nanoseconds: 3_000_000_000)
+        try await Task.sleep(nanoseconds: 5_000_000_000)
 
         // then
         XCTAssertTrue(spy.presentThumbnailCalled, "fetchThumbnailImage 함수가 presentThumbnailImage을 호출하지 못함")

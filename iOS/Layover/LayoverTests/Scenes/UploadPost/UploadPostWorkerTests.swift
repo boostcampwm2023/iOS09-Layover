@@ -31,7 +31,39 @@ class UploadPostWorkerTests: XCTestCase {
     // MARK: - Test Setup
 
     func setupUploadPostWorker() {
-        sut = UploadPostWorker()
+        sut = UploadPostWorker(provider: Provider(session: .initMockSession(), authManager: StubAuthManager()))
+    }
+
+    func test_uploadPost는_업로드에_성공하면_올바른결과를_반환한다() async throws {
+        // given
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "PostBoard", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
+
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        let request = UploadPost(title: "제목",
+                                 content: nil,
+                                 latitude: 100,
+                                 longitude: 100,
+                                 tag: [],
+                                 videoURL: URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")!)
+
+        // when
+        let response = await sut.uploadPost(with: request)
+        try await Task.sleep(nanoseconds: 3_000_000_000)
+
+        // then
+        XCTAssertNotNil(response, "uploadPost가 response를 정상적으로 반환하지 못함")
+        XCTAssertEqual(response?.id, 1)
     }
 
 }

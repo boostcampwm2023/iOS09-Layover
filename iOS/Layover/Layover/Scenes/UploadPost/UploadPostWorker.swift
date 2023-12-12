@@ -11,7 +11,8 @@ import UIKit
 import OSLog
 
 protocol UploadPostWorkerProtocol {
-    func uploadPost(with request: UploadPost) async -> Bool
+    func uploadPost(with request: UploadPost) async -> UploadPostDTO?
+    func uploadVideo(with request: UploadVideoRequestDTO, videoURL: URL) async -> Bool
 }
 
 final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
@@ -30,7 +31,7 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
         self.uploadPostEndPointFactory = uploadPostEndPointFactory
     }
 
-    func uploadPost(with request: UploadPost) async -> Bool {
+    func uploadPost(with request: UploadPost) async -> UploadPostDTO? {
         let endPoint = uploadPostEndPointFactory.makeUploadPostEndPoint(title: request.title,
                                                                         content: request.content,
                                                                         latitude: request.latitude,
@@ -38,18 +39,14 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
                                                                         tag: request.tag)
         do {
             let response = try await provider.request(with: endPoint)
-            guard let boardID = response.data?.id else { return false }
-            let fileType = request.videoURL.pathExtension
-            let uploadResponse = await uploadVideo(with: UploadVideoRequestDTO(boardID: boardID, filetype: fileType),
-                                                   videoURL: request.videoURL)
-            return uploadResponse
+            return response.data
         } catch {
             os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
-            return false
+            return nil
         }
     }
 
-    private func uploadVideo(with request: UploadVideoRequestDTO, videoURL: URL) async -> Bool {
+    func uploadVideo(with request: UploadVideoRequestDTO, videoURL: URL) async -> Bool {
         let endPoint = uploadPostEndPointFactory.makeUploadVideoEndPoint(boardID: request.boardID,
                                                                          fileType: request.filetype)
         do {

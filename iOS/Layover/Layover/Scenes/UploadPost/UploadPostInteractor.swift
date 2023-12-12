@@ -118,12 +118,16 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             exportVideoWithoutAudio(at: videoURL)
         }
         Task {
-            _ = await worker.uploadPost(with: UploadPost(title: request.title,
+            let uploadPostResponse = await worker.uploadPost(with: UploadPost(title: request.title,
                                                          content: request.content,
                                                          latitude: coordinate.latitude,
                                                          longitude: coordinate.longitude,
                                                          tag: request.tags,
                                                          videoURL: videoURL))
+            guard let boardID = uploadPostResponse?.id else { return }
+            let fileType = videoURL.pathExtension
+            _ = await worker.uploadVideo(with: UploadVideoRequestDTO(boardID: boardID, filetype: fileType),
+                                         videoURL: videoURL)
         }
     }
 
