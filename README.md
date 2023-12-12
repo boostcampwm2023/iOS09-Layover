@@ -1,4 +1,4 @@
-![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 04 55 17](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ab9a5878-de87-40f1-aec7-1297cab387df)# iOS09-Layover
+# iOS09-Layover
 
 ## 프로젝트 소개
 
