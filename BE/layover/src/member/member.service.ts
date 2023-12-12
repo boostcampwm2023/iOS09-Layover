@@ -11,8 +11,8 @@ export class MemberService {
     private memberRepository: MemberRepository,
     @Inject('REDIS_CLIENT')
     private readonly redisClient: ReturnType<typeof createClient>,
-    @Inject('REDIS_FOR_BLACK_LIST_CLIENT')
-    private readonly redisBlackListClient: ReturnType<typeof createClient>,
+    @Inject('REDIS_FOR_BLACKLIST_CLIENT')
+    private readonly redisBlacklistClient: ReturnType<typeof createClient>,
   ) {}
 
   async createMember(
@@ -68,7 +68,7 @@ export class MemberService {
 
   async addAccessTokenToBlackList(jti: string, exp: number, memberHash: string): Promise<void> {
     // JWT의 고유한 값인 jti를 이용해 redis에 해당 JWT를 블랙리스트로 등록, exp 이후 삭제되게 설정
-    await this.redisBlackListClient.setEx(jti, exp, memberHash);
+    await this.redisBlacklistClient.setEx(jti, exp, memberHash);
   }
 
   async deleteExistRefreshTokenFromRedis(memberHash: string): Promise<void> {

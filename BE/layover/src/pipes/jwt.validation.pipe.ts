@@ -7,8 +7,8 @@ import { createClient } from 'redis';
 
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
-  @Inject('REDIS_FOR_BLACK_LIST_CLIENT')
-  private readonly redisBlackListClient: ReturnType<typeof createClient>;
+  @Inject('REDIS_FOR_BLACKLIST_CLIENT')
+  private readonly redisBlacklistClient: ReturnType<typeof createClient>;
 
   async transform(header): Promise<tokenPayload> {
     const [tokenType, token] = header['authorization']?.split(' ');
@@ -38,7 +38,7 @@ export class JwtValidationPipe implements PipeTransform {
       throw new CustomResponse(ECustomCode.NO_SOME_PAYLOAD_DATA_JWT);
 
     // 2. 블랙리스트에 올라가있는지 확인(access token)
-    const value = await this.redisBlackListClient.get(payload.jti);
+    const value = await this.redisBlacklistClient.get(payload.jti);
     if (value !== null) throw new CustomResponse(ECustomCode.INVALID_JWT);
 
     // 3. issuer가 일치하는지 검사 (아직은 issuer만 확인)
