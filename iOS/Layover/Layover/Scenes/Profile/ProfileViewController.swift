@@ -45,6 +45,13 @@ final class ProfileViewController: BaseViewController {
 
     private var collectionViewDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .primaryPurple
+        refreshControl.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
+        return refreshControl
+    }()
+
     // MARK: - Properties
 
     typealias Models = ProfileModels
@@ -68,18 +75,22 @@ final class ProfileViewController: BaseViewController {
 
     // MARK: - View Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setNavigationBar()
-        setDataSource()
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchProfile()
     }
 
+    // MARK: - UI, Layout
+
+    override func setUI() {
+        super.setUI()
+        setRefreshControl()
+        setNavigationBar()
+        setDataSource()
+    }
+
     override func setConstraints() {
+        super.setConstraints()
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -91,6 +102,10 @@ final class ProfileViewController: BaseViewController {
     }
 
     // MARK: - Methods
+
+    private func setRefreshControl() {
+        collectionView.refreshControl = refreshControl
+    }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, _ in
@@ -205,6 +220,9 @@ final class ProfileViewController: BaseViewController {
         router?.routeToSetting()
     }
 
+    @objc private func pullToRefresh(_ sender: UIRefreshControl) {
+        fetchProfile()
+    }
 }
 
 // MARK: - ProfileDisplayLogic
@@ -217,6 +235,7 @@ extension ProfileViewController: ProfileDisplayLogic {
         snapshot.appendItems([viewModel.userProfile], toSection: .profile)
         snapshot.appendItems(viewModel.displayedPosts, toSection: .posts)
         collectionViewDatasource?.apply(snapshot)
+        refreshControl.endRefreshing()
     }
 
     func displayMorePosts(viewModel: ProfileModels.FetchMorePosts.ViewModel) {
@@ -249,7 +268,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         case .profile:
             return
         case .posts:
-            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.DisplayedPost else { return }
+            guard collectionViewDatasource?.itemIdentifier(for: indexPath) is Models.DisplayedPost else { return }
             interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
         }
     }
