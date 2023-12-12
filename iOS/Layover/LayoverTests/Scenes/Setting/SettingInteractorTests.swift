@@ -27,10 +27,6 @@ final class SettingInteractorTests: XCTestCase {
         setupSettingInteractor()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: - Test setup
 
     func setupSettingInteractor() {
@@ -75,8 +71,8 @@ final class SettingInteractorTests: XCTestCase {
         sut.performTableViewConfigure(request: request)
 
         // assert
-        XCTAssertTrue(spy.presentTableViewCalled, "performTableViewConfigure()를 실행해서 presentTableView()가 호출했다.")
-        XCTAssertTrue(spy.presentTableViewResponse.versionNumber == "7.7.7", "presentTableView()를 실행해서 올바른 versionNumber를 전달했다.")
+        XCTAssertTrue(spy.presentTableViewCalled, "performTableViewConfigure()를 실행해서 presentTableView()를 호출되지 못했다.")
+        XCTAssertTrue(spy.presentTableViewResponse.versionNumber == "7.7.7", "presentTableView()를 실행해서 올바른 versionNumber가 전달되지 못했다.")
     }
 
     func test_performUserLogout를_실행하면_presenter의_presentUserLogoutConfirmed가_호출된다() {
@@ -89,7 +85,7 @@ final class SettingInteractorTests: XCTestCase {
         sut.performUserLogout(request: request)
 
         // assert
-        XCTAssertTrue(spy.presentUserLogoutConfirmedCalled, "performUserLogout()를 실행해서 presenter의 presentUserLogoutConfirmed()가 호출되었다.")
+        XCTAssertTrue(spy.presentUserLogoutConfirmedCalled, "performUserLogout()를 실행해서 presenter의 presentUserLogoutConfirmed()를 호출되지 못했다.")
     }
 
     func test_performUserWithdraw를_실행하면_presenter의_presentUserWithdrawConfirmed가_호출된다() async throws {
@@ -103,6 +99,6 @@ final class SettingInteractorTests: XCTestCase {
         try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // assert
-        XCTAssertTrue(spy.presentUserWithdrawConfirmedCalled, "performUserWithdraw()를 실행해서 presenter의 presentUserWithdrawConfirmed()가 호출되었다.")
+        XCTAssertTrue(spy.presentUserWithdrawConfirmedCalled, "performUserWithdraw()를 실행해서 presenter의 presentUserWithdrawConfirmed()가 호출되지 못했다.")
     }
 }

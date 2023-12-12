@@ -106,7 +106,6 @@
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
 		19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48132B28C2B700DD4612 /* SettingViewControllerTests.swift */; };
 		19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */; };
-		19AE48192B28C2B700DD4612 /* SettingWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48152B28C2B700DD4612 /* SettingWorkerTests.swift */; };
 		19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */; };
 		19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
@@ -348,7 +347,6 @@
 		19AACFCB2B0F7D730088143E /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
 		19AE48132B28C2B700DD4612 /* SettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewControllerTests.swift; sourceTree = "<group>"; };
 		19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractorTests.swift; sourceTree = "<group>"; };
-		19AE48152B28C2B700DD4612 /* SettingWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWorkerTests.swift; sourceTree = "<group>"; };
 		19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPresenterTests.swift; sourceTree = "<group>"; };
 		19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingWorker.swift; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -739,7 +737,6 @@
 			children = (
 				19AE48132B28C2B700DD4612 /* SettingViewControllerTests.swift */,
 				19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */,
-				19AE48152B28C2B700DD4612 /* SettingWorkerTests.swift */,
 				19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */,
 			);
 			path = Setting;
@@ -1503,7 +1500,6 @@
 				19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */,
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
-				19AE48192B28C2B700DD4612 /* SettingWorkerTests.swift in Sources */,
 				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
