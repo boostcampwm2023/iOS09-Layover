@@ -33,7 +33,7 @@ pipeline {
                             } catch (Exception e) {
                                 echo 'Cleanup 실패: ' + e.getMessage()
                                 currentBuild.result = 'FAILURE'
-                                discordSend description: "Jenkins cd-bot", footer: "Cleanup 실패하였습니다.", result: currentBuild.result, title: Jenkins cd-pipeline, webhookURL: ${env.JENKINS_WEB_HOOK}
+                                discordSend description: "Jenkins cd-bot", footer: "Cleanup 실패하였습니다.", result: currentBuild.result, title: "Jenkins cd-pipeline", webhookURL: ${env.JENKINS_WEB_HOOK}
                             }
                         }
                     }
@@ -59,7 +59,7 @@ pipeline {
                     } catch (Exception e) {
                         echo '빌드 및 푸시 실패: ' + e.getMessage()
                         currentBuild.result = 'FAILURE'
-                        discordSend description: "Jenkins cd-bot", footer: "Build 및 Push 실패하였습니다.", result: currentBuild.result, title: Jenkins cd-pipeline, webhookURL: ${env.JENKINS_WEB_HOOK}
+                        discordSend description: "Jenkins cd-bot", footer: "Build 및 Push 실패하였습니다.", result: currentBuild.result, title: "Jenkins cd-pipeline", webhookURL: ${env.JENKINS_WEB_HOOK}
 
                     }
                 }
@@ -83,13 +83,13 @@ pipeline {
                             -v /var/log/logs.log:/usr/src/app/logs.log
                             """.replaceAll("\n", " ").trim())
                             echo '컨테이너 실행 성공'
-                            discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: Jenkins cd-pipeline, webhookURL: env.JENKINS_WEB_HOOK
+                            discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: "Jenkins cd-pipeline", webhookURL: ${env.JENKINS_WEB_HOOK}
                         }
 
                     } catch (Exception e) {
                         echo '컨테이너 실행 실패: ' + e.getMessage()
                         currentBuild.result = 'FAILURE'
-                        discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 실패하였습니다.", result: currentBuild.result, title: Jenkins cd-pipeline, webhookURL: ${env.JENKINS_WEB_HOOK}
+                        discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 실패하였습니다.", result: currentBuild.result, title: "Jenkins cd-pipeline", webhookURL: ${env.JENKINS_WEB_HOOK}
 
                     }
                 }
