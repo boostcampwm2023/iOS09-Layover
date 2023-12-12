@@ -158,7 +158,7 @@ final class ProfileViewController: BaseViewController {
             cell.editButton.addTarget(self, action: #selector(self.editbuttonDidTap), for: .touchUpInside)
         }
 
-        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.Post> { cell, indexPath, itemIdentifier in
+        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.DisplayedPost> { cell, indexPath, itemIdentifier in
 
             if let imageData = itemIdentifier.thumbnailImageData,
                let image = UIImage(data: imageData) {
@@ -177,7 +177,7 @@ final class ProfileViewController: BaseViewController {
             case .posts:
                 return collectionView.dequeueConfiguredReusableCell(using: postCellRegistration,
                                                                     for: indexPath,
-                                                                    item: itemIdentifier as? Models.Post)
+                                                                    item: itemIdentifier as? Models.DisplayedPost)
             }
         }
         collectionView.dataSource = collectionViewDatasource
@@ -247,7 +247,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         case .profile:
             return
         case .posts:
-            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.Post else { return }
+            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.DisplayedPost else { return }
             interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
         }
     }

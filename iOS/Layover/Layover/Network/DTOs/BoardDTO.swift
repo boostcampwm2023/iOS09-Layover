@@ -16,32 +16,32 @@ struct BoardDTO: Decodable {
     let title, content: String
     let status: BoardStatus
 
-    enum BoardStatus: String, Decodable {
-        case running
-        case waiting
-        case failure
-        case complete
-        case deleted
-        case inactive
-
-        init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            let rawValue = try container.decode(String.self)
-
-            if let value = BoardStatus(rawValue: rawValue.lowercased()) {
-                self = value
-            } else {
-                self = .inactive
-            }
-        }
-    }
-
     enum CodingKeys: String, CodingKey {
         case id
         case encodedVideoURL = "encoded_video_url"
         case videoThumbnailURL = "video_thumbnail_url"
         case latitude, longitude, title, content
         case status
+    }
+}
+
+enum BoardStatus: String, Decodable {
+    case running
+    case waiting
+    case failure
+    case complete
+    case deleted
+    case inactive
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+
+        if let value = BoardStatus(rawValue: rawValue.lowercased()) {
+            self = value
+        } else {
+            self = .inactive
+        }
     }
 }
 
@@ -54,7 +54,8 @@ extension BoardDTO {
             thumbnailImageURL: URL(string: videoThumbnailURL),
             videoURL: URL(string: encodedVideoURL),
             latitude: latitude,
-            longitude: longitude
+            longitude: longitude,
+            status: status
         )
     }
 }
