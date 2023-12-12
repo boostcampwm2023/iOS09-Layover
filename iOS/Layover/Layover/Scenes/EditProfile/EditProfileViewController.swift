@@ -223,6 +223,7 @@ final class EditProfileViewController: BaseViewController {
 
         let request = Models.EditProfile.Request(nickname: nickname,
                                                  introduce: introduce,
+                                                 profileImageChanged: changedProfileImageData != nil,
                                                  profileImageData: changedProfileImageData,
                                                  profileImageExtension: changedProfileImageExtension)
         showLoading()

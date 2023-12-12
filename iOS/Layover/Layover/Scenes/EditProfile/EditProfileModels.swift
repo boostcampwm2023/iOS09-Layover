@@ -93,6 +93,7 @@ enum EditProfileModels {
         struct Request {
             let nickname: String
             let introduce: String?
+            let profileImageChanged: Bool
             let profileImageData: Data?
             let profileImageExtension: String?
         }
