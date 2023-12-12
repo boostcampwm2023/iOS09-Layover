@@ -6,9 +6,10 @@ import { MemberController } from './member.controller';
 import { MemberRepository } from './member.repository';
 import { BoardModule } from 'src/board/board.module';
 import { ReportModule } from 'src/report/report.module';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
-  imports: [DatabaseModule, forwardRef(() => BoardModule), forwardRef(() => ReportModule)],
+  imports: [DatabaseModule, forwardRef(() => BoardModule), forwardRef(() => ReportModule), RedisModule],
   providers: [...memberProviders, MemberService, MemberRepository],
   exports: [MemberService],
   controllers: [MemberController],
