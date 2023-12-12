@@ -53,7 +53,7 @@ extension SignUpWorker: SignUpWorkerProtocol {
             authManager.login(accessToken: data.accessToken,
                               refreshToken: data.refreshToken,
                               loginType: .kakao)
-            authManager.memberID = await fetchMemberId()
+            authManager.memberID = await fetchMemberID()
             return true
         } catch {
             os_log(.error, log: .data, "Failed to sign up with error: %@", error.localizedDescription)
@@ -73,7 +73,7 @@ extension SignUpWorker: SignUpWorkerProtocol {
             authManager.login(accessToken: data.accessToken,
                               refreshToken: data.refreshToken,
                               loginType: .apple)
-            authManager.memberID = await fetchMemberId()
+            authManager.memberID = await fetchMemberID()
             return true
         } catch {
             os_log(.error, log: .data, "Failed to sign up with error: %@", error.localizedDescription)
@@ -81,7 +81,7 @@ extension SignUpWorker: SignUpWorkerProtocol {
         }
     }
 
-    private func fetchMemberId() async -> Int? {
+    private func fetchMemberID() async -> Int? {
         let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: nil)
         do {
             let responseData = try await provider.request(with: endPoint)
