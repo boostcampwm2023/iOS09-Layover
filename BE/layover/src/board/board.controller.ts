@@ -32,10 +32,7 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.CREATE_BOARD_SUCCESS)
   @ApiBearerAuth('token')
   @Post()
-  async createBoard(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
-    @Body() createBoardDto: CreateBoardDto,
-  ) {
+  async createBoard(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Body() createBoardDto: CreateBoardDto) {
     const savedBoard: CreateBoardResDto = await this.boardService.createBoard(payload.memberId, createBoardDto);
     throw new CustomResponse(ECustomCode.SUCCESS, savedBoard);
   }
@@ -48,7 +45,7 @@ export class BoardController {
   @ApiBearerAuth('token')
   @Post('presigned-url')
   async getPreSignedUrl(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Body() preSignedUrlDto: BoardPreSignedUrlDto,
   ) {
     const [filename, filetype] = [uuidv4(), preSignedUrlDto.filetype];
@@ -66,7 +63,7 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
   @Get('home')
-  async getBoardRandom(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+  async getBoardRandom(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
     const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsRandomly();
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
@@ -79,7 +76,7 @@ export class BoardController {
   @ApiBearerAuth('token')
   @Get('map')
   async getBoardMap(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('latitude') latitude: string,
     @Query('longitude') longitude: string,
   ) {
@@ -95,7 +92,7 @@ export class BoardController {
     description: '태그에 따라 게시물들을 조회합니다.',
   })
   async getBoardTag(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('tag') tag: string,
     @Query('page') page: string,
   ) {
@@ -112,7 +109,7 @@ export class BoardController {
     description: '나 또는 타인의 게시물을 조회합니다.',
   })
   async getBoardProfile(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('memberId') memberId: string,
     @Query('page') page: string,
   ) {
@@ -136,7 +133,7 @@ export class BoardController {
     summary: '게시물 삭제',
     description: '사용자가 원하는 게시물을 삭제합니다.',
   })
-  async deleteBoard(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Query('boardId') boardId: string) {
+  async deleteBoard(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Query('boardId') boardId: string) {
     await this.boardService.deleteBoardById(parseInt(boardId));
     throw new CustomResponse(ECustomCode.SUCCESS);
   }

@@ -139,10 +139,9 @@ export class OauthService {
     return new TokenResDto(accessJWTstr, refreshJWTstr);
   }
 
-  async isRefreshTokenValid(refreshToken: string): Promise<boolean> {
+  async isRefreshTokenValid(refreshToken: string): Promise<void> {
     const value = await this.redisClient.get(refreshToken);
-    if (value === null) return true;
-    return false;
+    if (value === null) throw new CustomResponse(ECustomCode.INVALUD_REFRESH_TOKEN);
   }
 
   async addAccessTokenToBlackList(jti: string, exp: number, memberHash: string): Promise<void> {
@@ -151,7 +150,7 @@ export class OauthService {
   }
 
   async deleteExistRefreshTokenFromRedis(memberHash: string): Promise<void> {
-    const refreshJti = await this.redisClient.get(memberHash);
+    const refreshJti: string = await this.redisClient.get(memberHash);
     await this.redisClient.del(refreshJti);
     await this.redisClient.del(memberHash);
   }

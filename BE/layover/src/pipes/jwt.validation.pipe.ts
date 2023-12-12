@@ -7,8 +7,10 @@ import { createClient } from 'redis';
 
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
-  @Inject('REDIS_FOR_BLACKLIST_CLIENT')
-  private readonly redisBlacklistClient: ReturnType<typeof createClient>;
+  constructor(
+    @Inject('REDIS_FOR_BLACKLIST_CLIENT')
+    private readonly redisBlacklistClient: ReturnType<typeof createClient>,
+  ) {}
 
   async transform(header): Promise<tokenPayload> {
     const [tokenType, token] = header['authorization']?.split(' ');

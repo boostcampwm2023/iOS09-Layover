@@ -51,7 +51,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Patch('username')
-  async updateUsername(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() usernameDto: UsernameDto) {
+  async updateUsername(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Body() usernameDto: UsernameDto) {
     const id = payload.memberId;
     const username = usernameDto.username;
     // 중복 검증
@@ -74,10 +74,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Patch('introduce')
-  async updateIntroduce(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
-    @Body() introduceDto: IntroduceDto,
-  ) {
+  async updateIntroduce(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Body() introduceDto: IntroduceDto) {
     const id = payload.memberId;
     const introduce = introduceDto.introduce;
 
@@ -98,7 +95,7 @@ export class MemberController {
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get()
   async getOtherMemberInfos(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('memberId') memberId: string,
   ) {
     let id: number;
@@ -134,7 +131,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Delete()
-  async deleteMember(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+  async deleteMember(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
     const id = payload.memberId;
 
     // 삭제될 유저 정보 가져오기
@@ -161,7 +158,7 @@ export class MemberController {
   @ApiBearerAuth('token')
   @Post('profile-image/presigned-url')
   async getUploadProfilePresignedUrl(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Body() body: ProfilePreSignedUrlDto,
   ) {
     const id = payload.memberId;
@@ -189,7 +186,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Post('profile-image/default')
-  async updateProfileImageToDefault(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+  async updateProfileImageToDefault(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
     // db에 반영
     await this.memberService.updateProfileImage(payload.memberId, 'default');
 

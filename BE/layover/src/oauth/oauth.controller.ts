@@ -190,14 +190,14 @@ export class OauthController {
   }
 
   @ApiOperation({
-    summary: 'Access token 재발급',
-    description: 'refresh token을 이용해 access token을 재발급합니다.',
+    summary: 'Access/Refresh token 재발급',
+    description: 'refresh token을 이용해 access/refresh token을 재발급합니다.',
   })
   @ApiResponse(OAUTH_SWAGGER.RENEW_TOKENS_SUCCESS)
   @ApiResponse(SWAGGER.REFRESH_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Post('refresh-token')
-  async renewTokens(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+  async renewTokens(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
     // AccessToken이 아직 만료되지 않았다면 error
     if (payload.exp - (REFRESH_TOKEN_EXP_IN_SECOND - ACCESS_TOKEN_EXP_IN_SECOND) > Math.floor(Date.now() / 1000))
       throw new CustomResponse(ECustomCode.ACCESS_TOKEN_NOT_EXPIRED);
