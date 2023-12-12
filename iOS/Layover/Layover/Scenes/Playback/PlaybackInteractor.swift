@@ -86,6 +86,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 self.posts = posts
             }
             let videos: [Models.PlaybackVideo] = transPostToVideo(posts)
+            print(videos.count)
             let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
             await MainActor.run {
                 presenter?.presentVideoList(with: response)
@@ -328,9 +329,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             let response: Models.LoadProfileImageAndLocation.Response = Models.LoadProfileImageAndLocation.Response(curCell: request.curCell, profileImageData: await profileImageData, location: await location)
             await MainActor.run {
                 presenter?.presentLoadProfileImageAndLocation(with: response)
-                return true
             }
-            return false
+            return true
         }
     }
 }

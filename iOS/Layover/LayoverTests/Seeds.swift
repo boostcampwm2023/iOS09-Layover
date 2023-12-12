@@ -113,5 +113,6 @@ class Seeds {
         static let previousCell: PlaybackCell = PlaybackCell()
         static let currentCell: PlaybackCell = PlaybackCell()
         static let profileImageData: Data? = try? Data(contentsOf: Bundle(for: Seeds.self).url(forResource: "sample", withExtension: "jpeg")!)
+        static let url: URL? = URL(string: "https://www.fnnews.com/resource/media/image/2023/10/17/202310171126334525_l.jpg")
     }
 }

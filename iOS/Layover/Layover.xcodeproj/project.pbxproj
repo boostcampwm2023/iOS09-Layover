@@ -142,6 +142,8 @@
 		83957AA62B20F94C00B3BA8A /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
+		83CE13B12B28826100AE7F9C /* PlaybackInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE13B02B28826100AE7F9C /* PlaybackInteractorTests.swift */; };
+		83CE13B32B28838C00AE7F9C /* MockPlaybackWorekr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE13B22B28838C00AE7F9C /* MockPlaybackWorekr.swift */; };
 		83DF0B4A2B2849CA00F35F4B /* PlaybackPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DF0B492B2849CA00F35F4B /* PlaybackPresenterTests.swift */; };
 		FC0E80242B1A0BBB00EF56D6 /* UploadPostPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */; };
 		FC0E80252B1A0BBB00EF56D6 /* UploadPostWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801F2B1A0BBB00EF56D6 /* UploadPostWorker.swift */; };
@@ -383,6 +385,8 @@
 		83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
 		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
+		83CE13B02B28826100AE7F9C /* PlaybackInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackInteractorTests.swift; sourceTree = "<group>"; };
+		83CE13B22B28838C00AE7F9C /* MockPlaybackWorekr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorekr.swift; sourceTree = "<group>"; };
 		83DF0B492B2849CA00F35F4B /* PlaybackPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPresenterTests.swift; sourceTree = "<group>"; };
 		FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenter.swift; sourceTree = "<group>"; };
 		FC0E801F2B1A0BBB00EF56D6 /* UploadPostWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostWorker.swift; sourceTree = "<group>"; };
@@ -608,6 +612,7 @@
 				194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */,
 				1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */,
 				192513842B27852C001533FA /* MockUserWorker.swift */,
+				83CE13B22B28838C00AE7F9C /* MockPlaybackWorekr.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -827,6 +832,7 @@
 			isa = PBXGroup;
 			children = (
 				83DF0B492B2849CA00F35F4B /* PlaybackPresenterTests.swift */,
+				83CE13B02B28826100AE7F9C /* PlaybackInteractorTests.swift */,
 			);
 			path = Playback;
 			sourceTree = "<group>";
@@ -1489,6 +1495,7 @@
 				1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */,
 				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
+				83CE13B32B28838C00AE7F9C /* MockPlaybackWorekr.swift in Sources */,
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
@@ -1498,6 +1505,7 @@
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
+				83CE13B12B28826100AE7F9C /* PlaybackInteractorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
