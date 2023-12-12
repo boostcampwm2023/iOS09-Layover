@@ -19,9 +19,12 @@ pipeline {
             post {
                 success {
                     echo '빌드 성공'
+
                 }
                 failure {
                     echo '빌드 실패'
+                    currentBuild.result = 'FAILURE'
+                    discordSend description: "Jenkins ci-bot", footer: "빌드 실패하였습니다.", result: currentBuild.result, title: "Jenkins ci-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                 }
             }
         }
@@ -36,9 +39,13 @@ pipeline {
             post {
                 success {
                     echo '테스트 성공'
+                    currentBuild.result = 'SUCCESS'
+                    discordSend description: "Jenkins ci-bot", footer: "빌드 및 테스트 성공!", result: currentBuild.result, title: "Jenkins ci-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                 }
                 failure {
                     echo '테스트 실패'
+                    currentBuild.result = 'FAILURE'
+                    discordSend description: "Jenkins ci-bot", footer: "테스트 실패하였습니다.", result: currentBuild.result, title: "Jenkins ci-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                 }
             }
         }
