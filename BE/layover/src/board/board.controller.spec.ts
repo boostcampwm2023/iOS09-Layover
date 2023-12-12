@@ -28,7 +28,7 @@ describe('BoardController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [BoardController],
-      providers: [BoardService],
+      providers: [BoardService, { provide: 'REDIS_FOR_BLACKLIST_CLIENT', useValue: null }],
     })
       .overrideProvider(BoardService)
       .useValue(mockBoardService)

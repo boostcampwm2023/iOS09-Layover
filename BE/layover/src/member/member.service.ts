@@ -1,12 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Member, memberStatus } from './member.entity';
 import { MemberRepository } from './member.repository';
+import { createClient } from 'redis';
 
 export type memberExistence = 'EXIST' | 'DELETED' | 'NOTEXIST';
 
 @Injectable()
 export class MemberService {
-  constructor(private memberRepository: MemberRepository) {}
+  constructor(
+    private memberRepository: MemberRepository,
+    @Inject('REDIS_CLIENT')
+    private readonly redisClient: ReturnType<typeof createClient>,
+    @Inject('REDIS_FOR_BLACKLIST_CLIENT')
+    private readonly redisBlacklistClient: ReturnType<typeof createClient>,
+  ) {}
 
   async createMember(
     username: string,
@@ -57,5 +64,16 @@ export class MemberService {
 
   async getMemberByHash(memberHash: string): Promise<Member | null> {
     return await this.memberRepository.findMemberByHash(memberHash);
+  }
+
+  async addAccessTokenToBlackList(jti: string, exp: number, memberHash: string): Promise<void> {
+    // JWT의 고유한 값인 jti를 이용해 redis에 해당 JWT를 블랙리스트로 등록, exp 이후 삭제되게 설정
+    await this.redisBlacklistClient.setEx(jti, exp, memberHash);
+  }
+
+  async deleteExistRefreshTokenFromRedis(memberHash: string): Promise<void> {
+    const refreshJti = await this.redisClient.get(memberHash);
+    await this.redisClient.del(refreshJti);
+    await this.redisClient.del(memberHash);
   }
 }

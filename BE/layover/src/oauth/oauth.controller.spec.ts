@@ -24,6 +24,7 @@ describe('oauthController', () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [OauthController],
       providers: [
+        { provide: 'REDIS_FOR_BLACKLIST_CLIENT', useValue: null },
         {
           provide: OauthService,
           useValue: mockOauthService,

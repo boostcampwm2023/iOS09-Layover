@@ -9,6 +9,7 @@ import * as jwtUtils from 'src/utils/jwtUtils';
 import * as hashUtils from 'src/utils/hashUtils';
 import { REFRESH_TOKEN_EXP_IN_SECOND } from 'src/config';
 import { BoardService } from 'src/board/board.service';
+import { tokenPayload } from 'src/utils/interfaces/token.payload';
 
 describe('OauthService', () => {
   let service: OauthService;
@@ -160,13 +161,7 @@ describe('OauthService', () => {
       await service.signup(memberHash, username, provider);
 
       // then
-      expect(mockMemberService.createMember).toHaveBeenCalledWith(
-        username,
-        'default.jpeg',
-        'default introduce',
-        provider,
-        memberHash,
-      );
+      expect(mockMemberService.createMember).toHaveBeenCalledWith(username, 'default', '', provider, memberHash);
     });
 
     it(`2 : memberService.createMember() 오류일 때 SAVE_MEMBER_INFO_ERR 잘 던지는가`, async () => {
@@ -177,13 +172,7 @@ describe('OauthService', () => {
       await expect(service.signup(memberHash, username, provider)).rejects.toThrow(
         new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR),
       );
-      expect(mockMemberService.createMember).toHaveBeenCalledWith(
-        username,
-        'default.jpeg',
-        'default introduce',
-        provider,
-        memberHash,
-      );
+      expect(mockMemberService.createMember).toHaveBeenCalledWith(username, 'default', '', provider, memberHash);
     });
   });
 
@@ -193,6 +182,7 @@ describe('OauthService', () => {
     const notExistMemberHash = 'notExistMemberHash';
     let spyIsMemberExistByHash: ReturnType<typeof jest.spyOn>;
     let spyGenerateAccessRefreshTokens: ReturnType<typeof jest.spyOn>;
+    let spyExtractPayloadJWT: ReturnType<typeof jest.spyOn>;
     beforeEach(() => {
       mockMemberService.getMemberByHash = jest.fn().mockResolvedValue({ id: 777 });
       mockMemberService.isMemberExistByHash = jest.fn(async (memberHash) => {
@@ -202,6 +192,19 @@ describe('OauthService', () => {
       mockJwtService.signAsync = jest.fn(async () => `aaa.bbb.ccc`);
       spyIsMemberExistByHash = jest.spyOn(service, 'isMemberExistByHash');
       spyGenerateAccessRefreshTokens = jest.spyOn(service, 'generateAccessRefreshTokens');
+      spyExtractPayloadJWT = jest.spyOn(jwtUtils, 'extractPayloadJWT').mockImplementation((): tokenPayload => {
+        return {
+          iss: `testIss`,
+          exp: 0,
+          sub: `testSub`,
+          aud: `testAud`,
+          nbf: 0,
+          iat: 0,
+          jti: 'testJti',
+          memberHash: `testMemberHash`,
+          memberId: 0,
+        };
+      });
     });
 
     // clear mock&spy
@@ -212,6 +215,7 @@ describe('OauthService', () => {
       mockJwtService.signAsync.mockClear();
       spyIsMemberExistByHash.mockRestore();
       spyGenerateAccessRefreshTokens.mockRestore();
+      spyExtractPayloadJWT.mockRestore();
     });
 
     it(`1 : 결과를 잘 반환하는가 + 내부 함수들 잘 호출되는가`, async () => {
@@ -241,12 +245,26 @@ describe('OauthService', () => {
     const memberHash = 'testMemberHash';
     const jwtRegEx = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
     let spyMakeJwtPayload: ReturnType<typeof jest.spyOn>;
+    let spyExtractPayloadJWT: ReturnType<typeof jest.spyOn>;
     beforeEach(() => {
       mockMemberService.getMemberByHash = jest.fn().mockResolvedValue({ id: 777 });
       mockRedisClient.setEx = jest.fn();
       mockJwtService.signAsync = jest.fn(async () => `aaa.bbb.ccc`);
       spyMakeJwtPayload = jest.spyOn(jwtUtils, 'makeJwtPaylaod').mockImplementation((a, b, c) => {
         return `${a}${b}${String(c)}`;
+      });
+      spyExtractPayloadJWT = jest.spyOn(jwtUtils, 'extractPayloadJWT').mockImplementation((): tokenPayload => {
+        return {
+          iss: `testIss`,
+          exp: 0,
+          sub: `testSub`,
+          aud: `testAud`,
+          nbf: 0,
+          iat: 0,
+          jti: 'testJti',
+          memberHash: `testMemberHash`,
+          memberId: 0,
+        };
       });
     });
 
@@ -256,6 +274,7 @@ describe('OauthService', () => {
       mockRedisClient.setEx.mockClear();
       mockJwtService.signAsync.mockClear();
       spyMakeJwtPayload.mockRestore();
+      spyExtractPayloadJWT.mockRestore();
     });
 
     it(`1 : 각 토큰 형식에 맞게 잘 반환하는가 + 내부 함수들 잘 호출하는가`, async () => {
@@ -268,7 +287,8 @@ describe('OauthService', () => {
       expect(spyMakeJwtPayload).toHaveBeenCalledWith('refresh', memberHash, 777);
       expect(mockJwtService.signAsync).toHaveBeenCalledWith(`access${memberHash}777`);
       expect(mockJwtService.signAsync).toHaveBeenCalledWith(`refresh${memberHash}777`);
-      expect(mockRedisClient.setEx).toHaveBeenCalledWith('aaa.bbb.ccc', REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+      expect(mockRedisClient.setEx).toHaveBeenCalledWith('testJti', REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+      expect(mockRedisClient.setEx).toHaveBeenCalledWith(memberHash, REFRESH_TOKEN_EXP_IN_SECOND, 'testJti');
       expect(returnValue).toHaveProperty('accessToken', expect.stringMatching(jwtRegEx));
       expect(returnValue).toHaveProperty('refreshToken', expect.stringMatching(jwtRegEx));
     });
@@ -305,7 +325,7 @@ describe('OauthService', () => {
       expect(spyMakeJwtPayload).toHaveBeenCalledWith('access', memberHash, 777);
       expect(mockJwtService.signAsync).toHaveBeenCalledWith(`access${memberHash}777`);
       expect(mockJwtService.signAsync).toHaveBeenCalledWith(`refresh${memberHash}777`);
-      expect(mockRedisClient.setEx).toHaveBeenCalledWith('aaa.bbb.ccc', REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
+      expect(mockRedisClient.setEx).toHaveBeenCalledWith('testJti', REFRESH_TOKEN_EXP_IN_SECOND, memberHash);
     });
   });
 });

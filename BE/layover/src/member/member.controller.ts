@@ -20,7 +20,6 @@ import { MEMBER_SWAGGER } from './member.swagger';
 import { generateDownloadPreSignedUrl, generateUploadPreSignedUrl } from '../utils/s3Utils';
 import { PreSignedUrlResDto } from '../utils/pre-signed-url-res.dto';
 import { BoardService } from 'src/board/board.service';
-import { ReportService } from 'src/report/report.service';
 
 @ApiTags('Member API')
 @Controller('member')
@@ -31,7 +30,6 @@ export class MemberController {
   constructor(
     private readonly memberService: MemberService,
     private readonly boardService: BoardService,
-    private readonly reportService: ReportService,
   ) {}
 
   @ApiOperation({
@@ -53,7 +51,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Patch('username')
-  async updateUsername(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload, @Body() usernameDto: UsernameDto) {
+  async updateUsername(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Body() usernameDto: UsernameDto) {
     const id = payload.memberId;
     const username = usernameDto.username;
     // 중복 검증
@@ -76,10 +74,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Patch('introduce')
-  async updateIntroduce(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
-    @Body() introduceDto: IntroduceDto,
-  ) {
+  async updateIntroduce(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Body() introduceDto: IntroduceDto) {
     const id = payload.memberId;
     const introduce = introduceDto.introduce;
 
@@ -100,7 +95,7 @@ export class MemberController {
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
   @Get()
   async getOtherMemberInfos(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('memberId') memberId: string,
   ) {
     let id: number;
@@ -136,7 +131,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Delete()
-  async deleteMember(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+  async deleteMember(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
     const id = payload.memberId;
 
     // 삭제될 유저 정보 가져오기
@@ -145,6 +140,10 @@ export class MemberController {
     // db에 반영
     await this.boardService.updateBoardsStatusByMemberId(id, 'COMPLETE', 'INACTIVE');
     await this.memberService.updateMemberStatusById(id, 'DELETED');
+
+    // 기존 토큰들은 없앰 (기존 AccessToken -> 블랙리스트 등록, 기존 RefreshToken -> redis에서 삭제)
+    await this.memberService.addAccessTokenToBlackList(payload.jti, payload.exp, payload.memberHash);
+    await this.memberService.deleteExistRefreshTokenFromRedis(payload.memberHash);
 
     // 응답
     throw new CustomResponse(ECustomCode.SUCCESS, new DeleteMemberResDto(memberInfo));
@@ -159,7 +158,7 @@ export class MemberController {
   @ApiBearerAuth('token')
   @Post('profile-image/presigned-url')
   async getUploadProfilePresignedUrl(
-    @CustomHeader(new JwtValidationPipe()) payload: tokenPayload,
+    @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Body() body: ProfilePreSignedUrlDto,
   ) {
     const id = payload.memberId;
@@ -187,7 +186,7 @@ export class MemberController {
   @ApiResponse(SWAGGER.ACCESS_TOKEN_TIMEOUT_RESPONSE)
   @ApiBearerAuth('token')
   @Post('profile-image/default')
-  async updateProfileImageToDefault(@CustomHeader(new JwtValidationPipe()) payload: tokenPayload) {
+  async updateProfileImageToDefault(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
     // db에 반영
     await this.memberService.updateProfileImage(payload.memberId, 'default');
 
