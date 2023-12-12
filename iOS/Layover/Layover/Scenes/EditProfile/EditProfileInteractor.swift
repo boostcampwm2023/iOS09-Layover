@@ -142,7 +142,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
             }
 
             // 이미지 변경 요청
-            if request.profileImageChanged {
+            if request.changeProfileImageNeeded {
                 if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
                     guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
                         await MainActor.run {

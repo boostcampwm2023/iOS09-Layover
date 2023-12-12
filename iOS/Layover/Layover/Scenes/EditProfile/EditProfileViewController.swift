@@ -95,6 +95,7 @@ final class EditProfileViewController: BaseViewController {
             guard let self else { return }
             self.changedProfileImageData = nil
             self.changedProfileImageExtension = nil
+            self.changeProfileImageNeeded = true
             self.profileImageView.image = UIImage.profile
             self.profileImageDataChanged()
         }
@@ -114,6 +115,7 @@ final class EditProfileViewController: BaseViewController {
     var interactor: EditProfileBusinessLogic?
 
     private var isValidNickname = true
+    private var changeProfileImageNeeded = false
     private var changedProfileImageData: Data?
     private var changedProfileImageExtension: String?
 
@@ -223,7 +225,7 @@ final class EditProfileViewController: BaseViewController {
 
         let request = Models.EditProfile.Request(nickname: nickname,
                                                  introduce: introduce,
-                                                 profileImageChanged: changedProfileImageData != nil,
+                                                 changeProfileImageNeeded: changeProfileImageNeeded,
                                                  profileImageData: changedProfileImageData,
                                                  profileImageExtension: changedProfileImageExtension)
         showLoading()
@@ -253,6 +255,7 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
                                     self.profileImageView.image = UIImage(contentsOfFile: temporaryCopyFileURL.path())
                                     self.changedProfileImageExtension = pathExtension
                                     self.changedProfileImageData = try? Data(contentsOf: temporaryCopyFileURL)
+                                    self.changeProfileImageNeeded = true
                                     self.profileImageDataChanged()
                                 }
                                 try FileManager.default.removeItem(at: temporaryCopyFileURL)
