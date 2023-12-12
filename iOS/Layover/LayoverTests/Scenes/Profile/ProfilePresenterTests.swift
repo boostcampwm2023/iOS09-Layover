@@ -70,7 +70,7 @@ final class ProfilePresenterTests: XCTestCase {
         let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: Seeds.Members.getMember1.username,
                                                                                        introduce: Seeds.Members.getMember1.introduce,
                                                                                        profileImageData: Seeds.sampleImageData),
-                                                    posts: [.init(id: Seeds.Posts.post1.board.identifier,
+                                                    displayedPosts: [.init(id: Seeds.Posts.post1.board.identifier,
                                                                   thumbnailImageData: Seeds.sampleImageData, 
                                                                   status: Seeds.Posts.post1.board.status)])
         // act
@@ -93,7 +93,7 @@ final class ProfilePresenterTests: XCTestCase {
         sut.viewController = spy
 
         // act
-        let response = Models.FetchMorePosts.Response(posts: [.init(id: Seeds.Posts.post1.board.identifier,
+        let response = Models.FetchMorePosts.Response(displayedPosts: [.init(id: Seeds.Posts.post1.board.identifier,
                                                                     thumbnailImageData: Seeds.sampleImageData,
                                                                     status: Seeds.Posts.post1.board.status)])
         sut.presentMorePosts(with: response)
