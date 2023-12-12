@@ -206,7 +206,7 @@ export class OauthController {
     await this.oauthService.isRefreshTokenValid(payload.jti);
 
     // 기존 토큰은 없앰 (기존 RefreshToken -> redis에서 삭제)
-    this.oauthService.deleteExistRefreshTokenFromRedis(payload.memberHash);
+    await this.oauthService.deleteExistRefreshTokenFromRedis(payload.memberHash);
 
     // 새로운 토큰을 생성하고 이를 반환함
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(payload.memberHash);
