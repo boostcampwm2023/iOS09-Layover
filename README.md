@@ -71,11 +71,51 @@
 ---
 
 ## 기술스택
-- iOS
-  - `UIKit`, `CleanSwift (a.k.a. VIP)`, `MapKit`, `AVFoundation`, `Swift Concurrency`
-- BE
-  -  `TypeScript`, `NestJS`, `MySQL`, `Redis`, `Jenkins`, `Docker`, `ncloud`
+# iOS 
 
+### CleanSwift + Test
+
+- CleanSwift를 적용하면서 느낀 점 / 장단점
+- `MockURLProtocol`을 이용해서 서버 API가 완성되기 전 데모 개발에 활용 이후 → 테스트 코드에 Test Double로 재활용
+
+### AVFoundation
+
+- 비디오 트랙만 뽑아서 추출하기
+- Layover만의 커스텀 PlayerView 만들기
+
+### Mapkit
+
+- 어노테이션 커스텀, 오버레이
+
+### Swift Concurrency
+
+- TaskGroup을 이용해 병렬 다운로드 처리
+
+### 트러블슈팅
+
+- 메모리 누수로 인한 문제인줄 알았지만 결국 다른 문제였던 것, 어떻게 찾을 수 있었는지
+- 업로드 확장자는 어떻게 처리해야 하는지
+
+- [Dev Log에서 확인할 수 있어요!](https://www.notion.so/Dev-Log-346d2f9ee4c64869a7a25d350761c4a9?pvs=21)
+
+# BE
+
+### ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
+
+- object storage /vod station / cloud function
+
+### 젠킨스와 도커를 활용한 ci/cd
+
+### 위치기반
+
+- 위치기반으로 데이터를 가져오기
+
+### JWT를 이용한 인증
+
+- JSON Web Token
+- Redis
+
+### Custom Response 설정
 ---
 
 ![Layover표지](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/11befbb5-46af-4e24-b8e9-cb1378239f74)
