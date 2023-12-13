@@ -108,6 +108,9 @@
 		19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */; };
 		19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */; };
 		19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */; };
+		19AE48222B29D03D00DD4612 /* EditProfileViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481E2B29D03D00DD4612 /* EditProfileViewControllerTests.swift */; };
+		19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481F2B29D03D00DD4612 /* EditProfileInteractorTests.swift */; };
+		19AE48252B29D03D00DD4612 /* EditProfilePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48212B29D03D00DD4612 /* EditProfilePresenterTests.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */; };
@@ -189,7 +192,6 @@
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
 		FC4975992B03439000D8627F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4975982B03439000D8627F /* UIFont+.swift */; };
 		FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1162B148D160036366D /* EditProfilePresenter.swift */; };
-		FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1172B148D160036366D /* EditProfileWorker.swift */; };
 		FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1182B148D160036366D /* EditProfileRouter.swift */; };
 		FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1192B148D160036366D /* EditProfileModels.swift */; };
 		FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE11A2B148D160036366D /* EditProfileViewController.swift */; };
@@ -349,6 +351,9 @@
 		19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractorTests.swift; sourceTree = "<group>"; };
 		19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPresenterTests.swift; sourceTree = "<group>"; };
 		19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingWorker.swift; sourceTree = "<group>"; };
+		19AE481E2B29D03D00DD4612 /* EditProfileViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewControllerTests.swift; sourceTree = "<group>"; };
+		19AE481F2B29D03D00DD4612 /* EditProfileInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractorTests.swift; sourceTree = "<group>"; };
+		19AE48212B29D03D00DD4612 /* EditProfilePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenterTests.swift; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
@@ -433,7 +438,6 @@
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		FC4975982B03439000D8627F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		FC5BE1162B148D160036366D /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
-		FC5BE1172B148D160036366D /* EditProfileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileWorker.swift; sourceTree = "<group>"; };
 		FC5BE1182B148D160036366D /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
 		FC5BE1192B148D160036366D /* EditProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileModels.swift; sourceTree = "<group>"; };
 		FC5BE11A2B148D160036366D /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -591,6 +595,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				19AE481D2B29D02700DD4612 /* EditProfile */,
 				19AE48122B28C2A800DD4612 /* Setting */,
 				192513632B26F7BB001533FA /* TagPlayList */,
 				1925137B2B277CC4001533FA /* Profile */,
@@ -740,6 +745,16 @@
 				19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */,
 			);
 			path = Setting;
+			sourceTree = "<group>";
+		};
+		19AE481D2B29D02700DD4612 /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				19AE481E2B29D03D00DD4612 /* EditProfileViewControllerTests.swift */,
+				19AE481F2B29D03D00DD4612 /* EditProfileInteractorTests.swift */,
+				19AE48212B29D03D00DD4612 /* EditProfilePresenterTests.swift */,
+			);
+			path = EditProfile;
 			sourceTree = "<group>";
 		};
 		19BB8A572B07BEE30070B922 /* UIComponents */ = {
@@ -926,7 +941,6 @@
 				FC5BE1162B148D160036366D /* EditProfilePresenter.swift */,
 				FC5BE1192B148D160036366D /* EditProfileModels.swift */,
 				FC5BE1182B148D160036366D /* EditProfileRouter.swift */,
-				FC5BE1172B148D160036366D /* EditProfileWorker.swift */,
 				FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */,
 			);
 			path = EditProfile;
@@ -1350,7 +1364,6 @@
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
-				FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */,
 				19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
@@ -1501,6 +1514,7 @@
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
+				19AE48252B29D03D00DD4612 /* EditProfilePresenterTests.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
 				1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */,
@@ -1509,6 +1523,8 @@
 				19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
+				19AE48222B29D03D00DD4612 /* EditProfileViewControllerTests.swift in Sources */,
+				19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
