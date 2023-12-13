@@ -16,8 +16,7 @@ enum ProfileModels {
         let profileImageData: Data?
     }
 
-    struct DisplayedPost: Hashable, Identifiable {
-        let uuid = UUID()
+    struct DisplayedPost: Hashable {
         let id: Int
         let thumbnailImageData: Data?
         let status: BoardStatus

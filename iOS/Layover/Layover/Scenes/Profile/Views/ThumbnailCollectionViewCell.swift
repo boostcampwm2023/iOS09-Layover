@@ -20,8 +20,8 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
     }()
 
     private let spinner: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.color = .primaryPurple
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.backgroundColor = .clear
         indicator.hidesWhenStopped = true
         indicator.stopAnimating()
         return indicator
@@ -49,13 +49,15 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
         switch status {
         case .complete:
             spinner.stopAnimating()
+            thumbnailImageView.alpha = 1.0
         default:
             spinner.startAnimating()
+            thumbnailImageView.alpha = 0.5
         }
     }
 
     private func setUI() {
-        backgroundColor = .primaryPurple
+        backgroundColor = .darkGrey
         layer.cornerRadius = 10
         clipsToBounds = true
     }

@@ -258,7 +258,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         let scrollOffset = scrollView.contentOffset.y
         let height = scrollView.bounds.height
 
-        if scrollOffset > contentHeight - height {
+        if scrollOffset > 0 && scrollOffset > contentHeight - height {
             fetchPosts()
         }
     }

@@ -56,11 +56,12 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never> {
         fetchPostsPage = 1
         canFetchMorePosts = true
+        posts = []
+        
         return Task {
             guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
                 return false
             }
-            posts = []
             nickname = userProfile.username
             introduce = userProfile.introduce
 
