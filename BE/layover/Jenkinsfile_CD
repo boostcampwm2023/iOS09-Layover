@@ -52,10 +52,10 @@ pipeline {
                             def dockerImage = docker.build("${DOCKER_IMG_NAME}:${commitHash}")
 
                             // Docker Hub에 로그인
-                            //withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                            withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
                                 // Docker 이미지 push
-                                //dockerImage.push("${commitHash}")
-                            //}
+                                dockerImage.push("${commitHash}")
+                            }
                             echo '빌드 및 푸시 성공'
                         }
                     } catch (Exception e) {
