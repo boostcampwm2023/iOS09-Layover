@@ -10,7 +10,7 @@ import Foundation
 
 // JSON 데이터와 비교하기 위한 모델
 class Seeds {
-    static let sampleImageData = try! Data(contentsOf: Bundle(for: Seeds.self).url(forResource: "sample", withExtension: "jpeg")!)
+    static let sampleImageData = try? Data(contentsOf: Bundle(for: Seeds.self).url(forResource: "sample", withExtension: "jpeg")!)
 
     struct Posts {
         // PostList.json에 정의된 데이터

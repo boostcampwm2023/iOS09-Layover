@@ -203,11 +203,15 @@ final class ProfileViewController: BaseViewController {
     // MARK: - Use Case
 
     private func fetchProfile() {
-        interactor?.fetchProfile(with: Models.FetchProfile.Request())
+        Task {
+            await interactor?.fetchProfile(with: Models.FetchProfile.Request())
+        }
     }
 
     private func fetchPosts() {
-        interactor?.fetchMorePosts(with: Models.FetchMorePosts.Request())
+        Task {
+            await interactor?.fetchMorePosts(with: Models.FetchMorePosts.Request())
+        }
     }
 
     // MARK: - Actions

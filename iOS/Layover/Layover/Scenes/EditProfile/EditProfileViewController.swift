@@ -211,7 +211,9 @@ final class EditProfileViewController: BaseViewController {
         checkDuplicateNicknameButton.isEnabled = false
 
         let request = Models.CheckNicknameDuplication.Request(nickname: nickname)
-        interactor?.checkDuplication(with: request)
+        Task {
+            await interactor?.checkDuplication(with: request)
+        }
     }
 
     @objc private func editProfileImageButtonDidTap() {
@@ -229,7 +231,9 @@ final class EditProfileViewController: BaseViewController {
                                                  profileImageData: changedProfileImageData,
                                                  profileImageExtension: changedProfileImageExtension)
         showLoading()
-        interactor?.editProfile(with: request)
+        Task {
+            await interactor?.editProfile(with: request)
+        }
     }
 }
 
