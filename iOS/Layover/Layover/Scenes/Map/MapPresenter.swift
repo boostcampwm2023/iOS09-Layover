@@ -33,15 +33,12 @@ final class MapPresenter: MapPresentationLogic {
     func presentFetchedPosts(with response: MapModels.FetchPosts.Response) {
         let displayedPost = response.posts
             .map { post -> Models.DisplayedPost? in
-                if let videoURL = post.board.videoURL {
-                    return .init(boardID: post.board.identifier,
-                                 thumbnailImageData: post.thumbnailImageData,
-                                 videoURL: videoURL,
-                                 latitude: post.board.latitude,
-                                 longitude: post.board.longitude)
-                } else {
-                    return nil
-                }
+                return .init(boardID: post.board.identifier,
+                             thumbnailImageData: post.thumbnailImageData,
+                             videoURL: post.board.videoURL,
+                             latitude: post.board.latitude,
+                             longitude: post.board.longitude,
+                             boardStatus: post.board.status)
             }.compactMap { $0 }
 
         let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPost)

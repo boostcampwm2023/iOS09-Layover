@@ -211,7 +211,7 @@ final class MapViewController: BaseViewController {
 
     @objc private func currentLocationButtonDidTap() {
         mapView.setUserTrackingMode(.follow, animated: true)
-        mapView.removeAnnotations(mapView.annotations)
+        interactor?.fetchPosts()
     }
 
     @objc private func uploadButtonDidTap() {

@@ -15,9 +15,10 @@ enum MapModels {
     struct DisplayedPost: Hashable {
         let boardID: Int
         let thumbnailImageData: Data?
-        let videoURL: URL
+        let videoURL: URL?
         let latitude: Double
         let longitude: Double
+        let boardStatus: BoardStatus
     }
 
     // MARK: - Fetch Video Use Cases
