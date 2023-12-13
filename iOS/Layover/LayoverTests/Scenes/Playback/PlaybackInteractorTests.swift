@@ -178,7 +178,7 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
-        XCTAssertTrue(result, "displayVideoList는 동작에 성공했습니다")
+        XCTAssertTrue(result, "displayVideoList는 동작에 실패했습니다")
         // map이므로 2 + 더미셀 2 = 4
         // videoURL이 nil이면 거름
         XCTAssertEqual(spy.presentVideoListResponse.videos.count, 4)
@@ -586,8 +586,9 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 5)
-        XCTAssertEqual(sut.posts?.count, 8)
+        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 4)
     }
 
     func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async {
@@ -602,8 +603,9 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 4)
-        XCTAssertEqual(sut.posts?.count, 25)
+        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 22)
     }
 
     func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async {
@@ -617,7 +619,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 4)
-        XCTAssertEqual(sut.posts?.count, 25)
+        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 22)
     }
 }

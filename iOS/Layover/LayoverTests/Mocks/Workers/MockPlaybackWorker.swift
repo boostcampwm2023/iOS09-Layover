@@ -100,9 +100,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func fetchHomePosts() async -> [Post]? {
-        guard let fileLocation = Bundle.main.url(forResource: "PostList",
-                                                 withExtension: "json") else { return nil }
-
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList", withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in
@@ -125,7 +123,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]? {
         let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
-        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else { return nil }
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: resourceFileName, withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in
@@ -148,9 +146,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]? {
         let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
-        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else {
-            return nil
-        }
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: resourceFileName, withExtension: "json") else { return nil }
 
         do {
             let mockData = try? Data(contentsOf: fileLocation)
