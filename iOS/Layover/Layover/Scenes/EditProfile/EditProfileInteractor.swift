@@ -141,22 +141,24 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
                 return false
             }
 
-            // 이미지 변경 시도
-            if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
-                guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
-                    await MainActor.run {
-                        presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+            // 이미지 변경 요청
+            if request.changeProfileImageNeeded {
+                if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
+                    guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
+                        await MainActor.run {
+                            presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                        }
+                        return false
                     }
-                    return false
-                }
-            } else { // 이미지 변경이 없는 경우 이미지 삭제 시도
-                guard await userWorker?.setProfileImageDefault() == true else {
-                    await MainActor.run {
-                        presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                } else { // 이미지 데이터 없는 경우 이미지 삭제 시도
+                    guard await userWorker?.setProfileImageDefault() == true else {
+                        await MainActor.run {
+                            presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                        }
+                        return false
                     }
-                    return false
+                    profileImageData = nil
                 }
-                profileImageData = nil
             }
 
             await MainActor.run {
@@ -168,7 +170,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
 
     private func nicknameEditRequest(into nickname: String) async -> Bool {
         if self.nickname != nickname {
-            guard let response = await userWorker?.modifyNickname(to: nickname) else {
+            guard await userWorker?.modifyNickname(to: nickname) != nil else {
                 os_log(.error, log: .data, "Edit Profile Error")
                 return false
             }
@@ -178,7 +180,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
     }
 
     private func introduceEditRequest(into introduce: String?) async -> Bool {
-        guard let modifyIntroduceResponse = await userWorker?.modifyIntroduce(to: introduce ?? "") else {
+        guard await userWorker?.modifyIntroduce(to: introduce ?? "") != nil else {
             os_log(.error, log: .data, "Edit Profile Error")
             return false
         }

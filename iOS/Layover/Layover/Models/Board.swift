@@ -16,4 +16,5 @@ struct Board {
     let videoURL: URL?
     let latitude: Double
     let longitude: Double
+    let status: BoardStatus
 }

@@ -16,7 +16,8 @@
                 "longitude" : 37.0532156213,
                 "latitude" : 127.060123123,
                 "title" : "최강 아이돌",
-                "content" : "게시글 설명"
+                "content" : "게시글 설명",
+                "status": "COMPLETE"
             },
             "tag" : ["아이브", "yujin"]
         }

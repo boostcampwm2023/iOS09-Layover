@@ -68,6 +68,7 @@ final class HomeWorkerTests: XCTestCase {
         XCTAssertEqual(result![0].board.videoURL, Seeds.Posts.post1.board.videoURL)
         XCTAssertEqual(result![0].board.latitude, Seeds.Posts.post1.board.latitude)
         XCTAssertEqual(result![0].board.longitude, Seeds.Posts.post1.board.longitude)
+        XCTAssertEqual(result![0].board.status, Seeds.Posts.post1.board.status)
         XCTAssertEqual(result![0].member.identifier, Seeds.Posts.post1.member.identifier)
         XCTAssertEqual(result![0].member.username, Seeds.Posts.post1.member.username)
         XCTAssertEqual(result![0].member.introduce, Seeds.Posts.post1.member.introduce)
