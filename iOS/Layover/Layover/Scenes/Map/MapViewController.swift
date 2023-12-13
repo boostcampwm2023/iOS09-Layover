@@ -96,9 +96,12 @@ final class MapViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.checkLocationAuthorizationStatus()
-        interactor?.fetchPosts()
         setCollectionViewDataSource()
         setDelegation()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        interactor?.fetchPosts()
     }
 
     // MARK: - UI + Layout
