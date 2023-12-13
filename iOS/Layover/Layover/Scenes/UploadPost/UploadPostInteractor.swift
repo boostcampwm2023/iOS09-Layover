@@ -15,15 +15,10 @@ import OSLog
 protocol UploadPostBusinessLogic {
     func fetchTags()
     func editTags(with request: UploadPostModels.EditTags.Request)
-
-    @discardableResult
-    func fetchThumbnailImage() -> Task<Bool, Never>
-
-    func fetchCurrentAddress()
+    func fetchThumbnailImage() async
+    func fetchCurrentAddress() async
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
-
-    @discardableResult
-    func uploadPost(request: UploadPostModels.UploadPost.Request) -> Task<Bool, Never>
+    func uploadPost(request: UploadPostModels.UploadPost.Request)
 }
 
 protocol UploadPostDataStore {
@@ -42,7 +37,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     var presenter: UploadPostPresentationLogic?
 
     private let fileManager: FileManager
-    private let locationManager: CLLocationManager
+    private let locationManager: CurrentLocationManager
 
     // MARK: - Data Store
 
@@ -53,7 +48,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     // MARK: - Object LifeCycle
 
     init(fileManager: FileManager = FileManager.default,
-         locationManager: CLLocationManager = CLLocationManager()) {
+         locationManager: CurrentLocationManager = CurrentLocationManager()) {
         self.fileManager = fileManager
         self.locationManager = locationManager
     }
@@ -69,46 +64,38 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         tags = request.tags
     }
 
-    @discardableResult
-    func fetchThumbnailImage() -> Task<Bool, Never> {
-        Task {
-        guard let videoURL else { return false }
+    func fetchThumbnailImage() async {
+        guard let videoURL else { return }
         let asset = AVAsset(url: videoURL)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
-            do {
-                let image = try await generator.image(at: .zero).image
-                await MainActor.run {
-                    presenter?.presentThumbnailImage(with: Models.FetchThumbnail.Response(thumbnailImage: image))
-                }
-                return true
-            } catch let error {
-                os_log(.error, log: .default, "Failed to fetch Thumbnail Image with error: %@", error.localizedDescription)
-                return false
+        do {
+            let image = try await generator.image(at: .zero).image
+            await MainActor.run {
+                presenter?.presentThumbnailImage(with: Models.FetchThumbnail.Response(thumbnailImage: image))
             }
+        } catch let error {
+            os_log(.error, log: .data, "Failed to fetch Thumbnail Image with error: %@", error.localizedDescription)
         }
     }
 
-    func fetchCurrentAddress() {
-        guard let location = getCurrentLocation() else { return }
+    func fetchCurrentAddress() async {
+        guard let location = locationManager.getCurrentLocation() else { return }
         let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
         let locale = Locale(identifier: localeIdentifier)
-
-        Task {
-            do {
-                let address = try await CLGeocoder().reverseGeocodeLocation(location, preferredLocale: locale).last
-                let administrativeArea = address?.administrativeArea
-                let locality = address?.locality
-                let subLocality = address?.subLocality
-                let response = Models.FetchCurrentAddress.Response(administrativeArea: administrativeArea,
-                                                                   locality: locality,
-                                                                   subLocality: subLocality)
-                await MainActor.run {
-                    presenter?.presentCurrentAddress(with: response)
-                }
-            } catch {
-                os_log(.error, log: .default, "Failed to fetch Current Address with error: %@", error.localizedDescription)
+        do {
+            let address = try await CLGeocoder().reverseGeocodeLocation(location, preferredLocale: locale).last
+            let administrativeArea = address?.administrativeArea
+            let locality = address?.locality
+            let subLocality = address?.subLocality
+            let response = Models.FetchCurrentAddress.Response(administrativeArea: administrativeArea,
+                                                               locality: locality,
+                                                               subLocality: subLocality)
+            await MainActor.run {
+                presenter?.presentCurrentAddress(with: response)
             }
+        } catch {
+            os_log(.error, log: .data, "Failed to fetch Current Address with error: %@", error.localizedDescription)
         }
     }
 
@@ -117,33 +104,26 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         presenter?.presentUploadButton(with: response)
     }
 
-    @discardableResult
-    func uploadPost(request: UploadPostModels.UploadPost.Request) -> Task<Bool, Never> {
-        Task {
-            guard let worker,
-                  let videoURL,
-                  let isMuted,
-                  let coordinate = getCurrentLocation()?.coordinate else { return false }
-            if isMuted {
-                exportVideoWithoutAudio(at: videoURL)
-            }
-            let response = await worker.uploadPost(with: UploadPost(title: request.title,
-                                                                     content: request.content,
-                                                                     latitude: coordinate.latitude,
-                                                                     longitude: coordinate.longitude,
-                                                                     tag: request.tags,
-                                                                     videoURL: videoURL))
-            return response
+    func uploadPost(request: UploadPostModels.UploadPost.Request) {
+        guard let worker,
+              let videoURL,
+              let isMuted,
+              let coordinate = locationManager.getCurrentLocation()?.coordinate else { return }
+        if isMuted {
+            exportVideoWithoutAudio(at: videoURL)
         }
-    }
-
-    private func getCurrentLocation() -> CLLocation? {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-
-        guard let space = locationManager.location?.coordinate else { return nil }
-        let location = CLLocation(latitude: space.latitude, longitude: space.longitude)
-        return location
+        Task {
+            let uploadPostResponse = await worker.uploadPost(with: UploadPost(title: request.title,
+                                                                              content: request.content,
+                                                                              latitude: coordinate.latitude,
+                                                                              longitude: coordinate.longitude,
+                                                                              tag: request.tags,
+                                                                              videoURL: videoURL))
+            guard let boardID = uploadPostResponse?.id else { return }
+            let fileType = videoURL.pathExtension
+            _ = await worker.uploadVideo(with: UploadVideoRequestDTO(boardID: boardID, filetype: fileType),
+                                         videoURL: videoURL)
+        }
     }
 
     private func exportVideoWithoutAudio(at url: URL) {
@@ -159,8 +139,8 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
 
                 let timeRange: CMTimeRange = CMTimeRangeMake(start: .zero, duration: sourceAssetduration)
                 try compositionVideoTrack.insertTimeRange(timeRange,
-                                                           of: sourceVideoTrack,
-                                                           at: .zero)
+                                                          of: sourceVideoTrack,
+                                                          at: .zero)
 
                 if fileManager.fileExists(atPath: url.path()) {
                     try fileManager.removeItem(at: url)

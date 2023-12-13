@@ -188,6 +188,15 @@
 		FC4975932B03432800D8627F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */; };
 		FC4975942B03432800D8627F /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */; };
 		FC4975992B03439000D8627F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4975982B03439000D8627F /* UIFont+.swift */; };
+		FC4E0C0C2B282AE500152596 /* UploadPostViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C082B282AE500152596 /* UploadPostViewControllerTests.swift */; };
+		FC4E0C0D2B282AE500152596 /* UploadPostInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C092B282AE500152596 /* UploadPostInteractorTests.swift */; };
+		FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C0A2B282AE500152596 /* UploadPostWorkerTests.swift */; };
+		FC4E0C0F2B282AE500152596 /* UploadPostPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C0B2B282AE500152596 /* UploadPostPresenterTests.swift */; };
+		FC4E0C112B28595200152596 /* MockUploadPostWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C102B28595200152596 /* MockUploadPostWorker.swift */; };
+		FC4E0C132B28609C00152596 /* PostBoard.json in Resources */ = {isa = PBXBuildFile; fileRef = FC4E0C122B28609C00152596 /* PostBoard.json */; };
+		FC4E0C192B28955400152596 /* LocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C182B28955400152596 /* LocationFetcher.swift */; };
+		FC4E0C1D2B28977000152596 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */; };
+		FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */; };
 		FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1162B148D160036366D /* EditProfilePresenter.swift */; };
 		FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1172B148D160036366D /* EditProfileWorker.swift */; };
 		FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1182B148D160036366D /* EditProfileRouter.swift */; };
@@ -432,6 +441,15 @@
 		FC49758A2B03432800D8627F /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		FC49758B2B03432800D8627F /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		FC4975982B03439000D8627F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		FC4E0C082B282AE500152596 /* UploadPostViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostViewControllerTests.swift; sourceTree = "<group>"; };
+		FC4E0C092B282AE500152596 /* UploadPostInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostInteractorTests.swift; sourceTree = "<group>"; };
+		FC4E0C0A2B282AE500152596 /* UploadPostWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostWorkerTests.swift; sourceTree = "<group>"; };
+		FC4E0C0B2B282AE500152596 /* UploadPostPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenterTests.swift; sourceTree = "<group>"; };
+		FC4E0C102B28595200152596 /* MockUploadPostWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUploadPostWorker.swift; sourceTree = "<group>"; };
+		FC4E0C122B28609C00152596 /* PostBoard.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PostBoard.json; sourceTree = "<group>"; };
+		FC4E0C182B28955400152596 /* LocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetcher.swift; sourceTree = "<group>"; };
+		FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
+		FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationFetcher.swift; sourceTree = "<group>"; };
 		FC5BE1162B148D160036366D /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
 		FC5BE1172B148D160036366D /* EditProfileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileWorker.swift; sourceTree = "<group>"; };
 		FC5BE1182B148D160036366D /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
@@ -595,6 +613,7 @@
 				192513632B26F7BB001533FA /* TagPlayList */,
 				1925137B2B277CC4001533FA /* Profile */,
 				194C21BE2B1DEE5500C62645 /* Home */,
+				FCF1A02D2B275A0400D961BE /* UploadPost */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -604,6 +623,7 @@
 			children = (
 				194C21CE2B1DF63D00C62645 /* MockDatas */,
 				194C21CA2B1DF37900C62645 /* Workers */,
+				FC4E0C1E2B28B4AD00152596 /* LocationFetcher */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -612,6 +632,7 @@
 			isa = PBXGroup;
 			children = (
 				194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */,
+				FC4E0C102B28595200152596 /* MockUploadPostWorker.swift */,
 				1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */,
 				192513842B27852C001533FA /* MockUserWorker.swift */,
 				19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */,
@@ -622,6 +643,9 @@
 		194C21CE2B1DF63D00C62645 /* MockDatas */ = {
 			isa = PBXGroup;
 			children = (
+				194C21D32B1EEE3700C62645 /* sample.jpeg */,
+				194C21CF2B1DF65200C62645 /* PostList.json */,
+				FC4E0C122B28609C00152596 /* PostBoard.json */,
 				192513972B278645001533FA /* CheckSignUp.json */,
 				1925138D2B278645001533FA /* CheckUserName.json */,
 				192513932B278645001533FA /* DeleteUser.json */,
@@ -909,6 +933,23 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		FC4E0C172B28954000152596 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				FC4E0C182B28955400152596 /* LocationFetcher.swift */,
+				FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		FC4E0C1E2B28B4AD00152596 /* LocationFetcher */ = {
+			isa = PBXGroup;
+			children = (
+				FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */,
+			);
+			path = LocationFetcher;
+			sourceTree = "<group>";
+		};
 		FC5BE1112B148AF00036366D /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1030,6 +1071,7 @@
 			children = (
 				1972CCD02B125E8800C3C762 /* UserDefaults */,
 				19C7AFD42B02583C003B35F2 /* Keychain */,
+				FC4E0C172B28954000152596 /* Location */,
 				1901D4A12B18F4BE00617A64 /* System.swift */,
 			);
 			path = Services;
@@ -1146,6 +1188,17 @@
 				FC2511A52B049020004717BC /* SignUpConfigurator.swift */,
 			);
 			path = SignUpScene;
+			sourceTree = "<group>";
+		};
+		FCF1A02D2B275A0400D961BE /* UploadPost */ = {
+			isa = PBXGroup;
+			children = (
+				FC4E0C082B282AE500152596 /* UploadPostViewControllerTests.swift */,
+				FC4E0C092B282AE500152596 /* UploadPostInteractorTests.swift */,
+				FC4E0C0A2B282AE500152596 /* UploadPostWorkerTests.swift */,
+				FC4E0C0B2B282AE500152596 /* UploadPostPresenterTests.swift */,
+			);
+			path = UploadPost;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1265,6 +1318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC4E0C132B28609C00152596 /* PostBoard.json in Resources */,
 				192513A02B278646001533FA /* PatchIntroduce.json in Resources */,
 				192513A32B278646001533FA /* sample.jpeg in Resources */,
 				1925139D2B278646001533FA /* PatchUserName.json in Resources */,
@@ -1433,7 +1487,9 @@
 				1915D6E52B1FB82000CE1DD0 /* CheckSignUpDTO.swift in Sources */,
 				198167A02B20583D0032F563 /* SettingPresenter.swift in Sources */,
 				198167A42B20583D0032F563 /* SettingInteractor.swift in Sources */,
+				FC4E0C1D2B28977000152596 /* CurrentLocationManager.swift in Sources */,
 				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
+				FC4E0C192B28955400152596 /* LocationFetcher.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,
 				836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */,
@@ -1494,6 +1550,8 @@
 				192513832B277CD7001533FA /* ProfilePresenterTests.swift in Sources */,
 				192513812B277CD7001533FA /* ProfileInteractorTests.swift in Sources */,
 				194C21C42B1DEE6B00C62645 /* HomeInteractorTests.swift in Sources */,
+				FC4E0C0F2B282AE500152596 /* UploadPostPresenterTests.swift in Sources */,
+				FC4E0C0C2B282AE500152596 /* UploadPostViewControllerTests.swift in Sources */,
 				1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */,
 				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
@@ -1503,6 +1561,7 @@
 				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
+				FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */,
 				1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */,
 				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
 				19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */,
@@ -1510,6 +1569,9 @@
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
+				FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */,
+				FC4E0C112B28595200152596 /* MockUploadPostWorker.swift in Sources */,
+				FC4E0C0D2B282AE500152596 /* UploadPostInteractorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
