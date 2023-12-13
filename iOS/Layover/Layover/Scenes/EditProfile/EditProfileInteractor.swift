@@ -13,9 +13,9 @@ import OSLog
 protocol EditProfileBusinessLogic {
     func setProfile(with request: EditProfileModels.SetProfile.Request)
     func changeProfile(with request: EditProfileModels.ChangeProfile.Request)
-    func checkDuplication(with request: EditProfileModels.CheckNicknameDuplication.Request)
+    func checkDuplication(with request: EditProfileModels.CheckNicknameDuplication.Request) async -> Bool
     @discardableResult
-    func editProfile(with request: EditProfileModels.EditProfile.Request) -> Task<Bool, Never>
+    func editProfile(with request: EditProfileModels.EditProfile.Request) async -> Bool
 }
 
 protocol EditProfileDataStore {
@@ -96,18 +96,17 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
         presenter?.presentProfileState(with: response)
     }
 
-    func checkDuplication(with request: Models.CheckNicknameDuplication.Request) {
-        Task {
-            guard let response = await userWorker?.checkNotDuplication(for: request.nickname) else {
-                os_log(.error, log: .data, "checkDuplication Server Error")
-                return
-            }
-            didCheckedNicknameDuplicate = response
-            let canEditProfile = didCheckedNicknameDuplicate && nicknameState == .valid && introduceState == .valid
-            await MainActor.run {
-                presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isValid: response, canEditProfile: canEditProfile))
-            }
+    func checkDuplication(with request: Models.CheckNicknameDuplication.Request) async -> Bool {
+        guard let response = await userWorker?.checkNotDuplication(for: request.nickname) else {
+            os_log(.error, log: .data, "checkDuplication Server Error")
+            return false
         }
+        didCheckedNicknameDuplicate = response
+        let canEditProfile = didCheckedNicknameDuplicate && nicknameState == .valid && introduceState == .valid
+        await MainActor.run {
+            presenter?.presentNicknameDuplication(with: Models.CheckNicknameDuplication.Response(isValid: response, canEditProfile: canEditProfile))
+        }
+        return true
     }
 
     private func profileImageEditRequest(into imageData: Data, fileExtension: String) async -> Bool {
@@ -129,43 +128,42 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
     }
 
     @discardableResult
-    func editProfile(with request: Models.EditProfile.Request) -> Task<Bool, Never> {
-        Task {
-            async let isSuccessNicknameEdit = nicknameEditRequest(into: request.nickname)
-            async let isSuccessIntroduceEdit = introduceEditRequest(into: request.introduce)
+    func editProfile(with request: Models.EditProfile.Request) async -> Bool {
 
-            guard await isSuccessNicknameEdit, await isSuccessIntroduceEdit else {
-                await MainActor.run {
-                    presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
-                }
-                return false
-            }
+        async let isSuccessNicknameEdit = nicknameEditRequest(into: request.nickname)
+        async let isSuccessIntroduceEdit = introduceEditRequest(into: request.introduce)
 
-            // 이미지 변경 요청
-            if request.changeProfileImageNeeded {
-                if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
-                    guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
-                        await MainActor.run {
-                            presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
-                        }
-                        return false
-                    }
-                } else { // 이미지 데이터 없는 경우 이미지 삭제 시도
-                    guard await userWorker?.setProfileImageDefault() == true else {
-                        await MainActor.run {
-                            presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
-                        }
-                        return false
-                    }
-                    profileImageData = nil
-                }
-            }
-
+        guard await isSuccessNicknameEdit, await isSuccessIntroduceEdit else {
             await MainActor.run {
-                presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: true))
+                presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
             }
-            return true
+            return false
         }
+
+        // 이미지 변경 요청
+        if request.changeProfileImageNeeded {
+            if let profileImageData = request.profileImageData, let profileImageExtension = request.profileImageExtension {
+                guard await profileImageEditRequest(into: profileImageData, fileExtension: profileImageExtension) else {
+                    await MainActor.run {
+                        presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                    }
+                    return false
+                }
+            } else { // 이미지 데이터 없는 경우 이미지 삭제 시도
+                guard await userWorker?.setProfileImageDefault() == true else {
+                    await MainActor.run {
+                        presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: false))
+                    }
+                    return false
+                }
+                profileImageData = nil
+            }
+        }
+
+        await MainActor.run {
+            presenter?.presentProfile(with: Models.EditProfile.Response(isSuccess: true))
+        }
+        return true
     }
 
     private func nicknameEditRequest(into nickname: String) async -> Bool {

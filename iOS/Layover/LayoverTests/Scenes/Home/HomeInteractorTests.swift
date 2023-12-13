@@ -64,7 +64,7 @@ final class HomeInteractorTests: XCTestCase {
         let request = Models.FetchPosts.Request()
 
         // Act
-        _ = await sut.fetchPosts(with: request).value
+        await sut.fetchPosts(with: request)
 
         // Assert
         XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출하지 못했다.")
@@ -85,7 +85,7 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
     }
 
-    func test_playPosts는_자신의_selectedIndex값을_변경한다() async throws {
+    func test_playPosts는_자신의_selectedIndex값을_변경한다() {
         // Arrange
         let request = Models.PlayPosts.Request(selectedIndex: 101)
 
@@ -96,7 +96,7 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(sut.postPlayStartIndex, 101, "playPosts()가 자신의 selectedIndex를 변경하지 못했다.")
     }
 
-    func test_playPosts는_presenter의_presentPlaybackScene를_호출한다() async throws {
+    func test_playPosts는_presenter의_presentPlaybackScene를_호출한다() {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy

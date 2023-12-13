@@ -88,15 +88,14 @@ final class SettingInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentUserLogoutConfirmedCalled, "performUserLogout()를 실행해서 presenter의 presentUserLogoutConfirmed()를 호출되지 못했다.")
     }
 
-    func test_performUserWithdraw를_실행하면_presenter의_presentUserWithdrawConfirmed가_호출된다() async throws {
+    func test_performUserWithdraw를_실행하면_presenter의_presentUserWithdrawConfirmed가_호출된다() async {
         // arrange
         let spy = SettingPresentationLogicSpy()
         sut.presenter = spy
         let request = Models.Withdraw.Request()
 
         // act
-        sut.performUserWithdraw(request: request)
-        try await Task.sleep(nanoseconds: 3_000_000_000)
+        await sut.performUserWithdraw(request: request)
 
         // assert
         XCTAssertTrue(spy.presentUserWithdrawConfirmedCalled, "performUserWithdraw()를 실행해서 presenter의 presentUserWithdrawConfirmed()가 호출되지 못했다.")

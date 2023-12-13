@@ -119,7 +119,9 @@ final class TagPlayListViewController: BaseViewController {
     }
 
     private func fetchPlayList() {
-        interactor?.fetchPlayList(request: Models.FetchPosts.Request())
+        Task {
+            await interactor?.fetchPlayList(request: Models.FetchPosts.Request())
+        }
     }
 }
 
@@ -132,7 +134,9 @@ extension TagPlayListViewController: UICollectionViewDelegate {
         let height = scrollView.bounds.height
 
         if scrollOffset > contentHeight - height {
-            interactor?.fetchMorePlayList(request: Models.FetchMorePosts.Request())
+            Task {
+                await interactor?.fetchMorePlayList(request: Models.FetchMorePosts.Request())
+            }
         }
     }
 

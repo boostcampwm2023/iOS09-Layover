@@ -46,11 +46,9 @@ final class SettingViewControllerTests: XCTestCase {
             performUserLogoutCalled = true
         }
 
-        func performUserWithdraw(request: Layover.SettingModels.Withdraw.Request) -> Task<Bool, Never> {
+        func performUserWithdraw(request: Layover.SettingModels.Withdraw.Request) async -> Bool {
             performUserWithdrawCalled = true
-            return Task {
-                true
-            }
+            return true
         }
     }
 

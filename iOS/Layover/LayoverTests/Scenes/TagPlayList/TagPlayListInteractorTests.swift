@@ -98,7 +98,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         let request = Models.FetchPosts.Request()
 
         // Act
-        _ = await sut.fetchPlayList(request: request).value
+        await sut.fetchPlayList(request: request)
 
         // Assert
         XCTAssertTrue(spy.presentPlayListCalled, "fetchPlayList()가 presenter의 presentPlayList()를 호출했다.")
@@ -131,7 +131,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         sut.posts = [Seeds.Posts.post2]
 
         // Act
-        _ = await sut.fetchPlayList(request: request).value
+        await sut.fetchPlayList(request: request)
 
         // Assert
         XCTAssert(!sut.posts.contains(where: {
@@ -174,7 +174,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         let fetchMoreRequest = Models.FetchMorePosts.Request()
 
         // Act
-        _ = await sut.fetchMorePlayList(request: fetchMoreRequest).value
+        await sut.fetchMorePlayList(request: fetchMoreRequest)
 
         // Assert
         XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출하지 못했다.")
@@ -191,9 +191,9 @@ final class TagPlayListInteractorTests: XCTestCase {
         let request = Models.FetchMorePosts.Request()
 
         // Act -> 3번 호출 이후 빈 배열을 반환하도록 Mocking됨
-        _ = await sut.fetchMorePlayList(request: request).value
-        _ = await sut.fetchMorePlayList(request: request).value
-        _ = await sut.fetchMorePlayList(request: request).value
+        await sut.fetchMorePlayList(request: request)
+        await sut.fetchMorePlayList(request: request)
+        await sut.fetchMorePlayList(request: request)
 
         // Assert
         XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출하지 못했다.")
@@ -210,7 +210,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         let request = Models.FetchMorePosts.Request()
 
         // Act
-        _ = await sut.fetchMorePlayList(request: request).value
+        await sut.fetchMorePlayList(request: request)
 
         // Assert
         XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출하지 못했다.")

@@ -72,7 +72,7 @@ final class ProfileInteractorTests: XCTestCase {
         sut.presenter = presentationLogicSpy
 
         // act
-        _ = await sut.fetchProfile(with: Models.FetchProfile.Request()).value
+        await sut.fetchProfile(with: Models.FetchProfile.Request())
 
         // assert
         XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출하지 못했다")
@@ -91,7 +91,7 @@ final class ProfileInteractorTests: XCTestCase {
         sut.presenter = presentationLogicSpy
 
         // act
-        _ = await sut.fetchMorePosts(with: Models.FetchMorePosts.Request()).value
+        await sut.fetchMorePosts(with: Models.FetchMorePosts.Request())
 
         // assert
         XCTAssertTrue(presentationLogicSpy.presentMorePostsCalled, "fetchMorePosts을 호출해서 presentMorePosts을 호출하지 못했다")
@@ -101,7 +101,7 @@ final class ProfileInteractorTests: XCTestCase {
         XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.displayedPosts[0].status, Seeds.Posts.post1.board.status, "presentMorePostsResponse에는 fetchMorePosts의 결과가 올바르게 담기지 못했다")
     }
 
-    func test_showPostDetail을_호출하면_자신의_playbackStartIndex에_값을_저장하고_presenter의_presentPostDetail을_호출한다() async {
+    func test_showPostDetail을_호출하면_자신의_playbackStartIndex에_값을_저장하고_presenter의_presentPostDetail을_호출한다() {
         // arrange
         let presentationLogicSpy = ProfilePresentationLogicSpy()
         sut.presenter = presentationLogicSpy

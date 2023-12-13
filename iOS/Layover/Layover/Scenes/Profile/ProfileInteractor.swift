@@ -10,11 +10,9 @@ import Foundation
 
 protocol ProfileBusinessLogic {
     @discardableResult
-    func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never>
-
+    func fetchProfile(with request: ProfileModels.FetchProfile.Request) async -> Bool
     @discardableResult
-    func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) -> Task<Bool, Never>
-
+    func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) async -> Bool
     func showPostDetail(with request: ProfileModels.ShowPostDetail.Request)
 }
 
@@ -53,58 +51,53 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     // MARK: - Methods
 
     @discardableResult
-    func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never> {
+    func fetchProfile(with request: ProfileModels.FetchProfile.Request) async -> Bool {
         fetchPostsPage = 1
         canFetchMorePosts = true
         posts = []
-        
-        return Task {
-            guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
-                return false
-            }
-            nickname = userProfile.username
-            introduce = userProfile.introduce
-
-            let posts = await fetchPosts()
-            canFetchMorePosts = !posts.isEmpty
-            fetchPostsPage += 1
-
-            var imageData: Data? = nil
-            if let profileImageURL = userProfile.profileImageURL {
-                imageData = await userWorker?.fetchImageData(with: profileImageURL)
-            }
-            profileImageData = imageData
-            let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
-                                                                                           introduce: userProfile.introduce,
-                                                                                           profileImageData: imageData),
-                                                        displayedPosts: posts)
-            await MainActor.run {
-                presenter?.presentProfile(with: response)
-            }
-            return true
+        guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
+            return false
         }
+        nickname = userProfile.username
+        introduce = userProfile.introduce
+
+        let posts = await fetchPosts()
+        canFetchMorePosts = !posts.isEmpty
+        fetchPostsPage += 1
+
+        var imageData: Data? = nil
+        if let profileImageURL = userProfile.profileImageURL {
+            imageData = await userWorker?.fetchImageData(with: profileImageURL)
+        }
+        profileImageData = imageData
+        let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
+                                                                                       introduce: userProfile.introduce,
+                                                                                       profileImageData: imageData),
+                                                    displayedPosts: posts)
+        await MainActor.run {
+            presenter?.presentProfile(with: response)
+        }
+        return true
     }
 
     @discardableResult
-    func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) -> Task<Bool, Never> {
-        Task {
-            guard canFetchMorePosts else { return false }
-            let fetchedPosts = await fetchPosts()
-            fetchPostsPage += 1
+    func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) async -> Bool {
+        guard canFetchMorePosts else { return false }
+        let fetchedPosts = await fetchPosts()
+        fetchPostsPage += 1
 
-            if fetchedPosts.isEmpty {
-                canFetchMorePosts = false
-                return false
-            }
-
-            let response = Models.FetchMorePosts.Response(displayedPosts: fetchedPosts)
-
-            await MainActor.run {
-                presenter?.presentMorePosts(with: response)
-            }
-
-            return true
+        if fetchedPosts.isEmpty {
+            canFetchMorePosts = false
+            return false
         }
+
+        let response = Models.FetchMorePosts.Response(displayedPosts: fetchedPosts)
+
+        await MainActor.run {
+            presenter?.presentMorePosts(with: response)
+        }
+
+        return true
     }
 
     private func fetchPosts() async -> [Models.DisplayedPost] {
