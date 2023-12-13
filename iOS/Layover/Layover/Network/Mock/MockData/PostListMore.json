@@ -16,7 +16,8 @@
                 "longitude" : 37.0532156213,
                 "latitude" : 127.060123123,
                 "title" : "최강 아이돌",
-                "content" : "게시글 설명"
+                "content" : "게시글 설명",
+                "status": "COMPLETE"
             },
             "tag" : ["나도몰라요", "너도몰라요"]
         },
@@ -34,7 +35,8 @@
                 "longitude" : 37.0532156213,
                 "latitude" : 127.060123123,
                 "title" : "프로듀스 101",
-                "content" : "게시글 설명"
+                "content" : "게시글 설명",
+                "status": "COMPLETE"
             },
             "tag" : ["해시태그", "해시태그2"]
         },
@@ -52,7 +54,8 @@
                 "longitude" : 37.0532156213,
                 "latitude" : 127.060123123,
                 "title" : "프로미스 나인",
-                "content" : "게시글 설명"
+                "content" : "게시글 설명",
+                "status": "COMPLETE"
             },
             "tag" : ["해시태그1", "해시태그2"]
         },
@@ -70,7 +73,8 @@
                 "longitude" : 37.0532156213,
                 "latitude" : 127.060123123,
                 "title" : "아이즈원",
-                "content" : "게시글 설명2"
+                "content" : "게시글 설명2",
+                "status": "COMPLETE"
             },
             "tag" : ["해시태그1", "해시태그6"]
         }

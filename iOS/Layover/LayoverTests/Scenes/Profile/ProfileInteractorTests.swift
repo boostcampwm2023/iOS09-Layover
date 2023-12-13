@@ -76,9 +76,10 @@ final class ProfileInteractorTests: XCTestCase {
 
         // assert
         XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출했다")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts.count, 1)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].id, Seeds.Posts.post1.board.identifier)
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.posts[0].thumbnailImageData, Seeds.sampleImageData)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts.count, 1)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].id, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData)
+        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].status, Seeds.Posts.post1.board.status)
         XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, Seeds.Members.getMember1.username)
         XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, Seeds.Members.getMember1.introduce)
         XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담겼다.")
@@ -93,10 +94,11 @@ final class ProfileInteractorTests: XCTestCase {
         _ = await sut.fetchMorePosts(with: Models.FetchMorePosts.Request()).value
 
         // assert
-        XCTAssertTrue(presentationLogicSpy.presentMorePostsCalled, "fetchMorePosts을 호출해서 presentMorePosts을 호출했다")
-        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts.count, 1, "presentMorePostsResponse에는 fetchPosts의 결과가 담겼다")
-        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts[0].id, Seeds.Posts.post1.board.identifier, "presentMorePostsResponse에는 fetchPosts의 결과가 담겼다")
-        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "presentMorePostsResponse에는 fetchPosts의 결과가 담겼다")
+        XCTAssertTrue(presentationLogicSpy.presentMorePostsCalled, "fetchMorePosts을 호출하여 presentMorePosts을 호출했다")
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.displayedPosts.count, 1, "fetchMorePosts를 호출하여 올바른 데이터를 전달했다")
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.displayedPosts[0].id, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData)
+        XCTAssertEqual(presentationLogicSpy.presentMorePostsResponse.displayedPosts[0].status, Seeds.Posts.post1.board.status, "fetchMorePosts를 실행하여 presenter에 올바른 데이터를 전달했다")
     }
 
     func test_showPostDetail을_호출하면_자신의_playbackStartIndex에_값을_저장하고_presenter의_presentPostDetail을_호출한다() async {

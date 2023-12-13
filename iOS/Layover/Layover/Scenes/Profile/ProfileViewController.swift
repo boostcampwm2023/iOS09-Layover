@@ -45,6 +45,13 @@ final class ProfileViewController: BaseViewController {
 
     private var collectionViewDatasource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .primaryPurple
+        refreshControl.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
+        return refreshControl
+    }()
+
     // MARK: - Properties
 
     typealias Models = ProfileModels
@@ -68,18 +75,22 @@ final class ProfileViewController: BaseViewController {
 
     // MARK: - View Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setNavigationBar()
-        setDataSource()
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchProfile()
     }
 
+    // MARK: - UI, Layout
+
+    override func setUI() {
+        super.setUI()
+        setRefreshControl()
+        setNavigationBar()
+        setDataSource()
+    }
+
     override func setConstraints() {
+        super.setConstraints()
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -91,6 +102,10 @@ final class ProfileViewController: BaseViewController {
     }
 
     // MARK: - Methods
+
+    private func setRefreshControl() {
+        collectionView.refreshControl = refreshControl
+    }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, _ in
@@ -158,11 +173,13 @@ final class ProfileViewController: BaseViewController {
             cell.editButton.addTarget(self, action: #selector(self.editbuttonDidTap), for: .touchUpInside)
         }
 
-        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.Post> { cell, indexPath, itemIdentifier in
+        let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.DisplayedPost> { cell, indexPath, itemIdentifier in
 
             if let imageData = itemIdentifier.thumbnailImageData,
                let image = UIImage(data: imageData) {
-                cell.configure(image: image)
+                cell.configure(image: image, status: itemIdentifier.status)
+            } else {
+                cell.configure(image: nil, status: itemIdentifier.status)
             }
         }
 
@@ -177,7 +194,7 @@ final class ProfileViewController: BaseViewController {
             case .posts:
                 return collectionView.dequeueConfiguredReusableCell(using: postCellRegistration,
                                                                     for: indexPath,
-                                                                    item: itemIdentifier as? Models.Post)
+                                                                    item: itemIdentifier as? Models.DisplayedPost)
             }
         }
         collectionView.dataSource = collectionViewDatasource
@@ -203,6 +220,9 @@ final class ProfileViewController: BaseViewController {
         router?.routeToSetting()
     }
 
+    @objc private func pullToRefresh(_ sender: UIRefreshControl) {
+        fetchProfile()
+    }
 }
 
 // MARK: - ProfileDisplayLogic
@@ -213,13 +233,15 @@ extension ProfileViewController: ProfileDisplayLogic {
         var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections([.profile, .posts])
         snapshot.appendItems([viewModel.userProfile], toSection: .profile)
-        snapshot.appendItems(viewModel.posts, toSection: .posts)
-        collectionViewDatasource?.apply(snapshot)
+        snapshot.appendItems(viewModel.displayedPosts, toSection: .posts)
+        collectionViewDatasource?.apply(snapshot) { [weak self] in
+            self?.refreshControl.endRefreshing()
+        }
     }
 
     func displayMorePosts(viewModel: ProfileModels.FetchMorePosts.ViewModel) {
         guard var snapshot = collectionViewDatasource?.snapshot(for: .posts) else { return }
-        snapshot.append(viewModel.posts)
+        snapshot.append(viewModel.displayedPosts)
         collectionViewDatasource?.apply(snapshot, to: .posts)
     }
 
@@ -236,7 +258,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         let scrollOffset = scrollView.contentOffset.y
         let height = scrollView.bounds.height
 
-        if scrollOffset > contentHeight - height {
+        if scrollOffset > 0 && scrollOffset > contentHeight - height {
             fetchPosts()
         }
     }
@@ -247,8 +269,13 @@ extension ProfileViewController: UICollectionViewDelegate {
         case .profile:
             return
         case .posts:
-            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.Post else { return }
-            interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
+            guard let post = collectionViewDatasource?.itemIdentifier(for: indexPath) as? Models.DisplayedPost else { return }
+            switch post.status {
+            case .complete:
+                interactor?.showPostDetail(with: Models.ShowPostDetail.Request(startIndex: indexPath.item))
+            default:
+                Toast.shared.showToast(message: "인코딩 중인 영상입니다. 잠시만 기다려주세요!")
+            }
         }
     }
 }

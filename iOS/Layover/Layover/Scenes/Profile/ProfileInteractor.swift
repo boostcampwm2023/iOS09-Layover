@@ -56,11 +56,12 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     func fetchProfile(with request: ProfileModels.FetchProfile.Request) -> Task<Bool, Never> {
         fetchPostsPage = 1
         canFetchMorePosts = true
+        posts = []
+        
         return Task {
             guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
                 return false
             }
-            posts = []
             nickname = userProfile.username
             introduce = userProfile.introduce
 
@@ -76,7 +77,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
             let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
                                                                                            introduce: userProfile.introduce,
                                                                                            profileImageData: imageData),
-                                                        posts: posts)
+                                                        displayedPosts: posts)
             await MainActor.run {
                 presenter?.presentProfile(with: response)
             }
@@ -96,7 +97,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
                 return false
             }
 
-            let response = Models.FetchMorePosts.Response(posts: fetchedPosts)
+            let response = Models.FetchMorePosts.Response(displayedPosts: fetchedPosts)
 
             await MainActor.run {
                 presenter?.presentMorePosts(with: response)
@@ -106,22 +107,22 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
         }
     }
 
-    private func fetchPosts() async -> [Models.Post] {
+    private func fetchPosts() async -> [Models.DisplayedPost] {
         guard let fetchedPosts = await userWorker?.fetchPosts(at: fetchPostsPage, of: profileId),
               fetchedPosts.count > 0 else {
             return []
         }
         posts += fetchedPosts
 
-        var responsePosts = [Models.Post]()
+        var responsePosts = [Models.DisplayedPost]()
         for post in fetchedPosts {
             guard let thumbnailURL = post.board.thumbnailImageURL,
                   let profileImageData = await userWorker?.fetchImageData(with: thumbnailURL) else {
-                responsePosts.append(.init(id: post.board.identifier, thumbnailImageData: nil))
+                responsePosts.append(.init(id: post.board.identifier, thumbnailImageData: nil, status: post.board.status))
                 continue
             }
 
-            responsePosts.append(Models.Post(id: post.board.identifier, thumbnailImageData: profileImageData))
+            responsePosts.append(Models.DisplayedPost(id: post.board.identifier, thumbnailImageData: profileImageData, status: post.board.status))
         }
 
         return responsePosts

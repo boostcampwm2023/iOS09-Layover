@@ -19,6 +19,14 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
 
+    private let spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.backgroundColor = .clear
+        indicator.hidesWhenStopped = true
+        indicator.stopAnimating()
+        return indicator
+    }()
+
     // MARK: - Object Lifecycle
 
     override init(frame: CGRect) {
@@ -35,24 +43,37 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Methods
 
-    func configure(image: UIImage) {
+    func configure(image: UIImage?, status: BoardStatus) {
         thumbnailImageView.image = image
+
+        switch status {
+        case .complete:
+            spinner.stopAnimating()
+            thumbnailImageView.alpha = 1.0
+        default:
+            spinner.startAnimating()
+            thumbnailImageView.alpha = 0.5
+        }
     }
 
     private func setUI() {
-        backgroundColor = .primaryPurple
+        backgroundColor = .darkGrey
         layer.cornerRadius = 10
         clipsToBounds = true
     }
 
     private func setConstraints() {
-        contentView.addSubview(thumbnailImageView)
-        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubviews(thumbnailImageView, spinner)
+        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            spinner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
 
