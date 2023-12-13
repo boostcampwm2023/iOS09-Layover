@@ -362,6 +362,7 @@
 		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
 		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
 		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
+		8344BFB52B2987CA0050AC9C /* Layover.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Layover.xctestplan; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -975,6 +976,7 @@
 		FC7E452D2AFEB623004F155A = {
 			isa = PBXGroup;
 			children = (
+				8344BFB52B2987CA0050AC9C /* Layover.xctestplan */,
 				83D0101D2B28E3E70086BE8B /* Layover.xctestplan */,
 				19AACFC52B0F71DF0088143E /* Secrets.xcconfig */,
 				FC7E45692AFEC06E004F155A /* .swiftlint.yml */,

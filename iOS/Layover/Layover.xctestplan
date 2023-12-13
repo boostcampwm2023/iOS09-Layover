@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "41E51B7F-CEAC-4A49-A895-095AC9BC010D",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Layover.xcodeproj",
+      "identifier" : "FC7E45352AFEB623004F155A",
+      "name" : "Layover"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Layover.xcodeproj",
+        "identifier" : "FC7E454B2AFEB62B004F155A",
+        "name" : "LayoverTests"
+      }
+    }
+  ],
+  "version" : 1
+}
