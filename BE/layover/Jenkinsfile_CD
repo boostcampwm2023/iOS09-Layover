@@ -5,6 +5,7 @@ pipeline {
         CONTAINER_NAME = 'layover-container'
         DOCKER_IMG_NAME = 'layover/layover'
         PROJECT_PATH = 'BE/layover'
+        COMMIT_HASH = ''
     }
 
     stages {
@@ -12,6 +13,9 @@ pipeline {
                     steps {
                         script {
                             try {
+                                // 커밋 해시 얻기
+                                env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+
                                 // 컨테이너가 존재하면 삭제
                                 sh """
                                 CONTAINER_ID=\$(docker ps -a -q -f name=$CONTAINER_NAME)
@@ -44,15 +48,13 @@ pipeline {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
-                            // COMMIT_HASH를 Jenkinsfile에서 얻음
                             echo '빌드 시작'
-                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
-                            def dockerImage = docker.build("${DOCKER_IMG_NAME}:${commitHash}")
+                            def dockerImage = docker.build("${DOCKER_IMG_NAME}:${COMMIT_HASH}")
 
                             // Docker Hub에 로그인
                             withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
                                 // Docker 이미지 push
-                                dockerImage.push("${commitHash}")
+                                dockerImage.push("${COMMIT_HASH}")
                             }
                             echo '빌드 및 푸시 성공'
                         }
@@ -66,22 +68,13 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run Docker Container with Compose') {
             steps {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
-                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
-                            def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
-                            dockerImage.run("""
-                            -p 3000:3000
-                            --name ${CONTAINER_NAME}
-                            -v ~/envs/.env:/usr/src/app/.env
-                            -v ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
-                            -v ~/envs/certificate.crt:/usr/src/app/certificate.crt
-                            -v ~/envs/private.key:/usr/src/app/private.key
-                            -v /var/log/logs.log:/usr/src/app/logs.log
-                            """.replaceAll("\n", " ").trim())
+                            def dockerImage = docker.image("${DOCKER_IMG_NAME}:${COMMIT_HASH}")
+                            sh "COMMIT_HASH=${commitHash} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} docker-compose up -d"
                             echo '컨테이너 실행 성공'
                             discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                         }
