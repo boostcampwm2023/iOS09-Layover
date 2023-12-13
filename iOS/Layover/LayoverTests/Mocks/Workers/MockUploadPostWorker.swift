@@ -15,7 +15,8 @@ final class MockUploadPostWorker: UploadPostWorkerProtocol {
 
     private let provider: ProviderType
 
-    init(provider: ProviderType) {
+    init(provider: ProviderType = Provider(session: .initMockSession(),
+                                           authManager: StubAuthManager())) {
         self.provider = provider
     }
 

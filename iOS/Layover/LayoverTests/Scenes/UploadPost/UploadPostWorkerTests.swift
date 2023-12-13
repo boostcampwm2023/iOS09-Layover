@@ -34,7 +34,7 @@ class UploadPostWorkerTests: XCTestCase {
         sut = UploadPostWorker(provider: Provider(session: .initMockSession(), authManager: StubAuthManager()))
     }
 
-    func test_uploadPost는_업로드에_성공하면_올바른결과를_반환한다() async throws {
+    func test_uploadPost는_업로드에_성공하면_올바른결과를_반환한다() async {
         // given
         guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "PostBoard", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation) else {
@@ -59,7 +59,7 @@ class UploadPostWorkerTests: XCTestCase {
 
         // when
         let response = await sut.uploadPost(with: request)
-        try await Task.sleep(nanoseconds: 3_000_000_000)
+//        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // then
         XCTAssertNotNil(response, "uploadPost가 response를 정상적으로 반환하지 못함")

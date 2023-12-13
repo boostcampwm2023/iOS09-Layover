@@ -141,8 +141,7 @@ final class UploadPostViewController: BaseViewController {
         setConstraints()
         setDelegation()
         addTarget()
-        interactor?.fetchThumbnailImage()
-        interactor?.fetchCurrentAddress()
+        fetchPostInfo()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -172,6 +171,13 @@ final class UploadPostViewController: BaseViewController {
             uploadButton.heightAnchor.constraint(equalToConstant: 50)
         ])
         setContentViewSubviewsConstraints()
+    }
+
+    private func fetchPostInfo() {
+        Task {
+            await interactor?.fetchCurrentAddress()
+            await interactor?.fetchThumbnailImage()
+        }
     }
 
     private func setDelegation() {

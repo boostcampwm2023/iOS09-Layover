@@ -8,7 +8,7 @@
 
 import CoreLocation
 
-class CurrentLocationManager: NSObject {
+final class CurrentLocationManager: NSObject {
 
     typealias LocationCompletion = ((CLLocation) -> Void)
 
@@ -25,10 +25,8 @@ class CurrentLocationManager: NSObject {
 
     func getCurrentLocation() -> CLLocation? {
         startUpdatingLocation()
-
         guard let space = locationFetcher.location?.coordinate else { return nil }
-        let location = CLLocation(latitude: space.latitude, longitude: space.longitude)
-        return location
+        return CLLocation(latitude: space.latitude, longitude: space.longitude)
     }
 
     func startUpdatingLocation() {

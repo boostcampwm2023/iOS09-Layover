@@ -97,14 +97,13 @@ class UploadPostInteractorTests: XCTestCase {
         XCTAssertNotNil(sut.tags, "fetchTags 함수가 datastore에 tags 데이터를 전달하지 못함")
     }
 
-    func test_fetchCurrentAddress를_호출하면_presenter의_presentCurrentAddress가_호출된다() async throws {
+    func test_fetchCurrentAddress를_호출하면_presenter의_presentCurrentAddress가_호출된다() async {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
 
         // when
-        sut.fetchCurrentAddress()
-        try await Task.sleep(nanoseconds: 3_000_000_000)
+        await sut.fetchCurrentAddress()
 
         // then
         XCTAssertTrue(spy.presentCurrentAddressCalled, "fetchCurrentAddress 함수가 presentCurrentAddress을 호출하지 못함")
@@ -116,22 +115,20 @@ class UploadPostInteractorTests: XCTestCase {
         sut.presenter = spy
 
         // when
-        sut.fetchCurrentAddress()
-        try await Task.sleep(nanoseconds: 3_000_000_000)
+        await sut.fetchCurrentAddress()
 
         // then
         XCTAssertNotNil(spy.presentCurrentAddressResponse, "fetchCurrentAddress 함수가 presenter에게 위치데이터를 전달하지 못함")
     }
 
-    func test_fetchThumbnailImage를_호출하면_presenter의_presentThumbnailImage가_호출된다() async throws {
+    func test_fetchThumbnailImage를_호출하면_presenter의_presentThumbnailImage가_호출된다() async {
         // given
         let spy = UploadPostPresentationLogicSpy()
         sut.presenter = spy
         sut.videoURL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")
 
         // when
-        sut.fetchThumbnailImage()
-        try await Task.sleep(nanoseconds: 5_000_000_000)
+        await sut.fetchThumbnailImage()
 
         // then
         XCTAssertTrue(spy.presentThumbnailCalled, "fetchThumbnailImage 함수가 presentThumbnailImage을 호출하지 못함")
