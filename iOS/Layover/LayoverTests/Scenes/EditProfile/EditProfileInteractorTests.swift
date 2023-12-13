@@ -76,6 +76,12 @@ final class EditProfileInteractorTests: XCTestCase {
         }
     }
 
+    final class UserWorkerMock: UserWorker {
+        override func checkNotDuplication(for userName: String) async -> Bool? {
+            return false
+        }
+    }
+
     // MARK: - Tests
 
     func test_setProfile을_실행하면_presenter의_presentProfile이_호출되고_자신의_데이터를_presenter에게_전달한다() {
@@ -281,7 +287,6 @@ final class EditProfileInteractorTests: XCTestCase {
     }
 
     func test_checkDuplication을_실행했을때_중복된_닉네임이_아니라면_presenter의_presentNicknameDuplication을_호출하고_올바른_값을_전달한다() async {
-
         // arrange
         let spy = EditProfilePresentationLogicSpy()
         sut.presenter = spy
@@ -297,6 +302,24 @@ final class EditProfileInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentNicknameDuplicationResponse.canEditProfile,
                      "checkDuplication을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
     }
+
+    func test_checkDuplication을_실행했을때_중복된_닉네임이라면_presenter의_presentNicknameDuplication을_호출하고_올바른_값을_전달한다() async {
+
+        // arrange
+        let spy = EditProfilePresentationLogicSpy()
+        sut.presenter = spy
+        sut.userWorker = UserWorkerMock()
+
+        // act
+        await sut.checkDuplication(with: Models.CheckNicknameDuplication.Request(nickname: "안유진"))
+
+        // assert
+        XCTAssertTrue(spy.presentNicknameDuplicationCalled, "checkDuplication을 호출해서 presenter의 presentNicknameDuplication을 호출하지 못했다.")
+        XCTAssertFalse(spy.presentNicknameDuplicationResponse.isValid,
+                       "checkDuplication을 호출해서 presenter에게 올바른 isValid값을 전달하지 못했다.")
+
+        XCTAssertFalse(spy.presentNicknameDuplicationResponse.canEditProfile,
+                        "checkDuplication을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")}
 
     // TODO: editProfile 테스트 메서드는 내부 병렬실행 이슈 해결 후 작성
 }
