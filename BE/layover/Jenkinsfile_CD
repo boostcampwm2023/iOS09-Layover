@@ -47,11 +47,10 @@ pipeline {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
+                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+                            env.COMMIT_HASH = commitHash
 
-		                    env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
-		                    //COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
                             echo "커밋 해시1: ${env.COMMIT_HASH}"
-                            echo "커밋 해시2: ${COMMIT_HASH}"
 
                             echo '빌드 시작'
                             def dockerImage = docker.build("${DOCKER_IMG_NAME}:${env.COMMIT_HASH}")
