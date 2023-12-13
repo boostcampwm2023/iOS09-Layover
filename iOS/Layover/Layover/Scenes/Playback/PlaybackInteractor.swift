@@ -129,7 +129,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
         if previousCell == request.currentCell {
             response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
@@ -139,10 +138,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
         // map에서 왔을 경우(로드한 목록 무한 반복)
         if parentView == .map {
-            if request.indexPathRow == (posts.count - 1) {
+            if request.indexPathRow == (playbackVideoInfos.count - 1) {
                 response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, previousCell: previousCell, currentCell: nil)
             } else if request.indexPathRow == 0 {
-                response = Models.DisplayPlaybackVideo.Response(indexPathRow: posts.count - 2, previousCell: previousCell, currentCell: nil)
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: playbackVideoInfos.count - 2, previousCell: previousCell, currentCell: nil)
             } else {
                 response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
                 previousCell = request.currentCell
@@ -162,14 +161,13 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
-        if let isTeleport, isTeleport == true, (request.indexPathRow == 1 || request.indexPathRow == (posts.count - 2)) {
-                response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
+        if let isTeleport, isTeleport == true, (request.indexPathRow == 1 || request.indexPathRow == (playbackVideoInfos.count - 2)) {
+            response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
             previousCell = request.currentCell
-                presenter?.presentMoveCellNext(with: response)
-                self.isTeleport = false
-            }
+            presenter?.presentMoveCellNext(with: response)
+            self.isTeleport = false
+        }
 
         if let isDelete, isDelete == true {
             response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: request.currentCell)
@@ -264,7 +262,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                     result: result,
                     playbackVideo: request.playbackVideo,
                     nextCellIndex: 2,
-                    deleteCellIndex: playbackVideoInfos.count,
+                    deleteCellIndex: playbackVideoInfos.count - 1,
                     isNeedReplace: false)
                 playbackVideoInfos.append(playbackVideoInfos[2])
                 if let posts {
@@ -321,7 +319,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         var videos: [Models.PlaybackVideo] = []
         var infos: [Models.PlaybackInfo] = []
         for post in posts {
-            if let videoURL: URL = post.board.videoURL {
+            if let videoURL: URL = post.board.videoURL, post.board.status == .complete {
                 videos.append(Models.PlaybackVideo(
                     displayedPost: Models.DisplayedPost(
                         member: Models.Member(
@@ -360,8 +358,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 isFetchReqeust = true
                 var page: Int = 0
                 if parentView != .home {
-                    guard let posts else { return false }
-                    page = posts.count / 15 + 1
+                    page = playbackVideoInfos.count / 15 + 1
                     if page == currentPage {
                         return false
                     }
@@ -382,7 +379,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                     return false
                 }
                 guard let newPosts else { return false }
-                self.posts?.append(contentsOf: newPosts)
+                posts?.append(contentsOf: newPosts)
                 let videos: [Models.PlaybackVideo]
                 let newInfos: [Models.PlaybackInfo]
                 (videos, newInfos) = transPostToVideo(newPosts)

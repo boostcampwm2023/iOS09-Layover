@@ -92,8 +92,8 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.configurePlaybackCell()
         interactor?.displayVideoList()
+        interactor?.configurePlaybackCell()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
         do {
@@ -312,10 +312,13 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         if let nextCellIndex = viewModel.nextCellIndex, let deleteCellIndex = viewModel.deleteCellIndex {
             let insertItem = snapshot.itemIdentifiers[nextCellIndex]
             let deleteItem = snapshot.itemIdentifiers[deleteCellIndex]
-            snapshot.insertItems([Models.PlaybackVideo(displayedPost: insertItem.displayedPost)], beforeItem: deleteItem)
+            let newFrontDummyItem = Models.PlaybackVideo(displayedPost: insertItem.displayedPost)
+            snapshot.insertItems([newFrontDummyItem], beforeItem: deleteItem)
             snapshot.deleteItems([deleteItem])
             if viewModel.isNeedReplace {
-                snapshot.insertItems([Models.PlaybackVideo(displayedPost: insertItem.displayedPost)], afterItem: viewModel.playbackVideo)
+                // 삭제가 되어도 더미셀이 오지 않고 정상적으로 순회하기 위함
+                let newBehindItem = Models.PlaybackVideo(displayedPost: insertItem.displayedPost)
+                snapshot.insertItems([newBehindItem], afterItem: viewModel.playbackVideo)
                 snapshot.deleteItems([insertItem])
             }
             dataSource.apply(snapshot, animatingDifferences: false)
