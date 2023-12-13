@@ -575,7 +575,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.selectedTag, "테스트")
     }
 
-    func test_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다_home() async {
+    func test_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다_home() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .home
@@ -583,6 +583,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.presenter = spy
         // act
         let result = await sut.fetchPosts().value
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
@@ -591,7 +592,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts?.count, 4)
     }
 
-    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async {
+    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .tag
@@ -600,6 +601,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.presenter = spy
         // act
         let result = await sut.fetchPosts().value
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
@@ -608,7 +610,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts?.count, 22)
     }
 
-    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async {
+    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .otherProfile
@@ -616,6 +618,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.presenter = spy
         // act
         let result = await sut.fetchPosts().value
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
