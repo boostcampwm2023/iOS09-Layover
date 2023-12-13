@@ -322,6 +322,12 @@ extension MapViewController: MapDisplayLogic {
 
 extension MapViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+        guard let post = carouselDatasource.itemIdentifier(for: indexPath) else { return }
+        switch post.boardStatus {
+        case .complete:
+            interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+        default:
+            Toast.shared.showToast(message: "인코딩 중인 영상입니다. 잠시만 기다려주세요!")
+        }
     }
 }
