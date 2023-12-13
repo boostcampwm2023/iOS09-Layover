@@ -79,7 +79,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     func fetchImageData(with url: URL?) async -> Data? {
         guard let url else { return nil }
         do {
-            guard let imageURL = Bundle.main.url(forResource: "sample", withExtension: "jpeg") else {
+            guard let imageURL = Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg") else {
                 return nil
             }
             let mockData = try? Data(contentsOf: imageURL)
