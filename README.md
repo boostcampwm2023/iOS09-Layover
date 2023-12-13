@@ -126,6 +126,9 @@
 
 ## BE
 
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/672b66fb-e1c0-454f-a5fc-6f65b876e589)
+
+
 ### ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
 
 - object storage /vod station / cloud function
