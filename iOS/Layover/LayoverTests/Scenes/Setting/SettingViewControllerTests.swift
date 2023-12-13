@@ -65,6 +65,6 @@ final class SettingViewControllerTests: XCTestCase {
         sut.setUI()
 
         // assert
-        XCTAssertTrue(spy.performTableViewConfigureCalled, "setUI()가 호출되어 performTableViewConfigure() 가 호출되지 않았다")
+        XCTAssertTrue(spy.performTableViewConfigureCalled, "setUI()가 호출됐지만 performTableViewConfigure()가 호출되지 않았다")
     }
 }
