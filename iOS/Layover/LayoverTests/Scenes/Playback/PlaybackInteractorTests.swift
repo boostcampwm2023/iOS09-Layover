@@ -177,7 +177,7 @@ final class PlaybackInteractorTests: XCTestCase {
         let result = await sut.displayVideoList().value
 
         // Assert
-        XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출했습니다")
+        XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
         XCTAssertTrue(result, "displayVideoList는 동작에 성공했습니다")
         // map이므로 2 + 더미셀 2 = 4
         // videoURL이 nil이면 거름
@@ -199,7 +199,7 @@ final class PlaybackInteractorTests: XCTestCase {
         let result = await sut.displayVideoList().value
 
         // Assert
-        XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출했습니다")
+        XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
         XCTAssertTrue(result, "displayVideoList는 동작에 성공했습니다")
         // map이므로 2 + 더미셀 2 = 4
         // videoURL이 nil이면 거름
@@ -219,7 +219,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.moveInitialPlaybackCell()
 
         // Assert
-        XCTAssertTrue(spy.presentMoveInitialPlaybackCellDidCalled, "moveInitialPlaybackCell은 moveInitialPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentMoveInitialPlaybackCellDidCalled, "moveInitialPlaybackCell은 moveInitialPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentMoveInitialPlaybackCellResponse.indexPathRow, 3)
     }
 
@@ -234,7 +234,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.moveInitialPlaybackCell()
 
         // Assert
-        XCTAssertTrue(spy.presentMoveInitialPlaybackCellDidCalled, "moveInitialPlaybackCell은 moveInitialPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentMoveInitialPlaybackCellDidCalled, "moveInitialPlaybackCell은 moveInitialPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentMoveInitialPlaybackCellResponse.indexPathRow, 2)
     }
 
@@ -249,7 +249,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.setInitialPlaybackCell()
 
         // Assert
-        XCTAssertTrue(spy.presentSetInitialPlaybackCellDidCalled, "setInitialPlaybackCell은 presentSetInitialPlaybackCell을 호출했습니다.")
+        XCTAssertTrue(spy.presentSetInitialPlaybackCellDidCalled, "setInitialPlaybackCell은 presentSetInitialPlaybackCell을 호출하지 않았습니다.")
         XCTAssertEqual(spy.presentSetInitialPlaybackCellResponse.indexPathRow, 3)
     }
 
@@ -264,7 +264,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.setInitialPlaybackCell()
 
         // Assert
-        XCTAssertTrue(spy.presentSetInitialPlaybackCellDidCalled, "setInitialPlaybackCell은 presentSetInitialPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentSetInitialPlaybackCellDidCalled, "setInitialPlaybackCell은 presentSetInitialPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentSetInitialPlaybackCellResponse.indexPathRow, 3)
     }
 
@@ -277,7 +277,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playInitialPlaybackCell(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentPlayInitialPlaybackCellDidCalled, "playInitialPlaybackCell은 presentInitialPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentPlayInitialPlaybackCellDidCalled, "playInitialPlaybackCell은 presentInitialPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentPlayInitialPlaybackCellResponse.previousCell, nil)
         XCTAssertEqual(spy.presentPlayInitialPlaybackCellResponse.currentCell, sut.previousCell)
         XCTAssertEqual(spy.presentPlayInitialPlaybackCellResponse.currentCell, Seeds.PlaybackVideo.currentCell)
@@ -294,7 +294,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playVideo(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentShowPlayerSliderDidCalled, "playVideo는 presentShowPlayerSlider를 호출했습니다")
+        XCTAssertTrue(spy.presentShowPlayerSliderDidCalled, "playVideo는 presentShowPlayerSlider를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentShowPlayerSliderResponse.currentCell, request.currentCell)
     }
 
@@ -310,7 +310,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playVideo(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentTeleportCellDidCalled, "playVideo는 presentTeleportCell를 호출했습니다")
+        XCTAssertTrue(spy.presentTeleportCellDidCalled, "playVideo는 presentTeleportCell를 호출하지 않았습니다")
         XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentTeleportCellResponse.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentTeleportCellResponse.indexPathRow, 1)
@@ -329,7 +329,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playVideo(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentTeleportCellDidCalled, "playVideo는 presentTeleportCell를 호출했습니다")
+        XCTAssertTrue(spy.presentTeleportCellDidCalled, "playVideo는 presentTeleportCell를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentTeleportCellResponse.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentTeleportCellResponse.currentCell, nil)
         XCTAssertEqual(spy.presentTeleportCellResponse.indexPathRow, 0)
@@ -350,7 +350,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playVideo(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playVideo는 presentMoveCellNext를 호출했습니다")
+        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playVideo는 presentMoveCellNext를 호출하지 않았습니다")
         XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.currentCell)
         XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
@@ -375,7 +375,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playTeleportVideo(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playTeleportvideo는 presentMoveCellNext를 호출했습니다")
+        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playTeleportvideo는 presentMoveCellNext를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
         XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.currentCell)
@@ -398,7 +398,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.playTeleportVideo(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playTeleportvideo는 presentMoveCellNext를 호출했습니다")
+        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playTeleportvideo는 presentMoveCellNext를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
         XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.currentCell)
@@ -415,7 +415,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.resumePlaybackView()
 
         // Assert
-        XCTAssertTrue(spy.presentPlayInitialPlaybackCellDidCalled, "resumPlaybackView가 presentPlayInitialPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentPlayInitialPlaybackCellDidCalled, "resumPlaybackView가 presentPlayInitialPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentPlayInitialPlaybackCellResponse.currentCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentPlayInitialPlaybackCellResponse.previousCell, nil)
     }
@@ -430,7 +430,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.resumePlaybackView()
 
         // Assert
-        XCTAssertTrue(spy.presentSetInitialPlaybackCellDidCalled, "resumPlaybackView가 presentSetInitialPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentSetInitialPlaybackCellDidCalled, "resumPlaybackView가 presentSetInitialPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentSetInitialPlaybackCellResponse.indexPathRow, 2)
     }
 
@@ -443,7 +443,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.leavePlaybackView()
 
         // Assert
-        XCTAssertTrue(spy.presentLeavePlaybackViewDidCalled, "leavePlaybackView가 presentLeavePlaybackView를 호출했습니다")
+        XCTAssertTrue(spy.presentLeavePlaybackViewDidCalled, "leavePlaybackView가 presentLeavePlaybackView를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentLeavePlaybackViewResponse.previousCell, Seeds.PlaybackVideo.previousCell)
     }
 
@@ -456,7 +456,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.resetVideo()
 
         // Assert
-        XCTAssertTrue(spy.presentResetPlaybackCellDidCalled, "resetVideo가 presentResetPlaybackCell을 호출했습니다")
+        XCTAssertTrue(spy.presentResetPlaybackCellDidCalled, "resetVideo가 presentResetPlaybackCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentResetPlaybackCellResponse.previousCell, nil)
         XCTAssertEqual(spy.presentResetPlaybackCellResponse.currentCell, Seeds.PlaybackVideo.previousCell)
     }
@@ -483,7 +483,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.careVideoLoading(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "careVideoLoading은 presentMoveCellNext를 호출했습니다")
+        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "careVideoLoading은 presentMoveCellNext를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, nil)
         XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
     }
@@ -499,7 +499,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.configurePlaybackCell()
 
         // Assert
-        XCTAssertTrue(spy.presentConfigureCellDidCalled, "configurePlaybackCell은 presentConfigureCell을 호출했습니다")
+        XCTAssertTrue(spy.presentConfigureCellDidCalled, "configurePlaybackCell은 presentConfigureCell을 호출하지 않았습니다")
         XCTAssertEqual(spy.presentConfigureCellResponse.teleportIndex, 4)
     }
 
@@ -514,7 +514,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.configurePlaybackCell()
 
         // Assert
-        XCTAssertTrue(spy.presentConfigureCellDidCalled, "configurePlaybackCell은 presentConfigureCell을 호출했습니다")
+        XCTAssertTrue(spy.presentConfigureCellDidCalled, "configurePlaybackCell은 presentConfigureCell을 호출하지 않았습니다")
     }
 
     func test_setSeemoreButton을_호출할때_presentSetSeemoreButton을_호출하고_올바른_데이터를_전달한다_본인일경우() {
@@ -557,7 +557,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.moveToProfile(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentProfileDidCalled, "moveToProfile이 presentProfileDidCalled를 호출했습니다")
+        XCTAssertTrue(spy.presentProfileDidCalled, "moveToProfile이 presentProfileDidCalled를 호출하지 않았습니다")
         XCTAssertEqual(sut.memberID, 1)
     }
 
@@ -571,11 +571,11 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.moveToTagPlay(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentTagPlayDidCalled, "moveToTagPlay이 presentTagPlay를 호출했습니다")
+        XCTAssertTrue(spy.presentTagPlayDidCalled, "moveToTagPlay이 presentTagPlay를 호출하지 않았습니다")
         XCTAssertEqual(sut.selectedTag, "테스트")
     }
 
-    func test_fetchPosts_home() async {
+    func test_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다_home() async {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .home
@@ -585,12 +585,12 @@ final class PlaybackInteractorTests: XCTestCase {
         let result = await sut.fetchPosts().value
 
         // Assert
-        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출했습니다")
+        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 5)
         XCTAssertEqual(sut.posts?.count, 8)
     }
 
-    func test_fetchPosts_tag() async {
+    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .tag
@@ -601,12 +601,12 @@ final class PlaybackInteractorTests: XCTestCase {
         let result = await sut.fetchPosts().value
 
         // Assert
-        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출했습니다")
+        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 4)
         XCTAssertEqual(sut.posts?.count, 25)
     }
 
-    func test_fetchPosts_Profile() async {
+    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .otherProfile
@@ -616,7 +616,7 @@ final class PlaybackInteractorTests: XCTestCase {
         let result = await sut.fetchPosts().value
 
         // Assert
-        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출했습니다")
+        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 4)
         XCTAssertEqual(sut.posts?.count, 25)
     }

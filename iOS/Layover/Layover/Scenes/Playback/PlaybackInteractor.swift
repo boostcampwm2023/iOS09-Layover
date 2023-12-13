@@ -86,7 +86,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 self.posts = posts
             }
             let videos: [Models.PlaybackVideo] = transPostToVideo(posts)
-            print(videos.count)
             let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
             await MainActor.run {
                 presenter?.presentVideoList(with: response)
