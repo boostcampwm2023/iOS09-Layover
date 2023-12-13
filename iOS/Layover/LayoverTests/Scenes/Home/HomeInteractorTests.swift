@@ -78,6 +78,7 @@ final class HomeInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.status, Seeds.Posts.post1.board.status, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.username, Seeds.Posts.post1.member.username, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")

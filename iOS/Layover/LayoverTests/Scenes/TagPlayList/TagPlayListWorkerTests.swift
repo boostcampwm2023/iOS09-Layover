@@ -66,6 +66,7 @@ final class TagPlayListWorkerTests: XCTestCase {
         XCTAssertEqual(result![0].board.videoURL, Seeds.Posts.post1.board.videoURL, "올바른 board videoURL이 반환되지 않았다.")
         XCTAssertEqual(result![0].board.latitude, Seeds.Posts.post1.board.latitude, "올바른 board latitude가 반환되지 않았다.")
         XCTAssertEqual(result![0].board.longitude, Seeds.Posts.post1.board.longitude, "올바른 board longitude가 반환되지 않았다.")
+        XCTAssertEqual(result![0].board.status, Seeds.Posts.post1.board.status, "올바른 board status가 반환되지 않았다.")
         XCTAssertEqual(result![0].member.identifier, Seeds.Posts.post1.member.identifier, "올바른 member identifier가 반환되지 않았다.")
         XCTAssertEqual(result![0].member.username, Seeds.Posts.post1.member.username, "올바른 member username이 반환되지 않았다.")
         XCTAssertEqual(result![0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "올바른 member profileImageURL이 반환되지 않았다.")

@@ -16,7 +16,8 @@
                 "longitude" : 35.001828282,
                 "latitude" : 100.060123123,
                 "title" : "아이브의 멤버",
-                "content" : "게시글 설명설명설명"
+                "content" : "게시글 설명설명설명",
+                "status": "COMPLETE"
             },
             "tag" : ["Ive", "wonyoung"]
         }

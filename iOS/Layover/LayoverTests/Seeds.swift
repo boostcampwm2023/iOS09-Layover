@@ -24,7 +24,9 @@ class Seeds {
                                              thumbnailImageURL: URL(string: "https://think-note.com/wp-content/uploads/2023/07/eta_3.jpg")!,
                                              videoURL: URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")!,
                                              latitude: 127.060123123,
-                                             longitude: 37.0532156213),
+                                             longitude: 37.0532156213,
+                                             status: .complete
+                                            ),
                                 tag: ["아이브", "yujin"])
 
         // PostListMore.json에 정의된 데이터
@@ -38,7 +40,9 @@ class Seeds {
                                              thumbnailImageURL: URL(string: "https://img.etoday.co.kr/pto_db/2022/11/600/20221108175829_1816470_1200_1800.jpg")!,
                                              videoURL: URL(string: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")!,
                                              latitude: 100.060123123,
-                                             longitude: 35.001828282),
+                                             longitude: 35.001828282,
+                                             status: .complete
+                                            ),
                                 tag: ["Ive", "wonyoung"])
         
         static let thumbnailImageNilPost = Post(member: Member(identifier: 1,
@@ -51,7 +55,9 @@ class Seeds {
                                       thumbnailImageURL: nil,
                                       videoURL: URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8")!,
                                       latitude: 127.060123123,
-                                      longitude: 37.0532156213),
+                                      longitude: 37.0532156213,
+                                      status: .complete
+                                     ),
                          tag: ["아이브", "yujin"])
 
         static let videoURLNilPost = Post(member: Member(identifier: 1,
@@ -64,7 +70,9 @@ class Seeds {
                                       thumbnailImageURL: nil,
                                       videoURL: nil,
                                       latitude: 127.060123123,
-                                      longitude: 37.0532156213),
+                                      longitude: 37.0532156213,
+                                      status: .complete
+                                     ),
                          tag: ["아이브", "yujin"])
 
     }

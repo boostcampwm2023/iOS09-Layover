@@ -68,6 +68,7 @@ final class HomeWorkerTests: XCTestCase {
         XCTAssertEqual(result![0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
         XCTAssertEqual(result![0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
         XCTAssertEqual(result![0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+        XCTAssertEqual(result![0].board.status, Seeds.Posts.post1.board.status, "fetchPost가 성공적으로 데이터를 받아와서 Post배열을 리턴하지 못했다.")
         XCTAssertEqual(result![0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
         XCTAssertEqual(result![0].member.username, Seeds.Posts.post1.member.username, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
         XCTAssertEqual(result![0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")

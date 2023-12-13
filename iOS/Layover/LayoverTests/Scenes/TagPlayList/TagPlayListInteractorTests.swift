@@ -112,6 +112,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts[0].board.longitude, Seeds.Posts.post1.board.longitude)
         XCTAssertEqual(sut.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL)
         XCTAssertEqual(sut.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL)
+        XCTAssertEqual(sut.posts[0].board.status, Seeds.Posts.post1.board.status)
         XCTAssertEqual(sut.posts[0].member.identifier, Seeds.Posts.post1.member.identifier)
         XCTAssertEqual(sut.posts[0].member.username, Seeds.Posts.post1.member.username)
         XCTAssertEqual(sut.posts[0].member.introduce, Seeds.Posts.post1.member.introduce)
@@ -141,6 +142,7 @@ final class TagPlayListInteractorTests: XCTestCase {
             && $0.board.videoURL == Seeds.Posts.post2.board.videoURL
             && $0.board.latitude == Seeds.Posts.post2.board.latitude
             && $0.board.longitude == Seeds.Posts.post2.board.longitude
+            && $0.board.status == Seeds.Posts.post2.board.status
             && $0.member.identifier == Seeds.Posts.post2.member.identifier
             && $0.member.username == Seeds.Posts.post2.member.username
             && $0.member.introduce == Seeds.Posts.post2.member.introduce
@@ -157,6 +159,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts[0].board.longitude, Seeds.Posts.post1.board.longitude)
         XCTAssertEqual(sut.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL)
         XCTAssertEqual(sut.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL)
+        XCTAssertEqual(sut.posts[0].board.status, Seeds.Posts.post1.board.status)
         XCTAssertEqual(sut.posts[0].member.identifier, Seeds.Posts.post1.member.identifier)
         XCTAssertEqual(sut.posts[0].member.username, Seeds.Posts.post1.member.username)
         XCTAssertEqual(sut.posts[0].member.introduce, Seeds.Posts.post1.member.introduce)
@@ -219,6 +222,7 @@ final class TagPlayListInteractorTests: XCTestCase {
             && $0.board.videoURL == Seeds.Posts.post1.board.videoURL
             && $0.board.latitude == Seeds.Posts.post1.board.latitude
             && $0.board.longitude == Seeds.Posts.post1.board.longitude
+            && $0.board.status == Seeds.Posts.post1.board.status
             && $0.member.identifier == Seeds.Posts.post1.member.identifier
             && $0.member.username == Seeds.Posts.post1.member.username
             && $0.member.introduce == Seeds.Posts.post1.member.introduce
