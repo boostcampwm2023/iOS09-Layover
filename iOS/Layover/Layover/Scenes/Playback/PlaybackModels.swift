@@ -219,11 +219,17 @@ enum PlaybackModels {
         struct Response {
             let result: Bool
             let playbackVideo: PlaybackVideo
+            let nextCellIndex: Int?
+            let deleteCellIndex: Int?
+            let isNeedReplace: Bool
         }
 
         struct ViewModel {
             let deleteMessage: DeleteMessage
             let playbackVideo: PlaybackVideo
+            let nextCellIndex: Int?
+            let deleteCellIndex: Int?
+            let isNeedReplace: Bool
         }
     }
 

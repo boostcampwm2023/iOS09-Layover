@@ -19,6 +19,7 @@ protocol PlaybackBusinessLogic {
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func moveVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func resetVideo()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
@@ -207,6 +208,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
     }
 
+    func moveVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        presenter?.presentTeleportCell(with: Models.DisplayPlaybackVideo.Response(indexPathRow: request.indexPathRow, previousCell: nil, currentCell: nil))
+    }
+
     // MARK: - UseCase ConfigureCell
 
     func configurePlaybackCell() {
@@ -246,11 +251,56 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) async {
         isDelete = true
         guard let worker,
+              let parentView,
               request.indexPathRow < playbackVideoInfos.count
         else { return }
         let boardID: Int = playbackVideoInfos[request.indexPathRow].boardID
+        let response: Models.DeletePlaybackVideo.Response
         let result = await worker.deletePlaybackVideo(boardID: boardID)
-        let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
+        if parentView == .map {
+            // map일 경우 최소 셀 개수가 3개
+            if request.indexPathRow == 1 {
+                response = Models.DeletePlaybackVideo.Response(
+                    result: result,
+                    playbackVideo: request.playbackVideo,
+                    nextCellIndex: 2,
+                    deleteCellIndex: playbackVideoInfos.count,
+                    isNeedReplace: false)
+                playbackVideoInfos.append(playbackVideoInfos[2])
+                if let posts {
+                    self.posts?.append((posts[2]))
+                }
+            } else if request.indexPathRow == playbackVideoInfos.count - 2 {
+                response = Models.DeletePlaybackVideo.Response(
+                    result: result,
+                    playbackVideo: request.playbackVideo,
+                    nextCellIndex: request.indexPathRow - 1,
+                    deleteCellIndex: 0,
+                    isNeedReplace: true)
+                playbackVideoInfos.append(playbackVideoInfos[request.indexPathRow - 1])
+                if let posts {
+                    self.posts?.append((posts[2]))
+                }
+            } else {
+                response = Models.DeletePlaybackVideo.Response(
+                    result: result,
+                    playbackVideo: request.playbackVideo,
+                    nextCellIndex: nil,
+                    deleteCellIndex: nil,
+                    isNeedReplace: false)
+            }
+        } else {
+            response = Models.DeletePlaybackVideo.Response(
+                result: result,
+                playbackVideo: request.playbackVideo,
+                nextCellIndex: nil,
+                deleteCellIndex: nil,
+                isNeedReplace: false)
+        }
+        if result {
+            playbackVideoInfos.removeAll { $0.boardID == boardID }
+            posts?.removeAll { $0.board.identifier == boardID }
+        }
         await MainActor.run {
             presenter?.presentDeleteVideo(with: response)
         }

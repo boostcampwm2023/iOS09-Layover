@@ -153,7 +153,6 @@ final class PlaybackViewController: BaseViewController {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
             [weak self] _ in
-//            self?.router?.routeToReport()
             self?.interactor?.reportVideo(with: Models.ReportPlaybackVideo.Request(indexPathRow: indexPathRow))
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
@@ -307,6 +306,20 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         interactor?.resetVideo()
         guard let dataSource else { return }
         var snapshot = dataSource.snapshot()
+        if viewModel.nextCellIndex == 2 && snapshot.itemIdentifiers.count == 2 {
+            self.navigationController?.popViewController(animated: true)
+        }
+        if let nextCellIndex = viewModel.nextCellIndex, let deleteCellIndex = viewModel.deleteCellIndex {
+            let insertItem = snapshot.itemIdentifiers[nextCellIndex]
+            let deleteItem = snapshot.itemIdentifiers[deleteCellIndex]
+            snapshot.insertItems([Models.PlaybackVideo(displayedPost: insertItem.displayedPost)], beforeItem: deleteItem)
+            snapshot.deleteItems([deleteItem])
+            if viewModel.isNeedReplace {
+                snapshot.insertItems([Models.PlaybackVideo(displayedPost: insertItem.displayedPost)], afterItem: viewModel.playbackVideo)
+                snapshot.deleteItems([insertItem])
+            }
+            dataSource.apply(snapshot, animatingDifferences: false)
+        }
         snapshot.deleteItems([viewModel.playbackVideo])
         dataSource.apply(snapshot, animatingDifferences: true)
         if snapshot.itemIdentifiers.count < 1 {

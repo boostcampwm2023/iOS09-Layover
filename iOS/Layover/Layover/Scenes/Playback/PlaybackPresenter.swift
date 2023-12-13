@@ -118,7 +118,12 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
 
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response) {
         let deleteMessage: Models.DeletePlaybackVideo.DeleteMessage = response.result ? .success : .fail
-        let viewModel: Models.DeletePlaybackVideo.ViewModel = Models.DeletePlaybackVideo.ViewModel(deleteMessage: deleteMessage, playbackVideo: response.playbackVideo)
+        let viewModel: Models.DeletePlaybackVideo.ViewModel = Models.DeletePlaybackVideo.ViewModel(
+            deleteMessage: deleteMessage,
+            playbackVideo: response.playbackVideo,
+            nextCellIndex: response.nextCellIndex,
+            deleteCellIndex: response.deleteCellIndex,
+            isNeedReplace: response.isNeedReplace)
         viewController?.deleteVideo(viewModel: viewModel)
     }
 
