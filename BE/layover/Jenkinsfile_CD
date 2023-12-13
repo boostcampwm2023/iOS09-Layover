@@ -76,7 +76,7 @@ pipeline {
                             def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
 
                             def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
-                            sh "COMMIT_HASH=${commitHash} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} BE/layover/docker-compose up -d"
+                            sh "COMMIT_HASH=${commitHash} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} BE/layover/docker-compose.yml up -d"
                             echo '컨테이너 실행 성공'
                             discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                         }
