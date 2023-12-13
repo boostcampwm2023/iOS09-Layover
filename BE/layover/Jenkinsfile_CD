@@ -47,7 +47,8 @@ pipeline {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
-		    env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+                            echo sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+		                    env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
                             echo "커밋 해시: ${env.COMMIT_HASH}"
 
                             echo '빌드 시작'
