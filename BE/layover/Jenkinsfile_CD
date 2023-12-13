@@ -15,6 +15,7 @@ pipeline {
                             try {
                                 // 커밋 해시 얻기
                                 env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+                                echo "커밋 해시: ${env.COMMIT_HASH}"
 
                                 // 컨테이너가 존재하면 삭제
                                 sh """
@@ -48,14 +49,16 @@ pipeline {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
+                            echo "커밋 해시: ${env.COMMIT_HASH}"
+
                             echo '빌드 시작'
                             def dockerImage = docker.build("${DOCKER_IMG_NAME}:${env.COMMIT_HASH}")
 
                             // Docker Hub에 로그인
-                            withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                            //withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
                                 // Docker 이미지 push
-                                dockerImage.push("${env.COMMIT_HASH}")
-                            }
+                                //dockerImage.push("${env.COMMIT_HASH}")
+                            //}
                             echo '빌드 및 푸시 성공'
                         }
                     } catch (Exception e) {
@@ -74,7 +77,7 @@ pipeline {
                     try {
                         dir("$PROJECT_PATH") {
                             def dockerImage = docker.image("${DOCKER_IMG_NAME}:${env.COMMIT_HASH}")
-                            sh "COMMIT_HASH=${env.COMMIT_HASH} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} docker-compose up -d"
+                            sh "COMMIT_HASH=${env.COMMIT_HASH} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} BE/layover/docker-compose up -d"
                             echo '컨테이너 실행 성공'
                             discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                         }
