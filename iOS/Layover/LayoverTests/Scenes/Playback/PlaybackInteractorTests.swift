@@ -587,9 +587,9 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-//        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
-//        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-//        XCTAssertEqual(sut.posts?.count, 3)
+        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 3)
     }
 
     func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async throws {
@@ -606,9 +606,9 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-//        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
-//        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-//        XCTAssertEqual(sut.posts?.count, 21)
+        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 21)
     }
 
     func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async throws {
@@ -624,8 +624,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-//        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
-//        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-//        XCTAssertEqual(sut.posts?.count, 21)
+        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 21)
     }
 }
