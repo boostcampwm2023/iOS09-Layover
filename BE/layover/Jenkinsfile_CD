@@ -48,6 +48,7 @@ pipeline {
                     try {
                         dir("$PROJECT_PATH") {
                             def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+                            echo "커밋 해시: ${commitHash}"
                             env.COMMIT_HASH = commitHash
 
                             echo "커밋 해시1: ${env.COMMIT_HASH}"
