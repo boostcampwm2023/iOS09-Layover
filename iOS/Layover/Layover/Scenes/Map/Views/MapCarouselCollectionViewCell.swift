@@ -11,7 +11,7 @@ import AVFoundation
 
 final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
-    private let loopingPlayerView = LoopingPlayerView()
+    private let loopingPlayerView: LoopingPlayerView = LoopingPlayerView()
 
     private let thumbnailImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
@@ -42,6 +42,7 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
     func setVideo(url: URL?) {
         guard let url else {
             spinner.startAnimating()
+            loopingPlayerView.disable()
             return
         }
         spinner.stopAnimating()
@@ -54,6 +55,8 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
     func configure(thumbnailImageData: Data?) {
         if let thumbnailImageData {
             thumbnailImageView.image = UIImage(data: thumbnailImageData)
+        } else {
+            thumbnailImageView.image = nil
         }
     }
 
