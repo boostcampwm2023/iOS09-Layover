@@ -581,6 +581,8 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.parentView = .home
         sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
         sut.presenter = spy
+        sut.currentPage = 1
+        sut.isFetchReqeust = false
 
         // act
         let result = await sut.fetchPosts().value
@@ -599,6 +601,9 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
         sut.selectedTag = "테스트"
         sut.presenter = spy
+        sut.currentPage = 1
+        sut.isFetchReqeust = false
+
         // act
         let result = await sut.fetchPosts().value
         try await Task.sleep(nanoseconds: 3_000_000_000)
@@ -617,6 +622,9 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
         sut.presenter = spy
         sut.memberID = -1
+        sut.currentPage = 1
+        sut.isFetchReqeust = false
+        
         // act
         let result = await sut.fetchPosts().value
 
