@@ -105,7 +105,7 @@ final class HomeViewControllerTests: XCTestCase {
         sut.routeToPlayback()
 
         // assert
-        XCTAssertTrue(spy.routeToPlaybackCalled, "routeToPlayback 호출 시 router의 routeToPlayback이 호출되었다.")
+        XCTAssertTrue(spy.routeToPlaybackCalled, "routeToPlayback 호출 시 router의 routeToPlayback이 호출되지 않았다.")
     }
 
     func test_routeToTagPlayList_호출시_router의_routeToTagPlay를_호출한다() {
@@ -117,6 +117,6 @@ final class HomeViewControllerTests: XCTestCase {
         sut.routeToTagPlayList()
 
         // assert
-        XCTAssertTrue(spy.routeToTagPlayCalled, "routeToTagPlayList 호출 시 router의 routeToTagPlay가 호출되었다.")
+        XCTAssertTrue(spy.routeToTagPlayCalled, "routeToTagPlayList 호출 시 router의 routeToTagPlay가 호출되지 않았다.")
     }
 }

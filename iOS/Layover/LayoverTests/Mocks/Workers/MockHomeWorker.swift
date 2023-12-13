@@ -6,10 +6,9 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+@testable import Layover
 import Foundation
 import OSLog
-
-@testable import Layover
 
 final class MockHomeWorker: HomeWorkerProtocol {
 

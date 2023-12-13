@@ -87,8 +87,8 @@ final class TagPlayListInteractorTests: XCTestCase {
         sut.setTitleTag(request: request)
 
         // Assert
-        XCTAssertTrue(spy.presentTitleTagCalled, "setTitleTag()가 presenter의 presentTitleTag()를 호출했다.")
-        XCTAssertEqual(sut.titleTag, spy.presentTitleTagResponse.titleTag, "setTitleTag()가 presenter에게 자신의 titleTag를 전달했다.")
+        XCTAssertTrue(spy.presentTitleTagCalled, "setTitleTag()가 presenter의 presentTitleTag()를 호출하지 못했다.")
+        XCTAssertEqual(sut.titleTag, spy.presentTitleTagResponse.titleTag, "setTitleTag()가 presenter에게 자신의 titleTag를 전달하지 못했다.")
     }
 
     func test_fetchPlayList를_호출하면_자신의_posts에_데이터를_저장하고_presenter의_presentPlayList를_호출하여_올바른_데이터를_전달한다() async {
@@ -98,7 +98,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         let request = Models.FetchPosts.Request()
 
         // Act
-        _ = await sut.fetchPlayList(request: request).value
+        await sut.fetchPlayList(request: request)
 
         // Assert
         XCTAssertTrue(spy.presentPlayListCalled, "fetchPlayList()가 presenter의 presentPlayList()를 호출했다.")
@@ -116,11 +116,11 @@ final class TagPlayListInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts[0].member.identifier, Seeds.Posts.post1.member.identifier)
         XCTAssertEqual(sut.posts[0].member.username, Seeds.Posts.post1.member.username)
         XCTAssertEqual(sut.posts[0].member.introduce, Seeds.Posts.post1.member.introduce)
-        XCTAssertEqual(sut.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPlayList()가 자신의 posts에 올바른 posts 데이터를 저장했다.")
+        XCTAssertEqual(sut.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPlayList()가 자신의 posts에 올바른 posts 데이터를 저장하지 못했다.")
         XCTAssertEqual(spy.presentPlayListResponse.post.count, 1)
         XCTAssertEqual(spy.presentPlayListResponse.post[0].identifier, Seeds.Posts.post1.board.identifier)
         XCTAssertEqual(spy.presentPlayListResponse.post[0].thumbnailImageData, Seeds.sampleImageData)
-        XCTAssertEqual(spy.presentPlayListResponse.post[0].title, Seeds.Posts.post1.board.title, "fetchPlayList()가 presenter에게 올바른 displayedPosts 데이터를 전달했다.")
+        XCTAssertEqual(spy.presentPlayListResponse.post[0].title, Seeds.Posts.post1.board.title, "fetchPlayList()가 presenter에게 올바른 displayedPosts 데이터를 전달하지 못했다.")
     }
 
     func test_fetchPlayList를_호출하면_기존에_저장된_posts를_비우고_새로운_Posts_데이터를_저장한다() async {
@@ -131,7 +131,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         sut.posts = [Seeds.Posts.post2]
 
         // Act
-        _ = await sut.fetchPlayList(request: request).value
+        await sut.fetchPlayList(request: request)
 
         // Assert
         XCTAssert(!sut.posts.contains(where: {
@@ -163,7 +163,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts[0].member.identifier, Seeds.Posts.post1.member.identifier)
         XCTAssertEqual(sut.posts[0].member.username, Seeds.Posts.post1.member.username)
         XCTAssertEqual(sut.posts[0].member.introduce, Seeds.Posts.post1.member.introduce)
-        XCTAssertEqual(sut.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPlayList()가 자신의 posts에 올바른 posts 데이터를 저장했다.")
+        XCTAssertEqual(sut.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPlayList()가 자신의 posts에 올바른 posts 데이터를 저장하지 못했다.")
     }
 
     func test_fetchMorePlayList를_호출하면_자신의_posts에_데이터를_저장하고_presenter의_presentMorePlayList를_호출하여_올바른_Posts_데이터를_전달한다() async {
@@ -174,14 +174,14 @@ final class TagPlayListInteractorTests: XCTestCase {
         let fetchMoreRequest = Models.FetchMorePosts.Request()
 
         // Act
-        _ = await sut.fetchMorePlayList(request: fetchMoreRequest).value
+        await sut.fetchMorePlayList(request: fetchMoreRequest)
 
         // Assert
-        XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출했다.")
-        XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 1, "fetchPlayMoreList()가 presenter에게 올바른 갯수의 posts 데이터를 전달했다.")
+        XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출하지 못했다.")
+        XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 1, "fetchPlayMoreList()가 presenter에게 올바른 갯수의 posts 데이터를 전달하지 못했다.")
         XCTAssertEqual(spy.presentMorePlayListResponse.post[0].identifier, Seeds.Posts.post1.board.identifier)
         XCTAssertEqual(spy.presentMorePlayListResponse.post[0].thumbnailImageData, Seeds.sampleImageData)
-        XCTAssertEqual(spy.presentMorePlayListResponse.post[0].title, Seeds.Posts.post1.board.title, "fetchPlayMoreList()가 presenter에게 올바른 displayedPosts 데이터를 전달했다.")
+        XCTAssertEqual(spy.presentMorePlayListResponse.post[0].title, Seeds.Posts.post1.board.title, "fetchPlayMoreList()가 presenter에게 올바른 displayedPosts 데이터를 전달하지 못했다.")
     }
 
     func test_fetchMorePlayList를_호출하다가_더이상_가져온_데이터가_없으면_본인의_post개수를_유지하고_presenter의_presentMorePlayList를_호출하여_빈_배열을_전달한다() async {
@@ -191,14 +191,14 @@ final class TagPlayListInteractorTests: XCTestCase {
         let request = Models.FetchMorePosts.Request()
 
         // Act -> 3번 호출 이후 빈 배열을 반환하도록 Mocking됨
-        _ = await sut.fetchMorePlayList(request: request).value
-        _ = await sut.fetchMorePlayList(request: request).value
-        _ = await sut.fetchMorePlayList(request: request).value
+        await sut.fetchMorePlayList(request: request)
+        await sut.fetchMorePlayList(request: request)
+        await sut.fetchMorePlayList(request: request)
 
         // Assert
-        XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출했다.")
-        XCTAssertEqual(sut.posts.count, 2, "fetchPlayMoreList()를 호출하다가 더이상 데이터가 없을 때 자신의 posts를 유지했다.")
-        XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 0, "fetchPlayMoreList()가 presenter에게 빈 배열을 전달했다.")
+        XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출하지 못했다.")
+        XCTAssertEqual(sut.posts.count, 2, "fetchPlayMoreList()를 호출하다가 더이상 데이터가 없을 때 자신의 posts를 유지하지 못했다.")
+        XCTAssertEqual(spy.presentMorePlayListResponse.post.count, 0, "fetchPlayMoreList()가 presenter에게 빈 배열을 전달하지 못했다.")
     }
 
     func test_fetchMorePlayList를_호출하면_기존_자신의_posts에_새로운_Posts_데이터가_추가되어_저장한다() async {
@@ -210,10 +210,10 @@ final class TagPlayListInteractorTests: XCTestCase {
         let request = Models.FetchMorePosts.Request()
 
         // Act
-        _ = await sut.fetchMorePlayList(request: request).value
+        await sut.fetchMorePlayList(request: request)
 
         // Assert
-        XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출했다.")
+        XCTAssertTrue(spy.presentMorePlayListCalled, "fetchPlayMoreList()가 presenter의 presentMorePlayList()를 호출하지 못했다.")
         XCTAssertEqual(sut.posts.filter({
             $0.board.identifier == Seeds.Posts.post1.board.identifier
             && $0.board.title == Seeds.Posts.post1.board.title
@@ -229,7 +229,7 @@ final class TagPlayListInteractorTests: XCTestCase {
             && $0.member.profileImageURL == Seeds.Posts.post1.member.profileImageURL
             && $0.tag == Seeds.Posts.post1.tag
         }).count, 2)
-        XCTAssertEqual(sut.posts.count, 2, "fetchPlayMoreList()가 자신의 posts에 새로운 posts 데이터를 더해서 저장했다.")
+        XCTAssertEqual(sut.posts.count, 2, "fetchPlayMoreList()가 자신의 posts에 새로운 posts 데이터를 더해서 저장하지 못했다.")
     }
 
     func test_showPostDetail을_호출하면_자신의_postPlayStartIndex값을_올바르게_저장하고_presenter의_presentPostDetail을_호출한다() {
@@ -242,7 +242,7 @@ final class TagPlayListInteractorTests: XCTestCase {
         sut.showPostsDetail(request: request)
 
         // Assert
-        XCTAssertEqual(sut.postPlayStartIndex, 7, "showPostDetail()가 presenter에게 올바른 startIndex를 전달했다.")
-        XCTAssertTrue(spy.presentPostsDetailCalled, "showPostDetail()가 presenter의 presentPostDetail()를 호출했다.")
+        XCTAssertEqual(sut.postPlayStartIndex, 7, "showPostDetail()가 presenter에게 올바른 startIndex를 전달하지 못했다.")
+        XCTAssertTrue(spy.presentPostsDetailCalled, "showPostDetail()가 presenter의 presentPostDetail()를 호출하지 못했다.")
     }
 }

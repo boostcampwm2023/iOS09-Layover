@@ -104,6 +104,10 @@
 		19A1694D2B18327E00DB34C0 /* sample.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 19A1694C2B18327E00DB34C0 /* sample.jpeg */; };
 		19AACFCA2B0F7C3B0088143E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFC92B0F7C3B0088143E /* Response.swift */; };
 		19AACFCC2B0F7D730088143E /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AACFCB2B0F7D730088143E /* LoginDTO.swift */; };
+		19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48132B28C2B700DD4612 /* SettingViewControllerTests.swift */; };
+		19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */; };
+		19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */; };
+		19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */; };
@@ -341,6 +345,10 @@
 		19AACFC52B0F71DF0088143E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		19AACFC92B0F7C3B0088143E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		19AACFCB2B0F7D730088143E /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
+		19AE48132B28C2B700DD4612 /* SettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewControllerTests.swift; sourceTree = "<group>"; };
+		19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractorTests.swift; sourceTree = "<group>"; };
+		19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPresenterTests.swift; sourceTree = "<group>"; };
+		19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingWorker.swift; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
@@ -583,6 +591,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				19AE48122B28C2A800DD4612 /* Setting */,
 				192513632B26F7BB001533FA /* TagPlayList */,
 				1925137B2B277CC4001533FA /* Profile */,
 				194C21BE2B1DEE5500C62645 /* Home */,
@@ -605,6 +614,7 @@
 				194C21CB2B1DF39200C62645 /* MockHomeWorker.swift */,
 				1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */,
 				192513842B27852C001533FA /* MockUserWorker.swift */,
+				19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -720,6 +730,16 @@
 				198167A72B20DD670032F563 /* PresignedURLDTO.swift */,
 			);
 			path = DTOs;
+			sourceTree = "<group>";
+		};
+		19AE48122B28C2A800DD4612 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				19AE48132B28C2B700DD4612 /* SettingViewControllerTests.swift */,
+				19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */,
+				19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		19BB8A572B07BEE30070B922 /* UIComponents */ = {
@@ -1477,12 +1497,16 @@
 				1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */,
 				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
+				19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */,
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
+				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
 				1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */,
 				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
+				19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */,
+				19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,

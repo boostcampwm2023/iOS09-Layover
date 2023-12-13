@@ -40,18 +40,14 @@ final class ProfileViewControllerTests: XCTestCase {
         var showPostDetailCalled = false
         var showPostDetailRequest: Models.ShowPostDetail.Request!
 
-        func fetchProfile(with request: Models.FetchProfile.Request) -> Task<Bool, Never> {
+        func fetchProfile(with request: Models.FetchProfile.Request) async -> Bool {
             fetchProfileCalled = true
-            return Task {
-                return true
-            }
+            return true
         }
 
-        func fetchMorePosts(with request: Models.FetchMorePosts.Request) -> Task<Bool, Never> {
+        func fetchMorePosts(with request: Models.FetchMorePosts.Request) async -> Bool {
             fetchMorePostsCalled = true
-            return Task {
-                return true
-            }
+            return true
         }
 
         func showPostDetail(with request: Models.ShowPostDetail.Request) {
@@ -72,7 +68,10 @@ final class ProfileViewControllerTests: XCTestCase {
         sut.viewWillAppear(false)
 
         // assert
-        XCTAssertTrue(spy.fetchProfileCalled, "viewWillAppear가 호출되어 fetchProfile이 호출했다")
+        Task {
+            try await Task.sleep(nanoseconds: 3_000_000_000)
+            XCTAssertTrue(spy.fetchProfileCalled, "viewWillAppear가 호출되어 fetchProfile를 호출하지 못했다")
+        }
     }
 
     func test_스크롤이_바닥에_닿아_scrollViewBeginDecelerating이_호출되면_fetchMorePosts가_호출된다() {
@@ -88,7 +87,10 @@ final class ProfileViewControllerTests: XCTestCase {
         sut.scrollViewWillBeginDecelerating(scrollView)
 
         // assert
-        XCTAssertTrue(spy.fetchMorePostsCalled, "스크롤이 바닥에 닿아 scrollViewBeginDecelerating이 호출되어 fetchPosts가 호출했다")
+        Task {
+            try await Task.sleep(nanoseconds: 3_000_000_000)
+            XCTAssertTrue(spy.fetchMorePostsCalled, "스크롤이 바닥에 닿아 scrollViewBeginDecelerating이 호출되어 fetchPosts를 호출하지 못했다")
+        }
     }
 
     func test_스크롤이_바닥에_닿지_않고_scrollViewBeginDecelerating이_호출되면_fetchMorePosts가_호출된다() {
@@ -104,7 +106,7 @@ final class ProfileViewControllerTests: XCTestCase {
         sut.scrollViewWillBeginDecelerating(scrollView)
 
         // assert
-        XCTAssertFalse(spy.fetchMorePostsCalled, "스크롤이 바닥에 닿지 않고 scrollViewBeginDecelerating이 호출되어 fetchPosts가 호출되지 않았다")
+        XCTAssertFalse(spy.fetchMorePostsCalled, "스크롤이 바닥에 닿지 않고 scrollViewBeginDecelerating이 호출되어 fetchMorePosts가 호출되었다")
     }
 
     func test_스크롤을_아래로_당겨서_scrollViewBeginDecelerating이_호출되면_fetchMorePosts가_호출되지_않았다() {
@@ -120,6 +122,6 @@ final class ProfileViewControllerTests: XCTestCase {
         sut.scrollViewWillBeginDecelerating(scrollView)
 
         // assert
-        XCTAssertFalse(spy.fetchMorePostsCalled, "스크롤이 아래로 당겨져서 scrollViewBeginDecelerating이 호출되어 fetchPosts가 호출되었다")
+        XCTAssertFalse(spy.fetchMorePostsCalled, "스크롤이 아래로 당겨져서 scrollViewBeginDecelerating이 호출되어 fetchMorePosts가 호출되었다")
     }
 }

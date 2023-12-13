@@ -72,12 +72,12 @@ final class HomePresenterTests: XCTestCase {
         sut.presentPosts(with: response)
 
         // assert
-        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 1, "presentPosts는 올바른 갯수의 데이터를 전달했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].tags, Seeds.Posts.post1.tag)
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].title, Seeds.Posts.post1.board.title)
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL)
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].videoURL, Seeds.Posts.post1.board.videoURL, "presentPosts는 올바른 데이터를 전달했다.")
+        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 1, "presentPosts는 올바른 갯수의 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].tags, Seeds.Posts.post1.tag, "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].title, Seeds.Posts.post1.board.title, "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].videoURL, Seeds.Posts.post1.board.videoURL, "presentPosts는 올바른 데이터를 전달하지 못했다.")
     }
 
     func test_presentPosts는_데이터의_썸네일_이미지_URL이_nil인_경우_뷰에게_해당_데이터를_전달하지_않는다() {
@@ -90,8 +90,8 @@ final class HomePresenterTests: XCTestCase {
         sut.presentPosts(with: response)
 
         // assert
-        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 0, "썸네일 이미지 URL이 nil인 데이터는 뷰에게 전달하지 않는다.")
+        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 0, "썸네일 이미지 URL이 nil인 데이터가 뷰에게 전달되었다.")
     }
 
     func test_presentPosts는_데이터의_비디오_URL이_nil인_경우_뷰에게_해당_데이터를_전달하지_않는다() {
@@ -104,8 +104,8 @@ final class HomePresenterTests: XCTestCase {
         sut.presentPosts(with: response)
 
         // assert
-        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 0, "비디오 URL이 nil인 데이터는 뷰에게 전달하지 않는다.")
+        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 0, "비디오 URL이 nil인 데이터가 뷰에게 전달되었다.")
     }
 
     func test_presentPlaybackScene은_뷰의_routeToPlayback을_실행한다() {
@@ -117,7 +117,7 @@ final class HomePresenterTests: XCTestCase {
         sut.presentPlaybackScene(with: Models.PlayPosts.Response())
 
         // assert
-        XCTAssertTrue(spy.routeToPlaybackCalled, "presentPlaybackScene은 routeToPlayback을 실행했다.")
+        XCTAssertTrue(spy.routeToPlaybackCalled, "presentPlaybackScene은 routeToPlayback을 실행하지 못했다.")
     }
 
     func test_presentTagPlayList는_뷰의_routeToTagPlayList를_실행한다() {
@@ -129,7 +129,7 @@ final class HomePresenterTests: XCTestCase {
         sut.presentTagPlayList(with: Models.ShowTagPlayList.Response())
 
         // assert
-        XCTAssertTrue(spy.routeToTagPlayListCalled, "presentTagPlayListScene은 routeToTagPlayList를 실행했다.")
+        XCTAssertTrue(spy.routeToTagPlayListCalled, "presentTagPlayListScene은 routeToTagPlayList를 실행하지 못했다.")
     }
 
 }

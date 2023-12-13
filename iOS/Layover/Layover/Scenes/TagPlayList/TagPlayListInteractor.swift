@@ -12,9 +12,9 @@ import OSLog
 protocol TagPlayListBusinessLogic {
     func setTitleTag(request: TagPlayListModels.FetchTitleTag.Request)
     @discardableResult
-    func fetchPlayList(request: TagPlayListModels.FetchPosts.Request) -> Task<Bool, Never>
+    func fetchPlayList(request: TagPlayListModels.FetchPosts.Request) async -> Bool
     @discardableResult
-    func fetchMorePlayList(request: TagPlayListModels.FetchMorePosts.Request) -> Task<Bool, Never>
+    func fetchMorePlayList(request: TagPlayListModels.FetchMorePosts.Request) async -> Bool
     func showPostsDetail(request: TagPlayListModels.ShowPostsDetail.Request)
 }
 
@@ -48,43 +48,39 @@ final class TagPlayListInteractor: TagPlayListBusinessLogic, TagPlayListDataStor
     }
 
     @discardableResult
-    func fetchPlayList(request: Models.FetchPosts.Request) -> Task<Bool, Never> {
-        Task {
-            fetchPostsPage = 1
-            guard let titleTag = titleTag,
-                  let fetchedPosts = await worker?.fetchPlayList(of: titleTag, at: fetchPostsPage) else { return false }
-            posts = fetchedPosts
-            fetchPostsPage += 1
-            canFetchMorePosts = !fetchedPosts.isEmpty
+    func fetchPlayList(request: Models.FetchPosts.Request) async -> Bool {
+        fetchPostsPage = 1
+        guard let titleTag = titleTag,
+              let fetchedPosts = await worker?.fetchPlayList(of: titleTag, at: fetchPostsPage) else { return false }
+        posts = fetchedPosts
+        fetchPostsPage += 1
+        canFetchMorePosts = !fetchedPosts.isEmpty
 
-            let responsePosts = await transformDisplayedPost(with: fetchedPosts)
+        let responsePosts = await transformDisplayedPost(with: fetchedPosts)
 
-            await MainActor.run {
-                presenter?.presentPlayList(response: Models.FetchPosts.Response(post: responsePosts))
-            }
-
-            return true
+        await MainActor.run {
+            presenter?.presentPlayList(response: Models.FetchPosts.Response(post: responsePosts))
         }
+
+        return true
     }
 
     @discardableResult
-    func fetchMorePlayList(request: Models.FetchMorePosts.Request) -> Task<Bool, Never> {
-        Task {
-            guard canFetchMorePosts,
-                  let titleTag = titleTag,
-                  let posts = await worker?.fetchPlayList(of: titleTag, at: fetchPostsPage) else { return false }
-            self.posts.append(contentsOf: posts)
-            fetchPostsPage += 1
-            canFetchMorePosts = !posts.isEmpty
+    func fetchMorePlayList(request: Models.FetchMorePosts.Request) async -> Bool {
+        guard canFetchMorePosts,
+              let titleTag = titleTag,
+              let posts = await worker?.fetchPlayList(of: titleTag, at: fetchPostsPage) else { return false }
+        self.posts.append(contentsOf: posts)
+        fetchPostsPage += 1
+        canFetchMorePosts = !posts.isEmpty
 
-            let responsePosts = await transformDisplayedPost(with: posts)
+        let responsePosts = await transformDisplayedPost(with: posts)
 
-            await MainActor.run {
-                presenter?.presentMorePlayList(response: Models.FetchMorePosts.Response(post: responsePosts))
-            }
-
-            return true
+        await MainActor.run {
+            presenter?.presentMorePlayList(response: Models.FetchMorePosts.Response(post: responsePosts))
         }
+
+        return true
     }
 
     func showPostsDetail(request: Models.ShowPostsDetail.Request) {
