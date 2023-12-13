@@ -100,7 +100,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func fetchHomePosts() async -> [Post]? {
-        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList", withExtension: "json") else { return nil }
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostListMore", withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in
