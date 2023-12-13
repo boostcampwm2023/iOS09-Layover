@@ -14,7 +14,6 @@ final class CurrentLocationManager: NSObject {
 
     private var locationFetcher: LocationFetcher
     var currentLocationCompletion: LocationCompletion?
-    var authrizationCompletion: ((CLAuthorizationStatus) -> Void)?
 
     init(locationFetcher: LocationFetcher = CLLocationManager()) {
         self.locationFetcher = locationFetcher
@@ -29,8 +28,16 @@ final class CurrentLocationManager: NSObject {
         return CLLocation(latitude: space.latitude, longitude: space.longitude)
     }
 
+    func getAuthorizationStatus() -> CLAuthorizationStatus {
+        return locationFetcher.authorizationStatus
+    }
+
     func startUpdatingLocation() {
         self.locationFetcher.startUpdatingLocation()
+    }
+
+    func requestWhenInUseAuthorization() {
+        self.locationFetcher.requestWhenInUseAuthorization()
     }
 
 }
@@ -41,19 +48,10 @@ extension CurrentLocationManager: LocationFetcherDelegate {
         self.currentLocationCompletion?(location)
         self.currentLocationCompletion = nil
     }
-
-    func locationFetcher(_ fetcher: LocationFetcher, didChangeAuthorization authorization: CLAuthorizationStatus) {
-        self.authrizationCompletion?(authorization)
-        self.authrizationCompletion = nil
-    }
 }
 
 extension CurrentLocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.locationFetcher(manager, didUpdateLocations: locations)
-    }
-
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        self.locationFetcher(manager, didChangeAuthorization: manager.authorizationStatus)
     }
 }

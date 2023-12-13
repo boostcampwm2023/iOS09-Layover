@@ -65,4 +65,11 @@ enum MapModels {
 
         }
     }
+
+    enum CheckLocationAuthorizationOnEntry {
+        struct ViewModel {
+            let latitude: Double = 36.350411
+            let longitude: Double = 127.384548
+        }
+    }
 }

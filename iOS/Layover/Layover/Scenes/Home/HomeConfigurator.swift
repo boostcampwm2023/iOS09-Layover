@@ -21,6 +21,7 @@ final class HomeConfigurator: Configurator {
 //        let homeWorker = MockHomeWorker()
         let homeWorker = HomeWorker()
         let videoFileWorker = VideoFileWorker()
+        let locationManager = CurrentLocationManager()
 
         router.viewController = viewController
         router.dataStore = interactor
@@ -28,6 +29,7 @@ final class HomeConfigurator: Configurator {
         interactor.presenter = presenter
         interactor.homeWorker = homeWorker
         interactor.videoFileWorker = videoFileWorker
+        interactor.locationManager = locationManager
         viewController.router = router
         viewController.interactor = interactor
 

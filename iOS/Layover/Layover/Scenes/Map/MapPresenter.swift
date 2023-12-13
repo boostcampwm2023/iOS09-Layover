@@ -13,6 +13,8 @@ protocol MapPresentationLogic {
     func presentDefaultLocation()
     func presentFetchedPosts(with response: MapModels.FetchPosts.Response)
     func presentPlaybackScene()
+    func presentUploadScene()
+    func presentSetting()
 }
 
 final class MapPresenter: MapPresentationLogic {
@@ -23,11 +25,11 @@ final class MapPresenter: MapPresentationLogic {
     weak var viewController: MapDisplayLogic?
 
     func presentCurrentLocation() {
-        // TODO: 현재 위치 사용 가능
+        viewController?.displayCurrentLocation()
     }
 
     func presentDefaultLocation() {
-        // TODO: 위치 관련 기능 사용 불가, 디폴트 위치로 이동
+        viewController?.displayDefaultLocation(viewModel: MapModels.CheckLocationAuthorizationOnEntry.ViewModel())
     }
 
     func presentFetchedPosts(with response: MapModels.FetchPosts.Response) {
@@ -47,5 +49,13 @@ final class MapPresenter: MapPresentationLogic {
 
     func presentPlaybackScene() {
         viewController?.routeToPlayback()
+    }
+
+    func presentUploadScene() {
+        viewController?.routeToVideoPicker()
+    }
+
+    func presentSetting() {
+        viewController?.openSetting()
     }
 }

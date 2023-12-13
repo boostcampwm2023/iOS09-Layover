@@ -13,6 +13,8 @@ protocol HomeDisplayLogic: AnyObject {
     func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel)
     func routeToPlayback()
     func routeToTagPlayList()
+    func routeToVideoPicker()
+    func openSetting()
 }
 
 final class HomeViewController: BaseViewController {
@@ -178,7 +180,7 @@ final class HomeViewController: BaseViewController {
     // MARK: - Actions
 
     @objc private func uploadButtonDidTap() {
-        present(videoPickerManager.phPickerViewController, animated: true)
+        interactor?.fetchLocationAuthorizationStatus()
     }
 
     @objc private func tagButtonDidTap(_ sender: UIButton) {
@@ -230,6 +232,7 @@ extension HomeViewController: VideoPickerDelegate {
 // MARK: - DisplayLogic
 
 extension HomeViewController: HomeDisplayLogic {
+
     func displayPosts(with viewModel: HomeModels.FetchPosts.ViewModel) {
         var snapshot = NSDiffableDataSourceSnapshot<UUID, Models.DisplayedPost>()
         snapshot.appendSections([UUID()])
@@ -246,4 +249,16 @@ extension HomeViewController: HomeDisplayLogic {
     func routeToTagPlayList() {
         router?.routeToTagPlay()
     }
+
+    func routeToVideoPicker() {
+        present(videoPickerManager.phPickerViewController, animated: true)
+    }
+
+    func openSetting() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+
 }

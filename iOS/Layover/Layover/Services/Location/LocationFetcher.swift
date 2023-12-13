@@ -10,18 +10,17 @@ import CoreLocation
 
 protocol LocationFetcherDelegate: AnyObject {
     func locationFetcher(_ fetcher: LocationFetcher, didUpdateLocations locations: [CLLocation])
-    func locationFetcher(_ fetcher: LocationFetcher, didChangeAuthorization authorization: CLAuthorizationStatus)
 }
 
 protocol LocationFetcher {
     var location: CLLocation? { get }
     var locationFetcherDelegate: LocationFetcherDelegate? { get set }
+    var authorizationStatus: CLAuthorizationStatus { get }
     var desiredAccuracy: CLLocationAccuracy { get set }
 
     func requestLocation()
     func startUpdatingLocation()
     func requestWhenInUseAuthorization()
-    func requestAlwaysAuthorization()
 }
 
 extension CLLocationManager: LocationFetcher {

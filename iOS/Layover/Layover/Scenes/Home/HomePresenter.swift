@@ -12,6 +12,8 @@ protocol HomePresentationLogic {
     func presentPosts(with response: HomeModels.FetchPosts.Response)
     func presentPlaybackScene(with response: HomeModels.PlayPosts.Response)
     func presentTagPlayList(with response: HomeModels.ShowTagPlayList.Response)
+    func presentUploadScene()
+    func presentSetting()
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -51,5 +53,13 @@ final class HomePresenter: HomePresentationLogic {
 
     func presentTagPlayList(with response: HomeModels.ShowTagPlayList.Response) {
         viewController?.routeToTagPlayList()
+    }
+
+    func presentUploadScene() {
+        viewController?.routeToVideoPicker()
+    }
+
+    func presentSetting() {
+        viewController?.openSetting()
     }
 }
