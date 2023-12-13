@@ -70,9 +70,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     var selectedTag: String?
 
-    private var isFetchReqeust: Bool = false
+    var isFetchReqeust: Bool = false
 
-    private var currentPage: Int = 1
+    var currentPage: Int = 1
 
     // MARK: - UseCase Load Video List
 
