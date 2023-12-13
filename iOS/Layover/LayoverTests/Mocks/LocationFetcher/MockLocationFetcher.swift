@@ -14,7 +14,6 @@ final class MockLocationFetcher: LocationFetcher {
     var location: CLLocation?
     var locationFetcherDelegate: Layover.LocationFetcherDelegate?
     var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
-    var locationCallBackValue: CLLocation?
 
     func requestLocation() { }
 
