@@ -579,7 +579,7 @@ final class PlaybackInteractorTests: XCTestCase {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .home
-        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost]
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
         sut.presenter = spy
         // act
         let result = await sut.fetchPosts().value
@@ -589,14 +589,14 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertTrue(result, "fetchPost에 실패했습니다.")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-        XCTAssertEqual(sut.posts?.count, 4)
+        XCTAssertEqual(sut.posts?.count, 3)
     }
 
     func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .tag
-        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost,Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost]
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
         sut.selectedTag = "테스트"
         sut.presenter = spy
         // act
@@ -607,14 +607,14 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertTrue(result, "fetchPost에 실패했습니다.")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-        XCTAssertEqual(sut.posts?.count, 22)
+        XCTAssertEqual(sut.posts?.count, 15)
     }
 
     func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .otherProfile
-        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost,Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost]
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
         sut.presenter = spy
         // act
         let result = await sut.fetchPosts().value
@@ -624,6 +624,6 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertTrue(result, "fetchPost에 실패했습니다.")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-        XCTAssertEqual(sut.posts?.count, 22)
+        XCTAssertEqual(sut.posts?.count, 15)
     }
 }
