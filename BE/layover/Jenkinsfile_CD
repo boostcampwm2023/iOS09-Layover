@@ -49,12 +49,12 @@ pipeline {
                     try {
                         dir("$PROJECT_PATH") {
                             echo '빌드 시작'
-                            def dockerImage = docker.build("${DOCKER_IMG_NAME}:${COMMIT_HASH}")
+                            def dockerImage = docker.build("${DOCKER_IMG_NAME}:${env.COMMIT_HASH}")
 
                             // Docker Hub에 로그인
                             withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
                                 // Docker 이미지 push
-                                dockerImage.push("${COMMIT_HASH}")
+                                dockerImage.push("${env.COMMIT_HASH}")
                             }
                             echo '빌드 및 푸시 성공'
                         }
@@ -73,8 +73,8 @@ pipeline {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
-                            def dockerImage = docker.image("${DOCKER_IMG_NAME}:${COMMIT_HASH}")
-                            sh "COMMIT_HASH=${commitHash} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} docker-compose up -d"
+                            def dockerImage = docker.image("${DOCKER_IMG_NAME}:${env.COMMIT_HASH}")
+                            sh "COMMIT_HASH=${env.COMMIT_HASH} DOCKER_IMG_NAME=${DOCKER_IMG_NAME} docker-compose up -d"
                             echo '컨테이너 실행 성공'
                             discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
                         }
