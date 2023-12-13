@@ -16,9 +16,10 @@ enum ProfileModels {
         let profileImageData: Data?
     }
 
-    struct Post: Hashable {
+    struct DisplayedPost: Hashable {
         let id: Int
         let thumbnailImageData: Data?
+        let status: BoardStatus
     }
 
     enum FetchProfile {
@@ -28,12 +29,12 @@ enum ProfileModels {
 
         struct Response {
             let userProfile: Profile
-            let posts: [Post]
+            let displayedPosts: [DisplayedPost]
         }
 
         struct ViewModel {
             let userProfile: Profile
-            let posts: [Post]
+            let displayedPosts: [DisplayedPost]
         }
     }
 
@@ -42,11 +43,11 @@ enum ProfileModels {
         }
 
         struct Response {
-            let posts: [Post]
+            let displayedPosts: [DisplayedPost]
         }
 
         struct ViewModel {
-            let posts: [Post]
+            let displayedPosts: [DisplayedPost]
         }
     }
 

@@ -16,7 +16,7 @@ final class PlaybackCell: UICollectionViewCell {
 
     weak var delegate: PlaybackViewControllerDelegate?
 
-    private var memberID: Int?
+    private (set) var memberID: Int?
 
     let playbackView: PlaybackView = PlaybackView()
 

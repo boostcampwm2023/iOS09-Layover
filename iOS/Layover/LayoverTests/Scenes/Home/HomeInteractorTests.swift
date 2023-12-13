@@ -57,49 +57,35 @@ final class HomeInteractorTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_fetchPost는_presenter의_presentPosts를_호출한다() async throws {
+    func test_fetchPost는_presenter의_presentPosts를_호출하고_올바른_데이터를_전달한다() async throws {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy
         let request = Models.FetchPosts.Request()
 
         // Act
-        _ = await sut.fetchPosts(with: request).value
+        await sut.fetchPosts(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출했다.")
+        XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 1, "fetchPost()가 presenter에게 올바른 데이터 갯수를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].tag, Seeds.Posts.post1.tag, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.identifier, Seeds.Posts.post1.board.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.title, Seeds.Posts.post1.board.title, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.description, Seeds.Posts.post1.board.description, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.status, Seeds.Posts.post1.board.status, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.username, Seeds.Posts.post1.member.username, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
     }
 
-    func test_fetchPost는_presenter에게_올바른_데이터를_전달한다() async throws {
-        // Arrange
-        let spy = HomePresentationLogicSpy()
-        sut.presenter = spy
-        let request = Models.FetchPosts.Request()
-
-        // Act
-        _ = await sut.fetchPosts(with: request).value
-
-        // Assert
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 4, "fetchPost()가 presenter에게 올바른 데이터를 저장했다.")
-    }
-
-    func test_fetchPost는_presenter에게_올바른_이미지_데이터를_전달한다() async throws {
-        // Arrange
-        let spy = HomePresentationLogicSpy()
-        sut.presenter = spy
-        let request = Models.FetchPosts.Request()
-        let imageData = try Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg")!)
-
-        // Act
-        _ = await sut.fetchPosts(with: request).value
-
-        // Assert
-        spy.presentPostsReceivedResponse.posts.forEach {
-            XCTAssertEqual($0.thumbnailImageData, imageData, "fetchPost()가 presenter에게 올바른 이미지 데이터를 전달했다.")
-        }
-    }
-
-    func test_playPosts는_자신의_selectedIndex값을_변경한다() async throws {
+    func test_playPosts는_자신의_selectedIndex값을_변경한다() {
         // Arrange
         let request = Models.PlayPosts.Request(selectedIndex: 101)
 
@@ -107,10 +93,10 @@ final class HomeInteractorTests: XCTestCase {
         sut.playPosts(with: request)
 
         // Assert
-        XCTAssertEqual(sut.postPlayStartIndex, 101, "playPosts()가 자신의 selectedIndex를 변경했다.")
+        XCTAssertEqual(sut.postPlayStartIndex, 101, "playPosts()가 자신의 selectedIndex를 변경하지 못했다.")
     }
 
-    func test_playPosts는_presenter의_presentPlaybackScene를_호출한다() async throws {
+    func test_playPosts는_presenter의_presentPlaybackScene를_호출한다() {
         // Arrange
         let spy = HomePresentationLogicSpy()
         sut.presenter = spy
@@ -120,7 +106,7 @@ final class HomeInteractorTests: XCTestCase {
         sut.playPosts(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentPlaybackSceneCalled, "playPosts()가 presenter의 presentPlaybackScene()를 호출했다.")
+        XCTAssertTrue(spy.presentPlaybackSceneCalled, "playPosts()가 presenter의 presentPlaybackScene()를 호출하지 않았다.")
     }
 
     // TODO: - videoFileWorker Mock 객체 생성 후 테스트 코드 작성
@@ -153,7 +139,7 @@ final class HomeInteractorTests: XCTestCase {
         sut.showTagPlayList(with: request)
 
         // Assert
-        XCTAssertEqual(sut.selectedTag, "DummyTag", "showTagPlayList()가 자신의 selectedTag를 변경했다.")
+        XCTAssertEqual(sut.selectedTag, "DummyTag", "showTagPlayList()가 자신의 selectedTag를 변경되지 않았다.")
     }
 
     func test_showTagPlayList는_presenter의_presentTagPlayList를_호출한다() {
@@ -166,6 +152,6 @@ final class HomeInteractorTests: XCTestCase {
         sut.showTagPlayList(with: request)
 
         // Assert
-        XCTAssertTrue(spy.presentTagPlayListCalled, "showTagPlayList()가 presenter의 presentTagPlayList()를 호출했다.")
+        XCTAssertTrue(spy.presentTagPlayListCalled, "showTagPlayList()가 presenter의 presentTagPlayList()를 호출되지 않았다.")
     }
 }

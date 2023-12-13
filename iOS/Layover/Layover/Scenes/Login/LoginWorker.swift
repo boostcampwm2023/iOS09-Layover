@@ -90,8 +90,8 @@ extension LoginWorker: LoginWorkerProtocol {
 
             authManager.login(accessToken: result.data?.accessToken,
                               refreshToken: result.data?.refreshToken,
-                              memberID: await fetchMemberId(),
                               loginType: .kakao)
+            authManager.memberID = await fetchMemberID()
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
@@ -119,8 +119,8 @@ extension LoginWorker: LoginWorkerProtocol {
 
             authManager.login(accessToken: result.data?.accessToken,
                               refreshToken: result.data?.refreshToken,
-                              memberID: await fetchMemberId(),
                               loginType: .apple)
+            authManager.memberID = await fetchMemberID()
             return true
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
@@ -128,7 +128,7 @@ extension LoginWorker: LoginWorkerProtocol {
         }
     }
 
-    private func fetchMemberId() async -> Int? {
+    private func fetchMemberID() async -> Int? {
         let endPoint = userEndPointFactory.makeUserInformationEndPoint(with: nil)
         do {
             let responseData = try await provider.request(with: endPoint)

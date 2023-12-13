@@ -16,7 +16,7 @@ protocol SettingBusinessLogic {
     func performTableViewConfigure(request: SettingModels.ConfigureTableView.Request)
     func performUserLogout(request: SettingModels.Logout.Request)
     @discardableResult
-    func performUserWithdraw(request: SettingModels.Withdraw.Request) -> Task<Bool, Never>
+    func performUserWithdraw(request: SettingModels.Withdraw.Request) async -> Bool
 }
 
 protocol SettingDataStore {
@@ -45,14 +45,12 @@ final class SettingInteractor: SettingBusinessLogic, SettingDataStore {
     }
 
     @discardableResult
-    func performUserWithdraw(request: SettingModels.Withdraw.Request) -> Task<Bool, Never> {
-        Task {
-            guard (await userWorker?.withdraw()) != nil else { return false }
-            userWorker?.logout()
-            await MainActor.run {
-                presenter?.presentUserWithdrawConfirmed(with: Models.Withdraw.Response())
-            }
-            return true
+    func performUserWithdraw(request: SettingModels.Withdraw.Request) async -> Bool {
+        guard (await userWorker?.withdraw()) != nil else { return false }
+        userWorker?.logout()
+        await MainActor.run {
+            presenter?.presentUserWithdrawConfirmed(with: Models.Withdraw.Response())
         }
+        return true
     }
 }

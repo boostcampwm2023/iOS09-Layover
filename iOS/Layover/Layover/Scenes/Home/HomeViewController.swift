@@ -189,7 +189,9 @@ final class HomeViewController: BaseViewController {
     // MARK: - Use Case
 
     private func fetchCarouselVideos() {
-        interactor?.fetchPosts(with: Models.FetchPosts.Request())
+        Task {
+            await interactor?.fetchPosts(with: Models.FetchPosts.Request())
+        }
     }
 }
 

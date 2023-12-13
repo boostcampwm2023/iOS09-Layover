@@ -10,7 +10,7 @@ import UIKit
 
 protocol HomeBusinessLogic {
     @discardableResult
-    func fetchPosts(with request: HomeModels.FetchPosts.Request) -> Task<Bool, Never>
+    func fetchPosts(with request: HomeModels.FetchPosts.Request) async -> Bool
     func playPosts(with request: HomeModels.PlayPosts.Request)
     func selectVideo(with request: HomeModels.SelectVideo.Request)
     func showTagPlayList(with request: HomeModels.ShowTagPlayList.Request)
@@ -46,18 +46,16 @@ final class HomeInteractor: HomeDataStore {
 
 extension HomeInteractor: HomeBusinessLogic {
     @discardableResult
-    func fetchPosts(with request: Models.FetchPosts.Request) -> Task<Bool, Never> {
-        Task {
-            guard let posts = await homeWorker?.fetchPosts() else { return false }
-            let response = Models.FetchPosts.Response(posts: posts)
+    func fetchPosts(with request: Models.FetchPosts.Request) async -> Bool {
+        guard let posts = await homeWorker?.fetchPosts() else { return false }
+        let response = Models.FetchPosts.Response(posts: posts)
 
-            await MainActor.run {
-                self.posts = posts
-                presenter?.presentPosts(with: response)
-            }
-
-            return true
+        await MainActor.run {
+            self.posts = posts
+            presenter?.presentPosts(with: response)
         }
+
+        return true
     }
 
     func playPosts(with request: HomeModels.PlayPosts.Request) {

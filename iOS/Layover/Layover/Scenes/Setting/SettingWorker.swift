@@ -18,13 +18,7 @@ protocol SettingWorkerProtocol {
 
 final class SettingWorker: SettingWorkerProtocol {
 
-    // MARK: - Properties
-
-    private let provider: ProviderType
-
-    init(provider: ProviderType = Provider()) {
-        self.provider = provider
-    }
+    // MARK: - Methods
 
     func versionNumber() -> String? {
         System.versionNumber()
