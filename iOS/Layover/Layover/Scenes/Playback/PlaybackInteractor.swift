@@ -23,9 +23,10 @@ protocol PlaybackBusinessLogic {
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
-    func setSeeMoreButton()
+    func setSeeMoreButton(with request: PlaybackModels.SetSeemoreButton.Request)
     @discardableResult
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
+    func reportVideo(with request: PlaybackModels.ReportPlaybackVideo.Request)
     func resumeVideo()
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
     func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
@@ -43,6 +44,7 @@ protocol PlaybackDataStore: AnyObject {
     var isDelete: Bool? { get set }
     var posts: [Post]? { get set }
     var memberID: Int? { get set }
+    var boardID: Int? { get set }
     var selectedTag: String? { get set }
 }
 
@@ -69,11 +71,15 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     var memberID: Int?
 
+    var boardID: Int?
+
     var selectedTag: String?
 
     private var isFetchReqeust: Bool = false
 
     private var currentPage: Int = 1
+
+    private var playbackVideoInfos: [Models.PlaybackInfo] = []
 
     // MARK: - UseCase Load Video List
 
@@ -86,7 +92,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 posts = worker.makeInfiniteScroll(posts: posts)
                 self.posts = posts
             }
-            let videos: [Models.PlaybackVideo] = transPostToVideo(posts)
+            let videos: [Models.PlaybackVideo]
+            (videos, playbackVideoInfos) = transPostToVideo(posts)
             let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
             await MainActor.run {
                 presenter?.presentVideoList(with: response)
@@ -224,12 +231,14 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         previousCell.playbackView.playerSlider?.isHidden = true
     }
 
-    func setSeeMoreButton() {
+    func setSeeMoreButton(with request: PlaybackModels.SetSeemoreButton.Request) {
         guard let worker,
-              let currentCellMemberID: Int = previousCell?.memberID
+              request.indexPathRow < playbackVideoInfos.count
         else { return }
+        memberID = playbackVideoInfos[request.indexPathRow].memberID
+        guard let currentCellMemberID = memberID else { return }
         let buttonType: Models.SetSeemoreButton.ButtonType = worker.isMyVideo(currentCellMemberID: currentCellMemberID) ? .delete : .report
-        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(buttonType: buttonType)
+        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(buttonType: buttonType, indexPathRow: request.indexPathRow)
         presenter?.presentSetSeemoreButton(with: response)
     }
 
@@ -237,10 +246,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
         isDelete = true
-        guard let previousCell,
-              let worker
+        guard let worker,
+              request.indexPathRow < playbackVideoInfos.count
         else { return Task { false } }
-        guard let boardID = previousCell.boardID else { return Task { false } }
+        let boardID: Int = playbackVideoInfos[request.indexPathRow].boardID
         return Task {
             let result: Bool = await worker.deletePlaybackVideo(boardID: boardID)
             let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
@@ -251,34 +260,45 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
     }
 
+    func reportVideo(with request: PlaybackModels.ReportPlaybackVideo.Request) {
+        if request.indexPathRow < playbackVideoInfos.count { return }
+        boardID = playbackVideoInfos[request.indexPathRow].boardID
+        presenter?.presentReportVideo()
+    }
+
     func resumeVideo() {
         guard let previousCell else { return }
         previousCell.playbackView.playPlayer()
     }
 
-    private func transPostToVideo(_ posts: [Post]) -> [Models.PlaybackVideo] {
-        return posts.compactMap { post in
-            guard let videoURL: URL = post.board.videoURL else { return nil }
-            return Models.PlaybackVideo(
-                displayedPost: Models.DisplayedPost(
-                    member: Models.Member(
-                        memberID: post.member.identifier,
-                        username: post.member.username,
-                        profileImageURL: post.member.profileImageURL),
-                    board: Models.Board(
-                        boardID: post.board.identifier,
-                        title: post.board.title,
-                        description: post.board.description,
-                        videoURL: videoURL,
-                        latitude: post.board.latitude,
-                        longitude: post.board.longitude),
-                    tags: post.tag))
+    private func transPostToVideo(_ posts: [Post]) -> ([Models.PlaybackVideo], [Models.PlaybackInfo]) {
+        var videos: [Models.PlaybackVideo] = []
+        var infos: [Models.PlaybackInfo] = []
+        for post in posts {
+            if let videoURL: URL = post.board.videoURL {
+                videos.append(Models.PlaybackVideo(
+                    displayedPost: Models.DisplayedPost(
+                        member: Models.Member(
+                            memberID: post.member.identifier,
+                            username: post.member.username,
+                            profileImageURL: post.member.profileImageURL),
+                        board: Models.Board(
+                            boardID: post.board.identifier,
+                            title: post.board.title,
+                            description: post.board.description,
+                            videoURL: videoURL,
+                            latitude: post.board.latitude,
+                            longitude: post.board.longitude),
+                        tags: post.tag)))
+                infos.append(Models.PlaybackInfo(memberID: post.member.identifier, boardID: post.board.identifier))
+            }
         }
+        return (videos, infos)
     }
 
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request) {
-        guard let memberID = request.memberID else { return }
-        self.memberID = memberID
+        guard let indexPathRow = request.indexPathRow, indexPathRow < playbackVideoInfos.count else { return }
+        self.memberID = playbackVideoInfos[indexPathRow].memberID
         presenter?.presentProfile()
     }
 
@@ -317,7 +337,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 }
                 guard let newPosts else { return false }
                 self.posts?.append(contentsOf: newPosts)
-                let videos: [Models.PlaybackVideo] = transPostToVideo(newPosts)
+                let videos: [Models.PlaybackVideo]
+                let newInfos: [Models.PlaybackInfo]
+                (videos, newInfos) = transPostToVideo(newPosts)
+                self.playbackVideoInfos.append(contentsOf: newInfos)
                 let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
                 await MainActor.run {
                     presenter?.presentLoadFetchVideos(with: response)

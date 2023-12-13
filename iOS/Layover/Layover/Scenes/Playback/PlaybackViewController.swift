@@ -12,7 +12,7 @@ import AVFoundation
 import OSLog
 
 protocol PlaybackViewControllerDelegate: AnyObject {
-    func moveToProfile(memberID: Int)
+    func moveToProfile()
     func moveToTagPlay(selectedTag: String)
 }
 
@@ -34,6 +34,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func routeToProfile()
     func routeToTagPlay()
     func setProfileImageAndLocation(viewModel: PlaybackModels.LoadProfileImageAndLocation.ViewModel)
+    func reportVideo()
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -148,11 +149,12 @@ final class PlaybackViewController: BaseViewController {
         self.navigationItem.rightBarButtonItem = seemoreButton
     }
 
-    private func reportButtonDidTap() {
+    private func reportButtonDidTap(_ indexPathRow: Int) {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
             [weak self] _ in
-            self?.router?.routeToReport()
+//            self?.router?.routeToReport()
+            self?.interactor?.reportVideo(with: Models.ReportPlaybackVideo.Request(indexPathRow: indexPathRow))
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
             [weak self] _ in
@@ -170,7 +172,7 @@ final class PlaybackViewController: BaseViewController {
         if visibleIndexPaths.count > 1 { return }
         guard let currentItemIndex = visibleIndexPaths.first else { return }
         guard let currentItem = dataSource?.itemIdentifier(for: currentItemIndex) else { return }
-        let request: Models.DeletePlaybackVideo.Request = Models.DeletePlaybackVideo.Request(playbackVideo: currentItem)
+        let request: Models.DeletePlaybackVideo.Request = Models.DeletePlaybackVideo.Request(playbackVideo: currentItem, indexPathRow: currentItemIndex.row)
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let deleteAction: UIAlertAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
             [weak self] _ in
@@ -188,7 +190,11 @@ final class PlaybackViewController: BaseViewController {
     }
 
     @objc private func seeMoreButtonDidTap() {
-        interactor?.setSeeMoreButton()
+        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
+        if visibleIndexPaths.count > 1 { return }
+        guard let currentItemIndex = visibleIndexPaths.first else { return }
+        let request: Models.SetSeemoreButton.Request = Models.SetSeemoreButton.Request(indexPathRow: currentItemIndex.row)
+        interactor?.setSeeMoreButton(with: request)
     }
 }
 
@@ -291,7 +297,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         case .delete:
             deleteButtonDidTap()
         case .report:
-            reportButtonDidTap()
+            reportButtonDidTap(viewModel.indexPathRow)
         }
     }
 
@@ -316,6 +322,10 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func setProfileImageAndLocation(viewModel: PlaybackModels.LoadProfileImageAndLocation.ViewModel) {
         viewModel.curCell.setProfileImageAndLocation(imageData: viewModel.profileImageData, location: viewModel.location)
+    }
+
+    func reportVideo() {
+        router?.routeToReport()
     }
 }
 
@@ -371,13 +381,16 @@ extension PlaybackViewController: UICollectionViewDelegate {
 }
 
 extension PlaybackViewController: PlaybackViewControllerDelegate {
-    func moveToProfile(memberID: Int) {
-        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: memberID, selectedTag: nil)
-        interactor?.moveToProfile(with: request)
+    func moveToProfile() {
+        let indexPaths = playbackCollectionView.indexPathsForVisibleItems
+        if indexPaths.count == 1, let indexPath = indexPaths.first {
+            let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(indexPathRow: indexPath.row, selectedTag: nil)
+            interactor?.moveToProfile(with: request)
+        }
     }
 
     func moveToTagPlay(selectedTag: String) {
-        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: nil, selectedTag: selectedTag)
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(indexPathRow: nil, selectedTag: selectedTag)
         interactor?.moveToTagPlay(with: request)
     }
 }

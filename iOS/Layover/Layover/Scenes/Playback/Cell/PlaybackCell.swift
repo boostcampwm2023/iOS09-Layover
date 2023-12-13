@@ -12,11 +12,7 @@ import OSLog
 
 final class PlaybackCell: UICollectionViewCell {
 
-    var boardID: Int?
-
     weak var delegate: PlaybackViewControllerDelegate?
-
-    private (set) var memberID: Int?
 
     let playbackView: PlaybackView = PlaybackView()
 
@@ -35,15 +31,12 @@ final class PlaybackCell: UICollectionViewCell {
     }
 
     func setPlaybackContents(post: PlaybackModels.DisplayedPost) {
-        boardID = post.board.boardID
         playbackView.descriptionView.titleLabel.text = post.board.title
         playbackView.descriptionView.setText(post.board.description ?? "")
         playbackView.setDescriptionViewUI()
         playbackView.profileButton.setImage(UIImage.profile, for: .normal)
         playbackView.profileLabel.text = post.member.username
         setTagButtons(with: post.tags)
-        memberID = nil
-        memberID = post.member.memberID
         playbackView.profileButton.removeTarget(nil, action: nil, for: .allEvents)
         playbackView.profileButton.addTarget(self, action: #selector(profileButtonDidTap), for: .touchUpInside)
     }
@@ -106,8 +99,7 @@ final class PlaybackCell: UICollectionViewCell {
     }
 
     @objc private func profileButtonDidTap() {
-        guard let memberID else { return }
-        delegate?.moveToProfile(memberID: memberID)
+        delegate?.moveToProfile()
     }
 
     @objc private func tagButtonDidTap(_ sender: UIButton) {
