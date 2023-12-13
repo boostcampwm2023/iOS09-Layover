@@ -75,7 +75,7 @@ pipeline {
                         dir("$PROJECT_PATH") {
                             def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
 
-                            export COMMIT_HASH=${commitHash}
+                            sh "export COMMIT_HASH=${commitHash}"
                             def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
                             echo "파일 생성 완료"
                             sh "docker-compose up -d"
