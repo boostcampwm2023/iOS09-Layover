@@ -11,13 +11,15 @@ import CoreLocation
 @testable import Layover
 
 final class MockLocationFetcher: LocationFetcher {
-    var location: CLLocation? = CLLocation(latitude: 37.7749, longitude: 122.4194)
+    var location: CLLocation?
     var locationFetcherDelegate: Layover.LocationFetcherDelegate?
     var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
+    var locationCallBackValue: CLLocation?
 
     func requestLocation() { }
 
     func startUpdatingLocation() {
+        location = CLLocation(latitude: 37.498206, longitude: 127.02761)
         guard let location else { return }
         locationFetcherDelegate?.locationFetcher(self, didUpdateLocations: [location])
     }

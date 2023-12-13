@@ -37,7 +37,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     var presenter: UploadPostPresentationLogic?
 
     private let fileManager: FileManager
-    private var locationManager: CurrentLocationManager
+    private let locationManager: CurrentLocationManager
 
     // MARK: - Data Store
 

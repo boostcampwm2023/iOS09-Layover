@@ -35,11 +35,6 @@ class CurrentLocationManager: NSObject {
         self.locationFetcher.startUpdatingLocation()
     }
 
-    func locationFetcher(_ fetcher: LocationFetcher, didChangeAuthorization authorization: CLAuthorizationStatus) {
-        self.authrizationCompletion?(authorization)
-        self.authrizationCompletion = nil
-    }
-
 }
 
 extension CurrentLocationManager: LocationFetcherDelegate {
@@ -48,10 +43,19 @@ extension CurrentLocationManager: LocationFetcherDelegate {
         self.currentLocationCompletion?(location)
         self.currentLocationCompletion = nil
     }
+
+    func locationFetcher(_ fetcher: LocationFetcher, didChangeAuthorization authorization: CLAuthorizationStatus) {
+        self.authrizationCompletion?(authorization)
+        self.authrizationCompletion = nil
+    }
 }
 
 extension CurrentLocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.locationFetcher(manager, didUpdateLocations: locations)
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        self.locationFetcher(manager, didChangeAuthorization: manager.authorizationStatus)
     }
 }
