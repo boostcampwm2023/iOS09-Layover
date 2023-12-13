@@ -13,9 +13,7 @@ pipeline {
                     steps {
                         script {
                             try {
-                                // 커밋 해시 얻기
-                                env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
-                                echo "커밋 해시: ${env.COMMIT_HASH}"
+
 
                                 // 컨테이너가 존재하면 삭제
                                 sh """
@@ -49,6 +47,7 @@ pipeline {
                 script {
                     try {
                         dir("$PROJECT_PATH") {
+		    env.COMMIT_HASH = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
                             echo "커밋 해시: ${env.COMMIT_HASH}"
 
                             echo '빌드 시작'
