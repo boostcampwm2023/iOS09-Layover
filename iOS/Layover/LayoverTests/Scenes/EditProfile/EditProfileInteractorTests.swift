@@ -179,11 +179,8 @@ final class EditProfileInteractorTests: XCTestCase {
         // assert
         XCTAssertTrue(spy.presentProfileStateCalled, "changeProfile을 호출해서 presenter의 presentProfileState를 호출하지 못했다.")
         XCTAssertEqual(spy.presentProfileStateResponse.nicknameState,  .lessThan2GreaterThan8, "changeProfile을 호출해서 presenter에게 올바른 nickname의 nicknameState를 전달하지 못했다.")
-
         XCTAssertFalse(spy.presentProfileStateResponse.canEditProfile, "changeProfile을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
-
         XCTAssertNil(spy.presentProfileStateResponse.introduceAlertDescription, "presenter에게 올바른 introduceAlertDescription을 전달하지 못했다.")
-
         XCTAssertFalse(spy.presentProfileStateResponse.canCheckNicknameDuplication!, "changeProfile을 호출해서 presenter에게 올바른 canCheckNicknameDuplication을 전달하지 못했다.")
     }
 
@@ -216,11 +213,8 @@ final class EditProfileInteractorTests: XCTestCase {
         // assert
         XCTAssertTrue(spy.presentProfileStateCalled, "changeProfile을 호출해서 presenter의 presentProfileState를 호출하지 못했다.")
         XCTAssertNil(spy.presentProfileStateResponse.introduceAlertDescription, "changeProfile을 호출해서 presenter에게 introduceAlertDescription이 Nil로 전달하지 못했다.")
-
         XCTAssertTrue(spy.presentProfileStateResponse.canEditProfile, "changeProfile을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
-
         XCTAssertNil(spy.presentProfileStateResponse.canCheckNicknameDuplication, "changeProfile을 호출해서 presenter에게 올바른 canCheckNicknameDuplication을 전달하지 못했다.")
-
         XCTAssertEqual(spy.presentProfileStateResponse.nicknameState, .valid, "changeProfile을 호출해서 presenter에게 올바른 nickname의 nicknameState를 전달하지 못했다.")
     }
 
@@ -237,12 +231,8 @@ final class EditProfileInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentProfileStateCalled, "changeProfile을 호출해서 presenter의 presentProfileState를 호출하지 못했다.")
         XCTAssertEqual(spy.presentProfileStateResponse.introduceAlertDescription, Models.ChangeProfile.IntroduceLengthState.overLength.description,"changeProfile을 호출해서 presenter에게 introduceAlertDescription이 Nil로 전달하지 못했다.")
 
-
         XCTAssertFalse(spy.presentProfileStateResponse.canEditProfile, "changeProfile을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
-
-
         XCTAssertNil(spy.presentProfileStateResponse.canCheckNicknameDuplication, "changeProfile을 호출해서 presenter에게 올바른 canCheckNicknameDuplication을 전달하지 못했다.")
-
         XCTAssertEqual(spy.presentProfileStateResponse.nicknameState, .valid, "changeProfile을 호출해서 presenter에게 올바른 nickname의 nicknameState를 전달하지 못했다.")
     }
 
@@ -260,9 +250,7 @@ final class EditProfileInteractorTests: XCTestCase {
         XCTAssertNil(spy.presentProfileStateResponse.introduceAlertDescription, "changeProfile을 호출해서 presenter에게 introduceAlertDescription이 Nil로 전달하지 못했다.")
 
         XCTAssertTrue(spy.presentProfileStateResponse.canEditProfile, "changeProfile을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
-
         XCTAssertNil(spy.presentProfileStateResponse.canCheckNicknameDuplication, "changeProfile을 호출해서 presenter에게 올바른 canCheckNicknameDuplication을 전달하지 못했다.")
-
         XCTAssertEqual(spy.presentProfileStateResponse.nicknameState, .valid, "changeProfile을 호출해서 presenter에게 올바른 nickname의 nicknameState를 전달하지 못했다.")
     }
 
@@ -278,11 +266,8 @@ final class EditProfileInteractorTests: XCTestCase {
         // assert
         XCTAssertTrue(spy.presentProfileStateCalled, "changeProfile을 호출해서 presenter의 presentProfileState를 호출하지 못했다.")
         XCTAssertNil(spy.presentProfileStateResponse.introduceAlertDescription, "changeProfile을 호출해서 presenter에게 introduceAlertDescription이 Nil로 전달하지 못했다.")
-
         XCTAssertTrue(spy.presentProfileStateResponse.canEditProfile, "changeProfile을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
-
         XCTAssertNil(spy.presentProfileStateResponse.canCheckNicknameDuplication, "changeProfile을 호출해서 presenter에게 올바른 canCheckNicknameDuplication을 전달하지 못했다.")
-
         XCTAssertEqual(spy.presentProfileStateResponse.nicknameState, .valid, "changeProfile을 호출해서 presenter에게 올바른 nickname의 nicknameState를 전달하지 못했다.")
     }
 
@@ -298,7 +283,6 @@ final class EditProfileInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentNicknameDuplicationCalled, "checkDuplication을 호출해서 presenter의 presentNicknameDuplication을 호출하지 못했다.")
         XCTAssertTrue(spy.presentNicknameDuplicationResponse.isValid,
                       "checkDuplication을 호출해서 presenter에게 올바른 isValid값을 전달하지 못했다.")
-
         XCTAssertTrue(spy.presentNicknameDuplicationResponse.canEditProfile,
                      "checkDuplication을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")
     }
@@ -317,7 +301,6 @@ final class EditProfileInteractorTests: XCTestCase {
         XCTAssertTrue(spy.presentNicknameDuplicationCalled, "checkDuplication을 호출해서 presenter의 presentNicknameDuplication을 호출하지 못했다.")
         XCTAssertFalse(spy.presentNicknameDuplicationResponse.isValid,
                        "checkDuplication을 호출해서 presenter에게 올바른 isValid값을 전달하지 못했다.")
-
         XCTAssertFalse(spy.presentNicknameDuplicationResponse.canEditProfile,
                         "checkDuplication을 호출해서 presenter에게 올바른 canEditProfile값을 전달하지 못했다.")}
 
