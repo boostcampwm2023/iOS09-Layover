@@ -21,4 +21,4 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     restart: always
     ports:
-      - 8090:8090
+      - 8090:8080
