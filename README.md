@@ -78,26 +78,24 @@
 ### 영상 탐색 및 시청
 > 홈에서 랜덤한 영상을 탐색하고, 원하는 영상을 골라 재생할 수 있습니다.
 
-![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 05 16 41](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/9aece43f-26b8-402c-a455-b615297afc35)
-![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 04 55 17](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/37776130-09ad-4572-91df-c83a9f26b29c)
+![11](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/2b69de8c-a6b6-45fe-94db-5c0f0da3795d)
+![12](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ff21462b-6cc3-4d0d-be8d-e776167ca3f3)
 
 ### 위치 기반 영상 탐색
 > 지도에서 원하는 지역의 영상을 탐색하고, 원하는 영상을 골라 재생할 수 있습니다.
 
-![Simulator Screen Recording - iPhone 15 Pro - 2023-12-13 at 05 05 10](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/0facd15c-6a23-4d1f-994d-b5a5b613934f)
+![22](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/38d6ef0e-2d45-4a6d-9c20-90dd2811c1ee)
 
 ### 영상 편집 및 위치 기반 영상 업로드
 > 현재 위치를 기반으로, 간단한 편집 기능과 함께 영상을 업로드 할 수 있습니다.
 
-![1](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/99e6c197-6817-4d17-9fb9-0816f1b904e0)
-![2](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/775f45fb-64a5-4c2e-ad41-dd562a50ba9b)
-
+![33](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ab1913b8-9eae-4f14-a52e-e6b587eb0d6f)
+![2](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/cb7fbd48-3009-4a24-bc1f-a47a22b3dcfd)
 
 ### 프로필
 > 프로필에서 내가 업로드한 영상의 목록을 확인하고 재생할 수 있습니다.
 
-![3b893515ea72abfc](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/aefcd98c-bee2-494e-9677-d7c4813b0801)
-
+![44](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/712f2e27-2ed2-4599-b303-cf1b834c6190)
 
 # 기술스택
 ## iOS 
