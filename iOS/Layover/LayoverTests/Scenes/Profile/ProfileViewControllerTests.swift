@@ -75,7 +75,7 @@ final class ProfileViewControllerTests: XCTestCase {
         XCTAssertTrue(spy.fetchProfileCalled, "viewWillAppear가 호출되어 fetchProfile이 호출했다")
     }
 
-    func test_스크롤이_바닥에_닿아_scrollViewBeginDecelerating이_호출되면_fetchPosts가_호출된다() {
+    func test_스크롤이_바닥에_닿아_scrollViewBeginDecelerating이_호출되면_fetchMorePosts가_호출된다() {
         // arrange
         let spy = ProfileBusinessLogicSpy()
         sut.interactor = spy
@@ -91,7 +91,7 @@ final class ProfileViewControllerTests: XCTestCase {
         XCTAssertTrue(spy.fetchMorePostsCalled, "스크롤이 바닥에 닿아 scrollViewBeginDecelerating이 호출되어 fetchPosts가 호출했다")
     }
 
-    func test_스크롤이_바닥에_닿지_않고_scrollViewBeginDecelerating이_호출되면_fetchPosts가_호출된다() {
+    func test_스크롤이_바닥에_닿지_않고_scrollViewBeginDecelerating이_호출되면_fetchMorePosts가_호출된다() {
         // arrange
         let spy = ProfileBusinessLogicSpy()
         sut.interactor = spy
@@ -105,5 +105,21 @@ final class ProfileViewControllerTests: XCTestCase {
 
         // assert
         XCTAssertFalse(spy.fetchMorePostsCalled, "스크롤이 바닥에 닿지 않고 scrollViewBeginDecelerating이 호출되어 fetchPosts가 호출되지 않았다")
+    }
+
+    func test_스크롤을_아래로_당겨서_scrollViewBeginDecelerating이_호출되면_fetchMorePosts가_호출되지_않았다() {
+        // arrange
+        let spy = ProfileBusinessLogicSpy()
+        sut.interactor = spy
+        let scrollView = UIScrollView(frame: .init(x: 0, y: 0, width: 100, height: 100))
+        scrollView.contentSize.height = 50
+        scrollView.contentOffset.y = -100
+
+
+        // act
+        sut.scrollViewWillBeginDecelerating(scrollView)
+
+        // assert
+        XCTAssertFalse(spy.fetchMorePostsCalled, "스크롤이 아래로 당겨져서 scrollViewBeginDecelerating이 호출되어 fetchPosts가 호출되었다")
     }
 }
