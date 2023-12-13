@@ -176,7 +176,9 @@ final class PlaybackViewController: BaseViewController {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let deleteAction: UIAlertAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
             [weak self] _ in
-            self?.interactor?.deleteVideo(with: request)
+            Task {
+                await self?.interactor?.deleteVideo(with: request)
+            }
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
             [weak self] _ in

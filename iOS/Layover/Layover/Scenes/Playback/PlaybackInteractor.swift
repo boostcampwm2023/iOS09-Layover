@@ -24,8 +24,7 @@ protocol PlaybackBusinessLogic {
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
     func setSeeMoreButton(with request: PlaybackModels.SetSeemoreButton.Request)
-    @discardableResult
-    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
+    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) async
     func reportVideo(with request: PlaybackModels.ReportPlaybackVideo.Request)
     func resumeVideo()
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
@@ -244,19 +243,16 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     // MARK: - UseCase Delete Video
 
-    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
+    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) async {
         isDelete = true
         guard let worker,
               request.indexPathRow < playbackVideoInfos.count
-        else { return Task { false } }
+        else { return }
         let boardID: Int = playbackVideoInfos[request.indexPathRow].boardID
-        return Task {
-            let result: Bool = await worker.deletePlaybackVideo(boardID: boardID)
-            let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
-            await MainActor.run {
-                presenter?.presentDeleteVideo(with: response)
-            }
-            return result
+        let result = await worker.deletePlaybackVideo(boardID: boardID)
+        let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
+        await MainActor.run {
+            presenter?.presentDeleteVideo(with: response)
         }
     }
 
