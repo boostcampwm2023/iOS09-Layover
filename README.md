@@ -126,7 +126,8 @@
 
 ## BE
 
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/00fb75bc-96fb-4cd9-9e0c-450331a5c16e)
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/a9cbcf6f-a961-4781-b377-ca910b4280ea)
+
 
 
 ### ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
