@@ -39,6 +39,7 @@ final class HomePresenterTests: XCTestCase {
     // MARK: - Test doubles
 
     final class HomeDisplayLogicSpy: HomeDisplayLogic {
+
         var displayPostsCalled = false
         var displayPostsReceivedViewModel: Models.FetchPosts.ViewModel!
         var displayThumbnailImageCalled = false
@@ -58,6 +59,15 @@ final class HomePresenterTests: XCTestCase {
         func routeToTagPlayList() {
             routeToTagPlayListCalled = true
         }
+
+        func routeToVideoPicker() {
+
+        }
+
+        func openSetting() {
+
+        }
+
     }
 
     // MARK: - Tests
