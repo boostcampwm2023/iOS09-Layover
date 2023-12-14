@@ -389,6 +389,15 @@ extension PlaybackViewController: UICollectionViewDelegate {
         interactor?.careVideoLoading(with: request)
     }
 
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
+            return
+        }
+
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
+        interactor?.playTeleportVideoOnlyOneCell(with: request)
+    }
+
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
