@@ -13,7 +13,7 @@ protocol UploadPostPresentationLogic {
     func presentThumbnailImage(with response: UploadPostModels.FetchThumbnail.Response)
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response)
     func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
-//    func presentUploadProgress(with response: UploadPostModels.UploadPost.Response)
+    func presentUnsupportedFormatAlert()
 }
 
 final class UploadPostPresenter: UploadPostPresentationLogic {
@@ -56,4 +56,7 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
         viewController?.displayUploadButton(viewModel: viewModel)
     }
 
+    func presentUnsupportedFormatAlert() {
+        viewController?.displayUnsupportedFormatAlert()
+    }
 }

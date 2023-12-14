@@ -45,7 +45,7 @@ final class VideoPickerManager: NSObject, PHPickerViewControllerDelegate {
             if error != nil {
                 Task {
                     await MainActor.run {
-                        Toast.shared.showToast(message: "지원하지 않는 동영상 형식입니다 T.T")
+                        Toast.shared.showToast(message: "지원하지 않는 파일 형식이에요 😢")
                     }
                 }
             }

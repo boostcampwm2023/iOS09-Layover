@@ -146,10 +146,14 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
                 try fileManager.removeItem(at: url)
             }
             guard let videoURL else { return }
-            let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough)
-            exporter?.outputURL = videoURL
-            exporter?.outputFileType = .from(videoURL)
-            await exporter?.export()
+            if let outputFileType = AVFileType.from(videoURL) {
+                let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough)
+                exporter?.outputURL = videoURL
+                exporter?.outputFileType = .from(videoURL)
+                await exporter?.export()
+            } else {
+                presenter?.presentUnsupportedFormatAlert()
+            }
         } catch {
             os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
         }
