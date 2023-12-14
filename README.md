@@ -1,5 +1,5 @@
 # iOS09-Layover
-
+---
 ## 프로젝트 소개
 
 <p align="center">
@@ -16,14 +16,14 @@
     어디서든 간편하게 Layover를 통해 방문의 순간, 기억을 지도에 기록하고, 다양한 경험을 나눌 수 있습니다. 
     
     당신의 여정을 Layover에 쌓아가보세요!
-
+---
 ## 문서
 
 | 그라운드 룰                                                                           | 기획/디자인 | 템플릿 | 회의록 | ***개발일지*** |
 | ------------------------------------------------------------------------------------- | ---------------- | ------ | ------ | ------ |
 | ⛳️ [그라운드 룰](https://loinsir.notion.site/51835aceabde449a82b56f7c15353a98?pvs=4) | 🎨 [디자인](https://www.figma.com/file/wqUKtYD2tqY6qS0TZnw2eO/Layover-UI?type=design&mode=design&t=9Io4sVa1Q17CxICu-1)             | 🔭 [템플릿](https://loinsir.notion.site/084324b5761c4d38bfd69a102e525d97?pvs=4)|📝 [회의록](https://loinsir.notion.site/2132e55f2dfd4f83ad895aabeab41684?pvs=4)| 🛠️ [DevLog](https://loinsir.notion.site/Dev-Log-346d2f9ee4c64869a7a25d350761c4a9?pvs=4)
 
-
+---
 ## 팀원 소개
 
 <table align=center>
@@ -69,110 +69,161 @@
 </table>
 
 ---
-## 프로젝트 소개
+## 프로젝트 소개 및 주요 기능
 
 ![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
-
-## 핵심 기술
-![Slide 16_9 - 47](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/7c7c1526-5a61-4bad-ae67-4734734d78ba)
-- HLS 프로토콜을 이용한 영상 스트리밍
-
-## 프로젝트 주요 기능
 
 ### 영상 탐색 및 시청
 > 홈에서 랜덤한 영상을 탐색하고, 원하는 영상을 골라 재생할 수 있습니다.
 
-![11](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/2b69de8c-a6b6-45fe-94db-5c0f0da3795d)
-![12](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ff21462b-6cc3-4d0d-be8d-e776167ca3f3)
+<img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/2b69de8c-a6b6-45fe-94db-5c0f0da3795d" width=20% />
+<img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ff21462b-6cc3-4d0d-be8d-e776167ca3f3" width=20% />
 
 ### 위치 기반 영상 탐색
 > 지도에서 원하는 지역의 영상을 탐색하고, 원하는 영상을 골라 재생할 수 있습니다.
 
-![22](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/38d6ef0e-2d45-4a6d-9c20-90dd2811c1ee)
+<img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/38d6ef0e-2d45-4a6d-9c20-90dd2811c1ee" width=20% />
 
 ### 영상 편집 및 위치 기반 영상 업로드
 > 현재 위치를 기반으로, 간단한 편집 기능과 함께 영상을 업로드 할 수 있습니다.
 
-![33](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ab1913b8-9eae-4f14-a52e-e6b587eb0d6f)
-![2](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/cb7fbd48-3009-4a24-bc1f-a47a22b3dcfd)
+<img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/ab1913b8-9eae-4f14-a52e-e6b587eb0d6f" width=20% />
+<img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/cb7fbd48-3009-4a24-bc1f-a47a22b3dcfd" width=20% />
 
 ### 프로필
 > 프로필에서 내가 업로드한 영상의 목록을 확인하고 재생할 수 있습니다.
 
-![44](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/712f2e27-2ed2-4599-b303-cf1b834c6190)
+<img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/712f2e27-2ed2-4599-b303-cf1b834c6190" width=20% />
 
-# 기술스택
-## iOS 
+---
 
-### CleanSwift + Test
+## 핵심 기술
+### HLS
 
-- CleanSwift를 적용하면서 느낀 점 / 장단점
-- `MockURLProtocol`을 이용해서 서버 API가 완성되기 전 데모 개발에 활용 이후 → 테스트 코드에 Test Double로 재활용
+<p align="center">
+    <img src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/7c7c1526-5a61-4bad-ae67-4734734d78ba" width=80% />
+</p>
 
-### AVFoundation
+- ABR(Adaptive Bitrate Streaming)를 통해 네트워크, CPU Capacity 상태에 따라 동적으로 화질을 변경하여 최적의 영상 품질을 제공합니다.
+- iOS에서 지원하는 유일한 스트리밍 프로토콜 입니다.
+---
+## 기술스택
+### 🍎 iOS
+<p>
+    <img src="https://img.shields.io/badge/CleanSwift-F05138?style=for-the-badge&logo=swift&logoColor=white">
+    <img src="https://img.shields.io/badge/AVFoundation-000000?style=for-the-badge&logo=airplayvideo&logoColor=white">    
+    <img src="https://img.shields.io/badge/MapKit-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white">
+    <img src="https://img.shields.io/badge/Swift Concurrency-F05138?style=for-the-badge&logo=swift&logoColor=white">
+</p>
 
-- 비디오 트랙만 뽑아서 추출하기
-- Layover만의 커스텀 PlayerView 만들기
+  
+### 🌐 BE
 
-### Mapkit
+<p>
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+    <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=NestJS&logoColor=white">    
+    <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+    <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
+    <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+    <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">
+    <img src="https://img.shields.io/badge/ncloud Service-03C75A?style=for-the-badge&logo=naver&logoColor=white">
+</p>
 
-- 어노테이션 커스텀, 오버레이
+---
+## 기술적 도전
+### 🎞 **presigned URL** 을 통한 업로드 구성
+- **`서버 부하 감소`** : Client -> Storage 직접 업로드, 서버의 부하 감소 및 업로드 속도 향상
+- **`구현 단순화`** : 단순히 URL을 통하여 업로드 함으로써 iOS, 서버 양쪽의 구현 단순화
 
-### Swift Concurrency
+![image](https://hackmd.io/_uploads/H16qds_Ia.png)
 
-- TaskGroup을 이용해 병렬 다운로드 처리
+<br>
 
-### 그 외에도...
+### 🎬 **VOD Station** & **Cloud Function** 서비스를 활용한 인코딩 및 스트리밍
+- ABR 스트리밍을 위하여 다양한 화질로 인코딩 (SD/HD/FHD) 및 스트리밍
+- Serverless 서비스 Cloud Function 을 통한 인코딩 자동화 및 콜백 업데이트
 
-- 메모리 누수로 인한 문제인줄 알았지만 결국 다른 문제였던 것, 어떻게 찾을 수 있었는지
-- 업로드 확장자는 어떻게 처리해야 하는지 등등!
-- 기술적인 고민 거리와 해결 과정은 [Dev Log에서 확인할 수 있어요!](https://www.notion.so/Dev-Log-346d2f9ee4c64869a7a25d350761c4a9?pvs=21)
+![image](https://hackmd.io/_uploads/HyHJI3_Ua.png)
 
-## BE
+<br>
 
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/f1eca374-65f8-4f00-ada4-a4030dd6f7bf)
-
-
-<br><br>
-
-## ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
-
-
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/97a5003b-7600-4c30-8d39-bddf4402576f)
-
-
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/06fa78f6-e673-4193-ad3b-a4c73a2f411b)
-
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/7d70ae62-8d6c-4245-a1b1-c386a4ee04ff)
-
-
-
-- presigned URL 을 통한 Client To Storage 업로드 구현으로 효율적인 업로드 구성
-- Serverless 서비스 Cloud Function을 통하여 Trigger 및 Action 구성
-- VOD Station 서비스를 통한 Encoding 및 ABR Streaming 구조 구성
-
-<br><br>
-
-
-### JWT를 이용한 인증
-
-<img width="785" alt="스크린샷 2023-12-15 오전 2 25 52" src="https://github.com/boostcampwm2023/iOS09-Layover/assets/111403658/8e753bbd-847b-48ac-8e45-b2698c8229d8">
+### 🔐JWT를 이용한 인증
 
 - JSON Web Token 으로 사용자 인증 진행
-- Redis로 각 토큰의 whitelist/blacklist를 운영하여 JWT 보안 허점 보완
+-  Redis로 각 토큰의 whitelist/blacklist를 운영하여 JWT 보안 허점 보완
 
-### Monitoring
+![image](https://hackmd.io/_uploads/BJZjXpuUT.png)
 
- ![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/ab573554-b248-45e3-a3a5-6e1c820aef20)
+<br>
 
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/1fea73e2-568f-45e6-8c93-40d2fb6ee79c)
+### 📜 **Server Monitoring**
 
-- 서버 Log저장 및 ncp의 `Cloud Log Analytics` 를 활용한 로그 수집
-- 빠른 에러 대처를 위한 Discord Bot 활용
-- 컨테이너 모니터링을 위한 `cadvisor + prometheus + grfana` 조합의 모니터링 구성
+- 서버에서 로그 저장 및 **`Cloud Log Analytics`** 서비스를 활용한 로그 수집
+- Discord Bot 을 적극적으로 활용한 빠른 에러대처
+- **`cadvisor + prometheus + grfana`** 을 활용한 서버 모니터링 
+
+![image](https://hackmd.io/_uploads/rk4Wg2u8p.png)
+
+![image](https://hackmd.io/_uploads/HJ73g2dIa.png)
 
 
+<br>
+
+
+---
+## 아키텍처
+
+### 🍎 iOS
+
+<img width="1229" alt="image" src="https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/5c0b181f-4e4f-4bc0-9ebc-c49e959a4538">
+
+### 🌐 BE
+
+![image](https://hackmd.io/_uploads/rylDX2OUp.png)
 
 
 ---
 
+## 개발 일지
+### 🍎 iOS
+
+
+| 제목 | Topic |
+| -------- | -------- |
+| [CleanSwift에 대하여](https://loinsir.notion.site/Clean-Swift-fabd1427e02241a6a8f4f0e18c5fc5fd?pvs=4) | 아키텍처 |
+| [코드폭격기 팀에서 적용한 iOS CI](https://loinsir.notion.site/iOS-CI-8eedf4b6aa5542adb67fe454d9d945a8?pvs=4) | CI/CD |
+| [앱에서 영상을 재생하기까지의 과정](https://loinsir.notion.site/856f29675c174ac48e8a9e6c0b868036?pvs=4) | AVFoundation |
+| [디자인 시스템 만들면서 기록하기](https://loinsir.notion.site/16b4a7c7cb8c4fe3b98748dd570d8b7b?pvs=4) | UI |
+| [AVPlayerLayer를 이용해 영상을 재생할 수 있는 PlayerView 구성](https://loinsir.notion.site/AVPlayerLayer-PlayerView-a9a85dac626b40b89551b7f40d0aef79?pvs=4) | AVFoundation |
+| [네트워크 통신없이 테스트하기 - URLProtocol](https://loinsir.notion.site/URLProtocol-fe734c0532f0473092f5e24e6a7b65f9?pvs=4) | URLSession |
+| [영상 업로드 화면을 만들어보쟈](https://loinsir.notion.site/1af78c8533b441a48e70140564da7ca2?pvs=4) | AVFoundation |
+| [제목은 좌충우돌 테스트코드 작성기로 하겠습니다. 그런데 Test Double을 곁들인…](https://loinsir.notion.site/Test-Double-ae17251bf438467bbc55ce686e72677d?pvs=4) | XCTest |
+| [MapView의 annotation selection 이슈](https://loinsir.notion.site/MapView-annotation-selection-6d75a520888949189e4a831b50382969?pvs=4) | MapKit
+| [테플 올리는거 그냥 과정 정리해보기](https://loinsir.notion.site/4a3dd96c36c9418b8a0206fd7a7f94bb?pvs=4) | TestFlight |
+| [영상을 재생시키면서 생긴 문제](https://loinsir.notion.site/102ce8a8cd8d423a9bc3e8ef24eb1267?pvs=4) | AVFoundation |
+| [UICollectionView로 무한 스크롤 만들기](https://loinsir.notion.site/UICollectionView-e90cef7c313b4e359231a35d69f5b232?pvs=4) | UIKit |
+
+
+### 🌐 BE
+
+| 제목 | Topic |
+| -------- | -------- |
+|[Tech Stack 선정 및 이유](https://www.notion.so/loinsir/Tech-Stack-8f23052d223e4caeb54b0c6aec86ae2d?pvs=4)  |아키텍처  |
+|[카카오/애플 OAuth](https://www.notion.so/loinsir/OAuth-785829eb700d4b208272bdd6a377e381?pvs=4)  |OAuth  |
+|[HTTPS 설정](https://www.notion.so/loinsir/HTTPS-9dd7c9ba64de482ab7c3d3c4fab8fd3d?pvs=4)  | HTTPS |
+|[Custom Response 와 ts-jenum](https://www.notion.so/loinsir/Custom-Exception-ts-jenum-b533ca572a974b5bb5318c5a5ecd223d?pvs=4)  | Response  |
+|[NestJS + Jest 테스트코드 작성](https://www.notion.so/loinsir/NestJS-Test-Code-62a0ed938b1a4f6f89f65fa5d0f70702?pvs=4)  | Test  |
+|[게시물 Pagination](https://www.notion.so/loinsir/Pagination-f7abb5a0ea334dc1a9e4f78e4516d544?pvs=4)  | Pagination  |
+|[HTTP Request Header에 대한 Pipe 구현하기](https://www.notion.so/loinsir/Pipe-0bc76f68b61e4e4ea6aa206b98b5e532?pvs=4) |@Pipe |
+|[VOD Station이란? 설정방법](https://www.notion.so/loinsir/VOD-Station-ae3d47bf2c1a4e35be14e6e7c3553dd4?pvs=4) | Video |
+|[클라이언트 업로드를 위한 presigned-URL 발급](https://www.notion.so/loinsir/Presigned-URL-03d6a4fc3f7c46dea50c004038bed358?pvs=4) | Video |
+|[Serverless 서비스 Cloud Function을 활용한 자동화 ](https://www.notion.so/loinsir/Cloud-Function-aefc56628ef94051871c20c5b7429879?pvs=4) | Video |
+|[Jenkins Pipeline 을 활용한 CI/CD 대작전](https://www.notion.so/loinsir/CI-CD-Jenknis-Pipeline-44ed0d4847dc4e8ca032ffcb04d5043c?pvs=4) | CI/CD |
+|[NestJS Circular Dependency 문제..](https://www.notion.so/loinsir/Circular-Dependency-bcb283689d32401f80fbea5078568915?pvs=4) | NestJS |
+|[🎈DB에 이모지를 저장할 줄 몰랐지..](https://www.notion.so/loinsir/b3874e5fcee54fcc890c44ccdfc05cb8?pvs=4) | DB |
+|[log 남기기 대작전](https://www.notion.so/loinsir/with-discord-ncloud-6b06bef92ef44107b3a93cbe148cf512?pvs=4) | log |
+
+<br>
+
+
+**더 많은 내용은??** **-> [Team 코드폭격기 Wiki](https://github.com/boostcampwm2023/iOS09-Layover/wiki)**
