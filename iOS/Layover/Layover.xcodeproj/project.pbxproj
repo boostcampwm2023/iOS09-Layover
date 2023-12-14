@@ -859,8 +859,8 @@
 				835A61982B068115002F22A5 /* PlaybackWorker.swift */,
 				835A61992B068115002F22A5 /* PlaybackRouter.swift */,
 				835A619A2B068115002F22A5 /* PlaybackModels.swift */,
-				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
 				835A619C2B068115002F22A5 /* PlaybackInteractor.swift */,
+				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
 				83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */,
 				836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */,
 			);

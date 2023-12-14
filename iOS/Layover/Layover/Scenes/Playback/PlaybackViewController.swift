@@ -12,7 +12,7 @@ import AVFoundation
 import OSLog
 
 protocol PlaybackViewControllerDelegate: AnyObject {
-    func moveToProfile(memberID: Int)
+    func moveToProfile()
     func moveToTagPlay(selectedTag: String)
 }
 
@@ -34,6 +34,7 @@ protocol PlaybackDisplayLogic: AnyObject {
     func routeToProfile()
     func routeToTagPlay()
     func setProfileImageAndLocation(viewModel: PlaybackModels.LoadProfileImageAndLocation.ViewModel)
+    func reportVideo()
 }
 
 final class PlaybackViewController: BaseViewController {
@@ -91,8 +92,8 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.configurePlaybackCell()
         interactor?.displayVideoList()
+        interactor?.configurePlaybackCell()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
         do {
@@ -148,11 +149,11 @@ final class PlaybackViewController: BaseViewController {
         self.navigationItem.rightBarButtonItem = seemoreButton
     }
 
-    private func reportButtonDidTap() {
+    private func reportButtonDidTap(_ indexPathRow: Int) {
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let reportAction: UIAlertAction = UIAlertAction(title: "신고", style: .destructive, handler: {
             [weak self] _ in
-            self?.router?.routeToReport()
+            self?.interactor?.reportVideo(with: Models.ReportPlaybackVideo.Request(indexPathRow: indexPathRow))
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
             [weak self] _ in
@@ -170,11 +171,13 @@ final class PlaybackViewController: BaseViewController {
         if visibleIndexPaths.count > 1 { return }
         guard let currentItemIndex = visibleIndexPaths.first else { return }
         guard let currentItem = dataSource?.itemIdentifier(for: currentItemIndex) else { return }
-        let request: Models.DeletePlaybackVideo.Request = Models.DeletePlaybackVideo.Request(playbackVideo: currentItem)
+        let request: Models.DeletePlaybackVideo.Request = Models.DeletePlaybackVideo.Request(playbackVideo: currentItem, indexPathRow: currentItemIndex.row)
         let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let deleteAction: UIAlertAction = UIAlertAction(title: "삭제", style: .destructive, handler: {
             [weak self] _ in
-            self?.interactor?.deleteVideo(with: request)
+            Task {
+                await self?.interactor?.deleteVideo(with: request)
+            }
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: {
             [weak self] _ in
@@ -188,7 +191,11 @@ final class PlaybackViewController: BaseViewController {
     }
 
     @objc private func seeMoreButtonDidTap() {
-        interactor?.setSeeMoreButton()
+        let visibleIndexPaths = playbackCollectionView.indexPathsForVisibleItems
+        if visibleIndexPaths.count > 1 { return }
+        guard let currentItemIndex = visibleIndexPaths.first else { return }
+        let request: Models.SetSeemoreButton.Request = Models.SetSeemoreButton.Request(indexPathRow: currentItemIndex.row)
+        interactor?.setSeeMoreButton(with: request)
     }
 }
 
@@ -291,7 +298,7 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         case .delete:
             deleteButtonDidTap()
         case .report:
-            reportButtonDidTap()
+            reportButtonDidTap(viewModel.indexPathRow)
         }
     }
 
@@ -299,6 +306,23 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         interactor?.resetVideo()
         guard let dataSource else { return }
         var snapshot = dataSource.snapshot()
+        if viewModel.nextCellIndex == 2 && snapshot.itemIdentifiers.count == 2 {
+            self.navigationController?.popViewController(animated: true)
+        }
+        if let nextCellIndex = viewModel.nextCellIndex, let deleteCellIndex = viewModel.deleteCellIndex {
+            let insertItem = snapshot.itemIdentifiers[nextCellIndex]
+            let deleteItem = snapshot.itemIdentifiers[deleteCellIndex]
+            let newFrontDummyItem = Models.PlaybackVideo(displayedPost: insertItem.displayedPost)
+            snapshot.insertItems([newFrontDummyItem], beforeItem: deleteItem)
+            snapshot.deleteItems([deleteItem])
+            if viewModel.isNeedReplace {
+                // 삭제가 되어도 더미셀이 오지 않고 정상적으로 순회하기 위함
+                let newBehindItem = Models.PlaybackVideo(displayedPost: insertItem.displayedPost)
+                snapshot.insertItems([newBehindItem], afterItem: viewModel.playbackVideo)
+                snapshot.deleteItems([insertItem])
+            }
+            dataSource.apply(snapshot, animatingDifferences: false)
+        }
         snapshot.deleteItems([viewModel.playbackVideo])
         dataSource.apply(snapshot, animatingDifferences: true)
         if snapshot.itemIdentifiers.count < 1 {
@@ -316,6 +340,10 @@ extension PlaybackViewController: PlaybackDisplayLogic {
 
     func setProfileImageAndLocation(viewModel: PlaybackModels.LoadProfileImageAndLocation.ViewModel) {
         viewModel.curCell.setProfileImageAndLocation(imageData: viewModel.profileImageData, location: viewModel.location)
+    }
+
+    func reportVideo() {
+        router?.routeToReport()
     }
 }
 
@@ -361,6 +389,15 @@ extension PlaybackViewController: UICollectionViewDelegate {
         interactor?.careVideoLoading(with: request)
     }
 
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let currentPlaybackCell: PlaybackCell = cell as? PlaybackCell else {
+            return
+        }
+
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: indexPath.row, currentCell: currentPlaybackCell)
+        interactor?.playTeleportVideoOnlyOneCell(with: request)
+    }
+
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
@@ -371,13 +408,16 @@ extension PlaybackViewController: UICollectionViewDelegate {
 }
 
 extension PlaybackViewController: PlaybackViewControllerDelegate {
-    func moveToProfile(memberID: Int) {
-        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: memberID, selectedTag: nil)
-        interactor?.moveToProfile(with: request)
+    func moveToProfile() {
+        let indexPaths = playbackCollectionView.indexPathsForVisibleItems
+        if indexPaths.count == 1, let indexPath = indexPaths.first {
+            let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(indexPathRow: indexPath.row, selectedTag: nil)
+            interactor?.moveToProfile(with: request)
+        }
     }
 
     func moveToTagPlay(selectedTag: String) {
-        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(memberID: nil, selectedTag: selectedTag)
+        let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(indexPathRow: nil, selectedTag: selectedTag)
         interactor?.moveToTagPlay(with: request)
     }
 }

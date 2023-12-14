@@ -161,7 +161,7 @@ final class PlaybackView: UIView {
     }
 
     func setPlayerSlider() {
-        let interval: CMTime = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+        let interval: CMTime = CMTimeMakeWithSeconds(0.2, preferredTimescale: Int32(NSEC_PER_SEC))
         timeObserverToken =  playerView.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] currentTime in
             self?.updateSlider(currentTime: currentTime)
         })

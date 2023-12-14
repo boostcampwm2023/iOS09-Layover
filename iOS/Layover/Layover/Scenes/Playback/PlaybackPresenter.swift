@@ -24,6 +24,7 @@ protocol PlaybackPresentationLogic {
     func presentSeekVideo(with response: PlaybackModels.SeekVideo.Response)
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response)
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response)
+    func presentReportVideo()
     func presentProfile()
     func presentTagPlay()
     func presentLoadProfileImageAndLocation(with response: PlaybackModels.LoadProfileImageAndLocation.Response)
@@ -112,13 +113,22 @@ final class PlaybackPresenter: PlaybackPresentationLogic {
     }
 
     func presentSetSeemoreButton(with response: PlaybackModels.SetSeemoreButton.Response) {
-        viewController?.setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel(buttonType: response.buttonType))
+        viewController?.setSeemoreButton(viewModel: Models.SetSeemoreButton.ViewModel(buttonType: response.buttonType, indexPathRow: response.indexPathRow))
     }
 
     func presentDeleteVideo(with response: PlaybackModels.DeletePlaybackVideo.Response) {
         let deleteMessage: Models.DeletePlaybackVideo.DeleteMessage = response.result ? .success : .fail
-        let viewModel: Models.DeletePlaybackVideo.ViewModel = Models.DeletePlaybackVideo.ViewModel(deleteMessage: deleteMessage, playbackVideo: response.playbackVideo)
+        let viewModel: Models.DeletePlaybackVideo.ViewModel = Models.DeletePlaybackVideo.ViewModel(
+            deleteMessage: deleteMessage,
+            playbackVideo: response.playbackVideo,
+            nextCellIndex: response.nextCellIndex,
+            deleteCellIndex: response.deleteCellIndex,
+            isNeedReplace: response.isNeedReplace)
         viewController?.deleteVideo(viewModel: viewModel)
+    }
+
+    func presentReportVideo() {
+        viewController?.reportVideo()
     }
 
     func presentProfile() {

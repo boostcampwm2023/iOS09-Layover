@@ -44,6 +44,13 @@ enum PlaybackModels {
         let longitude: Double
     }
 
+    struct PlaybackInfo {
+        let memberID: Int
+        let boardID: Int
+    }
+
+    static let fetchPostCount: Int = 15
+
     // MARK: - UseCase Load Video List
 
     enum LoadPlaybackVideoList {
@@ -146,15 +153,15 @@ enum PlaybackModels {
 
     enum ReportPlaybackVideo {
         struct Request {
-            
+            let indexPathRow: Int
         }
 
         struct Response {
-            let boardID: Int
+
         }
 
         struct ViewModel {
-            let boardID: Int
+
         }
     }
 
@@ -175,15 +182,17 @@ enum PlaybackModels {
             }
         }
         struct Request {
-
+            let indexPathRow: Int
         }
 
         struct Response {
             let buttonType: ButtonType
+            let indexPathRow: Int
         }
 
         struct ViewModel {
             let buttonType: ButtonType
+            let indexPathRow: Int
         }
     }
 
@@ -206,16 +215,23 @@ enum PlaybackModels {
 
         struct Request {
             let playbackVideo: PlaybackVideo
+            let indexPathRow: Int
         }
 
         struct Response {
             let result: Bool
             let playbackVideo: PlaybackVideo
+            let nextCellIndex: Int?
+            let deleteCellIndex: Int?
+            let isNeedReplace: Bool
         }
 
         struct ViewModel {
             let deleteMessage: DeleteMessage
             let playbackVideo: PlaybackVideo
+            let nextCellIndex: Int?
+            let deleteCellIndex: Int?
+            let isNeedReplace: Bool
         }
     }
 
@@ -223,7 +239,7 @@ enum PlaybackModels {
 
     enum MoveToRelativeView {
         struct Request {
-            let memberID: Int?
+            let indexPathRow: Int?
             let selectedTag: String?
         }
 

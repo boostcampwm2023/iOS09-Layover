@@ -18,14 +18,16 @@ protocol PlaybackBusinessLogic {
     func playInitialPlaybackCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func playTeleportVideoOnlyOneCell(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func careVideoLoading(with request: PlaybackModels.DisplayPlaybackVideo.Request)
+    func moveVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request)
     func resetVideo()
     func configurePlaybackCell()
     func controlPlaybackMovie(with request: PlaybackModels.SeekVideo.Request)
     func hidePlayerSlider()
-    func setSeeMoreButton()
-    @discardableResult
-    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never>
+    func setSeeMoreButton(with request: PlaybackModels.SetSeemoreButton.Request)
+    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) async
+    func reportVideo(with request: PlaybackModels.ReportPlaybackVideo.Request)
     func resumeVideo()
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
     func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
@@ -43,6 +45,7 @@ protocol PlaybackDataStore: AnyObject {
     var isDelete: Bool? { get set }
     var posts: [Post]? { get set }
     var memberID: Int? { get set }
+    var boardID: Int? { get set }
     var selectedTag: String? { get set }
 }
 
@@ -69,11 +72,15 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     var memberID: Int?
 
+    var boardID: Int?
+
     var selectedTag: String?
 
     private var isFetchReqeust: Bool = false
 
     private var currentPage: Int = 1
+
+    private var playbackVideoInfos: [Models.PlaybackInfo] = []
 
     // MARK: - UseCase Load Video List
 
@@ -86,7 +93,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 posts = worker.makeInfiniteScroll(posts: posts)
                 self.posts = posts
             }
-            let videos: [Models.PlaybackVideo] = transPostToVideo(posts)
+            let videos: [Models.PlaybackVideo]
+            (videos, playbackVideoInfos) = transPostToVideo(posts)
             let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
             await MainActor.run {
                 presenter?.presentVideoList(with: response)
@@ -122,7 +130,6 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
         if previousCell == request.currentCell {
             response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: previousCell)
@@ -132,10 +139,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
         // map에서 왔을 경우(로드한 목록 무한 반복)
         if parentView == .map {
-            if request.indexPathRow == (posts.count - 1) {
+            if request.indexPathRow == (playbackVideoInfos.count - 1) {
                 response = Models.DisplayPlaybackVideo.Response(indexPathRow: 1, previousCell: previousCell, currentCell: nil)
             } else if request.indexPathRow == 0 {
-                response = Models.DisplayPlaybackVideo.Response(indexPathRow: posts.count - 2, previousCell: previousCell, currentCell: nil)
+                response = Models.DisplayPlaybackVideo.Response(indexPathRow: playbackVideoInfos.count - 2, previousCell: previousCell, currentCell: nil)
             } else {
                 response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
                 previousCell = request.currentCell
@@ -155,20 +162,25 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func playTeleportVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
-        guard let posts else { return }
         var response: Models.DisplayPlaybackVideo.Response
-        if let isTeleport, isTeleport == true, (request.indexPathRow == 1 || request.indexPathRow == (posts.count - 2)) {
-                response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
+        if let isTeleport, isTeleport == true, (request.indexPathRow == 1 || request.indexPathRow == (playbackVideoInfos.count - 2)) {
+            response = Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: request.currentCell)
             previousCell = request.currentCell
-                presenter?.presentMoveCellNext(with: response)
-                self.isTeleport = false
-            }
+            presenter?.presentMoveCellNext(with: response)
+            self.isTeleport = false
+        }
 
         if let isDelete, isDelete == true {
             response = Models.DisplayPlaybackVideo.Response(previousCell: nil, currentCell: request.currentCell)
             previousCell = request.currentCell
             presenter?.presentMoveCellNext(with: response)
             self.isDelete = false
+        }
+    }
+
+    func playTeleportVideoOnlyOneCell(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        if let isTeleport, isTeleport == true, playbackVideoInfos.count == 3 {
+            presenter?.presentMoveCellNext(with: Models.DisplayPlaybackVideo.Response(previousCell: previousCell, currentCell: previousCell))
         }
     }
 
@@ -201,6 +213,10 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         }
     }
 
+    func moveVideo(with request: PlaybackModels.DisplayPlaybackVideo.Request) {
+        presenter?.presentTeleportCell(with: Models.DisplayPlaybackVideo.Response(indexPathRow: request.indexPathRow, previousCell: nil, currentCell: nil))
+    }
+
     // MARK: - UseCase ConfigureCell
 
     func configurePlaybackCell() {
@@ -224,31 +240,81 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         previousCell.playbackView.playerSlider?.isHidden = true
     }
 
-    func setSeeMoreButton() {
+    func setSeeMoreButton(with request: PlaybackModels.SetSeemoreButton.Request) {
         guard let worker,
-              let currentCellMemberID: Int = previousCell?.memberID
+              request.indexPathRow < playbackVideoInfos.count
         else { return }
+        memberID = playbackVideoInfos[request.indexPathRow].memberID
+        guard let currentCellMemberID = memberID else { return }
         let buttonType: Models.SetSeemoreButton.ButtonType = worker.isMyVideo(currentCellMemberID: currentCellMemberID) ? .delete : .report
-        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(buttonType: buttonType)
+        let response: Models.SetSeemoreButton.Response = Models.SetSeemoreButton.Response(buttonType: buttonType, indexPathRow: request.indexPathRow)
         presenter?.presentSetSeemoreButton(with: response)
     }
 
     // MARK: - UseCase Delete Video
 
-    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) -> Task<Bool, Never> {
+    func deleteVideo(with request: PlaybackModels.DeletePlaybackVideo.Request) async {
         isDelete = true
-        guard let previousCell,
-              let worker
-        else { return Task { false } }
-        guard let boardID = previousCell.boardID else { return Task { false } }
-        return Task {
-            let result: Bool = await worker.deletePlaybackVideo(boardID: boardID)
-            let response: Models.DeletePlaybackVideo.Response = Models.DeletePlaybackVideo.Response(result: result, playbackVideo: request.playbackVideo)
-            await MainActor.run {
-                presenter?.presentDeleteVideo(with: response)
+        guard let worker,
+              let parentView,
+              request.indexPathRow < playbackVideoInfos.count
+        else { return }
+        let boardID: Int = playbackVideoInfos[request.indexPathRow].boardID
+        let response: Models.DeletePlaybackVideo.Response
+        let result = await worker.deletePlaybackVideo(boardID: boardID)
+        if parentView == .map {
+            // map일 경우 최소 셀 개수가 3개
+            if request.indexPathRow == 1 {
+                response = Models.DeletePlaybackVideo.Response(
+                    result: result,
+                    playbackVideo: request.playbackVideo,
+                    nextCellIndex: 2,
+                    deleteCellIndex: playbackVideoInfos.count - 1,
+                    isNeedReplace: false)
+                playbackVideoInfos.append(playbackVideoInfos[2])
+                if let posts {
+                    self.posts?.append((posts[2]))
+                }
+            } else if request.indexPathRow == playbackVideoInfos.count - 2 {
+                response = Models.DeletePlaybackVideo.Response(
+                    result: result,
+                    playbackVideo: request.playbackVideo,
+                    nextCellIndex: request.indexPathRow - 1,
+                    deleteCellIndex: 0,
+                    isNeedReplace: true)
+                playbackVideoInfos.append(playbackVideoInfos[request.indexPathRow - 1])
+                if let posts {
+                    self.posts?.append((posts[2]))
+                }
+            } else {
+                response = Models.DeletePlaybackVideo.Response(
+                    result: result,
+                    playbackVideo: request.playbackVideo,
+                    nextCellIndex: nil,
+                    deleteCellIndex: nil,
+                    isNeedReplace: false)
             }
-            return result
+        } else {
+            response = Models.DeletePlaybackVideo.Response(
+                result: result,
+                playbackVideo: request.playbackVideo,
+                nextCellIndex: nil,
+                deleteCellIndex: nil,
+                isNeedReplace: false)
         }
+        if result {
+            playbackVideoInfos.removeAll { $0.boardID == boardID }
+            posts?.removeAll { $0.board.identifier == boardID }
+        }
+        await MainActor.run {
+            presenter?.presentDeleteVideo(with: response)
+        }
+    }
+
+    func reportVideo(with request: PlaybackModels.ReportPlaybackVideo.Request) {
+        if request.indexPathRow < playbackVideoInfos.count { return }
+        boardID = playbackVideoInfos[request.indexPathRow].boardID
+        presenter?.presentReportVideo()
     }
 
     func resumeVideo() {
@@ -256,29 +322,34 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         previousCell.playbackView.playPlayer()
     }
 
-    private func transPostToVideo(_ posts: [Post]) -> [Models.PlaybackVideo] {
-        return posts.compactMap { post in
-            guard let videoURL: URL = post.board.videoURL else { return nil }
-            return Models.PlaybackVideo(
-                displayedPost: Models.DisplayedPost(
-                    member: Models.Member(
-                        memberID: post.member.identifier,
-                        username: post.member.username,
-                        profileImageURL: post.member.profileImageURL),
-                    board: Models.Board(
-                        boardID: post.board.identifier,
-                        title: post.board.title,
-                        description: post.board.description,
-                        videoURL: videoURL,
-                        latitude: post.board.latitude,
-                        longitude: post.board.longitude),
-                    tags: post.tag))
+    private func transPostToVideo(_ posts: [Post]) -> ([Models.PlaybackVideo], [Models.PlaybackInfo]) {
+        var videos: [Models.PlaybackVideo] = []
+        var infos: [Models.PlaybackInfo] = []
+        for post in posts {
+            if let videoURL: URL = post.board.videoURL, post.board.status == .complete {
+                videos.append(Models.PlaybackVideo(
+                    displayedPost: Models.DisplayedPost(
+                        member: Models.Member(
+                            memberID: post.member.identifier,
+                            username: post.member.username,
+                            profileImageURL: post.member.profileImageURL),
+                        board: Models.Board(
+                            boardID: post.board.identifier,
+                            title: post.board.title,
+                            description: post.board.description,
+                            videoURL: videoURL,
+                            latitude: post.board.latitude,
+                            longitude: post.board.longitude),
+                        tags: post.tag)))
+                infos.append(Models.PlaybackInfo(memberID: post.member.identifier, boardID: post.board.identifier))
+            }
         }
+        return (videos, infos)
     }
 
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request) {
-        guard let memberID = request.memberID else { return }
-        self.memberID = memberID
+        guard let indexPathRow = request.indexPathRow, indexPathRow < playbackVideoInfos.count else { return }
+        self.memberID = playbackVideoInfos[indexPathRow].memberID
         presenter?.presentProfile()
     }
 
@@ -294,8 +365,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 isFetchReqeust = true
                 var page: Int = 0
                 if parentView != .home {
-                    guard let posts else { return false }
-                    page = posts.count / 15 + 1
+                    page = playbackVideoInfos.count / Models.fetchPostCount + 1
                     if page == currentPage {
                         return false
                     }
@@ -316,8 +386,11 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                     return false
                 }
                 guard let newPosts else { return false }
-                self.posts?.append(contentsOf: newPosts)
-                let videos: [Models.PlaybackVideo] = transPostToVideo(newPosts)
+                posts?.append(contentsOf: newPosts)
+                let videos: [Models.PlaybackVideo]
+                let newInfos: [Models.PlaybackInfo]
+                (videos, newInfos) = transPostToVideo(newPosts)
+                self.playbackVideoInfos.append(contentsOf: newInfos)
                 let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
                 await MainActor.run {
                     presenter?.presentLoadFetchVideos(with: response)
