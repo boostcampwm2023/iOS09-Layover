@@ -35,7 +35,15 @@ final class HomeInteractorTests: XCTestCase {
 
     // MARK: - Test doubles
 
-    final class HomePresentationLogicSpy: HomePresentationLogic { // 호출 테스트를 위한 Spy
+    final class HomePresentationLogicSpy: HomePresentationLogic {
+        func presentUploadScene() {
+
+        }
+        
+        func presentSetting() {
+
+        }
+        // 호출 테스트를 위한 Spy
         var presentPostsCalled = false
         var presentPostsReceivedResponse: Models.FetchPosts.Response!
         var presentPlaybackSceneCalled = false

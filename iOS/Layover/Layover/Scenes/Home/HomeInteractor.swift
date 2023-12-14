@@ -6,12 +6,14 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+import CoreLocation
 import UIKit
 
 protocol HomeBusinessLogic {
     @discardableResult
     func fetchPosts(with request: HomeModels.FetchPosts.Request) async -> Bool
     func playPosts(with request: HomeModels.PlayPosts.Request)
+    func fetchLocationAuthorizationStatus()
     func selectVideo(with request: HomeModels.SelectVideo.Request)
     func showTagPlayList(with request: HomeModels.ShowTagPlayList.Request)
 }
@@ -33,6 +35,7 @@ final class HomeInteractor: HomeDataStore {
     var videoFileWorker: VideoFileWorkerProtocol?
     var homeWorker: HomeWorkerProtocol?
     var presenter: HomePresentationLogic?
+    var locationManager: CurrentLocationManager?
 
     // MARK: - DataStore
 
@@ -45,6 +48,7 @@ final class HomeInteractor: HomeDataStore {
 // MARK: - Use Case
 
 extension HomeInteractor: HomeBusinessLogic {
+
     @discardableResult
     func fetchPosts(with request: Models.FetchPosts.Request) async -> Bool {
         guard let posts = await homeWorker?.fetchPosts() else { return false }
@@ -61,6 +65,20 @@ extension HomeInteractor: HomeBusinessLogic {
     func playPosts(with request: HomeModels.PlayPosts.Request) {
         postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene(with: Models.PlayPosts.Response())
+    }
+
+    func fetchLocationAuthorizationStatus() {
+        guard let authorizationStatus = locationManager?.getAuthorizationStatus() else { return }
+        switch authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            presenter?.presentUploadScene()
+        case .restricted, .notDetermined:
+            locationManager?.requestWhenInUseAuthorization()
+        case .denied:
+            presenter?.presentSetting()
+        @unknown default:
+            return
+        }
     }
 
     func selectVideo(with request: Models.SelectVideo.Request) {

@@ -11,9 +11,11 @@ import CoreLocation
 @testable import Layover
 
 final class MockLocationFetcher: LocationFetcher {
+
     var location: CLLocation?
     var locationFetcherDelegate: Layover.LocationFetcherDelegate?
     var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
+    var authorizationStatus: CLAuthorizationStatus = .authorizedWhenInUse
 
     func requestLocation() { }
 

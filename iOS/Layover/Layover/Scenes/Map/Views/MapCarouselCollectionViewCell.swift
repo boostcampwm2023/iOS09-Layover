@@ -11,12 +11,20 @@ import AVFoundation
 
 final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
-    private let loopingPlayerView = LoopingPlayerView()
+    private let loopingPlayerView: LoopingPlayerView = LoopingPlayerView()
 
     private let thumbnailImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
+    }()
+
+    private let spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.backgroundColor = .clear
+        indicator.hidesWhenStopped = true
+        indicator.stopAnimating()
+        return indicator
     }()
 
     override init(frame: CGRect) {
@@ -31,7 +39,13 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         render()
     }
 
-    func setVideo(url: URL) {
+    func setVideo(url: URL?) {
+        guard let url else {
+            spinner.startAnimating()
+            loopingPlayerView.disable()
+            return
+        }
+        spinner.stopAnimating()
         loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: url,
                                        timeRange: CMTimeRange(start: .zero, duration: CMTime(value: 1800, timescale: 600)))
@@ -41,6 +55,8 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
     func configure(thumbnailImageData: Data?) {
         if let thumbnailImageData {
             thumbnailImageView.image = UIImage(data: thumbnailImageData)
+        } else {
+            thumbnailImageView.image = nil
         }
     }
 
@@ -56,7 +72,7 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
     private func setUI() {
         backgroundColor = .background
-        contentView.addSubviews(loopingPlayerView, thumbnailImageView)
+        contentView.addSubviews(loopingPlayerView, thumbnailImageView, spinner)
         contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             loopingPlayerView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -67,7 +83,10 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            spinner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
 

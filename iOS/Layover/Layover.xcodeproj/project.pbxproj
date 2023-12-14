@@ -248,6 +248,7 @@
 		FCEE0FF22B036B6000195BBE /* LOButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF12B036B6000195BBE /* LOButton.swift */; };
 		FCEE0FF62B03804000195BBE /* LOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF52B03804000195BBE /* LOTextField.swift */; };
 		FCEE0FFA2B03AF8500195BBE /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */; };
+		FCF19BE22B2A4088003002E0 /* AVFileType+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF19BE12B2A4088003002E0 /* AVFileType+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -507,6 +508,7 @@
 		FCEE0FF12B036B6000195BBE /* LOButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOButton.swift; sourceTree = "<group>"; };
 		FCEE0FF52B03804000195BBE /* LOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextField.swift; sourceTree = "<group>"; };
 		FCEE0FF92B03AF8400195BBE /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = ../SignUpViewController.swift; sourceTree = "<group>"; };
+		FCF19BE12B2A4088003002E0 /* AVFileType+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFileType+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1165,6 +1167,7 @@
 				FC767FA42B125F430088CF9B /* UIViewController+.swift */,
 				1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */,
 				19A169482B181AE300DB34C0 /* Sequence+.swift */,
+				FCF19BE12B2A4088003002E0 /* AVFileType+.swift */,
 				19AE482D2B2A24C700DD4612 /* URL+.swift */,
 			);
 			path = Extensions;
@@ -1432,6 +1435,8 @@
 				1945520D2B0399E500299768 /* MainTabBarViewController.swift in Sources */,
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
+				FCF19BE22B2A4088003002E0 /* AVFileType+.swift in Sources */,
+				FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */,
 				19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,

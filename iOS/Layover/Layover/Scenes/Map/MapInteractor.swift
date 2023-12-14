@@ -9,16 +9,15 @@
 import CoreLocation
 import Foundation
 
+import OSLog
+
 protocol MapBusinessLogic {
-    func checkLocationAuthorizationStatus()
     func playPosts(with: MapModels.PlayPosts.Request)
-
-    @discardableResult
-    func fetchPosts() -> Task<Bool, Never>
-
-    @discardableResult
-    func fetchPost(latitude: Double, longitude: Double) -> Task<Bool, Never>
+    func fetchPosts() async
+    func fetchPost(latitude: Double, longitude: Double) async
     func selectVideo(with request: MapModels.SelectVideo.Request)
+    func checkLocationAuthorizationOnEntry()
+    func checkLocationPermissionOnUpload()
 }
 
 protocol MapDataStore {
@@ -35,54 +34,38 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
     var presenter: MapPresentationLogic?
     var videoFileWorker: VideoFileWorker?
     var worker: MapWorkerProtocol?
-
-    private let locationManager = CLLocationManager()
+    var locationManager: CurrentLocationManager?
 
     var postPlayStartIndex: Int?
     var posts: [Post]?
     var index: Int?
     var selectedVideoURL: URL?
 
-    override init() {
-        super.init()
-        locationManager.delegate = self
-    }
-
-    func checkLocationAuthorizationStatus() {
-        checkCurrentLocationAuthorization(for: locationManager.authorizationStatus)
-    }
-
     func playPosts(with request: MapModels.PlayPosts.Request) {
         postPlayStartIndex = request.selectedIndex
         presenter?.presentPlaybackScene()
     }
 
-    func fetchPosts() -> Task<Bool, Never> {
-        Task {
-            locationManager.startUpdatingLocation()
-            guard let coordinate = locationManager.location?.coordinate else { return false }
-            let posts = await worker?.fetchPosts(latitude: coordinate.latitude,
-                                                 longitude: coordinate.longitude)
-            guard let posts else { return false }
-            self.posts = posts
-            let response = Models.FetchPosts.Response(posts: posts)
-            await MainActor.run {
-                presenter?.presentFetchedPosts(with: response)
-            }
-            return true
+    func fetchPosts() async {
+        locationManager?.startUpdatingLocation()
+        guard let coordinate = locationManager?.getCurrentLocation()?.coordinate else { return }
+        let posts = await worker?.fetchPosts(latitude: coordinate.latitude,
+                                             longitude: coordinate.longitude)
+        guard let posts else { return }
+        self.posts = posts
+        let response = Models.FetchPosts.Response(posts: posts)
+        await MainActor.run {
+            presenter?.presentFetchedPosts(with: response)
         }
     }
 
-    func fetchPost(latitude: Double, longitude: Double) -> Task<Bool, Never> {
-        Task {
-            let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
-            guard let posts else { return false }
-            self.posts = posts
-            let response = Models.FetchPosts.Response(posts: posts)
-            await MainActor.run {
-                presenter?.presentFetchedPosts(with: response)
-            }
-            return true
+    func fetchPost(latitude: Double, longitude: Double) async {
+        let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
+        guard let posts else { return }
+        self.posts = posts
+        let response = Models.FetchPosts.Response(posts: posts)
+        await MainActor.run {
+            presenter?.presentFetchedPosts(with: response)
         }
     }
 
@@ -90,22 +73,32 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
         selectedVideoURL = videoFileWorker?.copyToNewURL(at: request.videoURL)
     }
 
-    private func checkCurrentLocationAuthorization(for status: CLAuthorizationStatus) {
-        switch status {
+    func checkLocationAuthorizationOnEntry() {
+        guard let authorizationStatus = locationManager?.getAuthorizationStatus() else { return }
+        switch authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:
             presenter?.presentCurrentLocation()
         case .restricted, .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
+            locationManager?.requestWhenInUseAuthorization()
         case .denied:
             presenter?.presentDefaultLocation()
         @unknown default:
             return
         }
     }
-}
 
-extension MapInteractor: CLLocationManagerDelegate {
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkCurrentLocationAuthorization(for: manager.authorizationStatus)
+    func checkLocationPermissionOnUpload() {
+        guard let authorizationStatus = locationManager?.getAuthorizationStatus() else { return }
+        switch authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            presenter?.presentUploadScene()
+        case .restricted, .notDetermined:
+            locationManager?.requestWhenInUseAuthorization()
+        case .denied:
+            presenter?.presentSetting()
+        @unknown default:
+            return
+        }
     }
+
 }

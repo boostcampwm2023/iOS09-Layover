@@ -15,9 +15,10 @@ enum MapModels {
     struct DisplayedPost: Hashable {
         let boardID: Int
         let thumbnailImageData: Data?
-        let videoURL: URL
+        let videoURL: URL?
         let latitude: Double
         let longitude: Double
+        let boardStatus: BoardStatus
     }
 
     // MARK: - Fetch Video Use Cases
@@ -62,6 +63,13 @@ enum MapModels {
 
         struct ViewModel {
 
+        }
+    }
+
+    enum CheckLocationAuthorizationOnEntry {
+        struct ViewModel {
+            let latitude: Double = 36.350411
+            let longitude: Double = 127.384548
         }
     }
 }

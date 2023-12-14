@@ -13,6 +13,7 @@ protocol UploadPostDisplayLogic: AnyObject {
     func displayThumbnail(viewModel: UploadPostModels.FetchThumbnail.ViewModel)
     func displayCurrentAddress(viewModel: UploadPostModels.FetchCurrentAddress.ViewModel)
     func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel)
+    func displayUnsupportedFormatAlert()
 }
 
 final class UploadPostViewController: BaseViewController {
@@ -313,6 +314,11 @@ extension UploadPostViewController: UploadPostDisplayLogic {
 
     func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel) {
         uploadButton.isEnabled = viewModel.canUpload
+    }
+
+    func displayUnsupportedFormatAlert() {
+        router?.routeToBack()
+        Toast.shared.showToast(message: "지원하지 않는 파일 형식이에요 😢")
     }
 
 }

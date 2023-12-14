@@ -8,6 +8,7 @@
 
 import AVFoundation
 import CoreLocation
+import UniformTypeIdentifiers
 import UIKit
 
 import OSLog
@@ -109,10 +110,10 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
               let videoURL,
               let isMuted,
               let coordinate = locationManager.getCurrentLocation()?.coordinate else { return }
-        if isMuted {
-            exportVideoWithoutAudio(at: videoURL)
-        }
         Task {
+            if isMuted {
+                await exportVideoWithoutAudio(at: videoURL)
+            }
             let uploadPostResponse = await worker.uploadPost(with: UploadPost(title: request.title,
                                                                               content: request.content,
                                                                               latitude: coordinate.latitude,
@@ -126,33 +127,35 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         }
     }
 
-    private func exportVideoWithoutAudio(at url: URL) {
+    private func exportVideoWithoutAudio(at url: URL) async {
         let composition = AVMutableComposition()
         let sourceAsset = AVURLAsset(url: url)
         guard let compositionVideoTrack = composition.addMutableTrack(withMediaType: AVMediaType.video,
                                                                       preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
-        Task {
-            do {
-                let sourceAssetduration = try await sourceAsset.load(.duration)
-                let sourceVideoTrack = try await sourceAsset.load(.tracks)[0]
-                compositionVideoTrack.preferredTransform = try await sourceVideoTrack.load(.preferredTransform)
+        do {
+            let sourceAssetduration = try await sourceAsset.load(.duration)
+            let sourceVideoTrack = try await sourceAsset.load(.tracks)[0]
+            compositionVideoTrack.preferredTransform = try await sourceVideoTrack.load(.preferredTransform)
 
-                let timeRange: CMTimeRange = CMTimeRangeMake(start: .zero, duration: sourceAssetduration)
-                try compositionVideoTrack.insertTimeRange(timeRange,
-                                                          of: sourceVideoTrack,
-                                                          at: .zero)
+            let timeRange: CMTimeRange = CMTimeRangeMake(start: .zero, duration: sourceAssetduration)
+            try compositionVideoTrack.insertTimeRange(timeRange,
+                                                      of: sourceVideoTrack,
+                                                      at: .zero)
 
-                if fileManager.fileExists(atPath: url.path()) {
-                    try fileManager.removeItem(at: url)
-                }
-
-                let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)
-                exporter?.outputURL = videoURL
-                exporter?.outputFileType = AVFileType.mov
-                await exporter?.export()
-            } catch {
-                os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
+            if fileManager.fileExists(atPath: url.path()) {
+                try fileManager.removeItem(at: url)
             }
+            guard let videoURL else { return }
+            if let outputFileType = AVFileType.from(videoURL) {
+                let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough)
+                exporter?.outputURL = videoURL
+                exporter?.outputFileType = .from(videoURL)
+                await exporter?.export()
+            } else {
+                presenter?.presentUnsupportedFormatAlert()
+            }
+        } catch {
+            os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
         }
     }
 

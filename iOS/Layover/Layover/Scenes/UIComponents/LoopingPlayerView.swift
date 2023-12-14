@@ -54,7 +54,7 @@ final class LoopingPlayerView: UIView {
         let asset: AVURLAsset
         if let assetResourceLoaderDelegate {
             self.assetResourceLoaderDelegate = assetResourceLoaderDelegate
-            asset = AVURLAsset(url: url.customHLS_URL)
+            asset = AVURLAsset(url: url.customHLSURL)
             asset.resourceLoader.setDelegate(assetResourceLoaderDelegate,
                                              queue: DispatchQueue.global(qos: .utility))
             Task {

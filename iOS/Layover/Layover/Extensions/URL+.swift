@@ -15,11 +15,11 @@ extension URL {
         return components?.url ?? self
     }
 
-    var customHLS_URL: URL {
+    var customHLSURL: URL {
         changeScheme(to: "lhls")
     }
 
-    var originHLS_URL: URL {
+    var originHLSURL: URL {
         changeScheme(to: "https")
     }
 }

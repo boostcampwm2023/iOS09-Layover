@@ -11,7 +11,11 @@ import UIKit
 
 protocol MapDisplayLogic: AnyObject {
     func displayFetchedPosts(viewModel: MapModels.FetchPosts.ViewModel)
+    func displayCurrentLocation()
+    func displayDefaultLocation(viewModel: MapModels.CheckLocationAuthorizationOnEntry.ViewModel)
     func routeToPlayback()
+    func routeToVideoPicker()
+    func openSetting()
 }
 
 final class MapViewController: BaseViewController {
@@ -21,7 +25,6 @@ final class MapViewController: BaseViewController {
     private lazy var mapView: MKMapView = {
         let mapView = MKMapView()
         mapView.showsUserLocation = true
-        mapView.setUserTrackingMode(.follow, animated: true)
         mapView.register(LOAnnotationView.self, forAnnotationViewWithReuseIdentifier: LOAnnotationView.identifier)
         mapView.delegate = self
         return mapView
@@ -95,10 +98,13 @@ final class MapViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.checkLocationAuthorizationStatus()
-        interactor?.fetchPosts()
         setCollectionViewDataSource()
         setDelegation()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        interactor?.checkLocationAuthorizationOnEntry()
+        fetchPosts()
     }
 
     // MARK: - UI + Layout
@@ -137,6 +143,12 @@ final class MapViewController: BaseViewController {
     }
 
     // MARK: - Methods
+
+    private func fetchPosts() {
+        Task {
+            await interactor?.fetchPosts()
+        }
+    }
 
     private func setDelegation() {
         carouselCollectionView.delegate = self
@@ -202,17 +214,21 @@ final class MapViewController: BaseViewController {
 
     @objc private func searchButtonDidTap() {
         searchButton.isHidden = true
-        interactor?.fetchPost(latitude: mapView.centerCoordinate.latitude,
-                              longitude: mapView.centerCoordinate.longitude)
+        Task {
+            await interactor?.fetchPost(latitude: mapView.centerCoordinate.latitude,
+                                        longitude: mapView.centerCoordinate.longitude)
+        }
     }
 
     @objc private func currentLocationButtonDidTap() {
         mapView.setUserTrackingMode(.follow, animated: true)
-        mapView.removeAnnotations(mapView.annotations)
+        Task {
+            await interactor?.fetchPosts()
+        }
     }
 
     @objc private func uploadButtonDidTap() {
-        present(videoPickerManager.phPickerViewController, animated: true)
+        interactor?.checkLocationPermissionOnUpload()
     }
 
 }
@@ -260,6 +276,10 @@ extension MapViewController: MKMapViewDelegate {
         if mapView.userTrackingMode != .follow {
             searchButton.isHidden = false
         }
+    }
+
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        searchButton.isHidden = true
     }
 
 }
@@ -315,10 +335,40 @@ extension MapViewController: MapDisplayLogic {
         router?.routeToPlayback()
     }
 
+    func routeToVideoPicker() {
+        present(videoPickerManager.phPickerViewController, animated: true)
+    }
+
+    func openSetting() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    func displayCurrentLocation() {
+        currentLocationButton.isHidden = false
+        mapView.setUserTrackingMode(.follow, animated: true)
+    }
+
+    func displayDefaultLocation(viewModel: MapModels.CheckLocationAuthorizationOnEntry.ViewModel) {
+        currentLocationButton.isHidden = true
+        mapView.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: viewModel.latitude,
+                                                                           longitude: viewModel.longitude),
+                                            latitudinalMeters: 1000,
+                                            longitudinalMeters: 1000)
+    }
+
 }
 
 extension MapViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+        guard let post = carouselDatasource.itemIdentifier(for: indexPath) else { return }
+        switch post.boardStatus {
+        case .complete:
+            interactor?.playPosts(with: Models.PlayPosts.Request(selectedIndex: indexPath.item))
+        default:
+            Toast.shared.showToast(message: "인코딩 중인 영상입니다. 잠시만 기다려주세요!")
+        }
     }
 }
