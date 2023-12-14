@@ -156,8 +156,10 @@
 
 ### JWT를 이용한 인증
 
-- JSON Web Token
-- Redis
+<img width="785" alt="스크린샷 2023-12-15 오전 2 25 52" src="https://github.com/boostcampwm2023/iOS09-Layover/assets/111403658/8e753bbd-847b-48ac-8e45-b2698c8229d8">
+
+- JSON Web Token 으로 사용자 인증 진행
+- Redis로 각 토큰의 whitelist/blacklist를 운영하여 JWT 보안 허점 보완
 
 ### Monitoring
 
