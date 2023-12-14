@@ -365,7 +365,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                 isFetchReqeust = true
                 var page: Int = 0
                 if parentView != .home {
-                    page = playbackVideoInfos.count / 15 + 1
+                    page = playbackVideoInfos.count / Models.fetchPostCount + 1
                     if page == currentPage {
                         return false
                     }

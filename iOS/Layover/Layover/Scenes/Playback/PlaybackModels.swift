@@ -49,6 +49,8 @@ enum PlaybackModels {
         let boardID: Int
     }
 
+    static let fetchPostCount: Int = 15
+
     // MARK: - UseCase Load Video List
 
     enum LoadPlaybackVideoList {
