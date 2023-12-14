@@ -73,6 +73,10 @@
 
 ![기획 설명](https://github.com/boostcampwm2023/iOS09-Layover/assets/44396392/0a7c7d57-c513-4dda-8d1a-4396cfaf802d)
 
+## 핵심 기술
+![Slide 16_9 - 47](https://github.com/boostcampwm2023/iOS09-Layover/assets/46420281/7c7c1526-5a61-4bad-ae67-4734734d78ba)
+- HLS 프로토콜을 이용한 영상 스트리밍
+
 ## 프로젝트 주요 기능
 
 ### 영상 탐색 및 시청
