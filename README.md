@@ -130,26 +130,47 @@
 
 ## BE
 
-![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/a9cbcf6f-a961-4781-b377-ca910b4280ea)
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/f1eca374-65f8-4f00-ada4-a4030dd6f7bf)
+
+
+<br><br>
+
+## ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
+
+
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/97a5003b-7600-4c30-8d39-bddf4402576f)
+
+
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/06fa78f6-e673-4193-ad3b-a4c73a2f411b)
+
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/7d70ae62-8d6c-4245-a1b1-c386a4ee04ff)
 
 
 
-### ncloud 서비스를 통한 업로드, 인코딩, 스트리밍
+- presigned URL 을 통한 Client To Storage 업로드 구현으로 효율적인 업로드 구성
+- Serverless 서비스 Cloud Function을 통하여 Trigger 및 Action 구성
+- VOD Station 서비스를 통한 Encoding 및 ABR Streaming 구조 구성
 
-- object storage /vod station / cloud function
+<br><br>
 
-### 젠킨스와 도커를 활용한 ci/cd
-
-### 위치기반
-
-- 위치기반으로 데이터를 가져오기
 
 ### JWT를 이용한 인증
 
 - JSON Web Token
 - Redis
 
-### Custom Response 설정
+### Monitoring
+
+ ![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/ab573554-b248-45e3-a3a5-6e1c820aef20)
+
+![image](https://github.com/boostcampwm2023/iOS09-Layover/assets/75191916/1fea73e2-568f-45e6-8c93-40d2fb6ee79c)
+
+- 서버 Log저장 및 ncp의 `Cloud Log Analytics` 를 활용한 로그 수집
+- 빠른 에러 대처를 위한 Discord Bot 활용
+- 컨테이너 모니터링을 위한 `cadvisor + prometheus + grfana` 조합의 모니터링 구성
+
+
+
 
 ---
 
