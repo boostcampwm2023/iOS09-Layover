@@ -37,6 +37,9 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
     private var fetchPostsPage = 1
     private var canFetchMorePosts = true
+    private var isMyProfile: Bool {
+        profileId == nil
+    }
 
     // MARK: - DataStore
 
@@ -109,6 +112,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
         var responsePosts = [Models.DisplayedPost]()
         for post in fetchedPosts {
+            if !isMyProfile && post.board.status != .complete { continue }
             guard let thumbnailURL = post.board.thumbnailImageURL,
                   let profileImageData = await userWorker?.fetchImageData(with: thumbnailURL) else {
                 responsePosts.append(.init(id: post.board.identifier, thumbnailImageData: nil, status: post.board.status))
@@ -125,5 +129,4 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
         playbackStartIndex = request.startIndex
         presenter?.presentPostDetail(with: Models.ShowPostDetail.Response())
     }
-
 }
