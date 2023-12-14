@@ -28,6 +28,8 @@ final class LoopingPlayerView: UIView {
         player?.timeControlStatus == .playing
     }
 
+    private var assetResourceLoaderDelegate: AVAssetResourceLoaderDelegate?
+
     // MARK: - View Life Cycle
 
     override func layoutSubviews() {
@@ -45,8 +47,23 @@ final class LoopingPlayerView: UIView {
         self.player = player
     }
 
-    func prepareVideo(with url: URL, loopStart: TimeInterval, duration: TimeInterval) {
-        let playerItem = AVPlayerItem(url: url)
+    func prepareVideo(with url: URL, 
+                      assetResourceLoaderDelegate: AVAssetResourceLoaderDelegate? = nil,
+                      loopStart: TimeInterval,
+                      duration: TimeInterval) {
+        let asset: AVURLAsset
+        if let assetResourceLoaderDelegate {
+            self.assetResourceLoaderDelegate = assetResourceLoaderDelegate
+            asset = AVURLAsset(url: url.customHLS_URL)
+            asset.resourceLoader.setDelegate(assetResourceLoaderDelegate,
+                                             queue: DispatchQueue.global(qos: .utility))
+            Task {
+                try await asset.load(.isPlayable, .duration)
+            }
+        } else {
+            asset = AVURLAsset(url: url)
+        }
+        let playerItem = AVPlayerItem(asset: asset)
         let player = AVQueuePlayer()
         looper = AVPlayerLooper(player: player,
                                 templateItem: playerItem,
@@ -75,12 +92,12 @@ final class LoopingPlayerView: UIView {
     }
 }
 
-#Preview {
-    let view = LoopingPlayerView()
-    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!,
-                      timeRange: .init(start: .zero,
-                                       end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
-    view.play()
-    view.player?.isMuted = true
-    return view
-}
+//#Preview {
+//    let view = LoopingPlayerView()
+//    view.prepareVideo(with: URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!,
+//                      timeRange: .init(start: .zero,
+//                                       end: .init(seconds: 3.0, preferredTimescale: CMTimeScale(1.0))))
+//    view.play()
+//    view.player?.isMuted = true
+//    return view
+//}
