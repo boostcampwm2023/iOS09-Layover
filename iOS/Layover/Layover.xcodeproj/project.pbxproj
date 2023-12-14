@@ -108,6 +108,11 @@
 		19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */; };
 		19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */; };
 		19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */; };
+		19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE481F2B29D03D00DD4612 /* EditProfileInteractorTests.swift */; };
+		19AE48252B29D03D00DD4612 /* EditProfilePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48212B29D03D00DD4612 /* EditProfilePresenterTests.swift */; };
+		19AE482A2B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */; };
+		19AE482C2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE482B2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift */; };
+		19AE482E2B2A24C700DD4612 /* URL+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE482D2B2A24C700DD4612 /* URL+.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */; };
@@ -198,7 +203,6 @@
 		FC4E0C1D2B28977000152596 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */; };
 		FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */; };
 		FC5BE11C2B148D160036366D /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1162B148D160036366D /* EditProfilePresenter.swift */; };
-		FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1172B148D160036366D /* EditProfileWorker.swift */; };
 		FC5BE11E2B148D160036366D /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1182B148D160036366D /* EditProfileRouter.swift */; };
 		FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE1192B148D160036366D /* EditProfileModels.swift */; };
 		FC5BE1202B148D170036366D /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5BE11A2B148D160036366D /* EditProfileViewController.swift */; };
@@ -359,6 +363,11 @@
 		19AE48142B28C2B700DD4612 /* SettingInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingInteractorTests.swift; sourceTree = "<group>"; };
 		19AE48162B28C2B700DD4612 /* SettingPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPresenterTests.swift; sourceTree = "<group>"; };
 		19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingWorker.swift; sourceTree = "<group>"; };
+		19AE481F2B29D03D00DD4612 /* EditProfileInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractorTests.swift; sourceTree = "<group>"; };
+		19AE48212B29D03D00DD4612 /* EditProfilePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenterTests.swift; sourceTree = "<group>"; };
+		19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSAssetResourceLoaderDelegate.swift; sourceTree = "<group>"; };
+		19AE482B2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSSliceResourceLoader.swift; sourceTree = "<group>"; };
+		19AE482D2B2A24C700DD4612 /* URL+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+.swift"; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
@@ -452,7 +461,6 @@
 		FC4E0C1C2B28977000152596 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
 		FC4E0C1F2B28B4C500152596 /* MockLocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationFetcher.swift; sourceTree = "<group>"; };
 		FC5BE1162B148D160036366D /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
-		FC5BE1172B148D160036366D /* EditProfileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileWorker.swift; sourceTree = "<group>"; };
 		FC5BE1182B148D160036366D /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
 		FC5BE1192B148D160036366D /* EditProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileModels.swift; sourceTree = "<group>"; };
 		FC5BE11A2B148D160036366D /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -611,6 +619,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				19AE481D2B29D02700DD4612 /* EditProfile */,
 				19AE48122B28C2A800DD4612 /* Setting */,
 				192513632B26F7BB001533FA /* TagPlayList */,
 				1925137B2B277CC4001533FA /* Profile */,
@@ -766,6 +775,24 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
+		19AE481D2B29D02700DD4612 /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				19AE481F2B29D03D00DD4612 /* EditProfileInteractorTests.swift */,
+				19AE48212B29D03D00DD4612 /* EditProfilePresenterTests.swift */,
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
+		19AE48262B2A117600DD4612 /* HLSResourceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				19AE482B2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift */,
+				19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */,
+			);
+			path = HLSResourceLoader;
+			sourceTree = "<group>";
+		};
 		19BB8A572B07BEE30070B922 /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -834,8 +861,8 @@
 				835A61982B068115002F22A5 /* PlaybackWorker.swift */,
 				835A61992B068115002F22A5 /* PlaybackRouter.swift */,
 				835A619A2B068115002F22A5 /* PlaybackModels.swift */,
-				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
 				835A619C2B068115002F22A5 /* PlaybackInteractor.swift */,
+				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
 				83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */,
 				836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */,
 			);
@@ -967,7 +994,6 @@
 				FC5BE1162B148D160036366D /* EditProfilePresenter.swift */,
 				FC5BE1192B148D160036366D /* EditProfileModels.swift */,
 				FC5BE1182B148D160036366D /* EditProfileRouter.swift */,
-				FC5BE1172B148D160036366D /* EditProfileWorker.swift */,
 				FC5BE1222B1490660036366D /* EditProfileConfigurator.swift */,
 			);
 			path = EditProfile;
@@ -1069,6 +1095,7 @@
 		FC7E45752AFF6F5B004F155A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				19AE48262B2A117600DD4612 /* HLSResourceLoader */,
 				1972CCD02B125E8800C3C762 /* UserDefaults */,
 				19C7AFD42B02583C003B35F2 /* Keychain */,
 				FC4E0C172B28954000152596 /* Location */,
@@ -1090,10 +1117,10 @@
 		FC7E457B2AFF6F9D004F155A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				8321A2E72B1E1011000A12AF /* Report */,
 				1945520E2B03AEA400299768 /* Configurator.swift */,
-				836C33922B18436A00ECAFB0 /* Setting */,
 				19BB8A572B07BEE30070B922 /* UIComponents */,
+				8321A2E72B1E1011000A12AF /* Report */,
+				836C33922B18436A00ECAFB0 /* Setting */,
 				835A61962B0680FC002F22A5 /* Playback */,
 				FC2511A72B04DA9C004717BC /* Map */,
 				FCEE0FFB2B03AFAA00195BBE /* SignUpScene */,
@@ -1141,6 +1168,7 @@
 				1972CCDE2B14C9B000C3C762 /* Notification.Name+.swift */,
 				19A169482B181AE300DB34C0 /* Sequence+.swift */,
 				FCF19BE12B2A4088003002E0 /* AVFileType+.swift */,
+				19AE482D2B2A24C700DD4612 /* URL+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1369,6 +1397,7 @@
 				FC8696D32B26008B00F9A7B9 /* SettingViewController.swift in Sources */,
 				83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */,
 				FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */,
+				19AE482A2B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift in Sources */,
 				FC2511A42B045D6C004717BC /* SignUpModels.swift in Sources */,
 				8321A2FD2B1E4260000A12AF /* DefaultPostManagerEndPointFactory.swift in Sources */,
 				FC767F932B1220CC0088CF9B /* NicknameDTO.swift in Sources */,
@@ -1384,6 +1413,7 @@
 				FC0E803A2B1B91C900EF56D6 /* EditTagPresenter.swift in Sources */,
 				836C33872B15A29600ECAFB0 /* Toast.swift in Sources */,
 				FC767F972B1224B80088CF9B /* IntroduceDTO.swift in Sources */,
+				19AE482E2B2A24C700DD4612 /* URL+.swift in Sources */,
 				19A169302B1776CA00DB34C0 /* TagPlayListCollectionViewCell.swift in Sources */,
 				FC0E80252B1A0BBB00EF56D6 /* UploadPostWorker.swift in Sources */,
 				1972CCD42B138E6B00C3C762 /* SignUpRouter.swift in Sources */,
@@ -1524,6 +1554,7 @@
 				1972CCCF2B12438900C3C762 /* LoginEndPointFactory.swift in Sources */,
 				835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */,
 				FC0E80432B1B934A00EF56D6 /* EditTagConfigurator.swift in Sources */,
+				19AE482C2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift in Sources */,
 				194551F72B037F2D00299768 /* LoginInteractor.swift in Sources */,
 				19A169382B17BCA800DB34C0 /* PostDTO.swift in Sources */,
 				19A1692A2B176D6E00DB34C0 /* TagPlayListConfigurator.swift in Sources */,
@@ -1561,6 +1592,7 @@
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
+				19AE48252B29D03D00DD4612 /* EditProfilePresenterTests.swift in Sources */,
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
 				FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */,
@@ -1570,6 +1602,7 @@
 				19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
+				19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
 				FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */,
 				FC4E0C112B28595200152596 /* MockUploadPostWorker.swift in Sources */,

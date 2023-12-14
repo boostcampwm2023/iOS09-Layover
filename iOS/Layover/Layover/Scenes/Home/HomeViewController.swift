@@ -99,13 +99,14 @@ final class HomeViewController: BaseViewController {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
+            uploadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            uploadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+
             carouselCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             carouselCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             carouselCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 42),
-            carouselCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -109),
+            carouselCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -41),
 
-            uploadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            uploadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
 

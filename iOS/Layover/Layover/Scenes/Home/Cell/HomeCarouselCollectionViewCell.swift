@@ -98,7 +98,10 @@ final class HomeCarouselCollectionViewCell: UICollectionViewCell {
 
     func setVideo(url: URL, loopingAt time: TimeInterval) {
         loopingPlayerView.disable()
-        loopingPlayerView.prepareVideo(with: url, loopStart: time, duration: 3.0)
+        loopingPlayerView.prepareVideo(with: url, 
+                                       assetResourceLoaderDelegate: HLSAssetResourceLoaderDelegate(resourceLoader: HLSSliceResourceLoader()),
+                                       loopStart: time,
+                                       duration: 3.0)
         loopingPlayerView.player?.isMuted = true
     }
 

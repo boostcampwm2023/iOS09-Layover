@@ -13,6 +13,7 @@ import OSLog
 protocol EditProfileBusinessLogic {
     func setProfile(with request: EditProfileModels.SetProfile.Request)
     func changeProfile(with request: EditProfileModels.ChangeProfile.Request)
+    @discardableResult
     func checkDuplication(with request: EditProfileModels.CheckNicknameDuplication.Request) async -> Bool
     @discardableResult
     func editProfile(with request: EditProfileModels.EditProfile.Request) async -> Bool
@@ -96,6 +97,7 @@ final class EditProfileInteractor: EditProfileBusinessLogic, EditProfileDataStor
         presenter?.presentProfileState(with: response)
     }
 
+    @discardableResult
     func checkDuplication(with request: Models.CheckNicknameDuplication.Request) async -> Bool {
         guard let response = await userWorker?.checkNotDuplication(for: request.nickname) else {
             os_log(.error, log: .data, "checkDuplication Server Error")
