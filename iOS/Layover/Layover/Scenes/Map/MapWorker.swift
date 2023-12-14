@@ -20,13 +20,16 @@ final class MapWorker: MapWorkerProtocol {
 
     typealias Models = MapModels
     private let provider: ProviderType
+    private let authManager: AuthManager
     private let postEndPointFactory: PostEndPointFactory
 
     // MARK: - Methods
 
     init(provider: ProviderType = Provider(),
+         authManager: AuthManager = AuthManager.shared,
          postEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory()) {
         self.provider = provider
+        self.authManager = authManager
         self.postEndPointFactory = postEndPointFactory
     }
 
@@ -35,7 +38,10 @@ final class MapWorker: MapWorkerProtocol {
         do {
             let response = try await provider.request(with: endPoint)
             guard let posts = response.data else { return nil }
-            return await fetchThumbnailImageData(of: posts)
+            let filterdPosts = posts.filter { post in
+                post.member.id == authManager.memberID || post.board.status == .complete
+            }
+            return await fetchThumbnailImageData(of: filterdPosts)
         } catch {
             os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
