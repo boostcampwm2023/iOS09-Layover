@@ -16,6 +16,8 @@ extension AVFileType {
             return .mp4
         case "mov":
             return .mov
+        case "m4v":
+            return .m4v
         default:
             return nil
         }
