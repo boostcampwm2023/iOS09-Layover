@@ -6,21 +6,71 @@
 //
 
 import UIKit
+import AuthenticationServices
 
-protocol LoginDisplayLogic: class {
-    func displayFetchFromLocalDataStore(with viewModel: LoginModels.FetchFromLocalDataStore.ViewModel)
-    func displayFetchFromRemoteDataStore(with viewModel: LoginModels.FetchFromRemoteDataStore.ViewModel)
-    func displayTrackAnalytics(with viewModel: LoginModels.TrackAnalytics.ViewModel)
-    func displayPerformLogin(with viewModel: LoginModels.PerformLogin.ViewModel)
+protocol LoginDisplayLogic: AnyObject {
+    func navigateToMain()
+    func routeToSignUp(with viewModel: LoginModels.PerformKakaoLogin.ViewModel)
+    func routeToSignUp(with viewModel: LoginModels.PerformAppleLogin.ViewModel)
 }
 
-class LoginViewController: UIViewController, LoginDisplayLogic {
+final class LoginViewController: BaseViewController {
 
     // MARK: - Properties
 
+    private let logoImage: UIImageView = {
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage.loLogo
+        return imageView
+    }()
+
+    private let logoTitleLabel: UILabel = {
+        let titleLabel: UILabel = UILabel()
+        titleLabel.font = .loFont(type: .logoTitle)
+        titleLabel.text = "Layover"
+        return titleLabel
+    }()
+
+    private lazy var kakaoLoginButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .kakao
+
+        configuration.attributedTitle = AttributedString("카카오로 계속하기",
+                                                         attributes: AttributeContainer([.font: UIFont.boldSystemFont(ofSize: 17),
+                                                                                         .foregroundColor: UIColor.black]))
+        configuration.image = UIImage.kakaoLogo.resized(to: CGSize(width: 20, height: 20))
+        configuration.imagePadding = 4
+        configuration.contentInsets = .init(top: 0, leading: -4, bottom: 0, trailing: 0)
+        let button: UIButton = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(kakaoLoginButtonTapped(_:)), for: .touchUpInside)
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 10
+        return button
+    }()
+
+    private lazy var appleLoginButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .white
+
+        configuration.attributedTitle = AttributedString("Apple로 계속하기",
+                                                         attributes: AttributeContainer([.font: UIFont.boldSystemFont(ofSize: 17),
+                                                                                         .foregroundColor: UIColor.black]))
+
+        configuration.image = UIImage.appleLogo.resized(to: CGSize(width: 20, height: 20))
+        configuration.imagePadding = 4
+        let button: UIButton = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(appleLoginButtonTapped(_:)), for: .touchUpInside)
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 10
+        return button
+    }()
+
+    // MARK: Properties
+
     typealias Models = LoginModels
-    var router: (NSObjectProtocol & LoginRoutingLogic & LoginDataPassing)?
+
     var interactor: LoginBusinessLogic?
+    var router: (LoginRoutingLogic & LoginDataPassing)?
 
     // MARK: - Object lifecycle
 
@@ -37,118 +87,80 @@ class LoginViewController: UIViewController, LoginDisplayLogic {
     // MARK: - Setup
 
     private func setup() {
-        let viewController = self
-        let interactor = LoginInteractor()
-        let presenter = LoginPresenter()
-        let router = LoginRouter()
-
-        viewController.router = router
-        viewController.interactor = interactor
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+        LoginConfigurator.shared.configure(self)
     }
 
-    // MARK: - View Lifecycle
+    // MARK: - UI + Layout
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupFetchFromLocalDataStore()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupFetchFromRemoteDataStore()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        trackScreenViewAnalytics()
-        registerNotifications()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        unregisterNotifications()
-    }
-
-    // MARK: - Notifications
-
-    func registerNotifications() {
-        let selector = #selector(trackScreenViewAnalytics)
-        let notification = UIApplication.didBecomeActiveNotification
-        NotificationCenter.default.addObserver(self, selector: selector, name: notification, object: nil)
-    }
-
-    func unregisterNotifications() {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    // MARK: - Use Case - Fetch From Local DataStore
-
-    @IBOutlet var exampleLocalLabel: UILabel! = UILabel()
-    func setupFetchFromLocalDataStore() {
-        let request = Models.FetchFromLocalDataStore.Request()
-        interactor?.fetchFromLocalDataStore(with: request)
-    }
-
-    func displayFetchFromLocalDataStore(with viewModel: LoginModels.FetchFromLocalDataStore.ViewModel) {
-        exampleLocalLabel.text = viewModel.exampleTranslation
-    }
-
-    // MARK: - Use Case - Fetch From Remote DataStore
-
-    @IBOutlet var exampleRemoteLabel: UILabel! = UILabel()
-    func setupFetchFromRemoteDataStore() {
-        let request = Models.FetchFromRemoteDataStore.Request()
-        interactor?.fetchFromRemoteDataStore(with: request)
-    }
-
-    func displayFetchFromRemoteDataStore(with viewModel: LoginModels.FetchFromRemoteDataStore.ViewModel) {
-        exampleRemoteLabel.text = viewModel.exampleVariable
-    }
-
-    // MARK: - Use Case - Track Analytics
-
-    @objc
-    func trackScreenViewAnalytics() {
-        trackAnalytics(event: .screenView)
-    }
-
-    func trackAnalytics(event: LoginModels.AnalyticsEvents) {
-        let request = Models.TrackAnalytics.Request(event: event)
-        interactor?.trackAnalytics(with: request)
-    }
-
-    func displayTrackAnalytics(with viewModel: LoginModels.TrackAnalytics.ViewModel) {
-        // do something after tracking analytics (if needed)
-    }
-
-    // MARK: - Use Case - Login
-
-    func performLogin(_ sender: Any) {
-        let request = Models.PerformLogin.Request(exampleVariable: exampleLocalLabel.text)
-        interactor?.performLogin(with: request)
-    }
-
-    func displayPerformLogin(with viewModel: LoginModels.PerformLogin.ViewModel) {
-        // handle error and ui element error states
-        // based on error type
-        if let error = viewModel.error {
-            switch error.type {
-            case .emptyExampleVariable:
-                exampleLocalLabel.text = error.message
-
-            case .networkError:
-                exampleLocalLabel.text = error.message
-            }
-
-            return
+    override func setConstraints() {
+        view.addSubviews(logoImage, logoTitleLabel, kakaoLoginButton, appleLoginButton)
+        [logoImage, logoTitleLabel, kakaoLoginButton, appleLoginButton].forEach { subView in
+            subView.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        // handle ui element success state and
-        // route to next screen
-        router?.routeToNext()
+        NSLayoutConstraint.activate([
+            logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 236),
+            logoImage.widthAnchor.constraint(equalToConstant: 81.24),
+            logoImage.heightAnchor.constraint(equalToConstant: 58.12),
+
+            logoTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoTitleLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 14.88),
+
+            kakaoLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            kakaoLoginButton.topAnchor.constraint(equalTo: logoTitleLabel.bottomAnchor, constant: 77),
+            kakaoLoginButton.widthAnchor.constraint(equalToConstant: 315),
+            kakaoLoginButton.heightAnchor.constraint(equalToConstant: 48),
+
+            appleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            appleLoginButton.topAnchor.constraint(equalTo: kakaoLoginButton.bottomAnchor, constant: 8),
+            appleLoginButton.widthAnchor.constraint(equalToConstant: 315),
+            appleLoginButton.heightAnchor.constraint(equalToConstant: 48)
+        ])
+    }
+
+    // MARK: Actions
+
+    @objc private func kakaoLoginButtonTapped(_ sender: UIButton) {
+        let request = LoginModels.PerformKakaoLogin.Request()
+        interactor?.performKakaoLogin(with: request)
+    }
+
+    @objc private func appleLoginButtonTapped(_ sender: UIButton) {
+        let request = LoginModels.PerformAppleLogin.Request(loginViewController: self)
+        interactor?.performAppleLogin(with: request)
+    }
+}
+
+// MARK: - Use Case - Login
+
+extension LoginViewController: LoginDisplayLogic {
+    func navigateToMain() {
+        router?.routeToMainTabBar()
+    }
+
+    func routeToSignUp(with viewModel: LoginModels.PerformKakaoLogin.ViewModel) {
+        router?.navigateToKakaoSignUp()
+    }
+
+    func routeToSignUp(with viewModel: LoginModels.PerformAppleLogin.ViewModel) {
+        router?.navigateToAppleSignUp()
+    }
+}
+
+fileprivate extension UIImage {
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+}
+
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        guard let window: UIWindow = self.view.window else {
+            return ASPresentationAnchor(frame: .zero)
+        }
+        return window
     }
 }

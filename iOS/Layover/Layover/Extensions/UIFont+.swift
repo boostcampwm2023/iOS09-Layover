@@ -17,6 +17,7 @@ enum TextStyles {
     case body2Semibold
     case body2Bold
     case body3
+    case logoTitle
 }
 
 enum LOWeight: String {
@@ -27,6 +28,7 @@ enum LOWeight: String {
 
 enum FontType: String {
     case pretendard = "Pretendard"
+    case dashboard = "Dashboard"
 }
 
 extension UIFont {
@@ -49,7 +51,9 @@ extension UIFont {
         case .body2Bold:
             return .loFont(ofSize: 16, weight: .bold)
         case .body3:
-            return .loFont(ofSize: 14, weight: .bold)
+            return .loFont(ofSize: 14, weight: .regular)
+        case .logoTitle:
+            return .loFont(ofSize: 32, weight: .regular, type: .dashboard)
         }
     }
 

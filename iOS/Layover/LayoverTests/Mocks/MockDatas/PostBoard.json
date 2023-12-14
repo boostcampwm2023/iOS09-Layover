@@ -1,0 +1,16 @@
+{
+  "message": "성공",
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "title": "제목",
+    "content": "내용",
+    "latitude": 37.1231053,
+    "longitude": 127.1231053,
+    "tag": [
+      "부산",
+      "광안리",
+      "바다"
+    ]
+  }
+}

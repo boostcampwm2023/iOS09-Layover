@@ -45,4 +45,7 @@ DerivedData/
 ## User settings
 xcuserdata/
 
+### Secret ###
+*.xcconfig
+
 # End of https://www.toptal.com/developers/gitignore/api/xcode,macos,swiftpackagemanager

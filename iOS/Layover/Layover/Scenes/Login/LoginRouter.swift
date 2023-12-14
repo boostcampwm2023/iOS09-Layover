@@ -8,14 +8,16 @@
 import UIKit
 
 protocol LoginRoutingLogic {
-    func routeToNext()
+    func routeToMainTabBar()
+    func navigateToKakaoSignUp()
+    func navigateToAppleSignUp()
 }
 
 protocol LoginDataPassing {
     var dataStore: LoginDataStore? { get }
 }
 
-class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
+final class LoginRouter: LoginRoutingLogic, LoginDataPassing {
 
     // MARK: - Properties
 
@@ -24,16 +26,38 @@ class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
 
     // MARK: - Routing
 
-    func routeToNext() {
-        // let destinationVC = UIStoryboard(name: "", bundle: nil).instantiateViewController(withIdentifier: "") as! NextViewController
-        // var destinationDS = destinationVC.router!.dataStore!
-        // passDataTo(destinationDS, from: dataStore!)
-        // viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    func routeToMainTabBar() {
+        let tabBarViewController = MainTabBarViewController()
+        viewController?.navigationController?.setNavigationBarHidden(true, animated: true)
+        viewController?.navigationController?.setViewControllers([tabBarViewController], animated: true)
     }
 
-    // MARK: - Data Passing
+    func navigateToKakaoSignUp() {
+        let signUpViewController = SignUpViewController()
 
-    // func passDataTo(_ destinationDS: inout NextDataStore, from sourceDS: LoginDataStore) {
-    //     destinationDS.attribute = sourceDS.attribute
-    // }
+        guard let source = dataStore,
+              var destination = signUpViewController.router?.dataStore
+        else { return }
+
+        passKakaoDataToSignUp(source: source, destination: &destination)
+        viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
+    }
+
+    func navigateToAppleSignUp() {
+        let signUpViewController = SignUpViewController()
+        guard let source = dataStore,
+              let destination = signUpViewController.router?.dataStore
+        else { return }
+
+        destination.signUpType = .apple
+        destination.socialToken = source.appleLoginToken
+        viewController?.navigationController?.pushViewController(signUpViewController, animated: true)
+    }
+
+    // MARK: - Passing Data
+
+    private func passKakaoDataToSignUp(source: LoginDataStore, destination: inout SignUpDataStore) {
+        destination.signUpType = .kakao
+        destination.socialToken = source.kakaoLoginToken
+    }
 }

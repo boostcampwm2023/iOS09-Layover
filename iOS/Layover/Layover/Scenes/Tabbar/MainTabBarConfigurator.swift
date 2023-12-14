@@ -14,15 +14,25 @@ final class MainTabBarConfigurator: Configurator {
 
     // TODO: 뷰컨트롤러, 탭바 아이템 교체
     func configure(_ viewController: UITabBarController) {
+        let homeViewController = UINavigationController(rootViewController: HomeViewController())
+        let mapViewController = UINavigationController(rootViewController: MapViewController())
+        let profileViewController = UINavigationController(rootViewController: ProfileViewController(profileType: .own))
 
-        let homeViewController = DummyViewController()
-        let mapViewController = DummyViewController()
-        let profileViewController = DummyViewController()
+        let homeIconImage = UIImage(resource: .planet)
+        let mapIconImage = UIImage(resource: .map)
+        let profileIconImage = UIImage(resource: .star)
 
-        homeViewController.tabBarItem = UITabBarItem(title: "탐사", image: UIImage(systemName: "square.and.arrow.up"), selectedImage: nil)
-        mapViewController.tabBarItem = UITabBarItem(title: "지도", image: UIImage(systemName: "square.and.arrow.up"), selectedImage: nil)
-        profileViewController.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "square.and.arrow.up"), selectedImage: nil)
+        homeViewController.tabBarItem = UITabBarItem(title: "탐사",
+                                                     image: homeIconImage.withTintColor(.white),
+                                                     selectedImage: nil)
+        mapViewController.tabBarItem = UITabBarItem(title: "지도",
+                                                    image: mapIconImage.withTintColor(.white),
+                                                    selectedImage: nil)
+        profileViewController.tabBarItem = UITabBarItem(title: "프로필",
+                                                        image: profileIconImage.withTintColor(.white),
+                                                        selectedImage: nil)
 
+        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
         viewController.setViewControllers([
             homeViewController,
             mapViewController,
