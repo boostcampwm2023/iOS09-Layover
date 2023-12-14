@@ -101,11 +101,6 @@ final class MapViewController: BaseViewController {
         setDelegation()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        interactor?.fetchPost(latitude: mapView.centerCoordinate.latitude,
-                              longitude: mapView.centerCoordinate.longitude)
-    }
-
     // MARK: - UI + Layout
 
     override func setConstraints() {
