@@ -69,6 +69,10 @@ class UploadPostInteractorTests: XCTestCase {
             presentUploadButtonResponse = response
         }
 
+        func presentUnsupportedFormatAlert() {
+
+        }
+
     }
 
     // MARK: - Tests

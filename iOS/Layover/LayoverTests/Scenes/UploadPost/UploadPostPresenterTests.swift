@@ -69,6 +69,10 @@ class UploadPostPresenterTests: XCTestCase {
             displayUploadButtonViewModel = viewModel
         }
 
+        func displayUnsupportedFormatAlert() {
+
+        }
+
     }
 
     // MARK: - Tests

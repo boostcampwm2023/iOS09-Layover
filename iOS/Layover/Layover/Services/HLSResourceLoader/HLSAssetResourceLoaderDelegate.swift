@@ -37,7 +37,7 @@ class HLSAssetResourceLoaderDelegate: NSObject, AVAssetResourceLoaderDelegate {
 
     // 공통으로 처리
     func loadRequestedResource(_ loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
-        guard let url = loadingRequest.request.url?.originHLS_URL else { return false }
+        guard let url = loadingRequest.request.url?.originHLSURL else { return false }
 
         if url.pathExtension.contains("ts") { // ts 파일은 리디렉션 시킨다.
             loadingRequest.redirect = URLRequest(url: url)

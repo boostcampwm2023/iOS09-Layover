@@ -36,7 +36,7 @@ final class HLSSliceResourceLoader: ResourceLoader {
     // MARK: - ResourceLoader
 
     func loadResource(from url: URL) async -> Data? {
-        let urlRequest = URLRequest(url: url.originHLS_URL) // 원래 url scheme 으로 변경
+        let urlRequest = URLRequest(url: url.originHLSURL) // 원래 url scheme 으로 변경
 
         guard let (data, response) = try? await session.data(for: urlRequest),
               let httpResponse = response as? HTTPURLResponse,
