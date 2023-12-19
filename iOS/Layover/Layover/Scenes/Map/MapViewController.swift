@@ -173,12 +173,12 @@ final class MapViewController: BaseViewController {
                 let distanceFromCenter = abs((item.center.x - offset.x) - environment.container.contentSize.width / 2.0)
                 let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minumumZoomScale)
                 item.transform = CGAffineTransform(scaleX: scale, y: scale)
-                let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
-                if scale >= maximumZoomScale * 0.9 {
-                    cell?.play()
+                guard let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell else { return }
+                if scale >= 0.9 {
+                    cell.play()
                     self?.selectAnnotation(at: item.indexPath)
                 } else {
-                    cell?.pause()
+                    cell.pause()
                 }
             }
         }
@@ -197,7 +197,6 @@ final class MapViewController: BaseViewController {
         carouselCollectionViewHeight.constant = isSelected ? 151 : 0
         UIView.animate(withDuration: 0.3) {
             annotationView.transform = isSelected ? CGAffineTransform(scaleX: 1.3, y: 1.3) : .identity
-            self.view.layoutIfNeeded()
         }
     }
 
@@ -256,7 +255,7 @@ extension MapViewController: MKMapViewDelegate {
         if let annotaion = annotation as? LOAnnotation {
             // 선택된 pin 정보와 datasource를 비교해 selected item을 찾음
             let snapshot = carouselDatasource.snapshot()
-            guard let selectedItemIdentifiers = carouselDatasource.snapshot().itemIdentifiers.filter({ post in
+            guard let selectedItemIdentifiers = snapshot.itemIdentifiers.filter({ post in
                 return post.boardID == annotaion.boardID
             }).first else { return }
             guard let section = snapshot.sectionIdentifier(containingItem: selectedItemIdentifiers),
