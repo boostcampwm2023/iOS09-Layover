@@ -161,7 +161,7 @@ final class MapViewController: BaseViewController {
         let maximumZoomScale: CGFloat = 1.0
         let inset = (screenSize.width - screenSize.width * groupWidthDimension) / 2
         let section: NSCollectionLayoutSection = .makeCarouselSection(groupWidthDimension: groupWidthDimension)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 0
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: inset,
@@ -174,8 +174,7 @@ final class MapViewController: BaseViewController {
                 let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minumumZoomScale)
                 item.transform = CGAffineTransform(scaleX: scale, y: scale)
                 guard let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell else { return }
-                if scale >= 0.9 {
-                    cell.play()
+                if scale >= maximumZoomScale * 0.9 {
                     self?.selectAnnotation(at: item.indexPath)
                 } else {
                     cell.pause()
@@ -261,9 +260,12 @@ extension MapViewController: MKMapViewDelegate {
             guard let section = snapshot.sectionIdentifier(containingItem: selectedItemIdentifiers),
                   let itemIndex = snapshot.indexOfItem(selectedItemIdentifiers),
                   let sectionIndex = snapshot.indexOfSection(section) else { return }
-            carouselCollectionView.scrollToItem(at: IndexPath(item: itemIndex, section: sectionIndex),
+            let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+            carouselCollectionView.scrollToItem(at: indexPath,
                                                 at: .centeredHorizontally,
                                                 animated: false)
+            guard let cell = carouselCollectionView.cellForItem(at: indexPath) as? MapCarouselCollectionViewCell else { return }
+            cell.play()
         }
     }
 
