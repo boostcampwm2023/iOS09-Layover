@@ -20,7 +20,8 @@ final class LoginConfigurator: Configurator {
         let interactor = LoginInteractor()
         let presenter = LoginPresenter()
         // TODO: 실행 전 Worker Mock인지 확인
-        let worker = LoginWorker()
+//        let worker = LoginWorker()
+        let worker = MockLoginWorker()
         let router = LoginRouter()
 
         router.viewController = viewController

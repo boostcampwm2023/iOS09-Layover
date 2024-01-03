@@ -1436,7 +1436,6 @@
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
 				FCF19BE22B2A4088003002E0 /* AVFileType+.swift in Sources */,
-				FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */,
 				19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
