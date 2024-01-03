@@ -11,6 +11,8 @@ import { generateDownloadPreSignedUrl } from '../utils/s3Utils';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardRepository, boardStatus } from './board.repository';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
+import { CustomResponse } from 'src/response/custom-response';
+import { ECustomCode } from 'src/response/ecustom-code.jenum';
 
 @Injectable()
 export class BoardService {
@@ -145,7 +147,7 @@ export class BoardService {
 
   async processByEncodingStatus(encodingCallbackRequestDto: EncodingCallbackDto) {
     const filename = this.parsingFilenameFromFilePath(encodingCallbackRequestDto.filePath);
-
+    throw new CustomResponse(ECustomCode.SUCCESS);
     //파일명으로 파일을 찾고 해당 파일의 status 를 갱신해준다.
     switch (encodingCallbackRequestDto.status) {
       case 'RUNNING':
