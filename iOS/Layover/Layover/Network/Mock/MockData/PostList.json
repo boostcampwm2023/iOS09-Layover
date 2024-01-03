@@ -81,8 +81,8 @@
         {
             "member" : {
                 "id" : 5,
-                "username" : "layover",
-                "introduce" : "Hi, my name is hwani",
+                "username" : "layover2",
+                "introduce" : "Hi, my name is hwani2",
                 "profile_image_url" : "profile_image_link"
             },
             "board" : {
@@ -91,8 +91,8 @@
                 "video_thumbnail_url" : "https://res.heraldm.com/content/image/2023/04/16/20230416000040_0.jpg",
                 "longitude" : 37.0532156213,
                 "latitude" : 127.060123123,
-                "title" : "아이즈원",
-                "content" : "게시글 설명2",
+                "title" : "아이즈원2",
+                "content" : "게시글 설명3",
                 "status": "COMPLETE"
             },
             "tag" : ["해시태그1", "해시태그6"]

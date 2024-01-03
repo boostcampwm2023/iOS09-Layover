@@ -10,7 +10,7 @@ import UIKit
 
 protocol PlaybackBusinessLogic {
     @discardableResult
-    func displayVideoList() -> Task<Bool, Never>
+    func displayVideoList() async
     func moveInitialPlaybackCell()
     func setInitialPlaybackCell()
     func leavePlaybackView()
@@ -84,22 +84,35 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     // MARK: - UseCase Load Video List
 
-    func displayVideoList() -> Task<Bool, Never> {
-        Task {
-            guard let parentView: Models.ParentView,
-                  var posts: [Post],
-                  let worker: PlaybackWorkerProtocol else { return false }
-            if parentView == .map {
-                posts = worker.makeInfiniteScroll(posts: posts)
-                self.posts = posts
-            }
-            let videos: [Models.PlaybackVideo]
-            (videos, playbackVideoInfos) = transPostToVideo(posts)
-            let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
-            await MainActor.run {
-                presenter?.presentVideoList(with: response)
-            }
-            return true
+    func displayVideoList() async {
+//        Task {
+//            guard let parentView: Models.ParentView,
+//                  var posts: [Post],
+//                  let worker: PlaybackWorkerProtocol else { return false }
+//            if parentView == .map {
+//                posts = worker.makeInfiniteScroll(posts: posts)
+//                self.posts = posts
+//            }
+//            let videos: [Models.PlaybackVideo]
+//            (videos, playbackVideoInfos) = transPostToVideo(posts)
+//            let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+//            await MainActor.run {
+//                presenter?.presentVideoList(with: response)
+//            }
+//            return true
+//        }
+        guard let parentView: Models.ParentView,
+              var posts: [Post],
+              let worker: PlaybackWorkerProtocol else { return }
+        if parentView == .map {
+            posts = worker.makeInfiniteScroll(posts: posts)
+            self.posts = posts
+        }
+        let videos: [Models.PlaybackVideo]
+        (videos, playbackVideoInfos) = transPostToVideo(posts)
+        let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+        await MainActor.run {
+            presenter?.presentVideoList(with: response)
         }
     }
 

@@ -92,7 +92,9 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.displayVideoList()
+        Task {
+            await interactor?.displayVideoList()
+        }
         interactor?.configurePlaybackCell()
         playbackCollectionView.delegate = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
