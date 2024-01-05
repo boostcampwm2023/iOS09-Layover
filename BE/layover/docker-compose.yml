@@ -2,6 +2,7 @@ version: '3'
 services:
   app:
     image: ${DOCKER_IMG_NAME}:${COMMIT_HASH}
+    container_name:  ${DOCKER_IMG_NAME}
     ports:
       - "3000:3000"
     volumes:
