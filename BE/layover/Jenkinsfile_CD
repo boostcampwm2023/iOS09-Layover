@@ -22,6 +22,8 @@ pipeline {
                                 echo ${CONTAINER_NAME}
 
                                 CONTAINER_ID=\$(docker ps -a -q -f name=$CONTAINER_NAME)
+                                echo '컨테이너 아이디'
+                                echo ${CONTAINER_ID}
                                 if [ -n "\$CONTAINER_ID" ]; then
                                     docker rm -f \$CONTAINER_ID
                                     echo "컨테이너 '$CONTAINER_NAME'를 삭제했습니다."
