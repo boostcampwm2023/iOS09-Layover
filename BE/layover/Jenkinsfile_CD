@@ -16,6 +16,11 @@ pipeline {
 
                                 // 컨테이너가 존재하면 삭제
                                 sh """
+                                echo '컨테이너 네임'
+                                echo $CONTAINER_NAME
+                                echo '$CONTAINER_NAME'
+                                echo ${CONTAINER_NAME}
+
                                 CONTAINER_ID=\$(docker ps -a -q -f name=$CONTAINER_NAME)
                                 if [ -n "\$CONTAINER_ID" ]; then
                                     docker rm -f \$CONTAINER_ID
