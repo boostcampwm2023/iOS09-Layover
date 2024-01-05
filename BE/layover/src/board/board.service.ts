@@ -88,7 +88,7 @@ export class BoardService {
     const boardInfo = new BoardResDto(
       board.id,
       board.encoded_video_url,
-      videoThumbnailUrl,ㅈ
+      videoThumbnailUrl,
       board.latitude,
       board.longitude,
       board.title,
