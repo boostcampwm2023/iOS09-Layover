@@ -139,16 +139,6 @@ export class BoardController {
   }
 
   @ApiOperation({
-    summary: '원본 영상 업로드 완료 콜백',
-    description: '클라이언트를 통해 원본 영상이 업로드 되면 호출됩니다.',
-  })
-  @Post('/upload-callback')
-  async uploadCallback(@Body() uploadCallbackRequestDto: UploadCallbackDto) {
-    this.logger.log(`[upload-callback] filename: ${uploadCallbackRequestDto.filename}`);
-    throw new CustomResponse(ECustomCode.SUCCESS);
-  }
-
-  @ApiOperation({
     summary: '인코딩 완료 콜백',
     description:
       '인코딩 상태에 따라 호출되어지며, 인코딩 상태를 갱신하며, 인코딩된 영상의 hls link 를 db에 저장합니다.',
