@@ -2,14 +2,15 @@ version: '3'
 services:
   app:
     image: ${DOCKER_IMG_NAME}:${COMMIT_HASH}
+    container_name: layover-container
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
-      - "~/envs/.env:/usr/src/app/.env"
-      - "~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt"
-      - "~/envs/certificate.crt:/usr/src/app/certificate.crt"
-      - "~/envs/private.key:/usr/src/app/private.key"
-      - "/var/log/logs.log:/usr/src/app/logs.log"
+      - ~/envs/.env:/usr/src/app/.env
+      - ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
+      - ~/envs/certificate.crt:/usr/src/app/certificate.crt
+      - ~/envs/private.key:/usr/src/app/private.key
+      - /var/log/logs.log:/usr/src/app/logs.log
     restart: on-failure
 
   cadvisor:
