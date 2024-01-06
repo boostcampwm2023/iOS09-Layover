@@ -11,7 +11,7 @@ import AuthenticationServices
 import OSLog
 
 protocol LoginBusinessLogic {
-    func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request)
+    func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request) async
     func performAppleLogin(with request: LoginModels.PerformAppleLogin.Request)
 }
 
@@ -38,19 +38,17 @@ final class LoginInteractor: NSObject, LoginDataStore {
 // MARK: - Use Case - Login
 
 extension LoginInteractor: LoginBusinessLogic {
-    func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request) {
-        Task {
-            guard let token = await worker?.fetchKakaoLoginToken() else { return }
-            kakaoLoginToken = token
-            if await worker?.isRegisteredKakao(with: token) == true,
-               await worker?.loginKakao(with: token) == true {
-                await MainActor.run {
-                    presenter?.presentPerformLogin()
-                }
-            } else {
-                await MainActor.run {
-                    presenter?.presentSignUp(with: Models.PerformKakaoLogin.Response())
-                }
+    func performKakaoLogin(with request: LoginModels.PerformKakaoLogin.Request) async {
+        guard let token = await worker?.fetchKakaoLoginToken() else { return }
+        kakaoLoginToken = token
+        if await worker?.isRegisteredKakao(with: token) == true,
+           await worker?.loginKakao(with: token) == true {
+            await MainActor.run {
+                presenter?.presentPerformLogin()
+            }
+        } else {
+            await MainActor.run {
+                presenter?.presentSignUp(with: Models.PerformKakaoLogin.Response())
             }
         }
     }
@@ -60,7 +58,6 @@ extension LoginInteractor: LoginBusinessLogic {
         let loginRequest: ASAuthorizationAppleIDRequest = appleIDProvider.createRequest()
         let authorizationController: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [loginRequest])
         authorizationController.delegate = self
-        authorizationController.presentationContextProvider = request.loginViewController
         authorizationController.performRequests()
     }
 }
@@ -69,26 +66,25 @@ extension LoginInteractor: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            guard let identityTokenData: Data = appleIDCredential.identityToken else {
+            guard let identityTokenData: Data = appleIDCredential.identityToken,
+                  let identityToken: String = String(data: identityTokenData, encoding: .utf8) else {
                 return
             }
-            guard let identityToken: String = String(data: identityTokenData, encoding: .utf8) else {
-                return
-            }
-            appleLoginToken = identityToken
-            Task {
-                let isRegistered = await worker?.isRegisteredApple(with: identityToken)
-                let loginResult = await worker?.loginApple(with: identityToken)
 
-                if isRegistered == true, loginResult == true {
-                    await MainActor.run {
-                        presenter?.presentPerformLogin()
-                    }
-                } else {
+            appleLoginToken = identityToken
+
+            Task {
+                async let isRegistered = await worker?.isRegisteredApple(with: identityToken)
+                async let loginResult = await worker?.loginApple(with: identityToken)
+
+                guard await isRegistered == true, await loginResult == true else {
                     await MainActor.run {
                         presenter?.presentSignUp(with: Models.PerformAppleLogin.Response())
                     }
+                    return
                 }
+
+                presenter?.presentPerformLogin()
             }
         default:
             break

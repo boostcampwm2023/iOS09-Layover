@@ -123,12 +123,13 @@ final class LoginViewController: BaseViewController {
 
     @objc private func kakaoLoginButtonTapped(_ sender: UIButton) {
         let request = LoginModels.PerformKakaoLogin.Request()
-        interactor?.performKakaoLogin(with: request)
+        Task {
+            await interactor?.performKakaoLogin(with: request)
+        }
     }
 
     @objc private func appleLoginButtonTapped(_ sender: UIButton) {
-        let request = LoginModels.PerformAppleLogin.Request(loginViewController: self)
-        interactor?.performAppleLogin(with: request)
+        interactor?.performAppleLogin(with: .init())
     }
 }
 

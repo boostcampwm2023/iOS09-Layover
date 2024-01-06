@@ -16,25 +16,20 @@ enum LoginModels {
         }
 
         struct Response {
-            
         }
 
         struct ViewModel {
-
         }
     }
 
     enum PerformAppleLogin {
         struct Request {
-            let loginViewController: LoginViewController
         }
 
         struct Response {
-
         }
 
         struct ViewModel {
-
         }
     }
 }
