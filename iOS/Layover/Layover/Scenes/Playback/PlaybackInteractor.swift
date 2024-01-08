@@ -77,7 +77,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     private var currentPage: Int = 1
 
-    private var playbackVideoInfos: [Models.PlaybackInfo] = []
+    var playbackVideoInfos: [Models.PlaybackInfo] = []
 
     // MARK: - UseCase Load Video List
 
