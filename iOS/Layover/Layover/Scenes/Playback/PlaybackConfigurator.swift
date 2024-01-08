@@ -19,8 +19,7 @@ final class PlaybackConfigurator: Configurator {
         let viewController: PlaybackViewController = viewController
         let interactor: PlaybackInteractor = PlaybackInteractor()
         let presenter: PlaybackPresenter = PlaybackPresenter()
-//        let worker: PlaybackWorkerProtocol = PlaybackWorker()
-        let worker: PlaybackWorkerProtocol = MockPlaybackWorker()
+        let worker: PlaybackWorkerProtocol = PlaybackWorker()
         let router: PlaybackRouter = PlaybackRouter()
 
         router.viewController = viewController

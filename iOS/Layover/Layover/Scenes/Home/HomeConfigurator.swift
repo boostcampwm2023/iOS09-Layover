@@ -18,8 +18,7 @@ final class HomeConfigurator: Configurator {
         let router = HomeRouter()
         let presenter = HomePresenter()
         let interactor = HomeInteractor()
-//        let homeWorker = HomeWorker()
-        let homeWorker = MockHomeWorker()
+        let homeWorker = HomeWorker()
         let videoFileWorker = VideoFileWorker()
         let locationManager = CurrentLocationManager()
 
