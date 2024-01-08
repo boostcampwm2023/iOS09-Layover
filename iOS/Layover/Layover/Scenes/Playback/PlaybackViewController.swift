@@ -19,7 +19,6 @@ protocol PlaybackViewControllerDelegate: AnyObject {
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func loadFetchVideos(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
-    func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
@@ -213,10 +212,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         guard var currentSnapshot = dataSource?.snapshot() else { return }
         currentSnapshot.appendItems(viewModel.videos)
         dataSource?.apply(currentSnapshot, animatingDifferences: true)
-    }
-
-    func displayMoveCellIfinfinite(viewModel: Models.SetInitialPlaybackCell.ViewModel) {
-        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height * CGFloat(viewModel.indexPathRow)), animated: false)
     }
 
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
