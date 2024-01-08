@@ -272,11 +272,13 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                 }
             }
             cell.addAVPlayer(url: playbackVideo.displayedPost.board.videoURL)
-            self.interactor?.loadProfileImageAndLocation(with: Models.LoadProfileImageAndLocation.Request(
-                curCell: cell,
-                profileImageURL: playbackVideo.displayedPost.member.profileImageURL,
-                latitude: playbackVideo.displayedPost.board.latitude,
-                longitude: playbackVideo.displayedPost.board.longitude))
+            Task {
+                await self.interactor?.loadProfileImageAndLocation(with: Models.LoadProfileImageAndLocation.Request(
+                    curCell: cell,
+                    profileImageURL: playbackVideo.displayedPost.member.profileImageURL,
+                    latitude: playbackVideo.displayedPost.board.latitude,
+                    longitude: playbackVideo.displayedPost.board.longitude))
+            }
             cell.delegate = self
             return cell
         }
@@ -404,7 +406,9 @@ extension PlaybackViewController: UICollectionViewDelegate {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         if maximumOffset < currentOffset {
-            interactor?.fetchPosts()
+            Task {
+                await interactor?.fetchPosts()
+            }
         }
     }
 }
