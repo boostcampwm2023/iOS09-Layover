@@ -311,43 +311,40 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentShowPlayerSliderResponse.currentCell, request.currentCell)
     }
 
-//    func test_playVideo를_호출하면_presentMoveCellNext를_호출한다_parentView가_map이고_index가_마지막을_가리킬_떄() {
-//        // Arrange
-//        let spy = PlaybackPresentationLogicSpy()
-//        sut.parentView = .map
-//        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
-//        sut.previousCell = Seeds.PlaybackVideo.previousCell
-//        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: 1, currentCell: Seeds.PlaybackVideo.currentCell)
-//        sut.presenter = spy
-//        // act
-//        sut.playVideo(with: request)
-//
-//        // Assert
-//        XCTAssertTrue(spy.presentTeleportCellDidCalled, "playVideo는 presentTeleportCell를 호출하지 않았습니다")
-//        XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.previousCell)
-//        XCTAssertEqual(spy.presentTeleportCellResponse.previousCell, Seeds.PlaybackVideo.previousCell)
-//        XCTAssertEqual(spy.presentTeleportCellResponse.indexPathRow, 1)
-//        XCTAssertTrue(((sut.isTeleport) != nil))
-//    }
+    func test_parentView가_map이고_index가_마지막을_가리킬_떄_playVideo를_호출하면_presentMoveCellNext를_호출한다() {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        sut.parentView = .map
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
+        sut.previousCell = Seeds.PlaybackVideo.previousCell
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: 1, currentCell: Seeds.PlaybackVideo.currentCell)
+        sut.presenter = spy
+        // act
+        sut.playVideo(with: request)
 
-//    func test_playVideo를_호출하면_presentMoveCellNext를_호출한다_parentView가_map이고_index가_처음을_가리킬_떄() {
-//        // Arrange
-//        let spy = PlaybackPresentationLogicSpy()
-//        sut.parentView = .map
-//        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
-//        sut.previousCell = Seeds.PlaybackVideo.previousCell
-//        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: 1, currentCell: Seeds.PlaybackVideo.currentCell)
-//        sut.presenter = spy
-//        // act
-//        sut.playVideo(with: request)
-//
-//        // Assert
-//        XCTAssertTrue(spy.presentTeleportCellDidCalled, "playVideo는 presentTeleportCell를 호출하지 않았습니다")
-//        XCTAssertEqual(spy.presentTeleportCellResponse.previousCell, Seeds.PlaybackVideo.previousCell)
-//        XCTAssertEqual(spy.presentTeleportCellResponse.currentCell, nil)
-//        XCTAssertEqual(spy.presentTeleportCellResponse.indexPathRow, 0)
-//        XCTAssertTrue(((sut.isTeleport) != nil))
-//    }
+        // Assert
+        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playVideo는 presentTeleportCell를 호출하지 않았습니다")
+        XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
+        XCTAssertFalse(sut.isTeleport!)
+    }
+
+    func test_parentView가_map이고_index가_처음을_가리킬_떄_playVideo를_호출하면_presentMoveCellNext를_호출한다() {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        sut.parentView = .map
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
+        sut.previousCell = Seeds.PlaybackVideo.previousCell
+        let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: 1, currentCell: Seeds.PlaybackVideo.currentCell)
+        sut.presenter = spy
+        // act
+        sut.playVideo(with: request)
+
+        // Assert
+        XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playVideo는 presentTeleportCell를 호출하지 않았습니다")
+        XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
+        XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
+        XCTAssertFalse(sut.isTeleport!)
+    }
 
     func test_playVideo를_호출하면_presentMoveCellNext를_호출한다_parentView가_map이고_텔레포트가_필요없는_상황일_때() {
         // Arrange
@@ -590,63 +587,236 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.selectedTag, "테스트")
     }
 
-//    func test_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다_Home() async {
-//        // Arrange
-//        let spy = PlaybackPresentationLogicSpy()
-//        sut.parentView = .home
-//        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
-//        sut.presenter = spy
-//        sut.isFetchReqeust = false
-//        sut.currentPage = 1
-//
-//        // act
-//        let result = await sut.fetchPosts().value
-//
-//        // Assert
-//        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-//        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
-//        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-//        XCTAssertEqual(sut.posts?.count, 3)
-//    }
-//
-//    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_tag() async throws {
-//        // Arrange
-//        let spy = PlaybackPresentationLogicSpy()
-//        sut.parentView = .tag
-//        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
-//        sut.selectedTag = "테스트"
-//        sut.presenter = spy
-//        sut.isFetchReqeust = false
-//        sut.currentPage = 1
-//
-//        // act
-//        let result = await sut.fetchPosts().value
+    func test_Home_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다() async {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        sut.parentView = .home
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
+        sut.presenter = spy
+
+        // act
+        await sut.fetchPosts()
+
+        // Assert
+        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 3)
+    }
+
+    func test_tag_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다() async throws {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        sut.parentView = .tag
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
+        sut.playbackVideoInfos = [
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0)
+        ]
+        sut.selectedTag = "테스트"
+        sut.presenter = spy
+
+        // act
+        await sut.fetchPosts()
 //        try await Task.sleep(nanoseconds: 3_000_000_000)
-//
-//        // Assert
-//        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-//        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
-//        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-//        XCTAssertEqual(sut.posts?.count, 21)
-//    }
-//
-//    func test_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다_Profile() async throws {
-//        // Arrange
-//        let spy = PlaybackPresentationLogicSpy()
-//        sut.parentView = .otherProfile
-//        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
-//        sut.presenter = spy
-//        sut.memberID = -1
-//        sut.isFetchReqeust = false
-//        sut.currentPage = 1
-//
-//        // act
-//        let result = await sut.fetchPosts().value
-//
-//        // Assert
-//        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
-//        XCTAssertTrue(result, "fetchPost에 실패했습니다.")
-//        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
-//        XCTAssertEqual(sut.posts?.count, 21)
-//    }
+
+        // Assert
+        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 21)
+        XCTAssertEqual(sut.playbackVideoInfos.count, 21)
+    }
+
+    func test_Profile_fetchPosts를_호출하면_presentLoadFetchVideos를_호출한다() async throws {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        sut.parentView = .otherProfile
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.post1, Seeds.Posts.post2]
+        sut.playbackVideoInfos = [
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0),
+            Models.PlaybackInfo(memberID: 0, boardID: 0), Models.PlaybackInfo(memberID: 0, boardID: 0)
+        ]
+
+        sut.presenter = spy
+        sut.memberID = -1
+
+        // act
+        await sut.fetchPosts()
+
+        // Assert
+        XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
+        XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
+        XCTAssertEqual(sut.posts?.count, 21)
+    }
+
+    func test_map이_아닐_때_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async throws {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        let testPost: Post = Seeds.Posts.post1
+        let playbackVideo: Models.PlaybackVideo = Models.PlaybackVideo(
+            displayedPost: Models.DisplayedPost(
+                member: Models.Member(
+                    memberID: testPost.member.identifier,
+                    username: testPost.member.username,
+                    profileImageURL: testPost.member.profileImageURL),
+                board: Models.Board(
+                    boardID: testPost.board.identifier,
+                    title: testPost.board.title,
+                    description: testPost.board.description,
+                    videoURL: testPost.board.videoURL!,
+                    latitude: testPost.board.latitude,
+                    longitude: testPost.board.longitude),
+                tags: Seeds.Posts.post1.tag))
+        sut.parentView = .home
+        sut.presenter = spy
+        sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
+        sut.playbackVideoInfos = [Models.PlaybackInfo(memberID: 0, boardID: 1), Models.PlaybackInfo(memberID: 0, boardID: 2)]
+        
+        // act
+        await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 0))
+
+        // Assert
+        XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
+        XCTAssertTrue(spy.presentDeleteVideoResponse.result)
+        XCTAssertEqual(spy.presentDeleteVideoResponse.playbackVideo, playbackVideo)
+        XCTAssertEqual(sut.posts!.count, 1)
+        XCTAssertEqual(sut.playbackVideoInfos.count, 1)
+    }
+
+    // TODO: map paging추가되면 로직 그냥 날려버리기
+
+    func test_map일_때_마지막_무한스크롤셀을_지울_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        let testPost: Post = Seeds.Posts.post1
+        let playbackVideo: Models.PlaybackVideo = Models.PlaybackVideo(
+            displayedPost: Models.DisplayedPost(
+                member: Models.Member(
+                    memberID: testPost.member.identifier,
+                    username: testPost.member.username,
+                    profileImageURL: testPost.member.profileImageURL),
+                board: Models.Board(
+                    boardID: testPost.board.identifier,
+                    title: testPost.board.title,
+                    description: testPost.board.description,
+                    videoURL: testPost.board.videoURL!,
+                    latitude: testPost.board.latitude,
+                    longitude: testPost.board.longitude),
+                tags: Seeds.Posts.post1.tag))
+        sut.parentView = .map
+        sut.presenter = spy
+        sut.posts = [Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost ,Seeds.Posts.post1]
+        sut.playbackVideoInfos = [Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1), Models.PlaybackInfo(memberID: 0, boardID: 2),  Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1)]
+        
+        // act
+        await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 3))
+
+        // assert
+        XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
+        XCTAssertEqual(sut.playbackVideoInfos[0].boardID, 1)
+        XCTAssertEqual(sut.playbackVideoInfos[1].boardID, 2)
+        XCTAssertEqual(sut.playbackVideoInfos[2].boardID, 1)
+        XCTAssertEqual(sut.playbackVideoInfos[3].boardID, 2)
+        XCTAssertEqual(sut.posts?[0].board.identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(sut.posts?[1].board.identifier, Seeds.Posts.post2.board.identifier)
+        XCTAssertEqual(sut.posts?[2].board.identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(sut.posts?[3].board.identifier, Seeds.Posts.post2.board.identifier)
+        XCTAssertEqual(sut.playbackVideoInfos.count, 4)
+        XCTAssertEqual(sut.posts?.count, 4)
+    }
+
+    func test_map일_때_첫번째_무한스크롤셀을_지울_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        let testPost: Post = Seeds.Posts.post1
+        let playbackVideo: Models.PlaybackVideo = Models.PlaybackVideo(
+            displayedPost: Models.DisplayedPost(
+                member: Models.Member(
+                    memberID: testPost.member.identifier,
+                    username: testPost.member.username,
+                    profileImageURL: testPost.member.profileImageURL),
+                board: Models.Board(
+                    boardID: testPost.board.identifier,
+                    title: testPost.board.title,
+                    description: testPost.board.description,
+                    videoURL: testPost.board.videoURL!,
+                    latitude: testPost.board.latitude,
+                    longitude: testPost.board.longitude),
+                tags: Seeds.Posts.post1.tag))
+        sut.parentView = .map
+        sut.presenter = spy
+        sut.posts = [Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost ,Seeds.Posts.post1]
+        sut.playbackVideoInfos = [Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1), Models.PlaybackInfo(memberID: 0, boardID: 2),  Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1)]
+
+        // act
+        await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 1))
+
+        // assert
+        XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
+        XCTAssertEqual(sut.playbackVideoInfos[0].boardID, 3)
+        XCTAssertEqual(sut.playbackVideoInfos[1].boardID, 2)
+        XCTAssertEqual(sut.playbackVideoInfos[2].boardID, 3)
+        XCTAssertEqual(sut.playbackVideoInfos[3].boardID, 2)
+        XCTAssertEqual(sut.posts?[0].board.identifier, Seeds.Posts.thumbnailImageNilPost.board.identifier)
+        XCTAssertEqual(sut.posts?[1].board.identifier, Seeds.Posts.post2.board.identifier)
+        XCTAssertEqual(sut.posts?[2].board.identifier, Seeds.Posts.thumbnailImageNilPost.board.identifier)
+        XCTAssertEqual(sut.posts?[3].board.identifier, Seeds.Posts.post2.board.identifier)
+        XCTAssertEqual(sut.playbackVideoInfos.count, 4)
+        XCTAssertEqual(sut.posts?.count, 4)
+    }
+
+    func test_map일_때_무한스크롤셀을_지우지않을_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async {
+        // Arrange
+        let spy = PlaybackPresentationLogicSpy()
+        let testPost: Post = Seeds.Posts.post1
+        let playbackVideo: Models.PlaybackVideo = Models.PlaybackVideo(
+            displayedPost: Models.DisplayedPost(
+                member: Models.Member(
+                    memberID: testPost.member.identifier,
+                    username: testPost.member.username,
+                    profileImageURL: testPost.member.profileImageURL),
+                board: Models.Board(
+                    boardID: testPost.board.identifier,
+                    title: testPost.board.title,
+                    description: testPost.board.description,
+                    videoURL: testPost.board.videoURL!,
+                    latitude: testPost.board.latitude,
+                    longitude: testPost.board.longitude),
+                tags: Seeds.Posts.post1.tag))
+        sut.parentView = .map
+        sut.presenter = spy
+        sut.posts = [Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost ,Seeds.Posts.post1]
+        sut.playbackVideoInfos = [Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1), Models.PlaybackInfo(memberID: 0, boardID: 2),  Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1)]
+
+        // act
+        await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 2))
+
+        // assert
+        XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
+        XCTAssertEqual(sut.playbackVideoInfos[0].boardID, 3)
+        XCTAssertEqual(sut.playbackVideoInfos[1].boardID, 1)
+        XCTAssertEqual(sut.playbackVideoInfos[2].boardID, 3)
+        XCTAssertEqual(sut.playbackVideoInfos[3].boardID, 1)
+        XCTAssertEqual(sut.posts?[0].board.identifier, Seeds.Posts.thumbnailImageNilPost.board.identifier)
+        XCTAssertEqual(sut.posts?[1].board.identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(sut.posts?[2].board.identifier, Seeds.Posts.thumbnailImageNilPost.board.identifier)
+        XCTAssertEqual(sut.posts?[3].board.identifier, Seeds.Posts.post1.board.identifier)
+        XCTAssertEqual(sut.playbackVideoInfos.count, 4)
+        XCTAssertEqual(sut.posts?.count, 4)
+    }
 }

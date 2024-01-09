@@ -49,7 +49,7 @@ class Seeds {
                                         username: "안유진",
                                         introduce: "안녕하세요, 아이브의 안유진입니다.",
                                         profileImageURL: URL(string: "https://cdn.footballist.co.kr/news/photo/202307/170226_100422_1733.jpg")!),
-                         board: Board(identifier: 1,
+                         board: Board(identifier: 3,
                                       title: "최강 아이돌",
                                       description: "게시글 설명",
                                       thumbnailImageURL: nil,

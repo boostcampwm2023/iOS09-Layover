@@ -278,7 +278,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                     isNeedReplace: true)
                 playbackVideoInfos.append(playbackVideoInfos[request.indexPathRow - 1])
                 if let posts {
-                    self.posts?.insert(posts[request.indexPathRow - 1], at: 0)
+                    self.posts?.append(posts[request.indexPathRow - 1])
                 }
             } else {
                 response = Models.DeletePlaybackVideo.Response(
