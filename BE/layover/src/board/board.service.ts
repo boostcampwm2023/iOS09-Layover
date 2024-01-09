@@ -83,7 +83,7 @@ export class BoardService {
     const member = new MemberInfosResDto(board.member.id, board.member.username, board.member.introduce, preSignedUrl);
     const videoThumbnailUrl = generateDownloadPreSignedUrl(
       process.env.NCLOUD_S3_THUMBNAIL_BUCKET_NAME,
-      `${process.env.HLS_ENCODING_PATH}/${board.filename}_01.jpg`,
+      `${process.env.HLS_ENCODING_PATH}/${board.filename}.jpg`,
     );
     const boardInfo = new BoardResDto(
       board.id,
@@ -130,11 +130,6 @@ export class BoardService {
     await this.boardRepository.saveBoard(board);
   }
 
-  generateEncodedVideoUrl(filename: string) {
-    return `${process.env.HLS_SCHEME}${process.env.HLS_ENCODING_CDN}/hls/${process.env.HLS_ENCODING_BUCKET_ENCRYPTED_NAME}
-    /${process.env.HLS_ENCODING_PATH}/${filename}_AVC_,FHD,HD,SD,_1Pass_30fps.mp4.smil/master.m3u8`;
-  }
-
   async getBoardById(id: number): Promise<Board> {
     return await this.boardRepository.findOneById(id);
   }
@@ -144,29 +139,24 @@ export class BoardService {
   }
 
   async processByEncodingStatus(encodingCallbackRequestDto: EncodingCallbackDto) {
-    const filename = this.parsingFilenameFromFilePath(encodingCallbackRequestDto.filePath);
-
     //파일명으로 파일을 찾고 해당 파일의 status 를 갱신해준다.
     switch (encodingCallbackRequestDto.status) {
       case 'RUNNING':
-        await this.boardRepository.updateStatusByFilename(filename, 'RUNNING');
+        await this.boardRepository.updateStatusByFilename(encodingCallbackRequestDto.filename, 'RUNNING');
         break;
+
       case 'FAILURE':
-        await this.boardRepository.updateStatusByFilename(filename, 'FAILURE');
+        await this.boardRepository.updateStatusByFilename(encodingCallbackRequestDto.filename, 'FAILURE');
         break;
-      case 'COMPLETE':
-        await this.boardRepository.updateStatusByFilename(filename, 'COMPLETE');
-        await this.boardRepository.updateEncodedVideoUrlByFilename(filename, this.generateEncodedVideoUrl(filename));
+
+      case 'COMPLETE': // cloud function 에서 인코딩을 성공적으로 끝냈을 때
+        await this.boardRepository.updateStatusByFilename(encodingCallbackRequestDto.filename, 'COMPLETE');
+        await this.boardRepository.updateEncodedVideoUrlByFilename(encodingCallbackRequestDto.filename, encodingCallbackRequestDto.filePath);
         break;
     }
   }
 
   async updateBoardsStatusByMemberId(id: number, fromStatus: boardStatus, toStatus: boardStatus) {
     await this.boardRepository.updateBoardsStatusByMemberId(id, fromStatus, toStatus);
-  }
-
-  parsingFilenameFromFilePath(filePath: string) {
-    const regExp = /^\/layover-station\/(.*?)(_AVC.*?)\.mp4$/;
-    return filePath.match(regExp)[1];
   }
 }
