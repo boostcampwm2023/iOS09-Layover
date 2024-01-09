@@ -147,6 +147,7 @@
 		835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */; };
 		8363A32D2B4C1CBB00772DDF /* PlaybackPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */; };
 		8363A32F2B4C329100772DDF /* PlaybackInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */; };
+		8363A3332B4D6E9B00772DDF /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */; };
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
@@ -406,6 +407,7 @@
 		835A61AA2B0B85FD002F22A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackPresenterTests.swift; path = LayoverTests/Mocks/Workers/PlaybackPresenterTests.swift; sourceTree = SOURCE_ROOT; };
 		8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackInteractorTests.swift; path = LayoverTests/Mocks/Workers/PlaybackInteractorTests.swift; sourceTree = SOURCE_ROOT; };
+		8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
 		836C33862B15A29600ECAFB0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
@@ -652,6 +654,7 @@
 				1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */,
 				192513842B27852C001533FA /* MockUserWorker.swift */,
 				19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */,
+				8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -1602,6 +1605,7 @@
 				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
 				19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */,
+				8363A3332B4D6E9B00772DDF /* MockPlaybackWorker.swift in Sources */,
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
