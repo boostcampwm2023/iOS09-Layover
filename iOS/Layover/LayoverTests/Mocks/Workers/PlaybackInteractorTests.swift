@@ -180,7 +180,7 @@ final class PlaybackInteractorTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_parentView가_map일_때_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다() async {
+    func test_parentView가_map일_때_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.presenter = spy
@@ -189,6 +189,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Act
         await sut.displayVideoList()
+
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
@@ -202,7 +204,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentVideoListResponse.videos.last!.displayedPost, Seeds.PlaybackVideos.videos.first!.displayedPost)
     }
 
-    func test_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다_parentView가_map이_아닐때() async {
+    func test_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다_parentView가_map이_아닐때() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.presenter = spy
@@ -211,6 +213,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Act
         await sut.displayVideoList()
+
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
@@ -628,6 +632,9 @@ final class PlaybackInteractorTests: XCTestCase {
         // act
         await sut.fetchPosts()
 
+        try await Task.sleep(nanoseconds: 3_000_000_000)
+
+
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)
@@ -658,6 +665,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // act
         await sut.fetchPosts()
+
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
@@ -691,6 +700,8 @@ final class PlaybackInteractorTests: XCTestCase {
         // act
         await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 0))
 
+        try await Task.sleep(nanoseconds: 3_000_000_000)
+
         // Assert
         XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
         XCTAssertTrue(spy.presentDeleteVideoResponse.result)
@@ -701,7 +712,7 @@ final class PlaybackInteractorTests: XCTestCase {
 
     // TODO: map paging추가되면 로직 그냥 날려버리기
 
-    func test_map일_때_마지막_무한스크롤셀을_지울_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async {
+    func test_map일_때_마지막_무한스크롤셀을_지울_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         let testPost: Post = Seeds.Posts.post1
@@ -727,6 +738,9 @@ final class PlaybackInteractorTests: XCTestCase {
         // act
         await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 3))
 
+        try await Task.sleep(nanoseconds: 3_000_000_000)
+
+
         // assert
         XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
         XCTAssertEqual(sut.playbackVideoInfos[0].boardID, 1)
@@ -741,7 +755,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts?.count, 4)
     }
 
-    func test_map일_때_첫번째_무한스크롤셀을_지울_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async {
+    func test_map일_때_첫번째_무한스크롤셀을_지울_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         let testPost: Post = Seeds.Posts.post1
@@ -767,6 +781,8 @@ final class PlaybackInteractorTests: XCTestCase {
         // act
         await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 1))
 
+        try await Task.sleep(nanoseconds: 3_000_000_000)
+
         // assert
         XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
         XCTAssertEqual(sut.playbackVideoInfos[0].boardID, 3)
@@ -781,7 +797,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.posts?.count, 4)
     }
 
-    func test_map일_때_무한스크롤셀을_지우지않을_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async {
+    func test_map일_때_무한스크롤셀을_지우지않을_경우_deleteVideo를_호출하면_presentDeleteVideo를_호출한다() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         let testPost: Post = Seeds.Posts.post1
@@ -806,6 +822,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // act
         await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 2))
+
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // assert
         XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
