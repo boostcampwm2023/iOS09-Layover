@@ -13,12 +13,12 @@
 @testable import Layover
 import XCTest
 
-class SignUpWorkerTests: XCTestCase
-{
+final class SignUpWorkerTests: XCTestCase {
     // MARK: Subject under test
   
     var sut: SignUpWorker!
-  
+    var authManagerSpy: AuthManagerSpy!
+
     // MARK: - Test lifecycle
   
     override func setUp() {
@@ -31,20 +31,149 @@ class SignUpWorkerTests: XCTestCase
     }
 
     // MARK: - Test setup
-  
+
     func setupSignUpWorker() {
-        sut = SignUpWorker()
+        authManagerSpy = AuthManagerSpy()
+        sut = SignUpWorker(provider: Provider(session: .initMockSession(), authManager: StubAuthManager()),
+                           authManager: authManagerSpy)
     }
 
-    // MARK: - Test doubles
+    // MARK: - Test Doubles
+
+    final class AuthManagerSpy: StubAuthManager {
+        var loginCalled = false
+        var logoutCalled = false
+
+        override init() {
+            super.init()
+            self.accessToken = nil
+            self.refreshToken = nil
+            self.loginType = nil
+            self.isLoggedIn = nil
+        }
+
+        override func login(accessToken: String?, refreshToken: String?, loginType: LoginType?) {
+            loginCalled = true
+            super.login(accessToken: accessToken, refreshToken: refreshToken, loginType: loginType)
+        }
+
+        override func logout() {
+            logoutCalled = true
+            super.logout()
+        }
+    }
 
     // MARK: - Tests
-  
-    func testSomething() {
-        // Given
 
-        // When
+    func test_카카오_회원가입을_성공적으로_했을때_true를_반환하고_로그인_처리된다() async {
+        // arrange
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "LoginData", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
 
-        // Then
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        // act
+        let isSuccess = await sut.signUp(withKakao: "MockToken", username: "안유진")
+
+        // assert
+        XCTAssertTrue(isSuccess)
+        XCTAssertTrue(authManagerSpy.loginCalled)
+        XCTAssertEqual(authManagerSpy.accessToken, "mockAccessToken")
+        XCTAssertEqual(authManagerSpy.refreshToken, "mockRefreshToken")
+        XCTAssertEqual(authManagerSpy.loginType, .kakao)
+        XCTAssertTrue(authManagerSpy.isLoggedIn == true)
+    }
+
+    func test_카카오_회원가입을_실패했을때_false를_반환하고_로그인_처리되지_않는다() async {
+        // arrange
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "LoginData", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
+
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 400,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        // act
+        let isSuccess = await sut.signUp(withKakao: "MockToken", username: "안유진")
+
+        // assert
+        XCTAssertFalse(isSuccess)
+        XCTAssertFalse(authManagerSpy.loginCalled)
+        XCTAssertNil(authManagerSpy.accessToken)
+        XCTAssertNil(authManagerSpy.refreshToken)
+        XCTAssertNil(authManagerSpy.loginType)
+        XCTAssertFalse(authManagerSpy.isLoggedIn == true)
+    }
+
+    func test_애플_회원가입을_성공적으로_했을때_true를_반환하고_로그인_처리된다() async {
+        // arrange
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "LoginData", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
+
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 200,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        // act
+        let isSuccess = await sut.signUp(withApple: "MockToken", username: "안유진")
+
+        // assert
+        XCTAssertTrue(isSuccess)
+        XCTAssertTrue(authManagerSpy.loginCalled)
+        XCTAssertEqual(authManagerSpy.accessToken, "mockAccessToken")
+        XCTAssertEqual(authManagerSpy.refreshToken, "mockRefreshToken")
+        XCTAssertEqual(authManagerSpy.loginType, .apple)
+        XCTAssertTrue(authManagerSpy.isLoggedIn == true)
+    }
+
+    func test_애플_회원가입을_실패했을때_false를_반환하고_로그인_처리되지_않는다() async {
+        // arrange
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "LoginData", withExtension: "json"),
+              let mockData = try? Data(contentsOf: mockFileLocation) else {
+            XCTFail("Mock json 파일 로드 실패.")
+            return
+        }
+
+        MockURLProtocol.requestHandler = { request in
+            let response = HTTPURLResponse(url: request.url!,
+                                           statusCode: 400,
+                                           httpVersion: nil,
+                                           headerFields: nil)
+            return (response, mockData, nil)
+        }
+
+        // act
+        let isSuccess = await sut.signUp(withApple: "MockToken", username: "안유진")
+
+        // assert
+        XCTAssertFalse(isSuccess)
+        XCTAssertFalse(authManagerSpy.loginCalled)
+        XCTAssertNil(authManagerSpy.accessToken)
+        XCTAssertNil(authManagerSpy.refreshToken)
+        XCTAssertNil(authManagerSpy.loginType)
+        XCTAssertFalse(authManagerSpy.isLoggedIn == true)
     }
 }
