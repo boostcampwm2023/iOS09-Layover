@@ -10,7 +10,7 @@ import UIKit
 
 protocol SignUpDisplayLogic: AnyObject {
     func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel)
-    func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel)
+    func displayNicknameDuplication(response: SignUpModels.CheckDuplication.ViewModel)
     func navigateToMain()
 }
 
@@ -163,7 +163,7 @@ extension SignUpViewController: SignUpDisplayLogic {
         nicknameAlertLabel.textColor = .error
     }
 
-    func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel) {
+    func displayNicknameDuplication(response: SignUpModels.CheckDuplication.ViewModel) {
         nicknameAlertLabel.isHidden = false
         nicknameAlertLabel.text = response.alertDescription
         nicknameAlertLabel.textColor = response.canSignUp ? .correct : .error
