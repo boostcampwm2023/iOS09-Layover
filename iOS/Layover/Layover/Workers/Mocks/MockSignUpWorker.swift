@@ -9,7 +9,7 @@
 import Foundation
 import OSLog
 
-final class MockSignUpWorker {
+class MockSignUpWorker: SignUpWorkerProtocol {
 
     // MARK: - Properties
 
@@ -21,11 +21,6 @@ final class MockSignUpWorker {
                                            authManager: StubAuthManager())) {
         self.provider = provider
     }
-}
-
-// MARK: - SignUpWorkerProtocol
-
-extension MockSignUpWorker: SignUpWorkerProtocol {
 
     func signUp(withKakao socialToken: String, username: String) async -> Bool {
         guard let mockFileLocation = Bundle.main.url(forResource: "LoginData", withExtension: "json"),
@@ -86,5 +81,4 @@ extension MockSignUpWorker: SignUpWorkerProtocol {
             return false
         }
     }
-
 }

@@ -113,6 +113,10 @@
 		19AE482A2B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */; };
 		19AE482C2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE482B2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift */; };
 		19AE482E2B2A24C700DD4612 /* URL+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE482D2B2A24C700DD4612 /* URL+.swift */; };
+		19B665D82B4EEDDD0083E63C /* SignUpViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D42B4EEDDD0083E63C /* SignUpViewControllerTests.swift */; };
+		19B665D92B4EEDDD0083E63C /* SignUpWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D52B4EEDDD0083E63C /* SignUpWorkerTests.swift */; };
+		19B665DA2B4EEDDD0083E63C /* SignUpInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D62B4EEDDD0083E63C /* SignUpInteractorTests.swift */; };
+		19B665DB2B4EEDDD0083E63C /* SignUpPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D72B4EEDDD0083E63C /* SignUpPresenterTests.swift */; };
 		19C7AFCE2B02410F003B35F2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFCD2B02410F003B35F2 /* AuthManager.swift */; };
 		19C7AFD62B02584D003B35F2 /* KeychainStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C7AFD52B02584D003B35F2 /* KeychainStored.swift */; };
 		19E79AC02B0A85D0009EA9ED /* LoopingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */; };
@@ -368,6 +372,10 @@
 		19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSAssetResourceLoaderDelegate.swift; sourceTree = "<group>"; };
 		19AE482B2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSSliceResourceLoader.swift; sourceTree = "<group>"; };
 		19AE482D2B2A24C700DD4612 /* URL+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+.swift"; sourceTree = "<group>"; };
+		19B665D42B4EEDDD0083E63C /* SignUpViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewControllerTests.swift; sourceTree = "<group>"; };
+		19B665D52B4EEDDD0083E63C /* SignUpWorkerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpWorkerTests.swift; sourceTree = "<group>"; };
+		19B665D62B4EEDDD0083E63C /* SignUpInteractorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpInteractorTests.swift; sourceTree = "<group>"; };
+		19B665D72B4EEDDD0083E63C /* SignUpPresenterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpPresenterTests.swift; sourceTree = "<group>"; };
 		19C7AFCD2B02410F003B35F2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		19C7AFD52B02584D003B35F2 /* KeychainStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStored.swift; sourceTree = "<group>"; };
 		19E79ABF2B0A85D0009EA9ED /* LoopingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingPlayerView.swift; sourceTree = "<group>"; };
@@ -619,6 +627,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				19B665D32B4EEDDD0083E63C /* SignUp */,
 				19AE481D2B29D02700DD4612 /* EditProfile */,
 				19AE48122B28C2A800DD4612 /* Setting */,
 				192513632B26F7BB001533FA /* TagPlayList */,
@@ -791,6 +800,17 @@
 				19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */,
 			);
 			path = HLSResourceLoader;
+			sourceTree = "<group>";
+		};
+		19B665D32B4EEDDD0083E63C /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				19B665D42B4EEDDD0083E63C /* SignUpViewControllerTests.swift */,
+				19B665D52B4EEDDD0083E63C /* SignUpWorkerTests.swift */,
+				19B665D62B4EEDDD0083E63C /* SignUpInteractorTests.swift */,
+				19B665D72B4EEDDD0083E63C /* SignUpPresenterTests.swift */,
+			);
+			path = SignUp;
 			sourceTree = "<group>";
 		};
 		19BB8A572B07BEE30070B922 /* UIComponents */ = {
@@ -1436,7 +1456,6 @@
 				FC2511AB2B04EA6B004717BC /* MapConfigurator.swift in Sources */,
 				1945523B2B05258200299768 /* HomeConfigurator.swift in Sources */,
 				FCF19BE22B2A4088003002E0 /* AVFileType+.swift in Sources */,
-				FC5BE11D2B148D160036366D /* EditProfileWorker.swift in Sources */,
 				19A1693A2B17BCC400DB34C0 /* MemberDTO.swift in Sources */,
 				194551F62B037F2D00299768 /* LoginViewController.swift in Sources */,
 				FC767FA52B125F430088CF9B /* UIViewController+.swift in Sources */,
@@ -1600,11 +1619,15 @@
 				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
 				19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */,
 				19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */,
+				19B665DA2B4EEDDD0083E63C /* SignUpInteractorTests.swift in Sources */,
+				19B665DB2B4EEDDD0083E63C /* SignUpPresenterTests.swift in Sources */,
+				19B665D82B4EEDDD0083E63C /* SignUpViewControllerTests.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
 				FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */,
+				19B665D92B4EEDDD0083E63C /* SignUpWorkerTests.swift in Sources */,
 				FC4E0C112B28595200152596 /* MockUploadPostWorker.swift in Sources */,
 				FC4E0C0D2B282AE500152596 /* UploadPostInteractorTests.swift in Sources */,
 			);
