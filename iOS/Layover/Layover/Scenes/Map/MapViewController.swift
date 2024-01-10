@@ -161,7 +161,7 @@ final class MapViewController: BaseViewController {
         let maximumZoomScale: CGFloat = 1.0
         let inset = (screenSize.width - screenSize.width * groupWidthDimension) / 2
         let section: NSCollectionLayoutSection = .makeCarouselSection(groupWidthDimension: groupWidthDimension)
-        section.orthogonalScrollingBehavior = .continuous
+        section.orthogonalScrollingBehavior = .groupPaging
         section.interGroupSpacing = 0
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: inset,
