@@ -587,7 +587,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.selectedTag, "테스트")
     }
 
-    func test_Home_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다() async {
+    func test_Home_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다() async throws {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .home
@@ -596,6 +596,8 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // act
         await sut.fetchPosts()
+
+        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
