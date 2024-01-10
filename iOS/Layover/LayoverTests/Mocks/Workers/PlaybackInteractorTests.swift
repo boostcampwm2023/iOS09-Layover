@@ -400,7 +400,7 @@ final class PlaybackInteractorTests: XCTestCase {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost]
-        sut.isTeleport = true
+        sut.isDelete = true
         sut.previousCell = Seeds.PlaybackVideo.previousCell
         let request: Models.DisplayPlaybackVideo.Request = Models.DisplayPlaybackVideo.Request(indexPathRow: 1, currentCell: Seeds.PlaybackVideo.currentCell)
         sut.presenter = spy
@@ -412,7 +412,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
         XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
         XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.currentCell)
-        XCTAssertFalse(((sut.isDelete) != nil))
+        XCTAssertFalse(sut.isDelete!)
     }
 
     func test_resumePlaybackView를_호출할때_previousCell이_존재하면_presentPlayInitialPlaybackCell을_호출한다() {
@@ -625,7 +625,6 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // act
         await sut.fetchPosts()
-//        try await Task.sleep(nanoseconds: 3_000_000_000)
 
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
