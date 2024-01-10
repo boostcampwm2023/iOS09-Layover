@@ -409,7 +409,7 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentMoveCellNextDidCalled, "playTeleportvideo는 presentMoveCellNext를 호출하지 않았습니다")
-        XCTAssertEqual(spy.presentMoveCellNextResponse.previousCell, Seeds.PlaybackVideo.previousCell)
+        XCTAssertNil(spy.presentMoveCellNextResponse.previousCell)
         XCTAssertEqual(spy.presentMoveCellNextResponse.currentCell, Seeds.PlaybackVideo.currentCell)
         XCTAssertEqual(sut.previousCell, Seeds.PlaybackVideo.currentCell)
         XCTAssertFalse(sut.isDelete!)
