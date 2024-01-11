@@ -66,23 +66,25 @@ final class ProfileInteractorTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_fetchProfile을_호출하면_presenter의_presentProfile을_호출하여_presentProfileResponse를_전달한다() async {
+    func test_fetchProfile을_호출하면_presenter의_presentProfile을_호출하여_presentProfileResponse를_전달한다() {
         // arrange
         let presentationLogicSpy = ProfilePresentationLogicSpy()
         sut.presenter = presentationLogicSpy
 
-        // act
-        await sut.fetchProfile(with: Models.FetchProfile.Request())
-
-        // assert
-        XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출하지 못했다")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts.count, 1, "presentProfileResponse에는 fetchProfile의 결과 갯수가 올바르게 담기지 못했다.")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].id, Seeds.Posts.post1.board.identifier, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].status, Seeds.Posts.post1.board.status, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, Seeds.Members.getMember1.username, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, Seeds.Members.getMember1.introduce, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
-        XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+        Task {
+            // act
+            await sut.fetchProfile(with: Models.FetchProfile.Request())
+            
+            // assert
+            XCTAssertTrue(presentationLogicSpy.presentProfileCalled, "fetchProfile을 호출해서 presentProfile을 호출하지 못했다")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts.count, 1, "presentProfileResponse에는 fetchProfile의 결과 갯수가 올바르게 담기지 못했다.")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].id, Seeds.Posts.post1.board.identifier, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.displayedPosts[0].status, Seeds.Posts.post1.board.status, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.username, Seeds.Members.getMember1.username, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.introduce, Seeds.Members.getMember1.introduce, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+            XCTAssertEqual(presentationLogicSpy.presentProfileResponse.userProfile.profileImageData, Seeds.sampleImageData, "presentProfileResponse에는 fetchProfile의 결과가 올바르게 담기지 못했다.")
+        }
     }
 
     func test_fetchMorePosts을_호출하면_presenter의_presentMorePosts을_호출하고_presentMorePostsResponse를_전달한다() async {

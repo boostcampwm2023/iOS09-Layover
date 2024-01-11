@@ -180,28 +180,27 @@ final class PlaybackInteractorTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_parentView가_map일_때_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다() async throws {
+    func test_parentView가_map일_때_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다() {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.presenter = spy
         sut.parentView = .map
         sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.videoURLNilPost]
+        
+        Task {
+            // Act
+            await sut.displayVideoList()
 
-        // Act
-        await sut.displayVideoList()
-
-        try await Task.sleep(nanoseconds: 3_000_000_000)
-
-        // Assert
-        XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
-        // map이므로 2 + 더미셀 2 = 4
-        // videoURL이 nil이면 거름
-        print(spy.presentVideoListResponse.videos)
-        XCTAssertEqual(spy.presentVideoListResponse.videos.count, 4)
-        XCTAssertEqual(spy.presentVideoListResponse.videos[0].displayedPost, spy.presentVideoListResponse.videos[2].displayedPost)
-        XCTAssertEqual(spy.presentVideoListResponse.videos[1].displayedPost, spy.presentVideoListResponse.videos[1].displayedPost)
-        XCTAssertEqual(spy.presentVideoListResponse.videos.first!.displayedPost, Seeds.PlaybackVideos.videos.last!.displayedPost)
-        XCTAssertEqual(spy.presentVideoListResponse.videos.last!.displayedPost, Seeds.PlaybackVideos.videos.first!.displayedPost)
+            // Assert
+            XCTAssertTrue(spy.presentVideoListDidCalled, "displayVideoList는 presentVideoList를 호출하지 않았습니다")
+            // map이므로 2 + 더미셀 2 = 4
+            // videoURL이 nil이면 거름
+            XCTAssertEqual(spy.presentVideoListResponse.videos.count, 4)
+            XCTAssertEqual(spy.presentVideoListResponse.videos[0].displayedPost, spy.presentVideoListResponse.videos[2].displayedPost)
+            XCTAssertEqual(spy.presentVideoListResponse.videos[1].displayedPost, spy.presentVideoListResponse.videos[1].displayedPost)
+            XCTAssertEqual(spy.presentVideoListResponse.videos.first!.displayedPost, Seeds.PlaybackVideos.videos.last!.displayedPost)
+            XCTAssertEqual(spy.presentVideoListResponse.videos.last!.displayedPost, Seeds.PlaybackVideos.videos.first!.displayedPost)
+        }
     }
 
     func test_displayVideoList를_호출하면_presentVideoList를_호출하고_올바른_데이터를_전달한다_parentView가_map이_아닐때() async throws {

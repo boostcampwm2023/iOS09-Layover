@@ -128,7 +128,7 @@ final class PlaybackWorkerTests: XCTestCase {
         Task {
             // act
             let result = await sut.fetchProfilePosts(profileID: 2, page: 1)
-            
+
             // assert
             XCTAssertNotNil(result)
         }
