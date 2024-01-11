@@ -17,7 +17,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     typealias Models = PlaybackModels
 
     private let provider: ProviderType = Provider(session: .initMockSession(), authManager: StubAuthManager())
-//    private let authManager: AuthManagerProtocol = StubAuthManager()
+    private let authManager: AuthManagerProtocol = StubAuthManager()
 
     // MARK: - Methods
 
