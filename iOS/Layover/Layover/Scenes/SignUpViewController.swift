@@ -10,7 +10,7 @@ import UIKit
 
 protocol SignUpDisplayLogic: AnyObject {
     func displayNicknameValidation(response: SignUpModels.ValidateNickname.ViewModel)
-    func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel)
+    func displayNicknameDuplication(response: SignUpModels.CheckDuplication.ViewModel)
     func navigateToMain()
 }
 
@@ -137,7 +137,9 @@ final class SignUpViewController: BaseViewController {
     @objc private func checkDuplicateNicknameButtonDidTap(_ sender: UIButton) {
         guard let nickname = nicknameTextfield.text else { return }
         checkDuplicateNicknameButton.isEnabled = false
-        interactor?.checkDuplication(with: SignUpModels.CheckDuplication.Request(nickname: nickname))
+        Task {
+            await interactor?.checkDuplication(with: SignUpModels.CheckDuplication.Request(nickname: nickname))
+        }
     }
 
     @objc private func popViewController() {
@@ -146,7 +148,9 @@ final class SignUpViewController: BaseViewController {
 
     @objc private func signUpButtonDidTap(_ sender: UIButton) {
         guard let nickname = nicknameTextfield.text else { return }
-        interactor?.signUp(with: SignUpModels.SignUp.Request(nickname: nickname))
+        Task {
+            await interactor?.signUp(with: SignUpModels.SignUp.Request(nickname: nickname))
+        }
     }
 }
 
@@ -159,7 +163,7 @@ extension SignUpViewController: SignUpDisplayLogic {
         nicknameAlertLabel.textColor = .error
     }
 
-    func displayNickanmeDuplication(response: SignUpModels.CheckDuplication.ViewModel) {
+    func displayNicknameDuplication(response: SignUpModels.CheckDuplication.ViewModel) {
         nicknameAlertLabel.isHidden = false
         nicknameAlertLabel.text = response.alertDescription
         nicknameAlertLabel.textColor = response.canSignUp ? .correct : .error

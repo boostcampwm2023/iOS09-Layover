@@ -8,13 +8,30 @@
 @testable import Layover
 import Foundation
 
-final class StubAuthManager: AuthManagerProtocol {
+class StubAuthManager: AuthManagerProtocol {
 
-    // MARK: Properties
+    // MARK: - Properties
 
     var accessToken: String? = "Fake Access Token"
     var refreshToken: String? = "Fake Refresh Token"
     var isLoggedIn: Bool? = true
     var loginType: LoginType? = .kakao
     var memberID: Int? = -1
+
+    // MARK: - Methods
+
+    func login(accessToken: String?, refreshToken: String?, loginType: LoginType?) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+        self.loginType = loginType
+        isLoggedIn = true
+    }
+
+    func logout() {
+        accessToken = nil
+        refreshToken = nil
+        memberID = nil
+        loginType = nil
+        isLoggedIn = false
+    }
 }
