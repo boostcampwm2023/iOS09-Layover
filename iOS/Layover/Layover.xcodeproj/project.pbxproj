@@ -148,6 +148,7 @@
 		8363A32D2B4C1CBB00772DDF /* PlaybackPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */; };
 		8363A32F2B4C329100772DDF /* PlaybackInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */; };
 		8363A3332B4D6E9B00772DDF /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */; };
+		8363A3352B4FE14C00772DDF /* PlaybackWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A3342B4FE14C00772DDF /* PlaybackWorkerTests.swift */; };
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
@@ -408,6 +409,7 @@
 		8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackPresenterTests.swift; path = LayoverTests/Mocks/Workers/PlaybackPresenterTests.swift; sourceTree = SOURCE_ROOT; };
 		8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackInteractorTests.swift; path = LayoverTests/Mocks/Workers/PlaybackInteractorTests.swift; sourceTree = SOURCE_ROOT; };
 		8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
+		8363A3342B4FE14C00772DDF /* PlaybackWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackWorkerTests.swift; path = LayoverTests/Mocks/Workers/PlaybackWorkerTests.swift; sourceTree = SOURCE_ROOT; };
 		836C33862B15A29600ECAFB0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
@@ -882,6 +884,7 @@
 			children = (
 				8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */,
 				8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */,
+				8363A3342B4FE14C00772DDF /* PlaybackWorkerTests.swift */,
 			);
 			path = Playback;
 			sourceTree = "<group>";
@@ -1603,6 +1606,7 @@
 				FC4E0C0C2B282AE500152596 /* UploadPostViewControllerTests.swift in Sources */,
 				1925136B2B26F7CE001533FA /* TagPlayListPresenterTests.swift in Sources */,
 				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
+				8363A3352B4FE14C00772DDF /* PlaybackWorkerTests.swift in Sources */,
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
 				19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */,
 				8363A3332B4D6E9B00772DDF /* MockPlaybackWorker.swift in Sources */,
