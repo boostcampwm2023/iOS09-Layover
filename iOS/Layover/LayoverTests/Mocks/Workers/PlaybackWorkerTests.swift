@@ -46,7 +46,7 @@ final class PlaybackWorkerTests: XCTestCase {
         XCTAssertEqual(result[3].board.identifier, Seeds.Posts.post1.board.identifier)
     }
 
-    func test_deletePlaybackVideo는_올바른_동작을_반환한다() async {
+    func test_deletePlaybackVideo는_올바른_동작을_반환한다() {
         // Arrange
         guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "DeleteVideo", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation) else {
@@ -62,12 +62,14 @@ final class PlaybackWorkerTests: XCTestCase {
             return (response, mockData, nil)
         }
 
-        let response = await sut.deletePlaybackVideo(boardID: 1)
+        Task {
+            let response = await sut.deletePlaybackVideo(boardID: 1)
 
-        XCTAssertNotNil(response, "deleteVideo가 response를 정상적으로 반환하지 못함")
+            XCTAssertNotNil(response, "deleteVideo가 response를 정상적으로 반환하지 못함")
+        }
     }
 
-    func test_fetchHomePosts는_올바른_목록을_반환한다() async {
+    func test_fetchHomePosts는_올바른_목록을_반환한다() {
         // Arrange
         guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "PostList", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation) else {
@@ -83,25 +85,27 @@ final class PlaybackWorkerTests: XCTestCase {
             return (response, mockData, nil)
         }
 
-        // act
-        let result = await sut.fetchHomePosts()
+        Task {
+            // act
+            let result = await sut.fetchHomePosts()
 
-        // assert
-        XCTAssertNotNil(result)
-        XCTAssertEqual(result?.count, 1, "fetchPost가 성공적으로 데이터를 받아와서 올바른 데이터 갯수를 리턴하지 못했다.")
-        XCTAssertEqual(result![0].tag, Seeds.Posts.post1.tag, "fetchPost가 성공적으로 데이터를 받아와서 올바른 tag를 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.identifier, Seeds.Posts.post1.board.identifier, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.title, Seeds.Posts.post1.board.title, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.description, Seeds.Posts.post1.board.description, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].board.status, Seeds.Posts.post1.board.status, "fetchPost가 성공적으로 데이터를 받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].member.username, Seeds.Posts.post1.member.username, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
-        XCTAssertEqual(result![0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            // assert
+            XCTAssertNotNil(result)
+            XCTAssertEqual(result?.count, 1, "fetchPost가 성공적으로 데이터를 받아와서 올바른 데이터 갯수를 리턴하지 못했다.")
+            XCTAssertEqual(result![0].tag, Seeds.Posts.post1.tag, "fetchPost가 성공적으로 데이터를 받아와서 올바른 tag를 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.identifier, Seeds.Posts.post1.board.identifier, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.title, Seeds.Posts.post1.board.title, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.description, Seeds.Posts.post1.board.description, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].board.status, Seeds.Posts.post1.board.status, "fetchPost가 성공적으로 데이터를 받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].member.username, Seeds.Posts.post1.member.username, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+            XCTAssertEqual(result![0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost가 성공적으로 데이터를_받아와서 Post배열을 리턴하지 못했다.")
+        }
     }
 
     func test_fetchProfilePosts_는_올바른_결과를_반환한다() async {
@@ -121,10 +125,12 @@ final class PlaybackWorkerTests: XCTestCase {
             return (response, mockData, nil)
         }
 
-        // act
-        let result = await sut.fetchProfilePosts(profileID: 2, page: 1)
-
-        // assert
-        XCTAssertNotNil(result)
+        Task {
+            // act
+            let result = await sut.fetchProfilePosts(profileID: 2, page: 1)
+            
+            // assert
+            XCTAssertNotNil(result)
+        }
     }
 }
