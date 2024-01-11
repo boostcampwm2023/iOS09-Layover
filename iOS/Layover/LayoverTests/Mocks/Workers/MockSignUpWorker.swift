@@ -1,11 +1,12 @@
 //
 //  MockSignUpWorker.swift
-//  Layover
+//  LayoverTests
 //
-//  Created by 황지웅 on 11/28/23.
-//  Copyright © 2023 CodeBomber. All rights reserved.
+//  Created by 김인환 on 1/11/24.
+//  Copyright © 2024 CodeBomber. All rights reserved.
 //
 
+@testable import Layover
 import Foundation
 import OSLog
 
@@ -17,13 +18,13 @@ class MockSignUpWorker: SignUpWorkerProtocol {
 
     // MARK: - Initializer
 
-    init(provider: ProviderType = Provider(session: .initMockSession(), 
+    init(provider: ProviderType = Provider(session: .initMockSession(),
                                            authManager: StubAuthManager())) {
         self.provider = provider
     }
 
     func signUp(withKakao socialToken: String, username: String) async -> Bool {
-        guard let mockFileLocation = Bundle.main.url(forResource: "LoginData", withExtension: "json"),
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "LoginData", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation) else {
             return false
         }
@@ -53,7 +54,7 @@ class MockSignUpWorker: SignUpWorkerProtocol {
     }
 
     func signUp(withApple identityToken: String, username: String) async -> Bool {
-        guard let fileLocation: URL = Bundle.main.url(forResource: "LoginData", withExtension: "json") else {
+        guard let fileLocation: URL = Bundle(for: type(of: self)).url(forResource: "LoginData", withExtension: "json") else {
             return false
         }
         guard let mockData: Data = try? Data(contentsOf: fileLocation) else {

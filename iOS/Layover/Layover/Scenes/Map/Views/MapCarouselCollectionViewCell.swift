@@ -48,7 +48,9 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         spinner.stopAnimating()
         loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: url,
-                                       timeRange: CMTimeRange(start: .zero, duration: CMTime(value: 1800, timescale: 600)))
+                                       assetResourceLoaderDelegate: HLSAssetResourceLoaderDelegate(resourceLoader: HLSSliceResourceLoader()),
+                                       loopStart: .zero,
+                                       duration: 3.0)
         loopingPlayerView.player?.isMuted = true
     }
 
