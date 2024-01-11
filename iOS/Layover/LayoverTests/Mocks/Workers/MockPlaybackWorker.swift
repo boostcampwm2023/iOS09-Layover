@@ -6,8 +6,8 @@
 //  Copyright © 2023 CodeBomber. All rights reserved.
 //
 
+@testable import Layover
 import Foundation
-import CoreLocation
 import OSLog
 
 final class MockPlaybackWorker: PlaybackWorkerProtocol {
@@ -16,33 +16,29 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     typealias Models = PlaybackModels
 
-    private let provider: ProviderType
-    private let authManager: AuthManagerProtocol
+    private let provider: ProviderType = Provider(session: .initMockSession(), authManager: StubAuthManager())
+    private let authManager: AuthManagerProtocol = StubAuthManager()
 
     // MARK: - Methods
-    
-    init(provider: ProviderType = Provider(session: .initMockSession()), authManager: AuthManagerProtocol = StubAuthManager()) {
-        self.provider = provider
-        self.authManager = authManager
-    }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
         var tempVideos: [Post] = []
         for post in posts {
-            if post.board.videoURL != nil, post.board.status == .complete {
-                tempVideos.append(post)
+            if post.board.videoURL == nil {
+                continue
             }
+            tempVideos.append(post)
         }
         guard let tempLastVideo: Post = tempVideos.last,
               let tempFirstVideo: Post = tempVideos.first
-        else { return tempVideos }
+        else { return posts }
         tempVideos.insert(tempLastVideo, at: 0)
         tempVideos.append(tempFirstVideo)
         return tempVideos
     }
 
     func deletePlaybackVideo(boardID: Int) async -> Bool {
-        guard let mockFileLocation = Bundle.main.url(forResource: "DeleteVideo", withExtension: "json"),
+        guard let mockFileLocation = Bundle(for: type(of: self)).url(forResource: "DeleteVideo", withExtension: "json"),
               let mockData = try? Data(contentsOf: mockFileLocation)
         else {
             os_log(.error, log: .data, "Failed to generate mock with error: %@", "Generate File Error")
@@ -72,23 +68,13 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func transLocation(latitude: Double, longitude: Double) async -> String? {
-        let findLocation: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
-        let geoCoder: CLGeocoder = CLGeocoder()
-        let local: Locale = Locale(identifier: "Ko-kr")
-
-        do {
-            let place = try await geoCoder.reverseGeocodeLocation(findLocation, preferredLocale: local)
-            return place.last?.administrativeArea
-        } catch {
-            os_log(.error, "convert location error: %@", error.localizedDescription)
-            return nil
-        }
+        "서울특별시"
     }
 
     func fetchImageData(with url: URL?) async -> Data? {
         guard let url else { return nil }
         do {
-            guard let imageURL = Bundle.main.url(forResource: "sample", withExtension: "jpeg") else {
+            guard let imageURL = Bundle(for: type(of: self)).url(forResource: "sample", withExtension: "jpeg") else {
                 return nil
             }
             let mockData = try? Data(contentsOf: imageURL)
@@ -109,9 +95,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func fetchHomePosts() async -> [Post]? {
-        guard let fileLocation = Bundle.main.url(forResource: "PostList",
-                                                 withExtension: "json") else { return nil }
-
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList", withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in
@@ -134,7 +118,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]? {
         let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
-        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else { return nil }
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: resourceFileName, withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in
@@ -157,9 +141,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]? {
         let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
-        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else {
-            return nil
-        }
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: resourceFileName, withExtension: "json") else { return nil }
 
         do {
             let mockData = try? Data(contentsOf: fileLocation)

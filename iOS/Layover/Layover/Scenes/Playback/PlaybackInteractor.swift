@@ -9,8 +9,7 @@
 import UIKit
 
 protocol PlaybackBusinessLogic {
-    @discardableResult
-    func displayVideoList() -> Task<Bool, Never>
+    func displayVideoList() async
     func moveInitialPlaybackCell()
     func setInitialPlaybackCell()
     func leavePlaybackView()
@@ -31,10 +30,8 @@ protocol PlaybackBusinessLogic {
     func resumeVideo()
     func moveToProfile(with request: PlaybackModels.MoveToRelativeView.Request)
     func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
-    @discardableResult
-    func fetchPosts() -> Task<Bool, Never>
-    @discardableResult
-    func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) -> Task<Bool, Never>
+    func fetchPosts() async
+    func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) async
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -80,26 +77,23 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     private var currentPage: Int = 1
 
-    private var playbackVideoInfos: [Models.PlaybackInfo] = []
+    var playbackVideoInfos: [Models.PlaybackInfo] = []
 
     // MARK: - UseCase Load Video List
 
-    func displayVideoList() -> Task<Bool, Never> {
-        Task {
-            guard let parentView: Models.ParentView,
-                  var posts: [Post],
-                  let worker: PlaybackWorkerProtocol else { return false }
-            if parentView == .map {
-                posts = worker.makeInfiniteScroll(posts: posts)
-                self.posts = posts
-            }
-            let videos: [Models.PlaybackVideo]
-            (videos, playbackVideoInfos) = transPostToVideo(posts)
-            let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
-            await MainActor.run {
-                presenter?.presentVideoList(with: response)
-            }
-            return true
+    func displayVideoList() async {
+        guard let parentView: Models.ParentView,
+              var posts: [Post],
+              let worker: PlaybackWorkerProtocol else { return }
+        if parentView == .map {
+            posts = worker.makeInfiniteScroll(posts: posts)
+            self.posts = posts
+        }
+        let videos: [Models.PlaybackVideo]
+        (videos, playbackVideoInfos) = transPostToVideo(posts)
+        let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+        await MainActor.run {
+            presenter?.presentVideoList(with: response)
         }
     }
 
@@ -284,7 +278,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
                     isNeedReplace: true)
                 playbackVideoInfos.append(playbackVideoInfos[request.indexPathRow - 1])
                 if let posts {
-                    self.posts?.append((posts[2]))
+                    self.posts?.append(posts[request.indexPathRow - 1])
                 }
             } else {
                 response = Models.DeletePlaybackVideo.Response(
@@ -359,59 +353,51 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
         presenter?.presentTagPlay()
     }
 
-    func fetchPosts() -> Task<Bool, Never> {
-        Task {
-            if !isFetchReqeust {
-                isFetchReqeust = true
-                var page: Int = 0
-                if parentView != .home {
-                    page = playbackVideoInfos.count / Models.fetchPostCount + 1
-                    if page == currentPage {
-                        return false
-                    }
+    func fetchPosts() async {
+        if !isFetchReqeust {
+            isFetchReqeust = true
+            var page: Int = 0
+            if parentView != .home {
+                page = playbackVideoInfos.count / Models.fetchPostCount + 1
+                if page == currentPage {
+                    return
                 }
-                currentPage = page
-                var newPosts: [Post]?
-                switch parentView {
-                case .home:
-                    newPosts = await worker?.fetchHomePosts()
-                case .map:
-                    return false
-                case .myProfile, .otherProfile:
-                    newPosts = await worker?.fetchProfilePosts(profileID: memberID, page: page)
-                case .tag:
-                    guard let selectedTag else { return false }
-                    newPosts = await worker?.fetchTagPosts(selectedTag: selectedTag, page: page)
-                default:
-                    return false
-                }
-                guard let newPosts else { return false }
-                posts?.append(contentsOf: newPosts)
-                let videos: [Models.PlaybackVideo]
-                let newInfos: [Models.PlaybackInfo]
-                (videos, newInfos) = transPostToVideo(newPosts)
-                self.playbackVideoInfos.append(contentsOf: newInfos)
-                let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
-                await MainActor.run {
-                    presenter?.presentLoadFetchVideos(with: response)
-                    isFetchReqeust = false
-                }
-                return true
             }
-            return false
+            currentPage = page
+            var newPosts: [Post]?
+            switch parentView {
+            case .home:
+                newPosts = await worker?.fetchHomePosts()
+            case .map:
+                return
+            case .myProfile, .otherProfile:
+                newPosts = await worker?.fetchProfilePosts(profileID: memberID, page: page)
+            case .tag:
+                guard let selectedTag else { return }
+                newPosts = await worker?.fetchTagPosts(selectedTag: selectedTag, page: page)
+            default:
+                return
+            }
+            guard let newPosts else { return  }
+            posts?.append(contentsOf: newPosts)
+            let videos: [Models.PlaybackVideo]
+            let newInfos: [Models.PlaybackInfo]
+            (videos, newInfos) = transPostToVideo(newPosts)
+            self.playbackVideoInfos.append(contentsOf: newInfos)
+            let response: Models.LoadPlaybackVideoList.Response = Models.LoadPlaybackVideoList.Response(videos: videos)
+            await MainActor.run {
+                presenter?.presentLoadFetchVideos(with: response)
+                isFetchReqeust = false
+            }
         }
     }
 
-    func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) -> Task<Bool, Never> {
-        Task {
-            async let profileImageData = self.worker?.fetchImageData(with: request.profileImageURL)
-            async let location: String? = self.worker?.transLocation(latitude: request.latitude, longitude: request.longitude)
-            let response: Models.LoadProfileImageAndLocation.Response = Models.LoadProfileImageAndLocation.Response(curCell: request.curCell, profileImageData: await profileImageData, location: await location)
-            await MainActor.run {
-                presenter?.presentLoadProfileImageAndLocation(with: response)
-                return true
-            }
-            return false
+    func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) async {
+        async let profileImageData = self.worker?.fetchImageData(with: request.profileImageURL)
+        async let location: String? = self.worker?.transLocation(latitude: request.latitude, longitude: request.longitude)
+        let response: Models.LoadProfileImageAndLocation.Response = Models.LoadProfileImageAndLocation.Response(curCell: request.curCell, profileImageData: await profileImageData, location: await location)
+        await MainActor.run {
+            presenter?.presentLoadProfileImageAndLocation(with: response)
         }
     }
 }

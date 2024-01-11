@@ -149,6 +149,9 @@
 		835A61A22B068115002F22A5 /* PlaybackInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A619C2B068115002F22A5 /* PlaybackInteractor.swift */; };
 		835A61A62B0B4DDD002F22A5 /* Dashboard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */; };
 		835A61A92B0B5A31002F22A5 /* LoginConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */; };
+		8363A32D2B4C1CBB00772DDF /* PlaybackPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */; };
+		8363A32F2B4C329100772DDF /* PlaybackInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */; };
+		8363A3332B4D6E9B00772DDF /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */; };
 		836C33872B15A29600ECAFB0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33862B15A29600ECAFB0 /* Toast.swift */; };
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
@@ -410,6 +413,9 @@
 		835A61A52B0B4DDD002F22A5 /* Dashboard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Dashboard-Regular.ttf"; sourceTree = "<group>"; };
 		835A61A82B0B5A31002F22A5 /* LoginConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginConfigurator.swift; sourceTree = "<group>"; };
 		835A61AA2B0B85FD002F22A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackPresenterTests.swift; path = LayoverTests/Mocks/Workers/PlaybackPresenterTests.swift; sourceTree = SOURCE_ROOT; };
+		8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackInteractorTests.swift; path = LayoverTests/Mocks/Workers/PlaybackInteractorTests.swift; sourceTree = SOURCE_ROOT; };
+		8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
 		836C33862B15A29600ECAFB0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
@@ -627,6 +633,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				8363A32B2B4C1C6900772DDF /* Playback */,
 				19B665D32B4EEDDD0083E63C /* SignUp */,
 				19AE481D2B29D02700DD4612 /* EditProfile */,
 				19AE48122B28C2A800DD4612 /* Setting */,
@@ -656,6 +663,7 @@
 				1925136C2B26F84E001533FA /* MockTagPlayListWorker.swift */,
 				192513842B27852C001533FA /* MockUserWorker.swift */,
 				19AE481B2B28C53800DD4612 /* MockSettingWorker.swift */,
+				8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */,
 				19B665DC2B4F0A7B0083E63C /* MockSignUpWorker.swift */,
 			);
 			path = Workers;
@@ -885,6 +893,15 @@
 				835A619B2B068115002F22A5 /* PlaybackViewController.swift */,
 				83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */,
 				836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */,
+			);
+			path = Playback;
+			sourceTree = "<group>";
+		};
+		8363A32B2B4C1C6900772DDF /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				8363A32C2B4C1CBA00772DDF /* PlaybackPresenterTests.swift */,
+				8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */,
 			);
 			path = Playback;
 			sourceTree = "<group>";
@@ -1609,6 +1626,7 @@
 				192513682B26F7CE001533FA /* TagPlayListViewControllerTests.swift in Sources */,
 				1925136A2B26F7CE001533FA /* TagPlayListWorkerTests.swift in Sources */,
 				19AE48182B28C2B700DD4612 /* SettingInteractorTests.swift in Sources */,
+				8363A3332B4D6E9B00772DDF /* MockPlaybackWorker.swift in Sources */,
 				192513A72B278BB3001533FA /* Seeds.swift in Sources */,
 				194C21C52B1DEE6B00C62645 /* HomeWorkerTests.swift in Sources */,
 				19AE481C2B28C53800DD4612 /* MockSettingWorker.swift in Sources */,
@@ -1616,6 +1634,7 @@
 				192513802B277CD7001533FA /* ProfileViewControllerTests.swift in Sources */,
 				194C21C62B1DEE6B00C62645 /* HomePresenterTests.swift in Sources */,
 				FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */,
+				8363A32D2B4C1CBB00772DDF /* PlaybackPresenterTests.swift in Sources */,
 				1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */,
 				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
 				19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */,
@@ -1623,6 +1642,7 @@
 				19B665DA2B4EEDDD0083E63C /* SignUpInteractorTests.swift in Sources */,
 				19B665DB2B4EEDDD0083E63C /* SignUpPresenterTests.swift in Sources */,
 				194C21C32B1DEE6B00C62645 /* HomeViewControllerTests.swift in Sources */,
+				8363A32F2B4C329100772DDF /* PlaybackInteractorTests.swift in Sources */,
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
