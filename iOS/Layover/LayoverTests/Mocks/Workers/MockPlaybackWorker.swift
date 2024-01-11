@@ -21,11 +21,6 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
 
     // MARK: - Methods
 
-//    init(provider: ProviderType = Provider(session: .initMockSession()), authManager: AuthManagerProtocol = StubAuthManager()) {
-//        self.provider = provider
-//        self.authManager = authManager
-//    }
-
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
         var tempVideos: [Post] = []
         for post in posts {
@@ -171,7 +166,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     }
 
     func isMyVideo(currentCellMemberID: Int) -> Bool {
-        return true
+        return currentCellMemberID == authManager.memberID
     }
 
 }
