@@ -601,8 +601,6 @@ final class PlaybackInteractorTests: XCTestCase {
         // act
         await sut.fetchPosts()
 
-        try await Task.sleep(nanoseconds: 3_000_000_000)
-
         // Assert
         XCTAssertTrue(spy.presentLoadFetchVideosDidCalled, "fetchPosts가 presentLoadFetchVideos를 호출하지 않았습니다")
         XCTAssertEqual(spy.presentLoadFetchVideosResponse.videos.count, 1)

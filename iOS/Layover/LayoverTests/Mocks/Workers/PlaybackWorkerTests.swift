@@ -83,10 +83,8 @@ final class PlaybackWorkerTests: XCTestCase {
             return (response, mockData, nil)
         }
 
-        var result: [Post]?
-
         // act
-        result = await sut.fetchHomePosts()
+        let result = await sut.fetchHomePosts()
 
         // assert
         XCTAssertNotNil(result)

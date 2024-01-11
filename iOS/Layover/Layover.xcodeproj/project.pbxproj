@@ -410,6 +410,7 @@
 		8363A32E2B4C329100772DDF /* PlaybackInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackInteractorTests.swift; path = LayoverTests/Mocks/Workers/PlaybackInteractorTests.swift; sourceTree = SOURCE_ROOT; };
 		8363A3322B4D6E9B00772DDF /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
 		8363A3342B4FE14C00772DDF /* PlaybackWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaybackWorkerTests.swift; path = LayoverTests/Mocks/Workers/PlaybackWorkerTests.swift; sourceTree = SOURCE_ROOT; };
+		8363A3362B4FFBF200772DDF /* Layover.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Layover.xctestplan; sourceTree = "<group>"; };
 		836C33862B15A29600ECAFB0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackConfigurator.swift; sourceTree = "<group>"; };
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
@@ -1064,6 +1065,7 @@
 		FC7E452D2AFEB623004F155A = {
 			isa = PBXGroup;
 			children = (
+				8363A3362B4FFBF200772DDF /* Layover.xctestplan */,
 				19AACFC52B0F71DF0088143E /* Secrets.xcconfig */,
 				FC7E45692AFEC06E004F155A /* .swiftlint.yml */,
 				FC7E45382AFEB623004F155A /* Layover */,
