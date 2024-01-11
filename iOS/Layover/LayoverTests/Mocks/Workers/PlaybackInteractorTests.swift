@@ -590,7 +590,7 @@ final class PlaybackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.selectedTag, "테스트")
     }
 
-    func test_Home_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다() {
+    func test_Home_fetchPosts를_호출하면_presentLoadFetchVideosResponse를_호출한다() async {
         // Arrange
         let spy = PlaybackPresentationLogicSpy()
         sut.parentView = .home
