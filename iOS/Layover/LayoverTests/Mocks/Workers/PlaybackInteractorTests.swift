@@ -694,7 +694,7 @@ final class PlaybackInteractorTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(spy.presentDeleteVideoDidCalled, "deleteVideo가 presentDeleteVideo를 호출하지 않았습니다")
-        XCTAssertTrue(spy.presentDeleteVideoResponse.result)
+        XCTAssertTrue(spy.presentDeleteVideoResponse.result, "result 결과가 옳지 않습니다.")
         XCTAssertEqual(spy.presentDeleteVideoResponse.playbackVideo, playbackVideo)
         XCTAssertEqual(sut.posts!.count, 1)
         XCTAssertEqual(sut.playbackVideoInfos.count, 1)
