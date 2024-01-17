@@ -137,6 +137,7 @@ final class SignUpInteractorTests: XCTestCase {
         await sut.signUp(with: Models.SignUp.Request(nickname: "안유진"))
 
         // assert
+        XCTAssertTrue(signUpWorkerSpy.signUpWithKakaoCalled)
         XCTAssertTrue(presenterSpy.presentSignUpSuccessDidCalled)
     }
 
@@ -154,6 +155,7 @@ final class SignUpInteractorTests: XCTestCase {
         await sut.signUp(with: Models.SignUp.Request(nickname: "안유진"))
 
         // assert
+        XCTAssertTrue(signUpWorkerSpy.signUpWithAppleCalled)
         XCTAssertTrue(presenterSpy.presentSignUpSuccessDidCalled)
     }
 }
