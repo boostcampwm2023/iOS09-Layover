@@ -135,6 +135,7 @@
 		8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FE2B1E428C000A12AF /* ReportDTO.swift */; };
 		8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */; };
 		8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */; };
+		833CC1242B5950920027D96F /* Prefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CC1232B5950920027D96F /* Prefetcher.swift */; };
 		834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */; };
 		835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835783C22B14A41600E7D304 /* MockLoginWorker.swift */; };
 		835783C62B14A5C800E7D304 /* LoginData.json in Resources */ = {isa = PBXBuildFile; fileRef = 835783C52B14A5C800E7D304 /* LoginData.json */; };
@@ -397,6 +398,7 @@
 		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
 		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
 		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
+		833CC1232B5950920027D96F /* Prefetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefetcher.swift; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
 		835783C52B14A5C800E7D304 /* LoginData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LoginData.json; sourceTree = "<group>"; };
@@ -881,6 +883,14 @@
 			path = Report;
 			sourceTree = "<group>";
 		};
+		833CC1222B59507E0027D96F /* Prefetcher */ = {
+			isa = PBXGroup;
+			children = (
+				833CC1232B5950920027D96F /* Prefetcher.swift */,
+			);
+			path = Prefetcher;
+			sourceTree = "<group>";
+		};
 		835A61962B0680FC002F22A5 /* Playback */ = {
 			isa = PBXGroup;
 			children = (
@@ -1039,6 +1049,7 @@
 		FC68E2992B02320F001AABFF /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				833CC1222B59507E0027D96F /* Prefetcher */,
 				FCE52FF62B0FCADB002CDB75 /* Mock */,
 				19AACFC82B0F7C200088143E /* DTOs */,
 				19C7AFCF2B02441C003B35F2 /* Common */,
@@ -1498,6 +1509,7 @@
 				FC0E80272B1A0BBB00EF56D6 /* UploadPostModels.swift in Sources */,
 				194552312B04DA1A00299768 /* LOCircleButton.swift in Sources */,
 				194552262B0478B400299768 /* HomeInteractor.swift in Sources */,
+				833CC1242B5950920027D96F /* Prefetcher.swift in Sources */,
 				FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */,
 				FC0E80302B1A15D600EF56D6 /* LOImageLabel.swift in Sources */,
 				FC5BE11F2B148D160036366D /* EditProfileModels.swift in Sources */,
