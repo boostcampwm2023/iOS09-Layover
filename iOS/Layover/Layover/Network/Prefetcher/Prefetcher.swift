@@ -56,7 +56,6 @@ actor Prefetcher: PrefetchProtocol {
 
         do {
             let fetchedData: Data = try await fetchTask.value
-            print("chopmojji: \(fetchedData.count)")
             imageCache.setObject(fetchedData as NSData, forKey: key as NSURL)
             fetchingImageTasks[key] = nil
             return fetchedData
