@@ -169,4 +169,20 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
         return currentCellMemberID == authManager.memberID
     }
 
+    // TODO: Test 짜보기
+    func prefetchProfileImage(with url: URL?) async -> Data? {
+        return nil
+    }
+
+    func prefetchLocation(latitude: Double, longitude: Double) async -> String? {
+        return nil
+    }
+
+    func cancelPrefetchProfileImage(with url: URL?) async {
+        //
+    }
+
+    func cancelPrefetchLocation(latitude: Double, longitude: Double) async {
+        //
+    }
 }

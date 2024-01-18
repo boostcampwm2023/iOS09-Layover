@@ -12,14 +12,25 @@ import OSLog
 
 protocol PrefetchProtocol {
     func prefetchImage(for key: URL) async -> Data?
-    func prefetchLoaction(latitude: Double, longitude: Double) async -> String?
+    func prefetchLocation(latitude: Double, longitude: Double) async -> String?
     func cancelPrefetchImage(for key: URL) async
     func cancelPrefetchLocation(latitude: Double, longitude: Double) async
 }
 
 actor Prefetcher: PrefetchProtocol {
-    private let imageCache: NSCache<NSURL, NSData> = NSCache()
-    private let locationCache: NSCache<NSString, NSString> = NSCache()
+    private let imageCache: NSCache<NSURL, NSData> = {
+        let cache = NSCache<NSURL, NSData>()
+        // 10MB
+        cache.totalCostLimit = 10 * 1024 * 1024
+        return cache
+    }()
+
+    private let locationCache: NSCache<NSString, NSString> = {
+        let cache = NSCache<NSString, NSString>()
+        // 5MB
+        cache.totalCostLimit = 5 * 1024 * 1024
+        return cache
+    }()
 
     private var fetchingImageTasks: [URL: Task<Data, Error>] = [:]
     private var fetchingLocationTasks: [String: Task<String?, Error>] = [:]
@@ -45,6 +56,7 @@ actor Prefetcher: PrefetchProtocol {
 
         do {
             let fetchedData: Data = try await fetchTask.value
+            print("chopmojji: \(fetchedData.count)")
             imageCache.setObject(fetchedData as NSData, forKey: key as NSURL)
             fetchingImageTasks[key] = nil
             return fetchedData
@@ -54,7 +66,7 @@ actor Prefetcher: PrefetchProtocol {
         }
     }
 
-    func prefetchLoaction(latitude: Double, longitude: Double) async -> String? {
+    func prefetchLocation(latitude: Double, longitude: Double) async -> String? {
         let cacheKey = "\(latitude)-\(longitude)"
 
         if let cachedData = locationCache.object(forKey: cacheKey as NSString) as? String {
