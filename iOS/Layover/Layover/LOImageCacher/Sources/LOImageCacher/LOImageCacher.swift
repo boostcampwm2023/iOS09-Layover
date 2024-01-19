@@ -18,7 +18,6 @@ public protocol LOImageCacherCompatible: AnyObject { }
 
 extension LOImageCacherCompatible {
     public var lo: LOImageCacherWrapper<Self> {
-        get { LOImageCacherWrapper(base: self) }
-        set { }
+        LOImageCacherWrapper(base: self)
     }
 }

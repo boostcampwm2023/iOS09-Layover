@@ -7,6 +7,8 @@
 
 import UIKit
 
+extension UIImageView: LOImageCacherCompatible { }
+
 extension LOImageCacherWrapper where Base: UIImageView {
 
     @MainActor

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -242,6 +242,8 @@
 		FC7E45462AFEB62B004F155A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45442AFEB62B004F155A /* LaunchScreen.storyboard */; };
 		FC7E456A2AFEC06E004F155A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = FC7E45692AFEC06E004F155A /* .swiftlint.yml */; };
 		FC8696D32B26008B00F9A7B9 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33972B1843BE00ECAFB0 /* SettingViewController.swift */; };
+		FC8DC42A2B5A5B7600FC772A /* LOImageCacher in Frameworks */ = {isa = PBXBuildFile; productRef = FC8DC4292B5A5B7600FC772A /* LOImageCacher */; };
+		FC8DC42F2B5A5C4600FC772A /* LOImageCacher in Frameworks */ = {isa = PBXBuildFile; productRef = FC8DC42E2B5A5C4600FC772A /* LOImageCacher */; };
 		FC930E752B0CD75C00AA48E3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E6F2B0CD75C00AA48E3 /* ProfilePresenter.swift */; };
 		FC930E772B0CD75C00AA48E3 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E712B0CD75C00AA48E3 /* ProfileRouter.swift */; };
 		FC930E782B0CD75C00AA48E3 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC930E722B0CD75C00AA48E3 /* ProfileModels.swift */; };
@@ -531,6 +533,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				194551FD2B0386D100299768 /* KakaoSDK in Frameworks */,
+				FC8DC42F2B5A5C4600FC772A /* LOImageCacher in Frameworks */,
+				FC8DC42A2B5A5B7600FC772A /* LOImageCacher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1286,6 +1290,8 @@
 			name = Layover;
 			packageProductDependencies = (
 				194551FC2B0386D100299768 /* KakaoSDK */,
+				FC8DC4292B5A5B7600FC772A /* LOImageCacher */,
+				FC8DC42E2B5A5C4600FC772A /* LOImageCacher */,
 			);
 			productName = Layover;
 			productReference = FC7E45362AFEB623004F155A /* Layover.app */;
@@ -1340,6 +1346,7 @@
 			mainGroup = FC7E452D2AFEB623004F155A;
 			packageReferences = (
 				194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				FC8DC42D2B5A5C4600FC772A /* XCLocalSwiftPackageReference "Layover/LOImageCacher" */,
 			);
 			productRefGroup = FC7E45372AFEB623004F155A /* Products */;
 			projectDirPath = "";
@@ -1934,6 +1941,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		FC8DC42D2B5A5C4600FC772A /* XCLocalSwiftPackageReference "Layover/LOImageCacher" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Layover/LOImageCacher;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1950,6 +1964,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDK;
+		};
+		FC8DC4292B5A5B7600FC772A /* LOImageCacher */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LOImageCacher;
+		};
+		FC8DC42E2B5A5C4600FC772A /* LOImageCacher */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LOImageCacher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
