@@ -63,8 +63,10 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
   @Get('home')
-  async getBoardRandom(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsRandomly();
+  async getBoardRandom(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Query('cursor') cursor?: string) {
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsRandomly(
+      cursor === undefined ? -1 : parseInt(cursor),
+    );
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 
@@ -94,9 +96,9 @@ export class BoardController {
   async getBoardTag(
     @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('tag') tag: string,
-    @Query('page') page: string,
+    @Query('cursor') cursor: string,
   ) {
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsByTag(tag, parseInt(page));
+    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsByTag(tag, parseInt(cursor));
     throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
   }
 

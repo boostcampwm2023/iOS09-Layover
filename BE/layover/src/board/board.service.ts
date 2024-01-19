@@ -55,20 +55,21 @@ export class BoardService {
     );
   }
 
-  async getBoardsRandomly() {
+  async getBoardsRandomly(cursor?: number) {
     // 성공한것만 가져온다.
-    const limit: number = await this.boardRepository.countCompletedBoards();
-    let offset: number = Math.floor(Math.random() * limit);
     const itemsPerPage = 10; // 최대 10개 데이터를 가져온다.
-
-    // 데이터가 10개 이하라면 첫번째 데이터부터 가져옴.
-    if (offset < 10) {
-      offset = 0;
-    } else if (limit - offset < 10) {
-      offset = limit - 10;
+    const limit: number = await this.boardRepository.countCompletedBoards();
+    if (cursor === -1) {
+      // 만약 커서가 없다면
+      cursor = Math.floor(Math.random() * limit);
     }
 
-    const boards: Board[] = await this.boardRepository.findBoardsRandomly(itemsPerPage, offset);
+    // 생각해보고 예외처리 하기
+
+    const boards: Board[] = await this.boardRepository.findBoardsRandomly(itemsPerPage, cursor);
+
+    // 가장 끝의 id를 cursor로 반환해줘야함.
+
     return Promise.all(boards.map((board: Board) => this.createBoardResDto(board)));
   }
 
@@ -107,20 +108,33 @@ export class BoardService {
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardsByTag(tag: string, page: number) {
+  async getBoardsByTag(tag: string, cursor: number) {
     const itemsPerPage = 15;
-    const offset = (page - 1) * itemsPerPage;
+    let boards: Board[];
 
-    const boards: Board[] = await this.boardRepository.findBoardsByTag(tag, itemsPerPage, offset);
+    // cursor 값이 없을 경우 -> 최근 데이터 15개 가져오기
+    if (cursor === undefined) {
+      boards = await this.boardRepository.findBoardsByTag(tag, itemsPerPage);
+    } else {
+      // cursor 값이 있을 경우 -> 해당 id 보다 작은 아이디 15개 limit 가져오기
+      boards = await this.boardRepository.findBoardsByTagWithCursor(tag, itemsPerPage, cursor);
+    }
+    // 가장 끝의 id를 cursor 로 반환해줘야함.
     const boardIds = boards.map((board) => board.id);
     const allBoards: Board[] = await this.boardRepository.findBoardsByIds(boardIds);
     return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardsByProfile(id: number, page: number) {
+  async getBoardsByProfile(id: number, cursor: number) {
     const itemsPerPage = 15;
-    const offset = (page - 1) * itemsPerPage;
-    const boards: Board[] = await this.boardRepository.findBoardsByProfile(id, itemsPerPage, offset);
+    let boards: Board[];
+
+    if (cursor === undefined) {
+      boards = await this.boardRepository.findBoardsByProfile(id, itemsPerPage);
+    } else {
+      boards = await this.boardRepository.findBoardsByProfileWithCursor(id, itemsPerPage, cursor);
+    }
+    // 가장 끝의 id를 cursor 로 반환해줘야함.
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
@@ -151,7 +165,10 @@ export class BoardService {
 
       case 'COMPLETE': // cloud function 에서 인코딩을 성공적으로 끝냈을 때
         await this.boardRepository.updateStatusByFilename(encodingCallbackRequestDto.filename, 'COMPLETE');
-        await this.boardRepository.updateEncodedVideoUrlByFilename(encodingCallbackRequestDto.filename, encodingCallbackRequestDto.filePath);
+        await this.boardRepository.updateEncodedVideoUrlByFilename(
+          encodingCallbackRequestDto.filename,
+          encodingCallbackRequestDto.filePath,
+        );
         break;
     }
   }

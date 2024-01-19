@@ -15,13 +15,13 @@ export class BoardRepository {
     return await this.boardRepository.createQueryBuilder('board').where("board.status = 'COMPLETE'").getCount();
   }
 
-  async findBoardsRandomly(itemsPerPage: number, offset: number) {
+  async findBoardsRandomly(itemsPerPage: number, cursor: number) {
     return await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where("board.status = 'COMPLETE'")
-      .skip(offset)
+      .andWhere('board.id > :id', { id: cursor }) //cursor paging (random 은 id 오름차순으로 가져오기?)
       .take(itemsPerPage)
       .getMany();
   }
@@ -41,15 +41,25 @@ export class BoardRepository {
       .getMany();
   }
 
-  async findBoardsByTag(tag: string, itemsPerPage: number, offset: number) {
+  async findBoardsByTagWithCursor(tag: string, itemsPerPage: number, cursor: number) {
     return await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
       .andWhere("board.status = 'COMPLETE'")
-      .orderBy('board.date_created', 'DESC')
-      .skip(offset)
+      .andWhere('board.id < :id', { id: cursor }) //cursor paging
+      .take(itemsPerPage)
+      .getMany();
+  }
+  async findBoardsByTag(tag: string, itemsPerPage: number) {
+    return await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
+      .where('tag.tagname = :tag', { tag })
+      .andWhere("board.status = 'COMPLETE'")
+      .orderBy('board.date_created', 'DESC') // cursor 가 있을 경우에는 필요 없을듯 (없으면 DESC 로 itemsPerPage 가져오기)
       .take(itemsPerPage)
       .getMany();
   }
@@ -63,7 +73,19 @@ export class BoardRepository {
       .getMany();
   }
 
-  async findBoardsByProfile(id: number, itemsPerPage: number, offset: number) {
+  async findBoardsByProfileWithCursor(id: number, itemsPerPage: number, cursor: number) {
+    return await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
+      .where('member.id = :id', { id })
+      .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
+      .andWhere('board.id < :id', { id: cursor }) //cursor paging
+      .take(itemsPerPage)
+      .getMany();
+  }
+
+  async findBoardsByProfile(id: number, itemsPerPage: number) {
     return await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
@@ -71,7 +93,6 @@ export class BoardRepository {
       .where('member.id = :id', { id })
       .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
       .orderBy('board.date_created', 'DESC')
-      .skip(offset)
       .take(itemsPerPage)
       .getMany();
   }
