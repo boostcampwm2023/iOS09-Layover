@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - Extensions
+
 extension UIImageView: LOImageCacherCompatible { }
 
 extension LOImageCacherWrapper where Base: UIImageView {

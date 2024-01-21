@@ -56,7 +56,7 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
 
     func configure(thumbnailImgaeURL: URL?) {
         if let thumbnailImgaeURL {
-        thumbnailImageView.lo.setImage(with: thumbnailImgaeURL)
+            thumbnailImageView.lo.setImage(with: thumbnailImgaeURL)
         } else {
             thumbnailImageView.image = nil
         }

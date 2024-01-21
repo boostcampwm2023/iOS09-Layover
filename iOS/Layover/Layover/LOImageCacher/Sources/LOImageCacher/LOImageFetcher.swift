@@ -7,16 +7,25 @@
 
 import UIKit
 
-open class LOImageFetcher {
+final class LOImageFetcher {
+
+    typealias ImageCacheStorage = Storage<String, Data>
+
+    // MARK: - Properties
 
     static let shared = LOImageFetcher()
-    private let storage = LOCacheStorage()
+    private let storage: any ImageCacheStorage
     private let session: URLSession
 
-    private init(session: URLSession = .shared) {
+    // MARK: - Initializer
+
+    private init(storage: any ImageCacheStorage = LOCacheStorage(),
+                 session: URLSession = .shared) {
+        self.storage = storage
         self.session = session
     }
 
+    // MARK: -  Methods
     @available(iOS 13.0.0, *)
     func fetchImage(from url: URL) async -> Data? {
         let key = url.lastPathComponent

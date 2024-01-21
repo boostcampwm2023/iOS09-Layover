@@ -8,7 +8,13 @@
 import Foundation
 
 public struct LOImageCacherWrapper<Base> {
+
+    // MARK: - Properties
+
     public let base: Base
+
+    // MARK: - Initializers
+
     public init(base: Base) {
         self.base = base
     }
@@ -17,7 +23,11 @@ public struct LOImageCacherWrapper<Base> {
 public protocol LOImageCacherCompatible: AnyObject { }
 
 extension LOImageCacherCompatible {
+
+    // swiftlint:disable identifier_name
     public var lo: LOImageCacherWrapper<Self> {
         LOImageCacherWrapper(base: self)
     }
+    // swiftlint:enable identifier_name
+
 }
