@@ -49,9 +49,9 @@ final class LOCacheStorage: Storage {
             return memorydata as Value
         }
 
-        let url = cacheURL(forKey: key)
-        if disk.fileExists(atPath: url.path),
-           let data = try? Data(contentsOf: url) {
+        let path = cacheURL(forKey: key).path
+        if disk.fileExists(atPath: path),
+           let data = disk.contents(atPath: path) {
             self.store(data, forKey: key)
             return data
         } else {
