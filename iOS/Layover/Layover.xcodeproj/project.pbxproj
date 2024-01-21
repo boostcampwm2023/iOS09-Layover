@@ -113,6 +113,7 @@
 		19AE482A2B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE48292B2A127E00DD4612 /* HLSAssetResourceLoaderDelegate.swift */; };
 		19AE482C2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE482B2B2A1A8B00DD4612 /* HLSSliceResourceLoader.swift */; };
 		19AE482E2B2A24C700DD4612 /* URL+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AE482D2B2A24C700DD4612 /* URL+.swift */; };
+		19AF2A062B5D06B9008C3620 /* HLSCachingServer in Frameworks */ = {isa = PBXBuildFile; productRef = 19AF2A052B5D06B9008C3620 /* HLSCachingServer */; };
 		19B665D92B4EEDDD0083E63C /* SignUpWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D52B4EEDDD0083E63C /* SignUpWorkerTests.swift */; };
 		19B665DA2B4EEDDD0083E63C /* SignUpInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D62B4EEDDD0083E63C /* SignUpInteractorTests.swift */; };
 		19B665DB2B4EEDDD0083E63C /* SignUpPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B665D72B4EEDDD0083E63C /* SignUpPresenterTests.swift */; };
@@ -531,6 +532,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				194551FD2B0386D100299768 /* KakaoSDK in Frameworks */,
+				19AF2A062B5D06B9008C3620 /* HLSCachingServer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1286,6 +1288,7 @@
 			name = Layover;
 			packageProductDependencies = (
 				194551FC2B0386D100299768 /* KakaoSDK */,
+				19AF2A052B5D06B9008C3620 /* HLSCachingServer */,
 			);
 			productName = Layover;
 			productReference = FC7E45362AFEB623004F155A /* Layover.app */;
@@ -1340,6 +1343,7 @@
 			mainGroup = FC7E452D2AFEB623004F155A;
 			packageReferences = (
 				194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				19AF2A042B5D06B9008C3620 /* XCRemoteSwiftPackageReference "HLSCachingServer" */,
 			);
 			productRefGroup = FC7E45372AFEB623004F155A /* Products */;
 			projectDirPath = "";
@@ -1943,6 +1947,14 @@
 				kind = branch;
 			};
 		};
+		19AF2A042B5D06B9008C3620 /* XCRemoteSwiftPackageReference "HLSCachingServer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/loinsir/HLSCachingServer";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1950,6 +1962,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDK;
+		};
+		19AF2A052B5D06B9008C3620 /* HLSCachingServer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19AF2A042B5D06B9008C3620 /* XCRemoteSwiftPackageReference "HLSCachingServer" */;
+			productName = HLSCachingServer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
