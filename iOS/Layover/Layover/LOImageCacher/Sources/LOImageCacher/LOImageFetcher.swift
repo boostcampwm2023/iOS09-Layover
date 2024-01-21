@@ -25,12 +25,15 @@ final class LOImageFetcher {
         self.session = session
     }
 
-    // MARK: -  Methods
+    // MARK: - Methods
+
     @available(iOS 13.0.0, *)
     func fetchImage(from url: URL) async -> Data? {
         let key = url.lastPathComponent
         guard let storageData = storage.retrieve(forKey: key) else {
             if let (fetchedData, _) = try? await session.data(from: url) {
+                storage.store(fetchedData, forKey: key)
+                storage.storeToDisk(fetchedData, forKey: key)
                 return fetchedData
             } else {
                 return nil

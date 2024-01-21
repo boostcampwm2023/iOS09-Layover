@@ -68,7 +68,6 @@ final class LOAnnotationView: MKAnnotationView {
         } else {
             thumbnailImageView.image = .profile
         }
-
     }
 
     private func render() {

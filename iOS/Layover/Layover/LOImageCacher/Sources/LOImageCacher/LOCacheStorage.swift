@@ -10,6 +10,7 @@ protocol Storage<Key, Value> {
     associatedtype Value
 
     func store(_ data: Value, forKey key: Key)
+    func storeToDisk(_ data: Value, forKey key: Key)
     func retrieve(forKey key: Key) -> Value?
 }
 
@@ -39,9 +40,8 @@ final class LOCacheStorage: Storage {
     }
 
     func storeToDisk(_ data: Value, forKey key: Key) {
-        let path = cacheURL(forKey: key).absoluteString
-        disk.createFile(atPath: path,
-                        contents: data)
+        let path = cacheURL(forKey: key).path
+        disk.createFile(atPath: path, contents: data)
     }
 
     func retrieve(forKey key: Key) -> Value? {
@@ -49,9 +49,9 @@ final class LOCacheStorage: Storage {
             return memorydata as Value
         }
 
-        let path = cacheURL(forKey: key)
-        if disk.fileExists(atPath: path.absoluteString),
-           let data = try? Data(contentsOf: path) {
+        let url = cacheURL(forKey: key)
+        if disk.fileExists(atPath: url.path),
+           let data = try? Data(contentsOf: url) {
             self.store(data, forKey: key)
             return data
         } else {
