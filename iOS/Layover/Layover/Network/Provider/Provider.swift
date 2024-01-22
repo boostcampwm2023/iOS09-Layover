@@ -83,7 +83,9 @@ class Provider: ProviderType {
         var urlRequest = try endPoint.makeURLRequest()
 
         if authenticationIfNeeded {
-            if let token = authManager.accessToken {
+            if retryCount > 1, let token = authManager.accessToken {
+                urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            } else if let token = authManager.refreshToken {
                 urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             } else {
                 guard await refreshTokenIfNeeded(), let newToken = authManager.accessToken else {
