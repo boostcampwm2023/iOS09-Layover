@@ -29,8 +29,6 @@ struct DefaultLoginEndPointFactory: LoginEndPointFactory {
     }
 
     func makeTokenRefreshEndPoint(with refreshToken: String) -> EndPoint<Response<LoginDTO>> {
-//        var bodyParameters = [String: String]()
-//        bodyParameters.updateValue(refreshToken, forKey: "refreshToken")
         return EndPoint(
             path: "/oauth/refresh-token",
             method: .POST,
