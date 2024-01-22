@@ -12,3 +12,8 @@ struct LoginDTO: Decodable {
     let accessToken: String
     let refreshToken: String
 }
+
+struct TestDTO: Decodable {
+    let accessToken: String?
+    let refreshToken: String?
+}
