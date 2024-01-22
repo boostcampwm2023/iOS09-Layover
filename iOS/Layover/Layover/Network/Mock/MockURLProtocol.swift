@@ -9,7 +9,12 @@
 import Foundation
 
 final class MockURLProtocol: URLProtocol {
-    static var requestHandler: ((URLRequest) -> (HTTPURLResponse?, Data?, Error?))?
+    private static var _requestHandler: ((URLRequest) -> (HTTPURLResponse?, Data?, Error?))?
+    private static var lock = NSLock()
+    static var requestHandler: ((URLRequest) -> (HTTPURLResponse?, Data?, Error?))? {
+        get { lock.withLock { _requestHandler }}
+        set { lock.withLock { _requestHandler = newValue }}
+    }
 
     override class func canInit(with request: URLRequest) -> Bool {
         return true
@@ -39,4 +44,12 @@ final class MockURLProtocol: URLProtocol {
     }
 
     override func stopLoading() { }
+}
+
+extension NSLocking {
+    func locked<T>(_ closure: () -> T) -> T {
+        lock()
+        defer { unlock() }
+        return closure()
+    }
 }
