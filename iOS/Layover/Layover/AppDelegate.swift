@@ -7,11 +7,12 @@
 
 import UIKit
 import KakaoSDKCommon
+import HLSCachingServer
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    private let hlsCachingServer = HLSCachingServer(urlSession: .shared, urlCache: .shared)
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
@@ -26,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         setNavigationControllerAppearance()
         setTabBarAppearance()
+
+        hlsCachingServer.start(port: 12345)
 
         return true
     }
