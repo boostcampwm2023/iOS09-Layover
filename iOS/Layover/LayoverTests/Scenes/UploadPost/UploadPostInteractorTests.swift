@@ -73,6 +73,10 @@ class UploadPostInteractorTests: XCTestCase {
 
         }
 
+        func presentShowActionSheet(with response: Layover.UploadPostModels.ShowActionSheet.Response) {
+            //
+        }
+
     }
 
     // MARK: - Tests
