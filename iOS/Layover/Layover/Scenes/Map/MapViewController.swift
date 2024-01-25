@@ -70,7 +70,7 @@ final class MapViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: item.videoURL)
-        cell.configure(thumbnailImgaeURL: item.thumbnailImageURL)
+        cell.configure(thumbnailImageURL: item.thumbnailImageURL)
         return cell
     }
 

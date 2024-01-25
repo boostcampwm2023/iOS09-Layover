@@ -27,7 +27,6 @@ final class LOImageFetcher {
 
     // MARK: - Methods
 
-    @available(iOS 13.0.0, *)
     func fetchImage(from url: URL) async -> Data? {
         let key = url.lastPathComponent
         guard let storageData = storage.retrieve(forKey: key) else {
