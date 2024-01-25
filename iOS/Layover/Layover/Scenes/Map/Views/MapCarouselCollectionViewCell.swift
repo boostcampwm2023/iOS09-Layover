@@ -54,9 +54,9 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         loopingPlayerView.player?.isMuted = true
     }
 
-    func configure(thumbnailImageData: Data?) {
-        if let thumbnailImageData {
-            thumbnailImageView.image = UIImage(data: thumbnailImageData)
+    func configure(thumbnailImageURL: URL?) {
+        if let thumbnailImageURL {
+            thumbnailImageView.lo.setImage(with: thumbnailImageURL)
         } else {
             thumbnailImageView.image = nil
         }

@@ -9,6 +9,8 @@
 import MapKit
 import UIKit
 
+import LOImageCacher
+
 final class LOAnnotationView: MKAnnotationView {
 
     // MARK: - Layout Constants
@@ -60,13 +62,12 @@ final class LOAnnotationView: MKAnnotationView {
 
     // MARK: - Methods
 
-    func setThumbnailImage(data: Data?) {
-        if let data {
-            thumbnailImageView.image = UIImage(data: data)
+    func setThumnailImage(with url: URL?) {
+        if let url {
+            thumbnailImageView.lo.setImage(with: url)
         } else {
             thumbnailImageView.image = .profile
         }
-
     }
 
     private func render() {

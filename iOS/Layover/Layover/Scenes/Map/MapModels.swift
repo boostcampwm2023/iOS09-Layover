@@ -14,7 +14,7 @@ enum MapModels {
 
     struct DisplayedPost: Hashable {
         let boardID: Int
-        let thumbnailImageData: Data?
+        let thumbnailImageURL: URL?
         let videoURL: URL?
         let latitude: Double
         let longitude: Double

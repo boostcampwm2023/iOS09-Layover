@@ -70,7 +70,7 @@ final class MapViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: item.videoURL)
-        cell.configure(thumbnailImageData: item.thumbnailImageData)
+        cell.configure(thumbnailImageURL: item.thumbnailImageURL)
         return cell
     }
 
@@ -188,7 +188,7 @@ final class MapViewController: BaseViewController {
         let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: post.latitude,
                                                                          longitude: post.longitude),
                                       boardID: post.boardID,
-                                      thumbnailImageData: post.thumbnailImageData)
+                                      thumbnailImageURL: post.thumbnailImageURL)
         mapView.addAnnotation(annotation)
     }
 
@@ -213,7 +213,7 @@ final class MapViewController: BaseViewController {
     @objc private func searchButtonDidTap() {
         searchButton.isHidden = true
         Task {
-            await interactor?.fetchPost(latitude: mapView.centerCoordinate.latitude,
+            await interactor?.fetchPosts(latitude: mapView.centerCoordinate.latitude,
                                         longitude: mapView.centerCoordinate.longitude)
         }
     }
@@ -237,10 +237,10 @@ extension MapViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation) else { return nil }
-        if let annotaion = annotation as? LOAnnotation {
+        if let loAnnotation = annotation as? LOAnnotation {
             let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
                                                                        for: annotation) as? LOAnnotationView
-            annotationView?.setThumbnailImage(data: annotaion.thumbnailImageData)
+            annotationView?.setThumnailImage(with: loAnnotation.thumbnailImageURL)
             return annotationView
         }
         return nil

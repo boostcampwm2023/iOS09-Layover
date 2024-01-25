@@ -40,8 +40,8 @@ final class MapWorker: MapWorkerProtocol {
             guard let posts = response.data else { return nil }
             let filterdPosts = posts.filter { post in
                 post.member.id == authManager.memberID || post.board.status == .complete
-            }
-            return await fetchThumbnailImageData(of: filterdPosts)
+            }.map { $0.toDomain() }
+            return filterdPosts
         } catch {
             os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
             return nil
