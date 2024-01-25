@@ -32,6 +32,8 @@ protocol PlaybackBusinessLogic {
     func moveToTagPlay(with request: PlaybackModels.MoveToRelativeView.Request)
     func fetchPosts() async
     func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) async
+    func prefetchLoadProfileImageAndLocation(with request: PlaybackModels.SetInitialPlaybackCell.Request) async
+    func cancelPrefetchProfileImageAndLocation(with request: PlaybackModels.SetInitialPlaybackCell.Request) async
 }
 
 protocol PlaybackDataStore: AnyObject {
@@ -393,11 +395,23 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func loadProfileImageAndLocation(with request: PlaybackModels.LoadProfileImageAndLocation.Request) async {
-        async let profileImageData = self.worker?.fetchImageData(with: request.profileImageURL)
-        async let location: String? = self.worker?.transLocation(latitude: request.latitude, longitude: request.longitude)
+        async let profileImageData = worker?.prefetchProfileImage(with: request.profileImageURL)
+        async let location: String? = worker?.prefetchLocation(latitude: request.latitude, longitude: request.longitude)
         let response: Models.LoadProfileImageAndLocation.Response = Models.LoadProfileImageAndLocation.Response(curCell: request.curCell, profileImageData: await profileImageData, location: await location)
         await MainActor.run {
             presenter?.presentLoadProfileImageAndLocation(with: response)
         }
+    }
+
+    func prefetchLoadProfileImageAndLocation(with request: PlaybackModels.SetInitialPlaybackCell.Request) async {
+        guard let posts else { return }
+        async let _ = worker?.prefetchProfileImage(with: posts[request.indexPathRow].member.profileImageURL)
+        async let _ = worker?.prefetchLocation(latitude: posts[request.indexPathRow].board.latitude, longitude: posts[request.indexPathRow].board.longitude)
+    }
+
+    func cancelPrefetchProfileImageAndLocation(with request: PlaybackModels.SetInitialPlaybackCell.Request) async {
+        guard let posts else { return }
+        async let _ = worker?.cancelPrefetchProfileImage(with: posts[request.indexPathRow].member.profileImageURL)
+        async let _ = worker?.cancelPrefetchLocation(latitude: posts[request.indexPathRow].board.latitude, longitude: posts[request.indexPathRow].board.longitude)
     }
 }

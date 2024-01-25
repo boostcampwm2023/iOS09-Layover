@@ -96,6 +96,7 @@ final class PlaybackViewController: BaseViewController {
         }
         interactor?.configurePlaybackCell()
         playbackCollectionView.delegate = self
+        playbackCollectionView.prefetchDataSource = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
@@ -420,6 +421,24 @@ extension PlaybackViewController: PlaybackViewControllerDelegate {
     func moveToTagPlay(selectedTag: String) {
         let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(indexPathRow: nil, selectedTag: selectedTag)
         interactor?.moveToTagPlay(with: request)
+    }
+}
+
+extension PlaybackViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            Task {
+                await interactor?.prefetchLoadProfileImageAndLocation(with: Models.SetInitialPlaybackCell.Request(indexPathRow: indexPath.row))
+            }
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            Task {
+                await interactor?.cancelPrefetchProfileImageAndLocation(with: Models.SetInitialPlaybackCell.Request(indexPathRow: indexPath.row))
+            }
+        }
     }
 }
 //#Preview {

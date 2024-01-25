@@ -20,6 +20,12 @@ protocol PlaybackWorkerProtocol {
     func fetchProfilePosts(profileID: Int?, page: Int) async -> [Post]?
     func fetchTagPosts(selectedTag: String, page: Int) async -> [Post]?
     func isMyVideo(currentCellMemberID: Int) -> Bool
+    @discardableResult
+    func prefetchProfileImage(with url: URL?) async -> Data?
+    @discardableResult
+    func prefetchLocation(latitude: Double, longitude: Double) async -> String?
+    func cancelPrefetchProfileImage(with url: URL?) async
+    func cancelPrefetchLocation(latitude: Double, longitude: Double) async
 }
 
 final class PlaybackWorker: PlaybackWorkerProtocol {
@@ -33,15 +39,17 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     private let defaultPostManagerEndPointFactory: PostManagerEndPointFactory
     private let defaultPostEndPointFactory: PostEndPointFactory
     private let defaultUserEndPointFactory: UserEndPointFactory
+    private let prefetcher: PrefetchProtocol
 
     // MARK: - Methods
 
-    init(provider: ProviderType = Provider(), authManager: AuthManagerProtocol = AuthManager.shared, defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(), defaultUserEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory()) {
+    init(provider: ProviderType = Provider(), authManager: AuthManagerProtocol = AuthManager.shared, defaultPostManagerEndPointFactory: PostManagerEndPointFactory = DefaultPostManagerEndPointFactory(), defaultPostEndPointFactory: PostEndPointFactory = DefaultPostEndPointFactory(), defaultUserEndPointFactory: UserEndPointFactory = DefaultUserEndPointFactory(), prefetcher: PrefetchProtocol = Prefetcher()) {
         self.provider = provider
         self.defaultPostManagerEndPointFactory = defaultPostManagerEndPointFactory
         self.defaultPostEndPointFactory = defaultPostEndPointFactory
         self.defaultUserEndPointFactory = defaultUserEndPointFactory
         self.authManager = authManager
+        self.prefetcher = prefetcher
     }
 
     func makeInfiniteScroll(posts: [Post]) -> [Post] {
@@ -130,5 +138,23 @@ final class PlaybackWorker: PlaybackWorkerProtocol {
     func isMyVideo(currentCellMemberID: Int) -> Bool {
         let myMemberID = authManager.memberID
         return currentCellMemberID == myMemberID
+    }
+
+    func prefetchProfileImage(with url: URL?) async -> Data? {
+        guard let url else { return nil }
+        return await prefetcher.prefetchImage(for: url)
+    }
+
+    func prefetchLocation(latitude: Double, longitude: Double) async -> String? {
+        await prefetcher.prefetchLocation(latitude: latitude, longitude: longitude)
+    }
+
+    func cancelPrefetchProfileImage(with url: URL?) async {
+        guard let url else { return }
+        await prefetcher.cancelPrefetchImage(for: url)
+    }
+
+    func cancelPrefetchLocation(latitude: Double, longitude: Double) async {
+        await prefetcher.cancelPrefetchLocation(latitude: latitude, longitude: longitude)
     }
 }
