@@ -19,7 +19,6 @@ protocol PlaybackViewControllerDelegate: AnyObject {
 protocol PlaybackDisplayLogic: AnyObject {
     func displayVideoList(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
     func loadFetchVideos(viewModel: PlaybackModels.LoadPlaybackVideoList.ViewModel)
-    func displayMoveCellIfinfinite(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel)
     func setInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
     func moveInitialPlaybackCell(viewModel: PlaybackModels.SetInitialPlaybackCell.ViewModel)
@@ -92,9 +91,12 @@ final class PlaybackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.displayVideoList()
+        Task {
+            await interactor?.displayVideoList()
+        }
         interactor?.configurePlaybackCell()
         playbackCollectionView.delegate = self
+        playbackCollectionView.prefetchDataSource = self
         playbackCollectionView.contentInsetAdjustmentBehavior = .never
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
@@ -213,10 +215,6 @@ extension PlaybackViewController: PlaybackDisplayLogic {
         dataSource?.apply(currentSnapshot, animatingDifferences: true)
     }
 
-    func displayMoveCellIfinfinite(viewModel: Models.SetInitialPlaybackCell.ViewModel) {
-        playbackCollectionView.setContentOffset(.init(x: playbackCollectionView.contentOffset.x, y: playbackCollectionView.bounds.height * CGFloat(viewModel.indexPathRow)), animated: false)
-    }
-
     func stopPrevPlayerAndPlayCurPlayer(viewModel: PlaybackModels.DisplayPlaybackVideo.ViewModel) {
         guard let tabBarHeight: CGFloat = self.tabBarController?.tabBar.frame.height else { return }
         if let previousCell = viewModel.previousCell {
@@ -270,11 +268,13 @@ extension PlaybackViewController: PlaybackDisplayLogic {
                 }
             }
             cell.addAVPlayer(url: playbackVideo.displayedPost.board.videoURL)
-            self.interactor?.loadProfileImageAndLocation(with: Models.LoadProfileImageAndLocation.Request(
-                curCell: cell,
-                profileImageURL: playbackVideo.displayedPost.member.profileImageURL,
-                latitude: playbackVideo.displayedPost.board.latitude,
-                longitude: playbackVideo.displayedPost.board.longitude))
+            Task {
+                await self.interactor?.loadProfileImageAndLocation(with: Models.LoadProfileImageAndLocation.Request(
+                    curCell: cell,
+                    profileImageURL: playbackVideo.displayedPost.member.profileImageURL,
+                    latitude: playbackVideo.displayedPost.board.latitude,
+                    longitude: playbackVideo.displayedPost.board.longitude))
+            }
             cell.delegate = self
             return cell
         }
@@ -402,7 +402,9 @@ extension PlaybackViewController: UICollectionViewDelegate {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         if maximumOffset < currentOffset {
-            interactor?.fetchPosts()
+            Task {
+                await interactor?.fetchPosts()
+            }
         }
     }
 }
@@ -419,6 +421,24 @@ extension PlaybackViewController: PlaybackViewControllerDelegate {
     func moveToTagPlay(selectedTag: String) {
         let request: Models.MoveToRelativeView.Request = Models.MoveToRelativeView.Request(indexPathRow: nil, selectedTag: selectedTag)
         interactor?.moveToTagPlay(with: request)
+    }
+}
+
+extension PlaybackViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            Task {
+                await interactor?.prefetchLoadProfileImageAndLocation(with: Models.SetInitialPlaybackCell.Request(indexPathRow: indexPath.row))
+            }
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            Task {
+                await interactor?.cancelPrefetchProfileImageAndLocation(with: Models.SetInitialPlaybackCell.Request(indexPathRow: indexPath.row))
+            }
+        }
     }
 }
 //#Preview {

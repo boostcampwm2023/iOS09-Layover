@@ -14,7 +14,7 @@ import OSLog
 protocol MapBusinessLogic {
     func playPosts(with: MapModels.PlayPosts.Request)
     func fetchPosts() async
-    func fetchPost(latitude: Double, longitude: Double) async
+    func fetchPosts(latitude: Double, longitude: Double) async
     func selectVideo(with request: MapModels.SelectVideo.Request)
     func checkLocationAuthorizationOnEntry()
     func checkLocationPermissionOnUpload()
@@ -59,7 +59,7 @@ final class MapInteractor: NSObject, MapBusinessLogic, MapDataStore {
         }
     }
 
-    func fetchPost(latitude: Double, longitude: Double) async {
+    func fetchPosts(latitude: Double, longitude: Double) async {
         let posts = await worker?.fetchPosts(latitude: latitude, longitude: longitude)
         guard let posts else { return }
         self.posts = posts

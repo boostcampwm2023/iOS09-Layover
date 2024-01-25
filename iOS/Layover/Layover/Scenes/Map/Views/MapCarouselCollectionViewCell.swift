@@ -48,13 +48,15 @@ final class MapCarouselCollectionViewCell: UICollectionViewCell {
         spinner.stopAnimating()
         loopingPlayerView.disable()
         loopingPlayerView.prepareVideo(with: url,
-                                       timeRange: CMTimeRange(start: .zero, duration: CMTime(value: 1800, timescale: 600)))
+                                       assetResourceLoaderDelegate: HLSAssetResourceLoaderDelegate(resourceLoader: HLSSliceResourceLoader()),
+                                       loopStart: .zero,
+                                       duration: 3.0)
         loopingPlayerView.player?.isMuted = true
     }
 
-    func configure(thumbnailImageData: Data?) {
-        if let thumbnailImageData {
-            thumbnailImageView.image = UIImage(data: thumbnailImageData)
+    func configure(thumbnailImageURL: URL?) {
+        if let thumbnailImageURL {
+            thumbnailImageView.lo.setImage(with: thumbnailImageURL)
         } else {
             thumbnailImageView.image = nil
         }

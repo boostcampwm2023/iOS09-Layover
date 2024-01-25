@@ -9,7 +9,7 @@
 import Foundation
 import OSLog
 
-final class MockUserWorker: UserWorkerProtocol {
+class MockUserWorker: UserWorkerProtocol {
 
     // MARK: - Properties
 

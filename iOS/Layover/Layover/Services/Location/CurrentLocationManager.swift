@@ -28,6 +28,12 @@ final class CurrentLocationManager: NSObject {
         return CLLocation(latitude: space.latitude, longitude: space.longitude)
     }
 
+    func getVideoLocation(latitude: Double?, longitude: Double?) -> CLLocation? {
+        guard let latitude,
+              let longitude else { return nil }
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
+
     func getAuthorizationStatus() -> CLAuthorizationStatus {
         return locationFetcher.authorizationStatus
     }

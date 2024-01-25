@@ -14,6 +14,7 @@ protocol UploadPostPresentationLogic {
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response)
     func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
     func presentUnsupportedFormatAlert()
+    func presentShowActionSheet(with response: UploadPostModels.ShowActionSheet.Response)
 }
 
 final class UploadPostPresenter: UploadPostPresentationLogic {
@@ -34,11 +35,11 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
 
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response) {
         let addresses: [String] = [
-            response.administrativeArea,
-            response.locality,
-            response.subLocality]
+            response.addressInfo.first?.administrativeArea,
+            response.addressInfo.first?.locality,
+            response.addressInfo.first?.subLocality]
             .compactMap { $0 }
-
+        
         var fullAddress: [String] = []
 
         for address in addresses {
@@ -46,7 +47,6 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
                 fullAddress.append(address)
             }
         }
-
         let viewModel = Models.FetchCurrentAddress.ViewModel(fullAddress: fullAddress.joined(separator: " "))
         viewController?.displayCurrentAddress(viewModel: viewModel)
     }
@@ -58,5 +58,16 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
 
     func presentUnsupportedFormatAlert() {
         viewController?.displayUnsupportedFormatAlert()
+    }
+
+    func presentShowActionSheet(with response: UploadPostModels.ShowActionSheet.Response) {
+        var addressTypes: [Models.AddressType] = []
+        if response.videoAddress != nil {
+            addressTypes.append(.video)
+        }
+        if response.currentAddress != nil {
+            addressTypes.append(.current)
+        }
+        viewController?.displayActionSheet(viewModel: Models.ShowActionSheet.ViewModel(addressTypes: addressTypes))
     }
 }

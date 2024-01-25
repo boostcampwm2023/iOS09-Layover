@@ -70,7 +70,7 @@ final class MapViewController: BaseViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCarouselCollectionViewCell.identifier,
                                                             for: indexPath) as? MapCarouselCollectionViewCell else { return UICollectionViewCell() }
         cell.setVideo(url: item.videoURL)
-        cell.configure(thumbnailImageData: item.thumbnailImageData)
+        cell.configure(thumbnailImageURL: item.thumbnailImageURL)
         return cell
     }
 
@@ -161,7 +161,7 @@ final class MapViewController: BaseViewController {
         let maximumZoomScale: CGFloat = 1.0
         let inset = (screenSize.width - screenSize.width * groupWidthDimension) / 2
         let section: NSCollectionLayoutSection = .makeCarouselSection(groupWidthDimension: groupWidthDimension)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.orthogonalScrollingBehavior = .groupPaging
         section.interGroupSpacing = 0
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: inset,
@@ -173,12 +173,11 @@ final class MapViewController: BaseViewController {
                 let distanceFromCenter = abs((item.center.x - offset.x) - environment.container.contentSize.width / 2.0)
                 let scale = max(maximumZoomScale - (distanceFromCenter / containerWidth), minumumZoomScale)
                 item.transform = CGAffineTransform(scaleX: scale, y: scale)
-                let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell
+                guard let cell = self?.carouselCollectionView.cellForItem(at: item.indexPath) as? MapCarouselCollectionViewCell else { return }
                 if scale >= maximumZoomScale * 0.9 {
-                    cell?.play()
                     self?.selectAnnotation(at: item.indexPath)
                 } else {
-                    cell?.pause()
+                    cell.pause()
                 }
             }
         }
@@ -189,7 +188,7 @@ final class MapViewController: BaseViewController {
         let annotation = LOAnnotation(coordinate: CLLocationCoordinate2D(latitude: post.latitude,
                                                                          longitude: post.longitude),
                                       boardID: post.boardID,
-                                      thumbnailImageData: post.thumbnailImageData)
+                                      thumbnailImageURL: post.thumbnailImageURL)
         mapView.addAnnotation(annotation)
     }
 
@@ -197,7 +196,6 @@ final class MapViewController: BaseViewController {
         carouselCollectionViewHeight.constant = isSelected ? 151 : 0
         UIView.animate(withDuration: 0.3) {
             annotationView.transform = isSelected ? CGAffineTransform(scaleX: 1.3, y: 1.3) : .identity
-            self.view.layoutIfNeeded()
         }
     }
 
@@ -215,7 +213,7 @@ final class MapViewController: BaseViewController {
     @objc private func searchButtonDidTap() {
         searchButton.isHidden = true
         Task {
-            await interactor?.fetchPost(latitude: mapView.centerCoordinate.latitude,
+            await interactor?.fetchPosts(latitude: mapView.centerCoordinate.latitude,
                                         longitude: mapView.centerCoordinate.longitude)
         }
     }
@@ -239,10 +237,10 @@ extension MapViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation) else { return nil }
-        if let annotaion = annotation as? LOAnnotation {
+        if let loAnnotation = annotation as? LOAnnotation {
             let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: LOAnnotationView.identifier,
                                                                        for: annotation) as? LOAnnotationView
-            annotationView?.setThumbnailImage(data: annotaion.thumbnailImageData)
+            annotationView?.setThumnailImage(with: loAnnotation.thumbnailImageURL)
             return annotationView
         }
         return nil
@@ -256,15 +254,18 @@ extension MapViewController: MKMapViewDelegate {
         if let annotaion = annotation as? LOAnnotation {
             // 선택된 pin 정보와 datasource를 비교해 selected item을 찾음
             let snapshot = carouselDatasource.snapshot()
-            guard let selectedItemIdentifiers = carouselDatasource.snapshot().itemIdentifiers.filter({ post in
+            guard let selectedItemIdentifiers = snapshot.itemIdentifiers.filter({ post in
                 return post.boardID == annotaion.boardID
             }).first else { return }
             guard let section = snapshot.sectionIdentifier(containingItem: selectedItemIdentifiers),
                   let itemIndex = snapshot.indexOfItem(selectedItemIdentifiers),
                   let sectionIndex = snapshot.indexOfSection(section) else { return }
-            carouselCollectionView.scrollToItem(at: IndexPath(item: itemIndex, section: sectionIndex),
+            let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+            carouselCollectionView.scrollToItem(at: indexPath,
                                                 at: .centeredHorizontally,
                                                 animated: false)
+            guard let cell = carouselCollectionView.cellForItem(at: indexPath) as? MapCarouselCollectionViewCell else { return }
+            cell.play()
         }
     }
 
