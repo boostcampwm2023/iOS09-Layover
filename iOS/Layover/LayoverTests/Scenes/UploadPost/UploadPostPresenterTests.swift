@@ -108,9 +108,10 @@ class UploadPostPresenterTests: XCTestCase {
         // given
         let spy = UploadPostDisplayLogicSpy()
         sut.viewController = spy
-        let response = Models.FetchCurrentAddress.Response(administrativeArea: nil,
-                                                           locality: nil,
-                                                           subLocality: nil)
+        let response = Models.FetchCurrentAddress.Response(addressInfo: [Models.AddressInfo(
+            administrativeArea: nil,
+            locality: nil,
+            subLocality: nil)])
 
         // when
         sut.presentCurrentAddress(with: response)

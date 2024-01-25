@@ -53,4 +53,8 @@ final class MockUploadPostWorker: UploadPostWorkerProtocol {
         return true
     }
 
+    func loadVideoLocation(videoURL: URL) async -> Layover.UploadPostModels.VideoAddress? {
+        nil
+    }
+
 }
