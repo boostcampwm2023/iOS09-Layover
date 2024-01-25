@@ -76,11 +76,12 @@ final class UploadPostViewController: BaseViewController {
         return imageLabel
     }()
 
-    private let currentAddressLabel: UILabel = {
-        let label = UILabel()
+    private let currentAddressLabel: LOTextLabel = {
+        let label = LOTextLabel(padding: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
         label.font = .loFont(type: .body2)
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
+        label.isUserInteractionEnabled = true
         return label
     }()
 
@@ -251,7 +252,7 @@ final class UploadPostViewController: BaseViewController {
 
     private func addLocationTarget() {
         let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(locationDidTap))
-        locationImageLabel.addGestureRecognizer(singleTapGestureRecognizer)
+        currentAddressLabel.addGestureRecognizer(singleTapGestureRecognizer)
     }
 
     @objc private func titleTextChanged() {
