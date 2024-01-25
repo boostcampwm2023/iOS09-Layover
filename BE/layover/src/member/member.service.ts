@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Member, memberStatus } from './member.entity';
 import { MemberRepository } from './member.repository';
 import { createClient } from 'redis';
+import { HttpService } from '@nestjs/axios';
 
 export type memberExistence = 'EXIST' | 'DELETED' | 'NOTEXIST';
 
@@ -13,6 +14,7 @@ export class MemberService {
     private readonly redisClient: ReturnType<typeof createClient>,
     @Inject('REDIS_FOR_BLACKLIST_CLIENT')
     private readonly redisBlacklistClient: ReturnType<typeof createClient>,
+    private readonly httpService: HttpService,
   ) {}
 
   async createMember(
