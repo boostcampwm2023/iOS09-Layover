@@ -14,6 +14,7 @@ protocol UploadPostDisplayLogic: AnyObject {
     func displayCurrentAddress(viewModel: UploadPostModels.FetchCurrentAddress.ViewModel)
     func displayUploadButton(viewModel: UploadPostModels.CanUploadPost.ViewModel)
     func displayUnsupportedFormatAlert()
+    func displayActionSheet(viewModel: UploadPostModels.ShowActionSheet.ViewModel)
 }
 
 final class UploadPostViewController: BaseViewController {
@@ -75,11 +76,12 @@ final class UploadPostViewController: BaseViewController {
         return imageLabel
     }()
 
-    private let currentAddressLabel: UILabel = {
-        let label = UILabel()
+    private let currentAddressLabel: LOTextLabel = {
+        let label = LOTextLabel(padding: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
         label.font = .loFont(type: .body2)
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
+        label.isUserInteractionEnabled = true
         return label
     }()
 
@@ -142,6 +144,7 @@ final class UploadPostViewController: BaseViewController {
         setConstraints()
         setDelegation()
         addTarget()
+        addLocationTarget()
         fetchPostInfo()
     }
 
@@ -176,7 +179,7 @@ final class UploadPostViewController: BaseViewController {
 
     private func fetchPostInfo() {
         Task {
-            await interactor?.fetchCurrentAddress()
+            await interactor?.fetchAddresses()
             await interactor?.fetchThumbnailImage()
         }
     }
@@ -247,6 +250,11 @@ final class UploadPostViewController: BaseViewController {
         scrollView.addGestureRecognizer(singleTapGestureRecognizer)
     }
 
+    private func addLocationTarget() {
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(locationDidTap))
+        currentAddressLabel.addGestureRecognizer(singleTapGestureRecognizer)
+    }
+
     @objc private func titleTextChanged() {
         interactor?.canUploadPost(request: Models.CanUploadPost.Request(title: titleTextField.text))
     }
@@ -268,6 +276,10 @@ final class UploadPostViewController: BaseViewController {
                                                 tags: tagStackView.tags)
         interactor?.uploadPost(request: request)
         router?.routeToBack()
+    }
+
+    @objc private func locationDidTap() {
+        interactor?.showActionSheet()
     }
 
 }
@@ -321,4 +333,21 @@ extension UploadPostViewController: UploadPostDisplayLogic {
         Toast.shared.showToast(message: "지원하지 않는 파일 형식이에요 😢")
     }
 
+    func displayActionSheet(viewModel: UploadPostModels.ShowActionSheet.ViewModel) {
+        let actionSheet = UIAlertController(title: "주소 선택", message: "원하는 위치의 주소를 선택하세요.", preferredStyle: .actionSheet)
+        for type in viewModel.addressTypes {
+            switch type {
+            case .video:
+                actionSheet.addAction(UIAlertAction(title: "영상 위치", style: .default, handler: { _ in
+                    self.interactor?.selectAddress(with: Models.SelectAddress.Request(addressType: type))
+                }))
+            case .current:
+                actionSheet.addAction(UIAlertAction(title: "현재 위치", style: .default, handler: { _ in
+                    self.interactor?.selectAddress(with: Models.SelectAddress.Request(addressType: type))
+                }))
+            }
+        }
+        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        present(actionSheet, animated: true, completion: nil)
+    }
 }

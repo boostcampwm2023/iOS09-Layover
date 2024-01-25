@@ -158,6 +158,7 @@
 		836C338B2B15D22C00ECAFB0 /* PlaybackConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C338A2B15D22C00ECAFB0 /* PlaybackConfigurator.swift */; };
 		836C33912B17629400ECAFB0 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836C33902B17629400ECAFB0 /* MapRouter.swift */; };
 		83957AA62B20F94C00B3BA8A /* MockPlaybackWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */; };
+		839F1DF82B62AEDA0071C622 /* LOTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839F1DF72B62AEDA0071C622 /* LOTextLabel.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
 		FC0E80242B1A0BBB00EF56D6 /* UploadPostPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */; };
@@ -426,6 +427,7 @@
 		836C33902B17629400ECAFB0 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
 		836C33972B1843BE00ECAFB0 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		83957AA52B20F94C00B3BA8A /* MockPlaybackWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaybackWorker.swift; sourceTree = "<group>"; };
+		839F1DF72B62AEDA0071C622 /* LOTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextLabel.swift; sourceTree = "<group>"; };
 		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
 		FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenter.swift; sourceTree = "<group>"; };
@@ -1205,6 +1207,7 @@
 				8321A2F62B1E14A1000A12AF /* LOPopUpView.swift */,
 				8321A2F82B1E15F3000A12AF /* LOReportStackView.swift */,
 				8321A2FA2B1E1739000A12AF /* LOReportContentView.swift */,
+				839F1DF72B62AEDA0071C622 /* LOTextLabel.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -1578,6 +1581,7 @@
 				198167A42B20583D0032F563 /* SettingInteractor.swift in Sources */,
 				FC4E0C1D2B28977000152596 /* CurrentLocationManager.swift in Sources */,
 				83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */,
+				839F1DF82B62AEDA0071C622 /* LOTextLabel.swift in Sources */,
 				FC4E0C192B28955400152596 /* LocationFetcher.swift in Sources */,
 				835A61A02B068115002F22A5 /* PlaybackModels.swift in Sources */,
 				FC0E80292B1A0BBB00EF56D6 /* UploadPostInteractor.swift in Sources */,

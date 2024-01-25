@@ -73,6 +73,10 @@ class UploadPostInteractorTests: XCTestCase {
 
         }
 
+        func presentShowActionSheet(with response: Layover.UploadPostModels.ShowActionSheet.Response) {
+            //
+        }
+
     }
 
     // MARK: - Tests
@@ -107,10 +111,10 @@ class UploadPostInteractorTests: XCTestCase {
         sut.presenter = spy
 
         // when
-        await sut.fetchCurrentAddress()
+        await sut.fetchAddresses()
 
         // then
-        XCTAssertTrue(spy.presentCurrentAddressCalled, "fetchCurrentAddress 함수가 presentCurrentAddress을 호출하지 못함")
+        XCTAssertTrue(spy.presentCurrentAddressCalled, "fetchAddress 함수가 presentCurrentAddress을 호출하지 못함")
     }
 
     func test_fetchCurrentAddress를_호출하면_presenter에게_위치데이터를_전달한다() async throws {
@@ -119,10 +123,10 @@ class UploadPostInteractorTests: XCTestCase {
         sut.presenter = spy
 
         // when
-        await sut.fetchCurrentAddress()
+        await sut.fetchAddresses()
 
         // then
-        XCTAssertNotNil(spy.presentCurrentAddressResponse, "fetchCurrentAddress 함수가 presenter에게 위치데이터를 전달하지 못함")
+        XCTAssertNotNil(spy.presentCurrentAddressResponse, "fetchAddress 함수가 presenter에게 위치데이터를 전달하지 못함")
     }
 
     func test_fetchThumbnailImage를_호출하면_presenter의_presentThumbnailImage가_호출된다() async {

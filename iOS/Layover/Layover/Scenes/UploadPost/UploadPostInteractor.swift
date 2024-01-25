@@ -17,9 +17,13 @@ protocol UploadPostBusinessLogic {
     func fetchTags()
     func editTags(with request: UploadPostModels.EditTags.Request)
     func fetchThumbnailImage() async
-    func fetchCurrentAddress() async
+    func fetchCurrentAddress() async -> UploadPostModels.AddressInfo?
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
     func uploadPost(request: UploadPostModels.UploadPost.Request)
+    func fetchVideoAddress() async -> UploadPostModels.AddressInfo?
+    func fetchAddresses() async
+    func showActionSheet()
+    func selectAddress(with request: UploadPostModels.SelectAddress.Request)
 }
 
 protocol UploadPostDataStore {
@@ -45,6 +49,8 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     var videoURL: URL?
     var isMuted: Bool?
     var tags: [String]? = []
+    var videoAddress: Models.AddressInfo?
+    var currentAddress: Models.AddressInfo?
 
     // MARK: - Object LifeCycle
 
@@ -80,8 +86,8 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         }
     }
 
-    func fetchCurrentAddress() async {
-        guard let location = locationManager.getCurrentLocation() else { return }
+    func fetchCurrentAddress() async -> UploadPostModels.AddressInfo? {
+        guard let location = locationManager.getCurrentLocation() else { return nil }
         let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
         let locale = Locale(identifier: localeIdentifier)
         do {
@@ -89,14 +95,35 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             let administrativeArea = address?.administrativeArea
             let locality = address?.locality
             let subLocality = address?.subLocality
-            let response = Models.FetchCurrentAddress.Response(administrativeArea: administrativeArea,
-                                                               locality: locality,
-                                                               subLocality: subLocality)
-            await MainActor.run {
-                presenter?.presentCurrentAddress(with: response)
-            }
+            return Models.AddressInfo(
+                administrativeArea: administrativeArea,
+                locality: locality,
+                subLocality: subLocality)
         } catch {
             os_log(.error, log: .data, "Failed to fetch Current Address with error: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchVideoAddress() async -> UploadPostModels.AddressInfo? {
+        guard let videoURL,
+              let videoLocation = await worker?.loadVideoLocation(videoURL: videoURL),
+              let location = locationManager.getVideoLocation(latitude: videoLocation.latitude, longitude: videoLocation.longitude)
+        else { return nil }
+        let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
+        let locale = Locale(identifier: localeIdentifier)
+        do {
+            let address = try await CLGeocoder().reverseGeocodeLocation(location, preferredLocale: locale).last
+            let administrativeArea = address?.administrativeArea
+            let locality = address?.locality
+            let subLocality = address?.subLocality
+            return Models.AddressInfo(
+                administrativeArea: administrativeArea,
+                locality: locality,
+                subLocality: subLocality)
+        } catch {
+            os_log(.error, log: .data, "Failed to fetch Video Address with error: %@", error.localizedDescription)
+            return nil
         }
     }
 
@@ -125,6 +152,37 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             _ = await worker.uploadVideo(with: UploadVideoRequestDTO(boardID: boardID, filetype: fileType),
                                          videoURL: videoURL)
         }
+    }
+
+    func fetchAddresses() async {
+        async let currentAddressInfo = fetchCurrentAddress()
+        async let videoAddressInfo = fetchVideoAddress()
+
+        videoAddress = await videoAddressInfo
+        currentAddress = await currentAddressInfo
+
+        let response: Models.FetchCurrentAddress.Response = Models.FetchCurrentAddress.Response(addressInfo: [ videoAddress, currentAddress].compactMap { $0 })
+        await MainActor.run {
+            presenter?.presentCurrentAddress(with: response)
+        }
+    }
+
+    func selectAddress(with request: UploadPostModels.SelectAddress.Request) {
+        var response: Models.FetchCurrentAddress.Response
+        switch request.addressType {
+        case .video:
+            guard let videoAddress else { return }
+            response = Models.FetchCurrentAddress.Response(addressInfo: [videoAddress])
+        case .current:
+            guard let currentAddress else { return }
+            response = Models.FetchCurrentAddress.Response(addressInfo: [currentAddress])
+        }
+        presenter?.presentCurrentAddress(with: response)
+    }
+
+    func showActionSheet() {
+        let response: Models.ShowActionSheet.Response = Models.ShowActionSheet.Response(videoAddress: videoAddress, currentAddress: currentAddress)
+        presenter?.presentShowActionSheet(with: response)
     }
 
     private func exportVideoWithoutAudio(at url: URL) async {
@@ -158,5 +216,4 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
         }
     }
-
 }
