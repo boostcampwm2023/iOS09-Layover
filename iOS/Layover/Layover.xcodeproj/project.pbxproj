@@ -1345,6 +1345,7 @@
 				Base,
 			);
 			mainGroup = FC7E452D2AFEB623004F155A;
+			packageReferences = (
 				194551FB2B03863B00299768 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				FC8DC42D2B5A5C4600FC772A /* XCLocalSwiftPackageReference "Layover/LOImageCacher" */,
 				19AF2A042B5D06B9008C3620 /* XCRemoteSwiftPackageReference "HLSCachingServer" */,
@@ -1977,6 +1978,7 @@
 		FC8DC42E2B5A5C4600FC772A /* LOImageCacher */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LOImageCacher;
+		};
 		19AF2A052B5D06B9008C3620 /* HLSCachingServer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 19AF2A042B5D06B9008C3620 /* XCRemoteSwiftPackageReference "HLSCachingServer" */;
