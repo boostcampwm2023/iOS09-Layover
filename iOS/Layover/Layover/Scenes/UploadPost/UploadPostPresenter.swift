@@ -14,6 +14,7 @@ protocol UploadPostPresentationLogic {
     func presentCurrentAddress(with response: UploadPostModels.FetchCurrentAddress.Response)
     func presentUploadButton(with response: UploadPostModels.CanUploadPost.Response)
     func presentUnsupportedFormatAlert()
+    func presentShowActionSheet(with response: UploadPostModels.ShowActionSheet.Response)
 }
 
 final class UploadPostPresenter: UploadPostPresentationLogic {
@@ -57,5 +58,16 @@ final class UploadPostPresenter: UploadPostPresentationLogic {
 
     func presentUnsupportedFormatAlert() {
         viewController?.displayUnsupportedFormatAlert()
+    }
+
+    func presentShowActionSheet(with response: UploadPostModels.ShowActionSheet.Response) {
+        var addressTypes: [Models.AddressType] = []
+        if response.videoAddress != nil {
+            addressTypes.append(.video)
+        }
+        if response.currentAddress != nil {
+            addressTypes.append(.current)
+        }
+        viewController?.displayActionSheet(viewModel: Models.ShowActionSheet.ViewModel(addressTypes: addressTypes))
     }
 }

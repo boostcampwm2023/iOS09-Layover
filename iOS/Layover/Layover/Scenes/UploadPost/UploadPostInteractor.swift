@@ -22,6 +22,8 @@ protocol UploadPostBusinessLogic {
     func uploadPost(request: UploadPostModels.UploadPost.Request)
     func fetchVideoAddress() async -> UploadPostModels.AddressInfo?
     func fetchAddresses() async
+    func showActionSheet()
+    func selectAddress(with request: UploadPostModels.SelectAddress.Request)
 }
 
 protocol UploadPostDataStore {
@@ -47,6 +49,8 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     var videoURL: URL?
     var isMuted: Bool?
     var tags: [String]? = []
+    var videoAddress: Models.AddressInfo?
+    var currentAddress: Models.AddressInfo?
 
     // MARK: - Object LifeCycle
 
@@ -151,12 +155,34 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     }
 
     func fetchAddresses() async {
-        async let currentAddress = fetchCurrentAddress()
-        async let videoAddress = fetchVideoAddress()
-        let response: Models.FetchCurrentAddress.Response = Models.FetchCurrentAddress.Response(addressInfo: [await videoAddress, await currentAddress].compactMap { $0 })
+        async let currentAddressInfo = fetchCurrentAddress()
+        async let videoAddressInfo = fetchVideoAddress()
+
+        videoAddress = await videoAddressInfo
+        currentAddress = await currentAddressInfo
+
+        let response: Models.FetchCurrentAddress.Response = Models.FetchCurrentAddress.Response(addressInfo: [ videoAddress, currentAddress].compactMap { $0 })
         await MainActor.run {
             presenter?.presentCurrentAddress(with: response)
         }
+    }
+
+    func selectAddress(with request: UploadPostModels.SelectAddress.Request) {
+        var response: Models.FetchCurrentAddress.Response
+        switch request.addressType {
+        case .video:
+            guard let videoAddress else { return }
+            response = Models.FetchCurrentAddress.Response(addressInfo: [videoAddress])
+        case .current:
+            guard let currentAddress else { return }
+            response = Models.FetchCurrentAddress.Response(addressInfo: [currentAddress])
+        }
+        presenter?.presentCurrentAddress(with: response)
+    }
+
+    func showActionSheet() {
+        let response: Models.ShowActionSheet.Response = Models.ShowActionSheet.Response(videoAddress: videoAddress, currentAddress: currentAddress)
+        presenter?.presentShowActionSheet(with: response)
     }
 
     private func exportVideoWithoutAudio(at url: URL) async {
@@ -190,5 +216,4 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             os_log(.error, log: .data, "Failed to extract Video Without Audio with error: %@", error.localizedDescription)
         }
     }
-
 }

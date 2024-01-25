@@ -24,6 +24,11 @@ enum UploadPostModels {
         let subLocality: String?
     }
 
+    enum AddressType {
+        case video
+        case current
+    }
+
     enum CanUploadPost {
         struct Request {
             let title: String?
@@ -88,7 +93,32 @@ enum UploadPostModels {
         struct Response {
 
         }
-        struct VideModel {
+        struct ViewModel {
+
+        }
+    }
+
+    enum ShowActionSheet {
+        struct Request {
+
+        }
+        struct Response {
+            let videoAddress: AddressInfo?
+            let currentAddress: AddressInfo?
+        }
+        struct ViewModel {
+            let addressTypes: [AddressType]
+        }
+    }
+
+    enum SelectAddress {
+        struct Request {
+            let addressType: AddressType
+        }
+        struct Response {
+
+        }
+        struct ViewModel {
 
         }
     }
