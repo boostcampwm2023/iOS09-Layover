@@ -17,9 +17,11 @@ protocol UploadPostBusinessLogic {
     func fetchTags()
     func editTags(with request: UploadPostModels.EditTags.Request)
     func fetchThumbnailImage() async
-    func fetchCurrentAddress() async
+    func fetchCurrentAddress() async -> UploadPostModels.AddressInfo?
     func canUploadPost(request: UploadPostModels.CanUploadPost.Request)
     func uploadPost(request: UploadPostModels.UploadPost.Request)
+    func fetchVideoAddress() async -> UploadPostModels.AddressInfo?
+    func fetchAddresses() async
 }
 
 protocol UploadPostDataStore {
@@ -80,8 +82,8 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         }
     }
 
-    func fetchCurrentAddress() async {
-        guard let location = locationManager.getCurrentLocation() else { return }
+    func fetchCurrentAddress() async -> UploadPostModels.AddressInfo? {
+        guard let location = locationManager.getCurrentLocation() else { return nil }
         let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
         let locale = Locale(identifier: localeIdentifier)
         do {
@@ -89,14 +91,35 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             let administrativeArea = address?.administrativeArea
             let locality = address?.locality
             let subLocality = address?.subLocality
-            let response = Models.FetchCurrentAddress.Response(administrativeArea: administrativeArea,
-                                                               locality: locality,
-                                                               subLocality: subLocality)
-            await MainActor.run {
-                presenter?.presentCurrentAddress(with: response)
-            }
+            return Models.AddressInfo(
+                administrativeArea: administrativeArea,
+                locality: locality,
+                subLocality: subLocality)
         } catch {
             os_log(.error, log: .data, "Failed to fetch Current Address with error: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchVideoAddress() async -> UploadPostModels.AddressInfo? {
+        guard let videoURL,
+              let videoLocation = await worker?.loadVideoLocation(videoURL: videoURL),
+              let location = locationManager.getVideoLocation(latitude: videoLocation.latitude, longitude: videoLocation.longitude)
+        else { return nil }
+        let localeIdentifier = Locale.preferredLanguages.first != nil ? Locale.preferredLanguages[0] : Locale.current.identifier
+        let locale = Locale(identifier: localeIdentifier)
+        do {
+            let address = try await CLGeocoder().reverseGeocodeLocation(location, preferredLocale: locale).last
+            let administrativeArea = address?.administrativeArea
+            let locality = address?.locality
+            let subLocality = address?.subLocality
+            return Models.AddressInfo(
+                administrativeArea: administrativeArea,
+                locality: locality,
+                subLocality: subLocality)
+        } catch {
+            os_log(.error, log: .data, "Failed to fetch Video Address with error: %@", error.localizedDescription)
+            return nil
         }
     }
 
@@ -124,6 +147,15 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             let fileType = videoURL.pathExtension
             _ = await worker.uploadVideo(with: UploadVideoRequestDTO(boardID: boardID, filetype: fileType),
                                          videoURL: videoURL)
+        }
+    }
+
+    func fetchAddresses() async {
+        async let currentAddress = fetchCurrentAddress()
+        async let videoAddress = fetchVideoAddress()
+        let response: Models.FetchCurrentAddress.Response = Models.FetchCurrentAddress.Response(addressInfo: [await videoAddress, await currentAddress].compactMap { $0 })
+        await MainActor.run {
+            presenter?.presentCurrentAddress(with: response)
         }
     }
 

@@ -176,7 +176,7 @@ final class UploadPostViewController: BaseViewController {
 
     private func fetchPostInfo() {
         Task {
-            await interactor?.fetchCurrentAddress()
+            await interactor?.fetchAddresses()
             await interactor?.fetchThumbnailImage()
         }
     }

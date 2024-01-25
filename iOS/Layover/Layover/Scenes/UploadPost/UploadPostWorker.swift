@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import AVFoundation
 
 import OSLog
 
 protocol UploadPostWorkerProtocol {
     func uploadPost(with request: UploadPost) async -> UploadPostDTO?
     func uploadVideo(with request: UploadVideoRequestDTO, videoURL: URL) async -> Bool
+    func loadVideoLocation(videoURL: URL) async -> UploadPostModels.VideoAddress?
 }
 
 final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
@@ -62,6 +64,27 @@ final class UploadPostWorker: NSObject, UploadPostWorkerProtocol {
             NotificationCenter.default.post(name: .uploadTaskDidFail, object: nil)
             return false
         }
+    }
+
+    func loadVideoLocation(videoURL: URL) async -> UploadPostModels.VideoAddress? {
+        let asset = AVAsset(url: videoURL)
+        let metadata = try? await asset.load(.metadata)
+        guard let metadata else { return nil }
+        for meta in metadata {
+            if meta.commonKey == AVMetadataKey.commonKeyLocation {
+                let location = try? await meta.load(.stringValue)?.split(separator: "+")
+                if location?.count ?? 0 < 2 {
+                    return nil
+                }
+                guard let latitudeString = location?[0],
+                      let longitudeString = location?[1],
+                      let latitude = Double(latitudeString),
+                      let longitude = Double(longitudeString)
+                else { return nil }
+                return Models.VideoAddress(latitude: latitude, longitude: longitude)
+            }
+        }
+        return nil
     }
 
 }
