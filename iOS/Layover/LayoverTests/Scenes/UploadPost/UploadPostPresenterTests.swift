@@ -73,6 +73,11 @@ class UploadPostPresenterTests: XCTestCase {
 
         }
 
+        func displayActionSheet(viewModel: Layover.UploadPostModels.ShowActionSheet.ViewModel) {
+            //
+        }
+
+
     }
 
     // MARK: - Tests
