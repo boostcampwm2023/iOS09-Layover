@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import HLSCachingServer
 
 final class PlaybackView: UIView {
 
@@ -106,7 +107,8 @@ final class PlaybackView: UIView {
     // MARK: Player Setting Method
 
     func addAVPlayer(url: URL) {
-        playerView.player = AVPlayer(url: url)
+        guard let reverseProxyURL = HLSCachingServer.reverseProxyURL(from: url) else { return }
+        playerView.player = AVPlayer(url: reverseProxyURL)
     }
 
     func getPlayerItemStatus() -> AVPlayerItem.Status? {
