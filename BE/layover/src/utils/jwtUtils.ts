@@ -78,7 +78,7 @@ export async function verifyJwtToken(token: string, key?: string): Promise<boole
     case 'RS256':
       await verifyAppleToken({
         idToken: token,
-        clientId: 'kr.codesquad.boostcamp8.Layover',
+        clientId: 'com.codebomber.Layover',
       });
       break;
     default:
