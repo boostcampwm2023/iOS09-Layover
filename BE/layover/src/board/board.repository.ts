@@ -15,7 +15,28 @@ export class BoardRepository {
     return await this.boardRepository.createQueryBuilder('board').where("board.status = 'COMPLETE'").getCount();
   }
 
-  async findBoardsRandomly(itemsPerPage: number, cursor: number) {
+  async getLastId() {
+    const lastRow = await this.boardRepository
+      .createQueryBuilder('board')
+      .select('board.id')
+      .where("board.status = 'COMPLETE'")
+      .orderBy('board.id', 'DESC')
+      .limit(1)
+      .getOne();
+
+    return lastRow.id;
+  }
+
+  async getAllCompleteVideo() {
+    return await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.member', 'member')
+      .leftJoinAndSelect('board.tags', 'tag')
+      .where("board.status = 'COMPLETE'")
+      .getMany();
+  }
+
+  async findBoardsHome(itemsPerPage: number, cursor: number) {
     return await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')

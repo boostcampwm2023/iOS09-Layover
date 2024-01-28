@@ -68,7 +68,7 @@ describe('BoardController', () => {
       mockBoardService.getBoardsRandomly.mockResolvedValue(boardsResDto);
 
       //when
-      await boardController.getBoardRandom(testPayload);
+      await boardController.getBoardHome(testPayload);
     } catch (e) {
       //then
       expect(e).toBeInstanceOf(CustomResponse);
