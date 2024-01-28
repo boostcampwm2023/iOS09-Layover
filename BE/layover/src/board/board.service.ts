@@ -11,7 +11,6 @@ import { generateDownloadPreSignedUrl } from '../utils/s3Utils';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardRepository, boardStatus } from './board.repository';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
-import { all } from 'axios';
 
 @Injectable()
 export class BoardService {
@@ -139,7 +138,7 @@ export class BoardService {
     let boards: Board[];
 
     // cursor 값이 없을 경우 -> 최근 데이터 15개 가져오기
-    if (cursor === undefined) {
+    if (cursor === -1) {
       boards = await this.boardRepository.findBoardsByTag(tag, itemsPerPage);
     } else {
       // cursor 값이 있을 경우 -> 해당 id 보다 작은 아이디 15개 limit 가져오기
@@ -147,7 +146,7 @@ export class BoardService {
     }
     // 가장 끝의 id를 cursor 로 반환해줘야함.
     const boardIds = boards.map((board) => board.id);
-    const lastId = boardIds[-1];
+    const lastId = boardIds[boardIds.length - 1];
     const allBoards: Board[] = await this.boardRepository.findBoardsByIds(boardIds);
     const boardsResDto: BoardsResDto[] = await Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
     return {
@@ -159,14 +158,13 @@ export class BoardService {
   async getBoardsByProfile(id: number, cursor: number) {
     const itemsPerPage = 15;
     let boards: Board[];
-
-    if (cursor === undefined) {
+    if (cursor === -1) {
       boards = await this.boardRepository.findBoardsByProfile(id, itemsPerPage);
     } else {
       boards = await this.boardRepository.findBoardsByProfileWithCursor(id, itemsPerPage, cursor);
     }
-
-    const lastId = boards[-1].id;
+    console.log(boards[0]);
+    const lastId = boards[boards.length - 1].id;
 
     const boardsResDto: BoardsResDto[] = await Promise.all(boards.map((board) => this.createBoardResDto(board)));
     // 가장 끝의 id를 cursor 로 반환해줘야함.

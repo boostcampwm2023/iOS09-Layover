@@ -101,7 +101,7 @@ export class BoardRepository {
       .leftJoinAndSelect('board.tags', 'tag')
       .where('member.id = :id', { id })
       .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
-      .andWhere('board.id < :id', { id: cursor }) //cursor paging
+      .andWhere('board.id < :id', { cursor }) //cursor paging
       .take(itemsPerPage)
       .getMany();
   }

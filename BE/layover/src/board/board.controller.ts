@@ -95,7 +95,7 @@ export class BoardController {
     @Query('tag') tag: string,
     @Query('cursor') cursor?: string,
   ) {
-    const result = await this.boardService.getBoardsByTag(tag, parseInt(cursor));
+    const result = await this.boardService.getBoardsByTag(tag, cursor === undefined ? -1 : parseInt(cursor));
     throw new CustomResponse(ECustomCode.SUCCESS, result);
   }
 
@@ -110,7 +110,7 @@ export class BoardController {
   async getBoardProfile(
     @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('memberId') memberId: string,
-    @Query('page') page: string,
+    @Query('cursor') cursor: string,
   ) {
     let id = -1;
 
@@ -122,7 +122,7 @@ export class BoardController {
       id = payload.memberId;
     }
 
-    const result = await this.boardService.getBoardsByProfile(id, parseInt(page));
+    const result = await this.boardService.getBoardsByProfile(id, cursor === undefined ? -1 : parseInt(cursor));
     throw new CustomResponse(ECustomCode.SUCCESS, result);
   }
 
