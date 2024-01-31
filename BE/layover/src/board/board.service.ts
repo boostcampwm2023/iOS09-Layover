@@ -82,12 +82,13 @@ export class BoardService {
         ? await this.findBoardsRandomly(itemsPerPage)
         : await this.boardRepository.findBoardsHome(itemsPerPage, cursor);
 
-    console.log(boards);
+    // length 가 0이라면 마지막 아이디라는 뜻.
+    if (boards.length === 0) {
+      return {};
+    }
+
     // 해당 커서로부터 일정 개수의 데이터 가져오기
     const lastId = boards[boards.length - 1].id;
-    boards.map((board: Board) => {
-      console.log(board.id);
-    });
 
     // 배열 섞기 (우선 보류)
 
@@ -144,6 +145,11 @@ export class BoardService {
       // cursor 값이 있을 경우 -> 해당 id 보다 작은 아이디 15개 limit 가져오기
       boards = await this.boardRepository.findBoardsByTagWithCursor(tag, itemsPerPage, cursor);
     }
+
+    if (boards.length === 0) {
+      return {};
+    }
+
     // 가장 끝의 id를 cursor 로 반환해줘야함.
     const boardIds = boards.map((board) => board.id);
     const lastId = boardIds[boardIds.length - 1];
@@ -163,6 +169,12 @@ export class BoardService {
     } else {
       boards = await this.boardRepository.findBoardsByProfileWithCursor(id, itemsPerPage, cursor);
     }
+
+    // length 가 0이라면 마지막 아이디라는 뜻.
+    if (boards.length === 0) {
+      return {};
+    }
+
     console.log(boards[0]);
     const lastId = boards[boards.length - 1].id;
 

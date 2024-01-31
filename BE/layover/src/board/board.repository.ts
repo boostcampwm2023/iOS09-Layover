@@ -42,7 +42,7 @@ export class BoardRepository {
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
       .where("board.status = 'COMPLETE'")
-      .andWhere('board.id > :id', { id: cursor }) //cursor paging (random 은 id 오름차순으로 가져오기?)
+      .andWhere('board.id > :cursor', { cursor }) //cursor paging (random 은 id 오름차순으로 가져오기?)
       .take(itemsPerPage)
       .getMany();
   }
@@ -69,7 +69,7 @@ export class BoardRepository {
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
       .andWhere("board.status = 'COMPLETE'")
-      .andWhere('board.id < :id', { id: cursor }) //cursor paging
+      .andWhere('board.id < :cursor', { cursor }) //cursor paging
       .take(itemsPerPage)
       .getMany();
   }
@@ -80,7 +80,7 @@ export class BoardRepository {
       .leftJoinAndSelect('board.tags', 'tag')
       .where('tag.tagname = :tag', { tag })
       .andWhere("board.status = 'COMPLETE'")
-      .orderBy('board.date_created', 'DESC') // cursor 가 있을 경우에는 필요 없을듯 (없으면 DESC 로 itemsPerPage 가져오기)
+      .orderBy('board.date_created', 'DESC')
       .take(itemsPerPage)
       .getMany();
   }
@@ -90,6 +90,8 @@ export class BoardRepository {
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.member', 'member')
       .leftJoinAndSelect('board.tags', 'tag')
+      .orderBy('board.date_created', 'DESC')
+
       .whereInIds(boardIds)
       .getMany();
   }
@@ -101,7 +103,8 @@ export class BoardRepository {
       .leftJoinAndSelect('board.tags', 'tag')
       .where('member.id = :id', { id })
       .andWhere("board.status IN ('COMPLETE', 'WAITING', 'RUNNING')")
-      .andWhere('board.id < :id', { cursor }) //cursor paging
+      .andWhere('board.id < :cursor', { cursor }) //cursor paging
+      .orderBy('board.date_created', 'DESC')
       .take(itemsPerPage)
       .getMany();
   }
