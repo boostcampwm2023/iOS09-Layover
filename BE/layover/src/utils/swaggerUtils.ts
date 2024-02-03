@@ -83,6 +83,7 @@ export const SWAGGER = {
   MEMBER_ID_QUERY_STRING: { name: 'memberId', required: false, description: '회원 아이디 (생략하면 본인 정보 요청)' },
   CURSOR_QUERY_STRING: {
     name: 'cursor',
+    type: 'number',
     required: false,
     description: '커서페이징에 사용될 값 (비우면 홈에서는 랜덤, 태그와 프로필에서는 최근값을 가져온다.)',
   },
