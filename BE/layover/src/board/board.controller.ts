@@ -61,6 +61,7 @@ export class BoardController {
   })
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
+  @ApiQuery(SWAGGER.CURSOR_QUERY_STRING)
   @Get('home')
   async getBoardHome(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Query('cursor') cursor?: string) {
     const result = await this.boardService.getBoardsHome(cursor === undefined ? -1 : parseInt(cursor));
@@ -85,6 +86,8 @@ export class BoardController {
 
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
+  @ApiQuery(SWAGGER.TAG_QUERY_STRING)
+  @ApiQuery(SWAGGER.CURSOR_QUERY_STRING)
   @Get('tag')
   @ApiOperation({
     summary: '태그별 게시글 조회',
@@ -102,6 +105,7 @@ export class BoardController {
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
+  @ApiQuery(SWAGGER.CURSOR_QUERY_STRING)
   @Get('profile')
   @ApiOperation({
     summary: '프로필 게시글 조회',
