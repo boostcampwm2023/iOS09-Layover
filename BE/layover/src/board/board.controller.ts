@@ -7,7 +7,6 @@ import { BoardPreSignedUrlDto } from './dtos/board-pre-signed-url.dto';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateBoardResDto } from './dtos/create-board-res.dto';
-import { UploadCallbackDto } from './dtos/upload-callback.dto';
 import { EncodingCallbackDto } from './dtos/encoding-callback.dto';
 import { CustomHeader } from '../pipes/custom-header.decorator';
 import { JwtValidationPipe } from '../pipes/jwt.validation.pipe';
@@ -62,10 +61,11 @@ export class BoardController {
   })
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
+  @ApiQuery(SWAGGER.CURSOR_QUERY_STRING)
   @Get('home')
-  async getBoardRandom(@CustomHeader(JwtValidationPipe) payload: tokenPayload) {
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsRandomly();
-    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+  async getBoardHome(@CustomHeader(JwtValidationPipe) payload: tokenPayload, @Query('cursor') cursor?: string) {
+    const result = await this.boardService.getBoardsHome(cursor === undefined ? -1 : parseInt(cursor));
+    throw new CustomResponse(ECustomCode.SUCCESS, result);
   }
 
   @ApiOperation({
@@ -86,6 +86,8 @@ export class BoardController {
 
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
+  @ApiQuery(SWAGGER.TAG_QUERY_STRING)
+  @ApiQuery(SWAGGER.CURSOR_QUERY_STRING)
   @Get('tag')
   @ApiOperation({
     summary: '태그별 게시글 조회',
@@ -94,15 +96,16 @@ export class BoardController {
   async getBoardTag(
     @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('tag') tag: string,
-    @Query('page') page: string,
+    @Query('cursor') cursor?: string,
   ) {
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsByTag(tag, parseInt(page));
-    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+    const result = await this.boardService.getBoardsByTag(tag, cursor === undefined ? -1 : parseInt(cursor));
+    throw new CustomResponse(ECustomCode.SUCCESS, result);
   }
 
   @ApiResponse(BOARD_SWAGGER.GET_BOARD_SUCCESS)
   @ApiBearerAuth('token')
   @ApiQuery(SWAGGER.MEMBER_ID_QUERY_STRING)
+  @ApiQuery(SWAGGER.CURSOR_QUERY_STRING)
   @Get('profile')
   @ApiOperation({
     summary: '프로필 게시글 조회',
@@ -111,7 +114,7 @@ export class BoardController {
   async getBoardProfile(
     @CustomHeader(JwtValidationPipe) payload: tokenPayload,
     @Query('memberId') memberId: string,
-    @Query('page') page: string,
+    @Query('cursor') cursor: string,
   ) {
     let id = -1;
 
@@ -123,8 +126,8 @@ export class BoardController {
       id = payload.memberId;
     }
 
-    const boardsRestDto: BoardsResDto[] = await this.boardService.getBoardsByProfile(id, parseInt(page));
-    throw new CustomResponse(ECustomCode.SUCCESS, boardsRestDto);
+    const result = await this.boardService.getBoardsByProfile(id, cursor === undefined ? -1 : parseInt(cursor));
+    throw new CustomResponse(ECustomCode.SUCCESS, result);
   }
 
   @ApiBearerAuth('token')
