@@ -54,10 +54,14 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Methods
 
-    func configure(profileImage: UIImage?,
+    func configure(profileImageURL: URL?,
                    nickname: String?,
                    introduce: String?) {
-        profileImageView.image = profileImage
+        if let profileImageURL {
+            profileImageView.lo.setImage(with: profileImageURL)
+        } else {
+            profileImageView.image = UIImage.profile
+        }
         nicknameLabel.text = nickname
         introduceLabel.text = introduce
     }

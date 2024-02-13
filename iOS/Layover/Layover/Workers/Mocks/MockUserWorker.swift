@@ -149,8 +149,8 @@ final class MockUserWorker: UserWorkerProtocol {
         }
     }
 
-    func fetchPosts(at page: Int, of id: Int?) async -> [Post]? {
-        let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
+    func fetchPosts(at cursor: Int?, of id: Int?) async -> PostsPage? {
+        let resourceFileName = switch cursor { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
         guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
@@ -161,11 +161,11 @@ final class MockUserWorker: UserWorkerProtocol {
                                                headerFields: nil)
                 return (response, mockData, nil)
             }
-            let endPoint = EndPoint<Response<[PostDTO]>>(path: "/member/posts",
+            let endPoint = EndPoint<Response<PostsPageDTO>>(path: "/member/posts",
                                                           method: .GET,
-                                                          queryParameters: ["page": page])
+                                                          queryParameters: ["cursor": cursor])
             let response = try await provider.request(with: endPoint)
-            return response.data?.map { $0.toDomain() }
+            return response.data?.toDomain()
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil

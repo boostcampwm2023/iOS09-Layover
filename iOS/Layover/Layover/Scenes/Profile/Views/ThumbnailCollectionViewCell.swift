@@ -43,8 +43,11 @@ final class ThumbnailCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Methods
 
-    func configure(image: UIImage?, status: BoardStatus) {
-        thumbnailImageView.image = image
+    func configure(image: URL?, status: BoardStatus) {
+
+        if let image {
+            thumbnailImageView.lo.setImage(with: image)
+        }
 
         switch status {
         case .complete:

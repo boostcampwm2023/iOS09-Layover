@@ -13,12 +13,12 @@ enum ProfileModels {
     struct Profile: Hashable {
         let username: String
         let introduce: String?
-        let profileImageData: Data?
+        let profileImageURL: URL?
     }
 
     struct DisplayedPost: Hashable {
         let id: Int
-        let thumbnailImageData: Data?
+        let thumbnailImageData: URL?
         let status: BoardStatus
     }
 
