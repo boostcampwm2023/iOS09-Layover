@@ -20,7 +20,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
     private let authManager: AuthManagerProtocol
 
     // MARK: - Methods
-    
+
     init(provider: ProviderType = Provider(session: .initMockSession()), authManager: AuthManagerProtocol = StubAuthManager()) {
         self.provider = provider
         self.authManager = authManager
@@ -108,7 +108,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
         }
     }
 
-    func fetchHomePosts() async -> [Post]? {
+    func fetchHomePosts(at cursor: Int?) async -> PostsPage? {
         guard let fileLocation = Bundle.main.url(forResource: "PostList",
                                                  withExtension: "json") else { return nil }
 
@@ -121,11 +121,11 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
                                                headerFields: nil)
                 return (response, mockData, nil)
             }
-            let endPoint: EndPoint = EndPoint<Response<[PostDTO]>>(path: "/board/home",
+            let endPoint: EndPoint = EndPoint<Response<PostsPageDTO>>(path: "/board/home",
                                                                    method: .GET)
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
-            return data.map { $0.toDomain() }
+            return data.toDomain()
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil

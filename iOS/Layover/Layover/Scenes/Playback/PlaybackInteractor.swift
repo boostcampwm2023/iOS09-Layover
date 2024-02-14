@@ -77,6 +77,8 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
 
     private var isFetchReqeust: Bool = false
 
+    private var postsPageCursor: Int?
+
     private var currentPage: Int = 1
 
     var playbackVideoInfos: [Models.PlaybackInfo] = []
@@ -369,7 +371,9 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
             var newPosts: [Post]?
             switch parentView {
             case .home:
-                newPosts = await worker?.fetchHomePosts()
+                let postsPage = await worker?.fetchHomePosts(at: postsPageCursor)
+                newPosts = postsPage?.posts
+                postsPageCursor = postsPage?.cursor
             case .map:
                 return
             case .myProfile, .otherProfile:
