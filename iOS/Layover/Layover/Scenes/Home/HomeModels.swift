@@ -24,6 +24,7 @@ enum HomeModels {
         }
 
         struct Response {
+            let cursor: Int
             let posts: [Post]
         }
 
