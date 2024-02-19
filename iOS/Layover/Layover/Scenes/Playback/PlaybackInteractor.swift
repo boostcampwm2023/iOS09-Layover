@@ -308,7 +308,7 @@ final class PlaybackInteractor: PlaybackBusinessLogic, PlaybackDataStore {
     }
 
     func reportVideo(with request: PlaybackModels.ReportPlaybackVideo.Request) {
-        if request.indexPathRow >= playbackVideoInfos.count { return }
+        if request.indexPathRow < playbackVideoInfos.count { return }
         boardID = playbackVideoInfos[request.indexPathRow].boardID
         presenter?.presentReportVideo()
     }
