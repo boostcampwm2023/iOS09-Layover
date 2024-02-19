@@ -13,6 +13,24 @@ enum UploadPostModels {
     static let titleMaxLength: Int = 15
     static let contentMaxLength: Int = 50
 
+    struct VideoAddress {
+        let latitude: Double
+        let longitude: Double
+    }
+
+    struct AddressInfo {
+        let administrativeArea: String?
+        let locality: String?
+        let subLocality: String?
+        let latitude: Double
+        let longitude: Double
+    }
+
+    enum AddressType {
+        case video
+        case current
+    }
+
     enum CanUploadPost {
         struct Request {
             let title: String?
@@ -61,9 +79,7 @@ enum UploadPostModels {
 
         }
         struct Response {
-            let administrativeArea: String?
-            let locality: String?
-            let subLocality: String?
+            let addressInfo: [AddressInfo]
         }
         struct ViewModel {
             let fullAddress: String
@@ -79,7 +95,32 @@ enum UploadPostModels {
         struct Response {
 
         }
-        struct VideModel {
+        struct ViewModel {
+
+        }
+    }
+
+    enum ShowActionSheet {
+        struct Request {
+
+        }
+        struct Response {
+            let videoAddress: AddressInfo?
+            let currentAddress: AddressInfo?
+        }
+        struct ViewModel {
+            let addressTypes: [AddressType]
+        }
+    }
+
+    enum SelectAddress {
+        struct Request {
+            let addressType: AddressType
+        }
+        struct Response {
+
+        }
+        struct ViewModel {
 
         }
     }
