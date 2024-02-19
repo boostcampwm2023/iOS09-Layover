@@ -22,8 +22,6 @@ enum UploadPostModels {
         let administrativeArea: String?
         let locality: String?
         let subLocality: String?
-        let latitude: Double
-        let longitude: Double
     }
 
     enum AddressType {
