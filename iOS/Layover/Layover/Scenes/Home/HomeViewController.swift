@@ -139,10 +139,8 @@ final class HomeViewController: BaseViewController {
             section.interGroupSpacing = 13
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30)
             section.orthogonalScrollingBehavior = .groupPagingCentered
-            if #available(iOS 17.0, *) {
-                section.orthogonalScrollingProperties.decelerationRate = .normal
-                section.orthogonalScrollingProperties.bounce = .never
-            }
+            section.orthogonalScrollingProperties.decelerationRate = .normal
+            section.orthogonalScrollingProperties.bounce = .never
 
             section.visibleItemsInvalidationHandler = { items, offset, environment in
                 let containerWidth = environment.container.contentSize.width
