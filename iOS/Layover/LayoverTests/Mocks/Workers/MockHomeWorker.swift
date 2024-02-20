@@ -20,7 +20,7 @@ final class MockHomeWorker: HomeWorkerProtocol {
     // MARK: - Methods
 
     func fetchPosts() async -> PostsPage? {
-        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList",
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostsPage",
                                                  withExtension: "json"),
               let imageDataLocation = Bundle(for: type(of: self)).url(forResource: "sample",
                                                                        withExtension: "jpeg")
@@ -47,7 +47,30 @@ final class MockHomeWorker: HomeWorkerProtocol {
     }
 
     func fetchMorePosts(at cursor: Int?) async -> PostsPage? {
-        return nil
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostsPage",
+                                                 withExtension: "json"),
+              let imageDataLocation = Bundle(for: type(of: self)).url(forResource: "sample",
+                                                                       withExtension: "jpeg")
+        else { return nil }
+
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
+            }
+            let endPoint: EndPoint = EndPoint<Response<PostsPageDTO>>(path: "/board/home",
+                                                                   method: .GET)
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { return nil }
+            return data.toDomain()
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
     }
 
     func fetchImageData(of url: URL) async -> Data? {

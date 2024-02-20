@@ -10,6 +10,7 @@ import Foundation
 import OSLog
 
 final class MockUserWorker: UserWorkerProtocol {
+    
 
     // MARK: - Properties
 
@@ -150,8 +151,10 @@ final class MockUserWorker: UserWorkerProtocol {
     }
 
     func fetchPosts(at cursor: Int?, of id: Int?) async -> PostsPage? {
-        let resourceFileName = switch cursor { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
-        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else { return nil }
+//        let resourceFileName = switch page { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
+//        let resourceFileName = cursor != nil ? "PostsPage" : "PostList"
+
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostsPage", withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
             MockURLProtocol.requestHandler = { request in
@@ -163,7 +166,8 @@ final class MockUserWorker: UserWorkerProtocol {
             }
             let endPoint = EndPoint<Response<PostsPageDTO>>(path: "/member/posts",
                                                           method: .GET,
-                                                          queryParameters: ["cursor": cursor])
+                                                          queryParameters: PostRequestDTO(cursor: cursor,
+                                                                                          memberId: "\(id)"))
             let response = try await provider.request(with: endPoint)
             return response.data?.toDomain()
         } catch {
@@ -171,6 +175,29 @@ final class MockUserWorker: UserWorkerProtocol {
             return nil
         }
     }
+//
+//    func fetchPosts(at cursor: Int?, of id: Int?) async -> PostsPage? {
+//        let resourceFileName = switch cursor { case 1: "PostList" case 2: "PostListMore" default: "PostListEnd" }
+//        guard let fileLocation = Bundle.main.url(forResource: resourceFileName, withExtension: "json") else { return nil }
+//        do {
+//            let mockData = try Data(contentsOf: fileLocation)
+//            MockURLProtocol.requestHandler = { request in
+//                let response = HTTPURLResponse(url: request.url!,
+//                                               statusCode: 200,
+//                                               httpVersion: nil,
+//                                               headerFields: nil)
+//                return (response, mockData, nil)
+//            }
+//            let endPoint = EndPoint<Response<PostsPageDTO>>(path: "/member/posts",
+//                                                          method: .GET,
+//                                                          queryParameters: ["cursor": cursor])
+//            let response = try await provider.request(with: endPoint)
+//            return response.data?.toDomain()
+//        } catch {
+//            os_log(.error, log: .data, "%@", error.localizedDescription)
+//            return nil
+//        }
+//    }
 
     func fetchImageData(with url: URL) async -> Data? {
         do {

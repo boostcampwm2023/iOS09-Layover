@@ -161,6 +161,7 @@
 		839F1DF82B62AEDA0071C622 /* LOTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839F1DF72B62AEDA0071C622 /* LOTextLabel.swift */; };
 		83C35E1B2B108C3500D8DD5C /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */; };
 		83C35E1E2B10923C00D8DD5C /* PlaybackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */; };
+		FC06392E2B83D3F00019E4FB /* PostsPage.json in Resources */ = {isa = PBXBuildFile; fileRef = FC06392D2B83D3F00019E4FB /* PostsPage.json */; };
 		FC0E80242B1A0BBB00EF56D6 /* UploadPostPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */; };
 		FC0E80252B1A0BBB00EF56D6 /* UploadPostWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E801F2B1A0BBB00EF56D6 /* UploadPostWorker.swift */; };
 		FC0E80262B1A0BBB00EF56D6 /* UploadPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E80202B1A0BBB00EF56D6 /* UploadPostRouter.swift */; };
@@ -431,6 +432,7 @@
 		839F1DF72B62AEDA0071C622 /* LOTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOTextLabel.swift; sourceTree = "<group>"; };
 		83C35E1A2B108C3500D8DD5C /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		83C35E1D2B10923C00D8DD5C /* PlaybackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackCell.swift; sourceTree = "<group>"; };
+		FC06392D2B83D3F00019E4FB /* PostsPage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PostsPage.json; sourceTree = "<group>"; };
 		FC0E801E2B1A0BBB00EF56D6 /* UploadPostPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPresenter.swift; sourceTree = "<group>"; };
 		FC0E801F2B1A0BBB00EF56D6 /* UploadPostWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostWorker.swift; sourceTree = "<group>"; };
 		FC0E80202B1A0BBB00EF56D6 /* UploadPostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostRouter.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 		194C21CE2B1DF63D00C62645 /* MockDatas */ = {
 			isa = PBXGroup;
 			children = (
+				FC06392D2B83D3F00019E4FB /* PostsPage.json */,
 				FC4E0C122B28609C00152596 /* PostBoard.json */,
 				192513972B278645001533FA /* CheckSignUp.json */,
 				1925138D2B278645001533FA /* CheckUserName.json */,
@@ -1423,6 +1426,7 @@
 				1925139C2B278645001533FA /* DeleteVideo.json in Resources */,
 				1925139F2B278646001533FA /* PostListMore.json in Resources */,
 				1925139A2B278645001533FA /* PostList.json in Resources */,
+				FC06392E2B83D3F00019E4FB /* PostsPage.json in Resources */,
 				192513992B278645001533FA /* PostListEnd.json in Resources */,
 				192513A12B278646001533FA /* DeleteUser.json in Resources */,
 				192513A22B278646001533FA /* ReportPlaybackVideo.json in Resources */,
