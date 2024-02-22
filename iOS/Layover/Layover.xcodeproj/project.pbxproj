@@ -136,6 +136,8 @@
 		8321A2FF2B1E428C000A12AF /* ReportDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A2FE2B1E428C000A12AF /* ReportDTO.swift */; };
 		8321A3012B1F1EC5000A12AF /* MockReportWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */; };
 		8321A3032B1F2041000A12AF /* ReportPlaybackVideo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */; };
+		832976F72B878189009F4E0A /* PlaybackInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832976F62B878189009F4E0A /* PlaybackInteractorTests.swift */; };
+		832976F92B87819E009F4E0A /* PlaybackPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832976F82B87819E009F4E0A /* PlaybackPresenterTests.swift */; };
 		833CC1242B5950920027D96F /* Prefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CC1232B5950920027D96F /* Prefetcher.swift */; };
 		834B7BD52B14F888002BD176 /* MockSignUpWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */; };
 		835783C32B14A41600E7D304 /* MockLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835783C22B14A41600E7D304 /* MockLoginWorker.swift */; };
@@ -402,6 +404,8 @@
 		8321A2FE2B1E428C000A12AF /* ReportDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDTO.swift; sourceTree = "<group>"; };
 		8321A3002B1F1EC5000A12AF /* MockReportWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReportWorker.swift; sourceTree = "<group>"; };
 		8321A3022B1F2041000A12AF /* ReportPlaybackVideo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ReportPlaybackVideo.json; sourceTree = "<group>"; };
+		832976F62B878189009F4E0A /* PlaybackInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackInteractorTests.swift; sourceTree = "<group>"; };
+		832976F82B87819E009F4E0A /* PlaybackPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPresenterTests.swift; sourceTree = "<group>"; };
 		833CC1232B5950920027D96F /* Prefetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefetcher.swift; sourceTree = "<group>"; };
 		834B7BD42B14F888002BD176 /* MockSignUpWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpWorker.swift; sourceTree = "<group>"; };
 		835783C22B14A41600E7D304 /* MockLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginWorker.swift; sourceTree = "<group>"; };
@@ -643,6 +647,7 @@
 		194C21C72B1DF09B00C62645 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				832976F52B87814F009F4E0A /* Playback */,
 				19B665D32B4EEDDD0083E63C /* SignUp */,
 				19AE481D2B29D02700DD4612 /* EditProfile */,
 				19AE48122B28C2A800DD4612 /* Setting */,
@@ -891,6 +896,15 @@
 				8321A2F42B1E10DF000A12AF /* ReportConfigurator.swift */,
 			);
 			path = Report;
+			sourceTree = "<group>";
+		};
+		832976F52B87814F009F4E0A /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				832976F62B878189009F4E0A /* PlaybackInteractorTests.swift */,
+				832976F82B87819E009F4E0A /* PlaybackPresenterTests.swift */,
+			);
+			path = Playback;
 			sourceTree = "<group>";
 		};
 		833CC1222B59507E0027D96F /* Prefetcher */ = {
@@ -1657,6 +1671,7 @@
 				FC4E0C202B28B4C500152596 /* MockLocationFetcher.swift in Sources */,
 				1925137A2B273D98001533FA /* StubAuthManager.swift in Sources */,
 				1925136D2B26F84E001533FA /* MockTagPlayListWorker.swift in Sources */,
+				832976F72B878189009F4E0A /* PlaybackInteractorTests.swift in Sources */,
 				19AE481A2B28C2B700DD4612 /* SettingPresenterTests.swift in Sources */,
 				19AE48172B28C2B700DD4612 /* SettingViewControllerTests.swift in Sources */,
 				19B665DA2B4EEDDD0083E63C /* SignUpInteractorTests.swift in Sources */,
@@ -1665,6 +1680,7 @@
 				192513692B26F7CE001533FA /* TagPlayListInteractorTests.swift in Sources */,
 				19AE48232B29D03D00DD4612 /* EditProfileInteractorTests.swift in Sources */,
 				194C21CC2B1DF39200C62645 /* MockHomeWorker.swift in Sources */,
+				832976F92B87819E009F4E0A /* PlaybackPresenterTests.swift in Sources */,
 				FC4E0C0E2B282AE500152596 /* UploadPostWorkerTests.swift in Sources */,
 				19B665D92B4EEDDD0083E63C /* SignUpWorkerTests.swift in Sources */,
 				FC4E0C112B28595200152596 /* MockUploadPostWorker.swift in Sources */,
