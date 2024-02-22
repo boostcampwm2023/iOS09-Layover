@@ -8,6 +8,12 @@ export class AppleSignupDto {
   readonly identityToken: string;
 
   @ApiProperty({
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    description: '애플 authorization code',
+  })
+  readonly authorizationCode: string;
+
+  @ApiProperty({
     example: 'myUsername',
     description: '설정할 유저 닉네임',
   })
