@@ -688,7 +688,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.presenter = spy
         sut.posts = [Seeds.Posts.post1, Seeds.Posts.post2]
         sut.playbackVideoInfos = [Models.PlaybackInfo(memberID: 0, boardID: 1), Models.PlaybackInfo(memberID: 0, boardID: 2)]
-        
+
         // act
         await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 0))
 
@@ -724,7 +724,7 @@ final class PlaybackInteractorTests: XCTestCase {
         sut.presenter = spy
         sut.posts = [Seeds.Posts.thumbnailImageNilPost, Seeds.Posts.post1, Seeds.Posts.post2, Seeds.Posts.thumbnailImageNilPost ,Seeds.Posts.post1]
         sut.playbackVideoInfos = [Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1), Models.PlaybackInfo(memberID: 0, boardID: 2),  Models.PlaybackInfo(memberID: 0, boardID: 3), Models.PlaybackInfo(memberID: 0, boardID: 1)]
-        
+
         // act
         await sut.deleteVideo(with: Models.DeletePlaybackVideo.Request(playbackVideo: playbackVideo, indexPathRow: 3))
 

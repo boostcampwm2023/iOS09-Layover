@@ -14,7 +14,7 @@ protocol UserEndPointFactory {
     func makeIntroduceModifyEndPoint(introduce: String) -> EndPoint<Response<IntroduceDTO>>
     func makeUserWithDrawEndPoint() -> EndPoint<Response<NicknameDTO>>
     func makeUserInformationEndPoint(with id: Int?) -> EndPoint<Response<MemberDTO>>
-    func makeUserPostsEndPoint(at page: Int, of id: Int?) -> EndPoint<Response<[PostDTO]>>
+    func makeUserPostsEndPoint(at cursor: Int?, of id: Int?) -> EndPoint<Response<PostsPageDTO>>
     func makeUserProfileImageDefaultEndPoint() -> EndPoint<Response<Data>>
     func makeFetchUserProfilePresignedURL(of fileType: String) -> EndPoint<Response<PresignedURLDTO>>
 }
@@ -76,12 +76,14 @@ final class DefaultUserEndPointFactory: UserEndPointFactory {
         )
     }
 
-    func makeUserPostsEndPoint(at page: Int, of id: Int? = nil) -> EndPoint<Response<[PostDTO]>> {
-        var queryParameters = [String: String]()
-        queryParameters.updateValue(String(page), forKey: "page")
-
+    func makeUserPostsEndPoint(at cursor: Int?, of id: Int? = nil) -> EndPoint<Response<PostsPageDTO>> {
+        var queryParameters: PostRequestDTO?
         if let id {
-            queryParameters.updateValue(String(id), forKey: "memberId")
+            queryParameters = PostRequestDTO(cursor: cursor,
+                                             memberId: String(id))
+        } else {
+            queryParameters = PostRequestDTO(cursor: cursor,
+                                             memberId: nil)
         }
 
         return EndPoint(

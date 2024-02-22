@@ -1,0 +1,32 @@
+{
+  "customCode": "SUCCESS",
+  "message": "성공",
+  "statusCode": 200,
+  "data": {
+    "lastId": 32,
+    "boardsResDto": [
+      {
+        "member": {
+          "id": 221,
+          "username": "hwani",
+          "introduce": "Hi, my name is hwani",
+          "profile_image_url": "https://layover-profile-image.kr.obj..."
+        },
+        "board": {
+          "id": 1,
+          "encoded_video_url": "https://qc66zhsq1708.edge.naverncp.com/hls/fMG98Ec1UirV-awtm4qKJyhanmRFlPLZbTs_/layover-station/sv_AVC_HD, SD_1Pass_30fps.mp4/index.m3u8",
+          "video_thumbnail_url": "https://layover-video-thumbnail.kr.obj...",
+          "latitude": 37.0532156213,
+          "longitude": 37.0532156213,
+          "title": "붓산 광안리",
+          "content": "날씨가 정말 좋았따이",
+          "status": "COMPLETE"
+        },
+        "tag": [
+          "tag1",
+          "tag2"
+        ]
+      }
+    ]
+  }
+}

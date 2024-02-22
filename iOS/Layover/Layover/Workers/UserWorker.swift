@@ -36,7 +36,7 @@ protocol UserWorkerProtocol {
     func logout()
 
     func fetchProfile(by id: Int?) async -> Member?
-    func fetchPosts(at page: Int, of id: Int?) async -> [Post]?
+    func fetchPosts(at cursor: Int?, of id: Int?) async -> PostsPage?
     func fetchImageData(with url: URL) async -> Data?
     func setProfileImageDefault() async -> Bool
     func fetchImagePresignedURL(with fileType: String) async -> String?
@@ -153,12 +153,12 @@ class UserWorker: UserWorkerProtocol {
         }
     }
 
-    func fetchPosts(at page: Int, of id: Int?) async -> [Post]? {
-        let endPoint = userEndPointFactory.makeUserPostsEndPoint(at: page, of: id)
+    func fetchPosts(at cursor: Int?, of id: Int?) async -> PostsPage? {
+        let endPoint = userEndPointFactory.makeUserPostsEndPoint(at: cursor, of: id)
 
         do {
             let response = try await provider.request(with: endPoint)
-            return response.data?.map { $0.toDomain() }
+            return response.data?.toDomain()
         } catch {
             os_log(.error, log: .data, "Error: %s", error.localizedDescription)
             return nil
@@ -178,7 +178,7 @@ class UserWorker: UserWorkerProtocol {
         let endPoint = userEndPointFactory.makeUserProfileImageDefaultEndPoint()
 
         do {
-            let _ = try await provider.request(with: endPoint)
+            _ = try await provider.request(with: endPoint)
             return true
         } catch {
             os_log(.error, log: .data, "Error: %s", error.localizedDescription)

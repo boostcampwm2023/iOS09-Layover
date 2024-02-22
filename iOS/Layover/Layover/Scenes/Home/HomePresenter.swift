@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomePresentationLogic {
     func presentPosts(with response: HomeModels.FetchPosts.Response)
+    func presentMorePosts(with response: HomeModels.FetchPosts.Response)
     func presentPlaybackScene(with response: HomeModels.PlayPosts.Response)
     func presentTagPlayList(with response: HomeModels.ShowTagPlayList.Response)
     func presentUploadScene()
@@ -41,6 +42,23 @@ final class HomePresenter: HomePresentationLogic {
 
         let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPosts)
         viewController?.displayPosts(with: viewModel)
+    }
+
+    func presentMorePosts(with response: Models.FetchPosts.Response) {
+        var displayedPosts = [Models.DisplayedPost]()
+
+        for post in response.posts {
+            guard let thumbnailURL = post.board.thumbnailImageURL,
+                  let videoURL = post.board.videoURL else { continue }
+            let displayedPost = Models.DisplayedPost(thumbnailImageURL: thumbnailURL,
+                                                     videoURL: videoURL,
+                                                     title: post.board.title,
+                                                     tags: post.tag)
+            displayedPosts.append(displayedPost)
+        }
+
+        let viewModel = Models.FetchPosts.ViewModel(displayedPosts: displayedPosts)
+        viewController?.displayMorePosts(with: viewModel)
     }
 
     // MARK: - UseCase Present PlaybackScene

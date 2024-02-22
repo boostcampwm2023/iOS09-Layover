@@ -12,6 +12,8 @@ import UIKit
 protocol HomeBusinessLogic {
     @discardableResult
     func fetchPosts(with request: HomeModels.FetchPosts.Request) async -> Bool
+    @discardableResult
+    func fetchMorePosts() async -> Bool
     func playPosts(with request: HomeModels.PlayPosts.Request)
     func fetchLocationAuthorizationStatus()
     func selectVideo(with request: HomeModels.SelectVideo.Request)
@@ -36,6 +38,8 @@ final class HomeInteractor: HomeDataStore {
     var homeWorker: HomeWorkerProtocol?
     var presenter: HomePresentationLogic?
     var locationManager: CurrentLocationManager?
+    var postPageLastID: Int?
+    var canFetchMorePosts = true
 
     // MARK: - DataStore
 
@@ -51,14 +55,31 @@ extension HomeInteractor: HomeBusinessLogic {
 
     @discardableResult
     func fetchPosts(with request: Models.FetchPosts.Request) async -> Bool {
-        guard let posts = await homeWorker?.fetchPosts() else { return false }
-        let response = Models.FetchPosts.Response(posts: posts)
-
+        guard let postsPage = await homeWorker?.fetchPosts() else { return false }
+        let response = Models.FetchPosts.Response(cursor: postsPage.cursor,
+                                                  posts: postsPage.posts)
+        self.postPageLastID = response.cursor
         await MainActor.run {
-            self.posts = posts
+            self.posts = response.posts
             presenter?.presentPosts(with: response)
         }
+        return true
+    }
 
+    @discardableResult
+    func fetchMorePosts() async -> Bool {
+        if canFetchMorePosts {
+            canFetchMorePosts = false
+            guard let postsPage = await homeWorker?.fetchMorePosts(at: postPageLastID) else { return false }
+            let response = Models.FetchPosts.Response(cursor: postsPage.cursor,
+                                                      posts: postsPage.posts)
+            self.postPageLastID = response.cursor
+            await MainActor.run {
+                self.posts = response.posts
+                presenter?.presentMorePosts(with: response)
+            }
+            canFetchMorePosts = true
+        }
         return true
     }
 

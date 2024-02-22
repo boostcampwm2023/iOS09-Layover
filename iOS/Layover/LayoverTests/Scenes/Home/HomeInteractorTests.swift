@@ -36,6 +36,10 @@ final class HomeInteractorTests: XCTestCase {
     // MARK: - Test doubles
 
     final class HomePresentationLogicSpy: HomePresentationLogic {
+        func presentMorePosts(with response: Layover.HomeModels.FetchPosts.Response) {
+
+        }
+        
         func presentUploadScene() {
 
         }
@@ -77,20 +81,45 @@ final class HomeInteractorTests: XCTestCase {
         // Assert
         XCTAssertTrue(spy.presentPostsCalled, "fetchPost()가 presenter의 presentPosts()를 호출하지 못했다.")
         XCTAssertEqual(spy.presentPostsReceivedResponse.posts.count, 1, "fetchPost()가 presenter에게 올바른 데이터 갯수를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].tag, Seeds.Posts.post1.tag, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].thumbnailImageData, Seeds.sampleImageData, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.identifier, Seeds.Posts.post1.board.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.title, Seeds.Posts.post1.board.title, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.description, Seeds.Posts.post1.board.description, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.latitude, Seeds.Posts.post1.board.latitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.longitude, Seeds.Posts.post1.board.longitude, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.videoURL, Seeds.Posts.post1.board.videoURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.status, Seeds.Posts.post1.board.status, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.username, Seeds.Posts.post1.member.username, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.introduce, Seeds.Posts.post1.member.introduce, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.profileImageURL, Seeds.Posts.post1.member.profileImageURL, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
-        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.identifier, Seeds.Posts.post1.member.identifier, "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].tag,
+                       Seeds.PostsPage.post1.tag,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.identifier,
+                       Seeds.PostsPage.post1.board.identifier,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.title, 
+                       Seeds.PostsPage.post1.board.title,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.description, 
+                       Seeds.PostsPage.post1.board.description,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.latitude,
+                       Seeds.PostsPage.post1.board.latitude,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.longitude,
+                       Seeds.PostsPage.post1.board.longitude,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.thumbnailImageURL,
+                       Seeds.PostsPage.post1.board.thumbnailImageURL,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.videoURL,
+                       Seeds.PostsPage.post1.board.videoURL,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].board.status,
+                       Seeds.PostsPage.post1.board.status,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.username,
+                       Seeds.PostsPage.post1.member.username,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.introduce,
+                       Seeds.PostsPage.post1.member.introduce,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.profileImageURL,
+                       Seeds.PostsPage.post1.member.profileImageURL,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
+        XCTAssertEqual(spy.presentPostsReceivedResponse.posts[0].member.identifier,
+                       Seeds.PostsPage.post1.member.identifier,
+                       "fetchPost()가 presenter에게 올바른 데이터를 저장하지 못했다.")
     }
 
     func test_playPosts는_자신의_selectedIndex값을_변경한다() {

@@ -9,17 +9,20 @@
 import Foundation
 
 protocol PostEndPointFactory {
-    func makeHomePostListEndPoint() -> EndPoint<Response<[PostDTO]>>
+    func makeHomePostListEndPoint(at cursor: Int?) -> EndPoint<Response<PostsPageDTO>>
     func makeMapPostListEndPoint(latitude: Double, longitude: Double) -> EndPoint<Response<[PostDTO]>>
     func makeTagSearchPostListEndPoint(of tag: String, at page: Int) -> EndPoint<Response<[PostDTO]>>
 }
 
 final class DefaultPostEndPointFactory: PostEndPointFactory {
-    func makeHomePostListEndPoint() -> EndPoint<Response<[PostDTO]>> {
-        return EndPoint(
-            path: "/board/home",
-            method: .GET
-        )
+    func makeHomePostListEndPoint(at cursor: Int?) -> EndPoint<Response<PostsPageDTO>> {
+        var queryParameters: [String: Int]?
+        if let cursor {
+            queryParameters?.updateValue(cursor, forKey: "cursor")
+        }
+        return EndPoint(path: "/board/home",
+                        method: .GET,
+                        queryParameters: queryParameters)
     }
 
     func makeMapPostListEndPoint(latitude: Double, longitude: Double) -> EndPoint<Response<[PostDTO]>> {

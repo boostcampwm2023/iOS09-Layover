@@ -12,6 +12,23 @@ import Foundation
 class Seeds {
     static let sampleImageData = try? Data(contentsOf: Bundle(for: Seeds.self).url(forResource: "sample", withExtension: "jpeg")!)
 
+    struct PostsPage {
+        static let cursor1 = 32
+        static let post1 = Post(member: Member(identifier: 221,
+                                                username: "hwani",
+                                                introduce: "Hi, my name is hwani",
+                                                profileImageURL: URL(string: "https://layover-profile-image.kr.obj...")),
+                                 board: Board(identifier: 1,
+                                              title: "붓산 광안리",
+                                              description: "날씨가 정말 좋았따이",
+                                              thumbnailImageURL: URL(string: "https://layover-video-thumbnail.kr.obj..."),
+                                              videoURL: URL(string: "https://qc66zhsq1708.edge.naverncp.com/hls/fMG98Ec1UirV-awtm4qKJyhanmRFlPLZbTs_/layover-station/sv_AVC_HD, SD_1Pass_30fps.mp4/index.m3u8"),
+                                              latitude: 37.0532156213,
+                                              longitude: 37.0532156213,
+                                              status: .complete),
+                                 tag: ["tag1", "tag2"])
+    }
+
     struct Posts {
         // PostList.json에 정의된 데이터
         static let post1 = Post(member: Member(identifier: 1,

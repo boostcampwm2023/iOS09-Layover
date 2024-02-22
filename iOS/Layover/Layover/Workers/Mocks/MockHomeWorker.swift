@@ -18,7 +18,7 @@ final class MockHomeWorker: HomeWorkerProtocol {
 
     // MARK: - Methods
 
-    func fetchPosts() async -> [Post]? {
+    func fetchPosts() async -> PostsPage? {
         guard let fileLocation = Bundle.main.url(forResource: "PostList",
                                                  withExtension: "json") else { return nil }
 
@@ -31,15 +31,19 @@ final class MockHomeWorker: HomeWorkerProtocol {
                                                headerFields: nil)
                 return (response, mockData, nil)
             }
-            let endPoint: EndPoint = EndPoint<Response<[PostDTO]>>(path: "/board/home",
+            let endPoint: EndPoint = EndPoint<Response<PostsPageDTO>>(path: "/board/home",
                                                                    method: .GET)
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
-            return data.map { $0.toDomain() }
+            return data.toDomain()
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
         }
+    }
+
+    func fetchMorePosts(at cursor: Int?) async -> PostsPage? {
+        return nil
     }
 
     func fetchImageData(of url: URL) async -> Data? {

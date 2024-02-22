@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import LOImageCacher
 
 protocol ProfileDisplayLogic: AnyObject {
     func displayProfile(viewModel: ProfileModels.FetchProfile.ViewModel)
@@ -153,14 +154,7 @@ final class ProfileViewController: BaseViewController {
     private func setDataSource() {
         let profileCellRegistration = UICollectionView.CellRegistration<ProfileCollectionViewCell, Models.Profile> { [weak self] cell, _, itemIdentifier in
             guard let self else { return }
-
-            var profileImage = UIImage.profile
-            if let profileImageData = itemIdentifier.profileImageData,
-               let image = UIImage(data: profileImageData) {
-                profileImage = image
-            }
-
-            cell.configure(profileImage: profileImage,
+            cell.configure(profileImageURL: itemIdentifier.profileImageURL,
                            nickname: itemIdentifier.username,
                            introduce: itemIdentifier.introduce)
             switch profileType {
@@ -174,13 +168,7 @@ final class ProfileViewController: BaseViewController {
         }
 
         let postCellRegistration = UICollectionView.CellRegistration<ThumbnailCollectionViewCell, Models.DisplayedPost> { cell, indexPath, itemIdentifier in
-
-            if let imageData = itemIdentifier.thumbnailImageData,
-               let image = UIImage(data: imageData) {
-                cell.configure(image: image, status: itemIdentifier.status)
-            } else {
-                cell.configure(image: nil, status: itemIdentifier.status)
-            }
+            cell.configure(image: itemIdentifier.thumbnailImageData, status: itemIdentifier.status)
         }
 
         collectionViewDatasource = UICollectionViewDiffableDataSource<Section, AnyHashable>(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
@@ -261,7 +249,6 @@ extension ProfileViewController: UICollectionViewDelegate {
         let contentHeight = scrollView.contentSize.height
         let scrollOffset = scrollView.contentOffset.y
         let height = scrollView.bounds.height
-
         if scrollOffset > 0 && scrollOffset > contentHeight - height {
             fetchPosts()
         }

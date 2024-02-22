@@ -51,6 +51,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
     var tags: [String]? = []
     var videoAddress: Models.AddressInfo?
     var currentAddress: Models.AddressInfo?
+    var addressType: Models.AddressType?
 
     // MARK: - Object LifeCycle
 
@@ -98,7 +99,10 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             return Models.AddressInfo(
                 administrativeArea: administrativeArea,
                 locality: locality,
-                subLocality: subLocality)
+                subLocality: subLocality,
+                latitude: location.coordinate.latitude,
+                longitude: location.coordinate.longitude
+            )
         } catch {
             os_log(.error, log: .data, "Failed to fetch Current Address with error: %@", error.localizedDescription)
             return nil
@@ -120,7 +124,10 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
             return Models.AddressInfo(
                 administrativeArea: administrativeArea,
                 locality: locality,
-                subLocality: subLocality)
+                subLocality: subLocality,
+                latitude: videoLocation.latitude,
+                longitude: videoLocation.longitude
+            )
         } catch {
             os_log(.error, log: .data, "Failed to fetch Video Address with error: %@", error.localizedDescription)
             return nil
@@ -136,15 +143,29 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
         guard let worker,
               let videoURL,
               let isMuted,
-              let coordinate = locationManager.getCurrentLocation()?.coordinate else { return }
+              let addressType
+        else { return }
+
+        var addressInfo: Models.AddressInfo?
+        switch addressType {
+        case .video:
+            if let videoAddress {
+                addressInfo = videoAddress
+            }
+        case .current:
+            if let currentAddress {
+                addressInfo = currentAddress
+            }
+        }
+        guard let addressInfo else { return }
         Task {
             if isMuted {
                 await exportVideoWithoutAudio(at: videoURL)
             }
             let uploadPostResponse = await worker.uploadPost(with: UploadPost(title: request.title,
                                                                               content: request.content,
-                                                                              latitude: coordinate.latitude,
-                                                                              longitude: coordinate.longitude,
+                                                                              latitude: addressInfo.latitude,
+                                                                              longitude: addressInfo.longitude,
                                                                               tag: request.tags,
                                                                               videoURL: videoURL))
             guard let boardID = uploadPostResponse?.id else { return }
@@ -160,8 +181,9 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
 
         videoAddress = await videoAddressInfo
         currentAddress = await currentAddressInfo
+        addressType = videoAddress != nil ? .video : .current
 
-        let response: Models.FetchCurrentAddress.Response = Models.FetchCurrentAddress.Response(addressInfo: [ videoAddress, currentAddress].compactMap { $0 })
+        let response: Models.FetchCurrentAddress.Response = Models.FetchCurrentAddress.Response(addressInfo: [videoAddress, currentAddress].compactMap { $0 })
         await MainActor.run {
             presenter?.presentCurrentAddress(with: response)
         }
@@ -169,6 +191,7 @@ final class UploadPostInteractor: NSObject, UploadPostBusinessLogic, UploadPostD
 
     func selectAddress(with request: UploadPostModels.SelectAddress.Request) {
         var response: Models.FetchCurrentAddress.Response
+        addressType = request.addressType
         switch request.addressType {
         case .video:
             guard let videoAddress else { return }
