@@ -5,6 +5,7 @@ export const enum EMessage {
   SUCCESS = '요청이 성공적으로 처리되었습니다.',
   NOT_SIGNUP_MEMBER = '회원가입이 되지 않은 유저입니다.',
   INVALID_KAKAO_TOKEN = '유효하지 않은 kakao access token입니다.',
+  INVALID_APPLE_TOKEN = '유효하지 않은 apple identity token입니다.',
   OAUTH_SERVER_ERR = 'OAuth 서버에서 사용자 정보를 받아오던 도중 오류가 발생했습니다.',
   TOKEN_GENERATE_ERR = 'token을 생성하는 과정에서 오류가 발생했습니다.',
   REFRESH_TOKEN_SAVE_ERR = 'refresh token을 저장하는 과정에서 오류가 발생했습니다.',
@@ -31,6 +32,8 @@ export class ECustomCode extends EnumType<ECustomCode>() {
   static readonly NOT_SIGNUP_MEMBER = new ECustomCode(HttpStatus.UNAUTHORIZED, EMessage.NOT_SIGNUP_MEMBER);
 
   static readonly INVALID_KAKAO_TOKEN = new ECustomCode(HttpStatus.BAD_REQUEST, EMessage.INVALID_KAKAO_TOKEN);
+
+  static readonly INVALID_APPLE_TOKEN = new ECustomCode(HttpStatus.BAD_REQUEST, EMessage.INVALID_APPLE_TOKEN);
 
   static readonly OAUTH_SERVER_ERR = new ECustomCode(HttpStatus.INTERNAL_SERVER_ERROR, EMessage.OAUTH_SERVER_ERR);
 
