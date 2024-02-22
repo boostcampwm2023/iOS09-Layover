@@ -55,21 +55,48 @@ export class BoardService {
     );
   }
 
-  async getBoardsRandomly() {
-    // 성공한것만 가져온다.
-    const limit: number = await this.boardRepository.countCompletedBoards();
-    let offset: number = Math.floor(Math.random() * limit);
-    const itemsPerPage = 10; // 최대 10개 데이터를 가져온다.
+  async findBoardsRandomly(itemsPerPage: number) {
+    // complete 인 값을 모두 가져옴
+    const boards: Board[] = await this.boardRepository.getAllCompleteVideo();
 
-    // 데이터가 10개 이하라면 첫번째 데이터부터 가져옴.
-    if (offset < 10) {
-      offset = 0;
-    } else if (limit - offset < 10) {
-      offset = limit - 10;
+    // 랜덤 인덱스를 하나 고른다.
+    let randomIdx: number = Math.floor(Math.random() * boards.length);
+
+    // 데이터는 항상 10개 이상 존재한다고 가정.
+    // 해당 랜덤 인덱스부터 10개의 데이터가 있는지 확인하고 처리한다.
+    if (randomIdx + 10 > boards.length) {
+      randomIdx -= randomIdx + 10 - boards.length;
     }
 
-    const boards: Board[] = await this.boardRepository.findBoardsRandomly(itemsPerPage, offset);
-    return Promise.all(boards.map((board: Board) => this.createBoardResDto(board)));
+    // 해당 객체의 id를 return 해준다.
+    return boards.slice(randomIdx, randomIdx + itemsPerPage);
+  }
+
+  async getBoardsHome(cursor: number) {
+    // 성공한것만 가져온다.
+    console.log('enter service layer');
+    const itemsPerPage = 10; // 최대 10개 데이터를 가져온다.
+
+    const boards: Board[] =
+      cursor === -1
+        ? await this.findBoardsRandomly(itemsPerPage)
+        : await this.boardRepository.findBoardsHome(itemsPerPage, cursor);
+
+    // length 가 0이라면 마지막 아이디라는 뜻.
+    if (boards.length === 0) {
+      return {};
+    }
+
+    // 해당 커서로부터 일정 개수의 데이터 가져오기
+    const lastId = boards[boards.length - 1].id;
+
+    // 배열 섞기 (우선 보류)
+
+    const boardsResDto: BoardsResDto[] = await Promise.all(boards.map((board: Board) => this.createBoardResDto(board)));
+    return {
+      lastId: lastId,
+      boardsResDto,
+    };
   }
 
   async createBoardResDto(board: Board): Promise<BoardsResDto> {
@@ -107,21 +134,56 @@ export class BoardService {
     return Promise.all(boards.map((board) => this.createBoardResDto(board)));
   }
 
-  async getBoardsByTag(tag: string, page: number) {
+  async getBoardsByTag(tag: string, cursor: number) {
     const itemsPerPage = 15;
-    const offset = (page - 1) * itemsPerPage;
+    let boards: Board[];
 
-    const boards: Board[] = await this.boardRepository.findBoardsByTag(tag, itemsPerPage, offset);
+    // cursor 값이 없을 경우 -> 최근 데이터 15개 가져오기
+    if (cursor === -1) {
+      boards = await this.boardRepository.findBoardsByTag(tag, itemsPerPage);
+    } else {
+      // cursor 값이 있을 경우 -> 해당 id 보다 작은 아이디 15개 limit 가져오기
+      boards = await this.boardRepository.findBoardsByTagWithCursor(tag, itemsPerPage, cursor);
+    }
+
+    if (boards.length === 0) {
+      return {};
+    }
+
+    // 가장 끝의 id를 cursor 로 반환해줘야함.
     const boardIds = boards.map((board) => board.id);
+    const lastId = boardIds[boardIds.length - 1];
     const allBoards: Board[] = await this.boardRepository.findBoardsByIds(boardIds);
-    return Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
+    const boardsResDto: BoardsResDto[] = await Promise.all(allBoards.map((board) => this.createBoardResDto(board)));
+    return {
+      lastId: lastId,
+      boardsResDto,
+    };
   }
 
-  async getBoardsByProfile(id: number, page: number) {
+  async getBoardsByProfile(id: number, cursor: number) {
     const itemsPerPage = 15;
-    const offset = (page - 1) * itemsPerPage;
-    const boards: Board[] = await this.boardRepository.findBoardsByProfile(id, itemsPerPage, offset);
-    return Promise.all(boards.map((board) => this.createBoardResDto(board)));
+    let boards: Board[];
+    if (cursor === -1) {
+      boards = await this.boardRepository.findBoardsByProfile(id, itemsPerPage);
+    } else {
+      boards = await this.boardRepository.findBoardsByProfileWithCursor(id, itemsPerPage, cursor);
+    }
+
+    // length 가 0이라면 마지막 아이디라는 뜻.
+    if (boards.length === 0) {
+      return {};
+    }
+
+    console.log(boards[0]);
+    const lastId = boards[boards.length - 1].id;
+
+    const boardsResDto: BoardsResDto[] = await Promise.all(boards.map((board) => this.createBoardResDto(board)));
+    // 가장 끝의 id를 cursor 로 반환해줘야함.
+    return {
+      lastId: lastId,
+      boardsResDto,
+    };
   }
 
   async updateFilenameById(id: number, filename: string) {
@@ -151,7 +213,10 @@ export class BoardService {
 
       case 'COMPLETE': // cloud function 에서 인코딩을 성공적으로 끝냈을 때
         await this.boardRepository.updateStatusByFilename(encodingCallbackRequestDto.filename, 'COMPLETE');
-        await this.boardRepository.updateEncodedVideoUrlByFilename(encodingCallbackRequestDto.filename, encodingCallbackRequestDto.filePath);
+        await this.boardRepository.updateEncodedVideoUrlByFilename(
+          encodingCallbackRequestDto.filename,
+          encodingCallbackRequestDto.filePath,
+        );
         break;
     }
   }

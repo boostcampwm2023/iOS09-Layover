@@ -42,7 +42,16 @@ export const BOARD_SWAGGER = {
         customCode: { type: 'string', example: 'SUCCESS' },
         message: { type: 'string', example: '성공' },
         statusCode: { type: 'number', example: HttpStatus.OK },
-        data: { type: 'array', items: { $ref: getSchemaPath(BoardsResDto) } },
+        data: {
+          type: 'object',
+          properties: {
+            lastId: { type: 'number', example: 32, description: '다음 커서 페이징에 사용될 값' },
+            boardsResDto: {
+              type: 'array',
+              items: { $ref: getSchemaPath(BoardsResDto) },
+            },
+          },
+        },
       },
     },
   },

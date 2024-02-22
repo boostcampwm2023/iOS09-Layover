@@ -79,5 +79,12 @@ export const SWAGGER = {
     required: true,
   },
 
+  TAG_QUERY_STRING: { name: 'tag', required: true, description: '조회할 태그 이름' },
   MEMBER_ID_QUERY_STRING: { name: 'memberId', required: false, description: '회원 아이디 (생략하면 본인 정보 요청)' },
+  CURSOR_QUERY_STRING: {
+    name: 'cursor',
+    type: 'number',
+    required: false,
+    description: '커서페이징에 사용될 값 (비우면 홈에서는 랜덤, 태그와 프로필에서는 최근값을 가져온다.)',
+  },
 };
