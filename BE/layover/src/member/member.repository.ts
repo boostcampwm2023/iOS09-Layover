@@ -10,6 +10,8 @@ export class MemberRepository {
     profile_image_key: string,
     introduce: string,
     provider: string,
+    kakao_id: string,
+    apple_refresh_token: string,
     hash: string,
     status: memberStatus,
   ): Promise<void> {
@@ -18,6 +20,8 @@ export class MemberRepository {
       profile_image_key,
       introduce,
       provider,
+      kakao_id,
+      apple_refresh_token,
       hash,
       status,
     });

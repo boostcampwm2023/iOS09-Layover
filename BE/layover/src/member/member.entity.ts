@@ -19,6 +19,12 @@ export class Member {
   @Column({ nullable: false, length: 255 })
   provider: string;
 
+  @Column({ nullable: true, length: 255 })
+  kakao_id: string;
+
+  @Column({ nullable: true, length: 255 })
+  apple_refresh_token: string;
+
   @Column({ nullable: false, length: 255 })
   hash: string;
 
