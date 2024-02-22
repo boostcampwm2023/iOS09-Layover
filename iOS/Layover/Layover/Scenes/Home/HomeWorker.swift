@@ -10,7 +10,8 @@ import UIKit
 import OSLog
 
 protocol HomeWorkerProtocol {
-    func fetchPosts() async -> [Post]?
+    func fetchPosts() async -> PostsPage?
+    func fetchMorePosts(at cursor: Int?) async -> PostsPage?
 }
 
 final class HomeWorker: HomeWorkerProtocol {
@@ -30,14 +31,25 @@ final class HomeWorker: HomeWorkerProtocol {
 
     // MARK: - Methods
 
-    func fetchPosts() async -> [Post]? {
-        let endPoint = postEndPointFactory.makeHomePostListEndPoint()
+    func fetchPosts() async -> PostsPage? {
+        let endPoint = postEndPointFactory.makeHomePostListEndPoint(at: nil)
         do {
             let response = try await provider.request(with: endPoint)
-            guard let posts = response.data else { return nil }
-            return await fetchThumbnailImageData(of: posts)
+            guard let postsPage = response.data else { return nil }
+            return postsPage.toDomain()
         } catch {
             os_log(.error, log: .data, "Failed to fetch posts: %@", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func fetchMorePosts(at cursor: Int?) async -> PostsPage? {
+        let endPoint = postEndPointFactory.makeHomePostListEndPoint(at: cursor)
+        do {
+            let response = try await provider.request(with: endPoint)
+            guard let postsPage = response.data else { return nil }
+            return postsPage.toDomain()
+        } catch {
             return nil
         }
     }

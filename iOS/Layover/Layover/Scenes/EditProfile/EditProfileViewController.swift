@@ -269,8 +269,8 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
                         }
                     }
                 }.resume()
+                picker.deselectAssets(withIdentifiers: results.compactMap(\.assetIdentifier))
             }
-            picker.deselectAssets(withIdentifiers: results.compactMap(\.assetIdentifier))
         }
     }
 }

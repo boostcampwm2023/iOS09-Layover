@@ -19,8 +19,8 @@ final class MockHomeWorker: HomeWorkerProtocol {
 
     // MARK: - Methods
 
-    func fetchPosts() async -> [Post]? {
-        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList",
+    func fetchPosts() async -> PostsPage? {
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostsPage",
                                                  withExtension: "json"),
               let imageDataLocation = Bundle(for: type(of: self)).url(forResource: "sample",
                                                                        withExtension: "jpeg")
@@ -35,18 +35,38 @@ final class MockHomeWorker: HomeWorkerProtocol {
                                                headerFields: nil)
                 return (response, mockData, nil)
             }
-            let endPoint: EndPoint = EndPoint<Response<[PostDTO]>>(path: "/board/home",
+            let endPoint: EndPoint = EndPoint<Response<PostsPageDTO>>(path: "/board/home",
                                                                    method: .GET)
             let response = try await provider.request(with: endPoint)
-            guard let responseData = response.data else { return nil }
+            guard let data = response.data else { return nil }
+            return data.toDomain()
+        } catch {
+            os_log(.error, log: .data, "%@", error.localizedDescription)
+            return nil
+        }
+    }
 
-            let data = responseData.map {
-                var domainData = $0.toDomain()
-                domainData.thumbnailImageData = try? Data(contentsOf: imageDataLocation)
-                return domainData
+    func fetchMorePosts(at cursor: Int?) async -> PostsPage? {
+        guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostsPage",
+                                                 withExtension: "json"),
+              let imageDataLocation = Bundle(for: type(of: self)).url(forResource: "sample",
+                                                                       withExtension: "jpeg")
+        else { return nil }
+
+        do {
+            let mockData = try Data(contentsOf: fileLocation)
+            MockURLProtocol.requestHandler = { request in
+                let response = HTTPURLResponse(url: request.url!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)
+                return (response, mockData, nil)
             }
-
-            return data
+            let endPoint: EndPoint = EndPoint<Response<PostsPageDTO>>(path: "/board/home",
+                                                                   method: .GET)
+            let response = try await provider.request(with: endPoint)
+            guard let data = response.data else { return nil }
+            return data.toDomain()
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil

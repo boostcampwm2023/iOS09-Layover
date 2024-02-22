@@ -69,10 +69,10 @@ final class ProfilePresenterTests: XCTestCase {
         sut.viewController = spy
         let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: Seeds.Members.getMember1.username,
                                                                                        introduce: Seeds.Members.getMember1.introduce,
-                                                                                       profileImageData: Seeds.sampleImageData),
+                                                                                       profileImageURL: Seeds.Members.getMember1.profileImageURL),
                                                     displayedPosts: [.init(id: Seeds.Posts.post1.board.identifier,
-                                                                  thumbnailImageData: Seeds.sampleImageData, 
-                                                                  status: Seeds.Posts.post1.board.status)])
+                                                                           thumbnailImageData: Seeds.Members.getMember1.profileImageURL,
+                                                                           status: Seeds.Posts.post1.board.status)])
         // act
         sut.presentProfile(with: response)
 
@@ -80,11 +80,11 @@ final class ProfilePresenterTests: XCTestCase {
         XCTAssertTrue(spy.displayProfileDidCalled, "presentProfile은 displayProfile을 호출하지 못했다")
         XCTAssertEqual(spy.displayProfileViewModel.userProfile.username, Seeds.Members.getMember1.username, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
         XCTAssertEqual(spy.displayProfileViewModel.userProfile.introduce, Seeds.Members.getMember1.introduce, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
-        XCTAssertEqual(spy.displayProfileViewModel.userProfile.profileImageData, Seeds.sampleImageData, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.userProfile.profileImageURL, Seeds.Members.getMember1.profileImageURL, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
         XCTAssertEqual(spy.displayProfileViewModel.displayedPosts.count, 1, "presentProfile은 올바른 데이터 갯수를 뷰에 전달하지 못했다")
         XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].id, Seeds.Posts.post1.board.identifier, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
         XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].status, Seeds.Posts.post1.board.status, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
-        XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayProfileViewModel.displayedPosts[0].thumbnailImageData, Seeds.Members.getMember1.profileImageURL, "presentProfile은 올바른 데이터를 뷰에 전달하지 못했다")
     }
 
     func test_presentMorePosts을_호출하면_displayMorePosts를_호출하고_올바른_데이터를_전달한다() {
@@ -94,8 +94,8 @@ final class ProfilePresenterTests: XCTestCase {
 
         // act
         let response = Models.FetchMorePosts.Response(displayedPosts: [.init(id: Seeds.Posts.post1.board.identifier,
-                                                                    thumbnailImageData: Seeds.sampleImageData,
-                                                                    status: Seeds.Posts.post1.board.status)])
+                                                                             thumbnailImageData: Seeds.Members.getMember1.profileImageURL,
+                                                                             status: Seeds.Posts.post1.board.status)])
         sut.presentMorePosts(with: response)
 
         // assert
@@ -103,7 +103,7 @@ final class ProfilePresenterTests: XCTestCase {
         XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts.count, 1, "presentMorePosts은 올바른 데이터 갯수를 뷰에 전달하지 못했다")
         XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].id, Seeds.Posts.post1.board.identifier, "presentMorePosts은 올바른 데이터를 뷰에 전달하지 못했다")
         XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].status, Seeds.Posts.post1.board.status, "presentMorePosts은 올바른 데이터를 뷰에 전달하지 못했다")
-        XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].thumbnailImageData, Seeds.sampleImageData, "presentMorePosts은 올바른 데이터를 뷰에 전달하지 못했다")
+        XCTAssertEqual(spy.displayMorePostsViewModel.displayedPosts[0].thumbnailImageData, Seeds.Members.getMember1.profileImageURL, "presentMorePosts은 올바른 데이터를 뷰에 전달하지 못했다")
     }
 
     func test_presentPostDetail을_호출하면_routeToPostDetail을_호출한다() {

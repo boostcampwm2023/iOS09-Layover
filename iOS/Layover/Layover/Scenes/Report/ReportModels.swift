@@ -20,7 +20,7 @@ enum ReportModels {
             var description: String {
                 switch self {
                 case .success:
-                    "신고가 접수되었습니다."
+                    "신고가 접수되었습니다.\n해당 컨텐츠는 검토 후, 24시간 내에 차단 처리됩니다."
                 case .fail:
                     "신고 접수에 실패했습니다. 다시 시도해주세요."
                 }

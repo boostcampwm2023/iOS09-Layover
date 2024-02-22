@@ -38,10 +38,6 @@ extension ProviderType {
                                 method: method)
     }
 
-    func upload(from fileURL: URL, to url: String, method: HTTPMethod = .PUT) async throws -> Data {
-        return try await upload(from: fileURL, to: url, method: method)
-    }
-
     func upload(fromFile: URL,
                 to url: String,
                 method: HTTPMethod = .PUT,

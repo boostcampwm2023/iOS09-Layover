@@ -35,7 +35,7 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     var presenter: ProfilePresentationLogic?
     var userWorker: UserWorkerProtocol?
 
-    private var fetchPostsPage = 1
+    private var postsPageCursor: Int?
     private var canFetchMorePosts = true
     private var isMyProfile: Bool {
         profileId == nil
@@ -55,7 +55,6 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
     @discardableResult
     func fetchProfile(with request: ProfileModels.FetchProfile.Request) async -> Bool {
-        fetchPostsPage = 1
         canFetchMorePosts = true
         posts = []
         guard let userProfile = await userWorker?.fetchProfile(by: profileId) else {
@@ -66,16 +65,10 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
 
         let posts = await fetchPosts()
         canFetchMorePosts = !posts.isEmpty
-        fetchPostsPage += 1
 
-        var imageData: Data? = nil
-        if let profileImageURL = userProfile.profileImageURL {
-            imageData = await userWorker?.fetchImageData(with: profileImageURL)
-        }
-        profileImageData = imageData
         let response = Models.FetchProfile.Response(userProfile: ProfileModels.Profile(username: userProfile.username,
                                                                                        introduce: userProfile.introduce,
-                                                                                       profileImageData: imageData),
+                                                                                       profileImageURL: userProfile.profileImageURL),
                                                     displayedPosts: posts)
         await MainActor.run {
             presenter?.presentProfile(with: response)
@@ -86,43 +79,33 @@ final class ProfileInteractor: ProfileBusinessLogic, ProfileDataStore {
     @discardableResult
     func fetchMorePosts(with request: ProfileModels.FetchMorePosts.Request) async -> Bool {
         guard canFetchMorePosts else { return false }
-        let fetchedPosts = await fetchPosts()
-        fetchPostsPage += 1
-
+        let fetchedPosts = await fetchPosts(at: postsPageCursor)
         if fetchedPosts.isEmpty {
             canFetchMorePosts = false
             return false
         }
-
         let response = Models.FetchMorePosts.Response(displayedPosts: fetchedPosts)
 
         await MainActor.run {
             presenter?.presentMorePosts(with: response)
         }
-
         return true
     }
 
-    private func fetchPosts() async -> [Models.DisplayedPost] {
-        guard let fetchedPosts = await userWorker?.fetchPosts(at: fetchPostsPage, of: profileId),
-              fetchedPosts.count > 0 else {
+    private func fetchPosts(at cursor: Int? = nil) async -> [Models.DisplayedPost] {
+        guard let fetchedPostsPage = await userWorker?.fetchPosts(at: cursor, of: profileId),
+              fetchedPostsPage.posts.count > 0 else {
             return []
         }
+        let fetchedPosts = fetchedPostsPage.posts
         posts += fetchedPosts
+        postsPageCursor = fetchedPostsPage.cursor
 
-        var responsePosts = [Models.DisplayedPost]()
-        for post in fetchedPosts {
-            if !isMyProfile && post.board.status != .complete { continue }
-            guard let thumbnailURL = post.board.thumbnailImageURL,
-                  let profileImageData = await userWorker?.fetchImageData(with: thumbnailURL) else {
-                responsePosts.append(.init(id: post.board.identifier, thumbnailImageData: nil, status: post.board.status))
-                continue
-            }
-
-            responsePosts.append(Models.DisplayedPost(id: post.board.identifier, thumbnailImageData: profileImageData, status: post.board.status))
+        return fetchedPosts.map { post in
+            Models.DisplayedPost(id: post.board.identifier,
+                                 thumbnailImageData: post.board.thumbnailImageURL,
+                                 status: post.board.status)
         }
-
-        return responsePosts
     }
 
     func showPostDetail(with request: ProfileModels.ShowPostDetail.Request) {

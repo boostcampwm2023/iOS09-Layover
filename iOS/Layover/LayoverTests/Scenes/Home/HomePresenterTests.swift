@@ -68,6 +68,10 @@ final class HomePresenterTests: XCTestCase {
 
         }
 
+        func displayMorePosts(with viewModel: Layover.HomeModels.FetchPosts.ViewModel) {
+
+        }
+
     }
 
     // MARK: - Tests
@@ -76,25 +80,35 @@ final class HomePresenterTests: XCTestCase {
         // arrange
         let spy = HomeDisplayLogicSpy()
         sut.viewController = spy
-        let response = Models.FetchPosts.Response(posts: [Seeds.Posts.post1])
+        let response = Models.FetchPosts.Response(cursor: Seeds.PostsPage.cursor1,
+                                                  posts: [Seeds.PostsPage.post1])
 
         // act
         sut.presentPosts(with: response)
 
         // assert
-        XCTAssertTrue(spy.displayPostsCalled, "presentPosts는 displayPosts를 실행하지 못했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count, 1, "presentPosts는 올바른 갯수의 데이터를 전달하지 못했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].tags, Seeds.Posts.post1.tag, "presentPosts는 올바른 데이터를 전달하지 못했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].title, Seeds.Posts.post1.board.title, "presentPosts는 올바른 데이터를 전달하지 못했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].thumbnailImageURL, Seeds.Posts.post1.board.thumbnailImageURL, "presentPosts는 올바른 데이터를 전달하지 못했다.")
-        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].videoURL, Seeds.Posts.post1.board.videoURL, "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertTrue(spy.displayPostsCalled,
+                      "presentPosts는 displayPosts를 실행하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts.count,
+                       1,
+                       "presentPosts는 올바른 갯수의 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].tags,
+                       Seeds.PostsPage.post1.tag,
+                       "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].title, Seeds.PostsPage.post1.board.title, 
+                       "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].thumbnailImageURL, Seeds.PostsPage.post1.board.thumbnailImageURL,
+                       "presentPosts는 올바른 데이터를 전달하지 못했다.")
+        XCTAssertEqual(spy.displayPostsReceivedViewModel.displayedPosts[0].videoURL, Seeds.PostsPage.post1.board.videoURL,
+                       "presentPosts는 올바른 데이터를 전달하지 못했다.")
     }
 
     func test_presentPosts는_데이터의_썸네일_이미지_URL이_nil인_경우_뷰에게_해당_데이터를_전달하지_않는다() {
         // arrange
         let spy = HomeDisplayLogicSpy()
         sut.viewController = spy
-        let response = Models.FetchPosts.Response(posts: [Seeds.Posts.thumbnailImageNilPost])
+        let response = Models.FetchPosts.Response(cursor: 400,
+                                                  posts: [Seeds.Posts.thumbnailImageNilPost])
 
         // act
         sut.presentPosts(with: response)
@@ -108,7 +122,8 @@ final class HomePresenterTests: XCTestCase {
         // arrange
         let spy = HomeDisplayLogicSpy()
         sut.viewController = spy
-        let response = Models.FetchPosts.Response(posts: [Seeds.Posts.videoURLNilPost])
+        let response = Models.FetchPosts.Response(cursor: 400,
+                                                  posts: [Seeds.Posts.videoURLNilPost])
 
         // act
         sut.presentPosts(with: response)

@@ -94,7 +94,7 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
         }
     }
 
-    func fetchHomePosts() async -> [Post]? {
+    func fetchHomePosts(at cursor: Int?) async -> PostsPage? {
         guard let fileLocation = Bundle(for: type(of: self)).url(forResource: "PostList", withExtension: "json") else { return nil }
         do {
             let mockData = try Data(contentsOf: fileLocation)
@@ -105,11 +105,11 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
                                                headerFields: nil)
                 return (response, mockData, nil)
             }
-            let endPoint: EndPoint = EndPoint<Response<[PostDTO]>>(path: "/board/home",
+            let endPoint: EndPoint = EndPoint<Response<PostsPageDTO>>(path: "/board/home",
                                                                    method: .GET)
             let response = try await provider.request(with: endPoint)
             guard let data = response.data else { return nil }
-            return data.map { $0.toDomain() }
+            return data.toDomain()
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
@@ -128,11 +128,11 @@ final class MockPlaybackWorker: PlaybackWorkerProtocol {
                                                headerFields: nil)
                 return (response, mockData, nil)
             }
-            let endPoint = EndPoint<Response<[PostDTO]>>(path: "/member/posts",
+            let endPoint = EndPoint<Response<PostsPageDTO>>(path: "/member/posts",
                                                           method: .GET,
                                                           queryParameters: ["page": page])
             let response = try await provider.request(with: endPoint)
-            return response.data?.map { $0.toDomain() }
+            return response.data?.posts.map { $0.toDomain() }
         } catch {
             os_log(.error, log: .data, "%@", error.localizedDescription)
             return nil
