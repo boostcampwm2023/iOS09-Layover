@@ -116,7 +116,10 @@ class UploadPostPresenterTests: XCTestCase {
         let response = Models.FetchCurrentAddress.Response(addressInfo: [Models.AddressInfo(
             administrativeArea: nil,
             locality: nil,
-            subLocality: nil)])
+            subLocality: nil,
+            latitude: 0,
+            longitude: 0
+        )])
 
         // when
         sut.presentCurrentAddress(with: response)
