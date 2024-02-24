@@ -135,7 +135,7 @@ export class MemberController {
     const id = payload.memberId;
 
     // 삭제될 유저 정보 가져오기
-    const memberInfo = await this.memberService.getUsernameById(id);
+    const memberInfo = await this.memberService.getMemberById(id);
 
     // db에 반영
     await this.boardService.updateBoardsStatusByMemberId(id, 'COMPLETE', 'INACTIVE');
@@ -145,8 +145,19 @@ export class MemberController {
     await this.memberService.addAccessTokenToBlackList(payload.jti, payload.exp, payload.memberHash);
     await this.memberService.deleteExistRefreshTokenFromRedis(payload.memberHash);
 
+    // 각 토큰들은 revoke
+    const provider = memberInfo.provider;
+    switch (provider) {
+      case 'apple':
+        this.memberService.revokeApple(memberInfo.apple_refresh_token);
+        break;
+      case 'kakao':
+        this.memberService.revokeKakao(memberInfo.kakao_id);
+        break;
+    }
+
     // 응답
-    throw new CustomResponse(ECustomCode.SUCCESS, new DeleteMemberResDto(memberInfo));
+    throw new CustomResponse(ECustomCode.SUCCESS, new DeleteMemberResDto(memberInfo.username));
   }
 
   @ApiOperation({

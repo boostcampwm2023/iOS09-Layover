@@ -22,9 +22,20 @@ export class MemberService {
     profile_image_key: string,
     introduce: string,
     provider: string,
+    kakao_id: string,
+    apple_refresh_token: string,
     hash: string,
   ): Promise<void> {
-    await this.memberRepository.saveMember(username, profile_image_key, introduce, provider, hash, 'EXIST');
+    await this.memberRepository.saveMember(
+      username,
+      profile_image_key,
+      introduce,
+      provider,
+      kakao_id,
+      apple_refresh_token,
+      hash,
+      'EXIST',
+    );
   }
 
   async updateUsername(id: number, username: string): Promise<void> {
@@ -77,5 +88,33 @@ export class MemberService {
     const refreshJti = await this.redisClient.get(memberHash);
     await this.redisClient.del(refreshJti);
     await this.redisClient.del(memberHash);
+  }
+
+  async revokeKakao(kakaoId: string): Promise<void> {
+    const data = {
+      target_id_type: 'user_id',
+      target_id: kakaoId,
+      scopes: ['profile_nickname', 'profile_image'],
+    };
+    this.httpService.post('https://kapi.kakao.com/v2/user/revoke/scopes', data, {
+      headers: {
+        Authorization: `KakaoAK ${process.env.KAKAO_APP_ADMIN_KET}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  }
+
+  async revokeApple(appleRefreshToken: string): Promise<void> {
+    const data = {
+      client_id: process.env.APPLE_CLIENT_ID,
+      client_secret: process.env.APPLE_CLIENT_SECRET,
+      token: appleRefreshToken,
+      token_type_hint: 'refresh_token',
+    };
+    this.httpService.post('https://appleid.apple.com/auth/revoke', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
   }
 }

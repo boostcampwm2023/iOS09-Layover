@@ -88,9 +88,23 @@ export class OauthService {
     this.boardService.updateBoardsStatusByMemberId(id, 'INACTIVE', 'COMPLETE');
   }
 
-  async signup(memberHash: string, username: string, provider: string): Promise<void> {
+  async signup(
+    memberHash: string,
+    username: string,
+    provider: string,
+    kakao_id: string,
+    apple_refresh_token: string,
+  ): Promise<void> {
     try {
-      await this.memberService.createMember(username, 'default', '', provider, memberHash);
+      await this.memberService.createMember(
+        username,
+        'default',
+        '',
+        provider,
+        kakao_id,
+        apple_refresh_token,
+        memberHash,
+      );
     } catch (e) {
       throw new CustomResponse(ECustomCode.SAVE_MEMBER_INFO_ERR);
     }
@@ -154,5 +168,31 @@ export class OauthService {
     const refreshJti: string = await this.redisClient.get(memberHash);
     await this.redisClient.del(refreshJti);
     await this.redisClient.del(memberHash);
+  }
+
+  async getAppleRefreshToken(authorization_code: string): Promise<string> {
+    const data = {
+      client_id: process.env.APPLE_CLIENT_ID,
+      client_secret: process.env.APPLE_CLIENT_SECRET,
+      code: authorization_code,
+      grant_type: 'authorization_code',
+      redirect_uri: process.env.APPLE_REDIRECT_URI,
+    };
+    const observableRes = this.httpService
+      .post('https://appleid.apple.com/auth/token', data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+      .pipe(
+        catchError((error: AxiosError) => {
+          console.log(`${error} occured!`);
+          throw new CustomResponse(ECustomCode.OAUTH_SERVER_ERR);
+        }),
+      );
+    const response = await firstValueFrom(observableRes);
+    if (!response.data.refresh_token) throw new CustomResponse(ECustomCode.INVALID_APPLE_TOKEN);
+    const appleRefreshToken = String(response.data.refresh_token);
+    return appleRefreshToken;
   }
 }

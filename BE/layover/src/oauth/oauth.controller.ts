@@ -136,7 +136,13 @@ export class OauthController {
     }
 
     // signup
-    await this.oauthService.signup(memberHash, username, 'kakao');
+    await this.oauthService.signup(
+      memberHash,
+      username,
+      'kakao',
+      await this.oauthService.getMemberIdByKakaoAccessToken(accessToken),
+      '',
+    );
 
     // Response access token and refresh token
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
@@ -151,7 +157,11 @@ export class OauthController {
   @ApiResponse(SWAGGER.NOT_OUR_MEMBER_RESPONSE)
   @Post('signup/apple')
   async processAppleSignup(@Body() appleSignupDto: AppleSignupDto) {
-    const [identityToken, username] = [appleSignupDto.identityToken, appleSignupDto.username];
+    const [authorizationCode, identityToken, username] = [
+      appleSignupDto.authorizationCode,
+      appleSignupDto.identityToken,
+      appleSignupDto.username,
+    ];
 
     // identity token 검증
     await this.oauthService.verifyAppleIdentityToken(identityToken);
@@ -182,7 +192,13 @@ export class OauthController {
     }
 
     // signup
-    await this.oauthService.signup(memberHash, username, 'apple');
+    await this.oauthService.signup(
+      memberHash,
+      username,
+      'apple',
+      '',
+      await this.oauthService.getAppleRefreshToken(authorizationCode),
+    );
 
     // Response access token and refresh token
     const tokenResponseDto = await this.oauthService.generateAccessRefreshTokens(memberHash);
