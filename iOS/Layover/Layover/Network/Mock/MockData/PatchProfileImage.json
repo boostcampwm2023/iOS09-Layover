@@ -1,0 +1,7 @@
+{
+  "message": "요청이 성공적으로 처리되었습니다.",
+  "statusCode": 200,
+  "data": {
+      "profile-image": "https://i.ibb.co/qML8vdN/2023-11-25-9-08-01.png"
+  }
+}

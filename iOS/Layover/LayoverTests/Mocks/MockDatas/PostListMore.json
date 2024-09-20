@@ -1,0 +1,25 @@
+{
+    "message": "요청이 성공적으로 처리되었습니다.",
+    "statusCode": 200,
+    "data": [
+        {
+            "member" : {
+                "id" : 2,
+                "username" : "장원영",
+                "introduce" : "안녕하세요, 아이브의 장원영입니다.",
+                "profile_image_url" : "https://www.fnnews.com/resource/media/image/2023/10/17/202310171126334525_l.jpg"
+            },
+            "board" : {
+                "id" : 2,
+                "encoded_video_url" : "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
+                "video_thumbnail_url" : "https://img.etoday.co.kr/pto_db/2022/11/600/20221108175829_1816470_1200_1800.jpg",
+                "longitude" : 35.001828282,
+                "latitude" : 100.060123123,
+                "title" : "아이브의 멤버",
+                "content" : "게시글 설명설명설명",
+                "status": "COMPLETE"
+            },
+            "tag" : ["Ive", "wonyoung"]
+        }
+    ]
+}
