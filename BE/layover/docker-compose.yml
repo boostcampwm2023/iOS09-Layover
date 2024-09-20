@@ -1,0 +1,44 @@
+version: '3'
+services:
+  app:
+    image: ${DOCKER_IMG_NAME}:${COMMIT_HASH}
+    container_name: layover-container
+    ports:
+      - 3000:3000
+    volumes:
+      - ~/envs/.env:/usr/src/app/.env
+      - ~/envs/ca_bundle.crt:/usr/src/app/ca_bundle.crt
+      - ~/envs/certificate.crt:/usr/src/app/certificate.crt
+      - ~/envs/private.key:/usr/src/app/private.key
+      - /var/log/logs.log:/usr/src/app/logs.log
+    restart: on-failure
+
+  cadvisor:
+    image: gcr.io/google-containers/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    ports:
+      - 8090:8080
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - 3001:3000

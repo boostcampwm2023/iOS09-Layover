@@ -1,5 +1,46 @@
-# Created by https://www.toptal.com/developers/gitignore/api/xcode,macos,swiftpackagemanager
-# Edit at https://www.toptal.com/developers/gitignore?templates=xcode,macos,swiftpackagemanager
+#compiled output
+BE/layover/dist
+BE/layover/node_modules
+
+# .env
+.env
+
+# secure files
+BE/layover/ca_bundle.crt
+BE/layover/certificate.crt
+BE/layover/private.key
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+BE/layover/coverage
+BE/layover/.nyc_output
+
+# IDEs and editors
+BE/layover/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 ### macOS ###
 # General

@@ -1,0 +1,98 @@
+pipeline {
+    agent any
+
+    environment {
+        CONTAINER_NAME = 'layover-container'
+        DOCKER_IMG_NAME = 'layover/layover'
+        PROJECT_PATH = 'BE/layover'
+    }
+
+    stages {
+        stage('Cleanup') {
+                    steps {
+                        script {
+                            try {
+
+
+                                // 컨테이너가 존재하면 삭제
+                                sh """
+                                CONTAINER_ID=\$(docker ps -a -q -f name=$CONTAINER_NAME)
+                                if [ -n "\$CONTAINER_ID" ]; then
+                                    docker rm -f \$CONTAINER_ID
+                                    echo "컨테이너 '$CONTAINER_NAME'를 삭제했습니다."
+                                fi
+                                """
+
+                                // 기존 이미지 삭제
+                                sh """
+                                IMAGE_ID=\$(docker images | grep "${DOCKER_IMG_NAME}" | awk '{print \$3}')
+                                if [ -n "\$IMAGE_ID" ]; then
+                                    docker rmi -f \$IMAGE_ID
+                                else
+                                    echo "Image does not exist. Skipping deletion."
+                                fi
+                                """
+                            } catch (Exception e) {
+                                echo 'Cleanup 실패: ' + e.getMessage()
+                                currentBuild.result = 'FAILURE'
+                                discordSend description: "Jenkins cd-bot", footer: "Cleanup 실패하였습니다.", result: currentBuild.result, title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+                            }
+                        }
+                    }
+                }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    try {
+                        dir("$PROJECT_PATH") {
+                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+
+                            echo '빌드 시작'
+                            def dockerImage = docker.build("${DOCKER_IMG_NAME}:${commitHash}")
+
+                            // Docker Hub에 로그인
+                            //withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                                // Docker 이미지 push
+                                //dockerImage.push("${commitHash}")
+                           // }
+                            echo '빌드 및 푸시 성공'
+                        }
+                    } catch (Exception e) {
+                        echo '빌드 및 푸시 실패: ' + e.getMessage()
+                        currentBuild.result = 'FAILURE'
+                        discordSend description: "Jenkins cd-bot", footer: "Build 및 Push 실패하였습니다.", result: currentBuild.result, title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+
+                    }
+                }
+            }
+        }
+
+        stage('Run Docker Container with Compose') {
+            steps {
+                script {
+                    try {
+                        dir("$PROJECT_PATH") {
+                            def commitHash = sh(script: 'git log -1 --pretty=%H', returnStdout: true).trim()
+
+                            def dockerImage = docker.image("${DOCKER_IMG_NAME}:${commitHash}")
+                            echo "파일 생성 완료"
+                            sh """
+                            export COMMIT_HASH=${commitHash}
+                            docker-compose up -d
+                            """
+                            echo '도커 컴포즈 실행 성공'
+                            discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 성공!", result: "SUCCESS", title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+                        }
+
+                    } catch (Exception e) {
+                        echo '컨테이너 실행 실패: ' + e.getMessage()
+                        currentBuild.result = 'FAILURE'
+                        discordSend description: "Jenkins cd-bot", footer: "컨테이너 실행 실패하였습니다.", result: currentBuild.result, title: "Jenkins cd-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+
+                    }
+                }
+            }
+        }
+    }
+}

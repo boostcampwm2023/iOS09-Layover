@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Install') {
+            steps {
+                dir('BE/layover') {
+                    sh 'npm install'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('BE/layover') {
+                    echo '빌드 시작'
+                    sh 'npm run build'
+                }
+            }
+            post {
+                success {
+                    echo '빌드 성공'
+
+                }
+                failure {
+                    script {
+                        currentBuild.result = 'FAILURE'
+                    }
+                    echo '빌드 실패'
+                    discordSend description: "Jenkins ci-bot", footer: "빌드 실패하였습니다.", result: currentBuild.result, title: "Jenkins ci-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('BE/layover') {
+                    echo '테스트 시작'
+                    sh 'npm run test'
+                }
+            }
+            post {
+                success {
+                    script {
+                        currentBuild.result = 'SUCCESS'
+                    }
+                    echo '테스트 성공'
+                    discordSend description: "Jenkins ci-bot", footer: "빌드 및 테스트 성공!", result: currentBuild.result, title: "Jenkins ci-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+                }
+                failure {
+                    script {
+                        currentBuild.result = 'FAILURE'
+                    }
+                    echo '테스트 실패'
+                    discordSend description: "Jenkins ci-bot", footer: "테스트 실패하였습니다.", result: currentBuild.result, title: "Jenkins ci-pipeline", webhookURL: env.JENKINS_WEB_HOOK
+                }
+            }
+        }
+    }
+}
